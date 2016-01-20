@@ -74,7 +74,7 @@
 	\newcommand{\supervisors}[2]{\def \@firstsupervisor {#1}  \def \@secondsupervisor {#2}}
 	\newcommand{\examiner}[1]{\def \@examiner {#1}}
 	\newcommand{\subtitle}[1]{\def \@subtitle {#1}}
-	\company{}
+    \company{Mobile and Pervasive Computing Institute (MAPCI), Lund University}
 	\supervisor{}
 	\supervisors{}{}
 	\examiner{}
