@@ -74,7 +74,7 @@
 	\newcommand{\supervisors}[2]{\def \@firstsupervisor {#1}  \def \@secondsupervisor {#2}}
 	\newcommand{\examiner}[1]{\def \@examiner {#1}}
 	\newcommand{\subtitle}[1]{\def \@subtitle {#1}}
-    \company{Mobile and Pervasive Computing Institute (MAPCI), Lund University}
+    \company{}
 	\supervisor{}
 	\supervisors{}{}
 	\examiner{}
@@ -82,7 +82,7 @@
 	
 	% for the title page
 	\pretitle{\noindent\rule{\linewidth}{1pt}\begin{center}\Huge}
-	\posttitle{\par \vskip 0.5em \ifx \@subtitle \empty \vskip 1em \else {\Large(\@subtitle)} \fi \end{center}\noindent\rule{\linewidth}{1pt}\vskip 0.5em}
+	\posttitle{\par \vskip 0.5em \ifx \@subtitle \empty \vskip 0em \else {\Large(\@subtitle)} \fi \end{center}\noindent\rule{\linewidth}{1pt}\vskip 0.5em}
 	\predate{\vskip 5em \begin{center}\Large}
 	\postdate{\par\vfill {\large Master's thesis work carried out at 
 		\ifx\@company\empty
