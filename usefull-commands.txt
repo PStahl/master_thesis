@@ -17,4 +17,4 @@ Web server:
 
 Server
 
-__USERNAME__@gru.mapci.gru.lu.se
+__USERNAME__@gru.mapci.lu.se
