@@ -57,6 +57,37 @@ Leave a \textit{2cm} vertical space after the abstract and provide a few keyword
 
 \begin{document}
 \makefrontmatter
+\chapter[introduction]{Introduction}
+\section{Background and Motivation}
+Ensuring a certain level of reliability is of major concern for many vendors. With the ongoing cloudification and more and more applications running in distributed environments this concern has become of certain interest. 
+% Five -nine means less than 5 min and 15 seconds downtime/year, i.e. operational 99,999 % of the time
+Cloud systems often consists of heterogeneous hardware and therefore ensuring a certain level of reliability is a complex task since any of the components may fail at any time. 
+	Guaranteeing properties such as high reliability, raises complexity to the resource allocation decisions, and fault-tolerance mechanisms in highly dynamic and complex distributed systems. For cloud service providers, it is necessary that this increased complexity is taken care of without putting extra burden on the user. The system must therefore ensure these properties in a seamless way.
+
+	As computational work is distributed across multiple resources, the overall reliability of the application decreases. To cope with this issue, a fault-tolerant design or error handling mechanism need to be in place. This is of particular interest for cloud service providers, as users often desire a certain level of reliability.
+	Sometimes vendors, for example carrier providers, are even obliged by law to achieve a certain level of availability or reliability. In these cases, one may need to sacrifice other quality aspects such as latency and resource usage. By using static and dynamic analysis of the infrastructure and the mean-time-to-failure for the given resources, a statistical model can be used in order to verify statistically that the desired level is reached.
+	Reliability can be increased by cloning application tasks, where all clones produce the same output. This of course leads to redundancy but also allows for an easy error check. If the execution of one clone stops or the link between a clone and the receiver is broken this can easily be detected at the receiver side and the scheduler mechanism can automatically find a proper location for a new clone. This allows for continuing execution of the application even in case of e.g. hardware failure.
+	Drawbacks of simply replicating a task n times, is that the resources needed increases. Furthermore, since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
+
+
+\section{Related work}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Hint and tips from the report template found online
+
 \chapter[Short on Formatting]{Formatting}
 Avoid empty spaces between \textit{chapter}-\textit{section}, \textit{section}-\textit{sub-section}. For instance, a very brief summary of the chapter would be one way of bridging the chapter heading and the first section of that chapter.
 \section{Page Size and Margins}
