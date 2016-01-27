@@ -34,7 +34,9 @@
 \acknowledgements{
 If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
 
-We would like to thank Lennart Andersson for his feedback on this template.
+We would like to thank MAPCI and Björn Landfeldt for there input. Maybe Ericsson as well!
+Shub...någonting for input. 
+We also like to thank our examiner	Christian Nyberg.
 }
 
 \theabstract{
@@ -57,25 +59,188 @@ Leave a \textit{2cm} vertical space after the abstract and provide a few keyword
 
 \begin{document}
 \makefrontmatter
-\chapter[introduction]{Introduction}
+
+\chapter[Introduction]{Introduction}
 \section{Background and Motivation}
-Ensuring a certain level of reliability is of major concern for many vendors. With the ongoing cloudification and more and more applications running in distributed environments this concern has become of certain interest. 
+Ensuring a certain level of reliability is of major concern for many vendors. As cloud computing are growing rapidly and users are demanding more services and higher performance load balancing and task scheduling in the cloud has become a very important and interesting research area. 
 % Five -nine means less than 5 min and 15 seconds downtime/year, i.e. operational 99,999 % of the time
 Cloud systems often consists of heterogeneous hardware and therefore ensuring a certain level of reliability is a complex task since any of the components may fail at any time. 
-	Guaranteeing properties such as high reliability, raises complexity to the resource allocation decisions, and fault-tolerance mechanisms in highly dynamic and complex distributed systems. For cloud service providers, it is necessary that this increased complexity is taken care of without putting extra burden on the user. The system must therefore ensure these properties in a seamless way.
 
-	As computational work is distributed across multiple resources, the overall reliability of the application decreases. To cope with this issue, a fault-tolerant design or error handling mechanism need to be in place. This is of particular interest for cloud service providers, as users often desire a certain level of reliability.
-	Sometimes vendors, for example carrier providers, are even obliged by law to achieve a certain level of availability or reliability. In these cases, one may need to sacrifice other quality aspects such as latency and resource usage. By using static and dynamic analysis of the infrastructure and the mean-time-to-failure for the given resources, a statistical model can be used in order to verify statistically that the desired level is reached.
-	Reliability can be increased by cloning application tasks, where all clones produce the same output. This of course leads to redundancy but also allows for an easy error check. If the execution of one clone stops or the link between a clone and the receiver is broken this can easily be detected at the receiver side and the scheduler mechanism can automatically find a proper location for a new clone. This allows for continuing execution of the application even in case of e.g. hardware failure.
-	Drawbacks of simply replicating a task n times, is that the resources needed increases. Furthermore, since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
+Guaranteeing properties such as high reliability, raises complexity to the resource allocation decisions, and fault-tolerance mechanisms in highly dynamic and complex distributed systems. For cloud service providers, it is necessary that this increased complexity is taken care of without putting extra burden on the user. The system must therefore ensure these properties in a seamless way.
+
+As computational work is distributed across multiple resources, the overall reliability of the application decreases. To cope with this issue, a fault-tolerant design or error handling mechanism need to be in place. This is of particular interest for cloud service providers, as users often desire a certain level of reliability.
+
+Sometimes vendors, for example carrier providers, are even obliged by law to achieve a certain level of availability or reliability. In these cases, one may need to sacrifice other quality aspects such as latency and resource usage. By using static and dynamic analysis of the infrastructure and the mean-time-to-failure for the given resources, a statistical model can be used in order to verify statistically that the desired level is reached.
+
+Reliability can be increased by cloning application tasks, where all clones produce the same output. This of course leads to redundancy but also allows for an easy error check. If the execution of one clone stops or the link between a clone and the receiver is broken this can easily be detected at the receiver side and the scheduler mechanism can automatically find a proper location for a new clone. This allows for continuing execution of the application even in case of e.g. hardware failure.
+
+Drawbacks of simply replicating a task n times, is that the resources needed increases. Furthermore, since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
+
+\section{Our contributions}
 
 
 \section{Related work}
 
 
+\chapter{Approach}
+\section{Method}
 
 
+\section{Theory}
+\subsection{Defintions}
+I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
+Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
+\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
+\begin{itemize}
+\item Perform well in specified time t without undergoing halting state
+\item Perform exactly the way it is designed
+\item Resist various failures and recover in case of any failure that occurs during system execution without proceeding any incorrect result.
+\item Successfully run software operation or its intended functions for a specified period of time in a specified environment.
+\item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
+\item Have the ability to run correctly even after scaling is done with reference to some aspects.
+\end{itemize}
 
+%Some conclusion regarding what def we will use.
+
+To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
+\begin{itemize}
+\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. I.e. the inability to perform as required
+\item Fault: A fault is a the state of software. It is also called defect/bug.
+\item Error: An error is a human mistake.
+\end{itemize} 
+To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
+
+\subsection{Types of distributed computing}
+There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
+
+Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task. 
+
+Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. 
+
+Cloud an be described as the next generation of grids and clusters. It is indeed quite similar to grid and clusters, e.g. parallel and distributed, but with the important difference that cloud has multiple domains \cite{compStudyLoadAndCloud}. Due to that machines can be geographically distributed, software and hardware components heterogeneous and that every application has it own deployment requirements analyzing and predicting workload and reliability is very challenging \cite{surveyReliabilityDistr}. 
+
+HDCS, or Heterogeneous Distributed Computing System is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved. 
+
+% Ev. skriva om static vs dynamic env.
+
+\subsection{Replication techniques}
+There are a number of different strategies for replication a task:
+\begin{itemize}
+\item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+
+\item Semi-Acitve - Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
+
+\item Passive - A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
+\end{itemize}
+
+\subsection{Fault tolerance techniques}
+Fault-tolerance techniques can be divided into two categorizes:
+Task-level techniques and work-flow level techniques.
+Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level tehcniques fail to cover \cite{gridWorkflow}.
+
+Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
+
+% Checkpointing, job migration, voting etc
+
+\subsection{Fault Models?}
+
+
+\subsection{Load balancing techniques}
+The term load balancing is generally used for the process of transferring load fro overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
+%Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
+
+The load balancing algorithms can be divided into three categorize based on the initiation of the process:
+\begin{itemize}
+\item Sender Initiated - An overloaded node send requests until it find a proper node which can except its load.
+\item Receiver Initiated - An under loaded node sends a message for requests until it finds an overloaded node.
+\item Symmetric - A combination of sender initiated and receiver initiated. 
+\end{itemize}
+
+Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory at the moment which might lead to the disadvantage that the selected node gets overloaded \cite{perfAnalysisLoadCloud}
+
+A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load  balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing?
+
+In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks \cite{perfAnalysisLoadCloud}.
+
+We will briefly mention some dynamic load balancing algorithms: % skip static load balancing algorithms or not?
+
+\begin{itemize}
+\item Central Queue Algorithm - A non-distributed algorithm where the central manager maintains a cyclic FIFO-queue. Whenever a new activity arrives the manager inserts it into the queue and whenever a new request arrives it simply picks the first activity in the queue. 
+
+\item Local Queue Algorithm - 
+
+\item Ant Colony Optimization Algorithm - 
+
+\item Honey Bee Foraging Algorithm - 
+% De fyra ovan är från \cite{perfAnalysisLoadCloud}
+
+\item \ldots
+\end{itemize}
+
+\subsection{Probability measurements}
+In order to examine whether a certain level of reliability we need to define how we measure reliability. 
+
+One usual measurements for hardware reliability is Mean-Time Between Failure, MTBF which is defined as 
+$$MTBF = (nbr of failures) / (total time)$$.
+From MTBF a reliability function can be expressed as 
+$$R(t) = e^{-t/MTBF}$$
+which describes the probability that the hardware will work for time $t$ without a single failure.
+
+If we consider the case when a application is duplicated to secondary hardware the reliability function above become
+$$R_{tot}(t) = 1 - (1 - e^{-t/MTBF_1})(1 - e^{-t/MTBF_2})\cdots(1 - e^{-t/MTBF_n})$$
+for $n$ replicas. 
+
+
+\section{Implementation}
+
+\chapter{Evaluation}
+
+\chapter{Conclusions}
+
+\begin{thebibliography}{50}
+
+\bibitem{taskAllocation}
+	Sol M. Shatz, Jia-Ping Wang and Masanori Goto,
+	\emph{Task Allocation for Maximizing Reliability of Distributed Computer Systems},
+	Computers, IEEE Transactions on, Volume 41  Issue 9,
+	Sep 1992
+	
+\bibitem{surveyReliabilityDistr}
+	Waseem Ahmed and Yong Wei Wu,
+	\emph{A survey on reliability in distributed systems},
+	Journal of Computer and System Sciences Volume 78 Issue 8,
+	December 2013, Pages 1243–1255
+
+\bibitem{compStudyLoadAndCloud}
+	Mayanka Katyal and Atul Mishra,
+	\emph{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environmen},
+	International Journal of Distributed and Cloud Computing, Volume 1 Issue 2,
+	2013
+
+\bibitem{surveyFaultParallel}
+	Michael Treaster,
+	\emph{A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems},
+	Cornell University Library,
+	Jan 2005
+
+\bibitem{gridWorkflow}
+	Soonwook Hwang and Carl Kesselman,
+	\emph{Grid Workflow: A Flexible Failure Handling Framework for the Grid},
+	High Performance Distributed Computing, 2003. Proceedings. 12th IEEE International Symposium on, p. 	126-137, 
+	June 2003
+
+\bibitem{perfAnalysisLoadCloud}
+	Prashant D. Maheta , Kunjal Garala and Namrata Goswami,
+	\emph{A Performance Analysis of Load Balancing Algorithms in Cloud Environment},
+	Computer Communication and Informatics (ICCCI), 2015 International Conference on,
+	Jan 2015
+	
+\end{thebibliography}
+
+\begin{appendices}
+\chapter{A}
+
+\end{appendices}
 
 
 
