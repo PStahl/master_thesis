@@ -34,9 +34,9 @@
 \acknowledgements{
 If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
 
-We would like to thank MAPCI and Björn Landfeldt for there input. Maybe Ericsson as well!
+We would like to thank MAPCI and our supervisor Björn Landfeldt for there input. % Maybe Ericsson as well!
 Shub...någonting for input. 
-We also like to thank our examiner	Christian Nyberg.
+We also would like to thank our examiner Christian Nyberg.
 }
 
 \theabstract{
@@ -60,8 +60,8 @@ Leave a \textit{2cm} vertical space after the abstract and provide a few keyword
 \begin{document}
 \makefrontmatter
 
-\chapter[Introduction]{Introduction}
-\section{Background and Motivation}
+\chapter{Introduction} \label{introduction} 
+\section{Background and Motivation} 
 Ensuring a certain level of reliability is of major concern for many vendors. As cloud computing are growing rapidly and users are demanding more services and higher performance load balancing and task scheduling in the cloud has become a very important and interesting research area. 
 % Five -nine means less than 5 min and 15 seconds downtime/year, i.e. operational 99,999 % of the time
 Cloud systems often consists of heterogeneous hardware and therefore ensuring a certain level of reliability is a complex task since any of the components may fail at any time. 
@@ -82,11 +82,14 @@ Drawbacks of simply replicating a task n times, is that the resources needed inc
 \section{Related work}
 
 
-\chapter{Approach}
+\chapter{Approach} \label{approach}
 \section{Method}
+we decided that our approach in this master thesis should be to use an action research oriented methodology. That means that we first studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the problem which was to be solved.
+The second step was to suggest a proper solution and implement it. Here we got input from our supervisor and literature. The third and most important step was to evaluate the solution in an objective way. 
 
+Same experimenting aspects also...
 
-\section{Theory}
+\section{Theory} 
 \subsection{Defintions}
 I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
 Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
@@ -145,7 +148,7 @@ Fault tolerance techniques can also be divided into reactive and proactive techn
 \subsection{Fault Models?}
 
 
-\subsection{Load balancing techniques}
+\subsection{Load balancing}
 The term load balancing is generally used for the process of transferring load fro overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
 
@@ -190,12 +193,13 @@ If we consider the case when a application is duplicated to secondary hardware t
 $$R_{tot}(t) = 1 - (1 - e^{-t/MTBF_1})(1 - e^{-t/MTBF_2})\cdots(1 - e^{-t/MTBF_n})$$
 for $n$ replicas. 
 
+\subsection{Task scheduling}
 
 \section{Implementation}
 
-\chapter{Evaluation}
+\chapter{Evaluation} \label{evaluation}
 
-\chapter{Conclusions}
+\chapter{Conclusions} \label{conclusions}
 
 \begin{thebibliography}{50}
 
@@ -251,7 +255,8 @@ for $n$ replicas.
 
 
 
-% Hint and tips from the report template found online
+
+% Below is the report template found online
 
 \chapter[Short on Formatting]{Formatting}
 Avoid empty spaces between \textit{chapter}-\textit{section}, \textit{section}-\textit{sub-section}. For instance, a very brief summary of the chapter would be one way of bridging the chapter heading and the first section of that chapter.
