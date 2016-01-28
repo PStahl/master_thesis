@@ -16,7 +16,7 @@ class StaticModel(object):
 		p = 1 - self.reliabilities[0]
 
 		while (1 - p) < reliability_level:
-			# Check that we don't use more resources that we have access to
+			# Check that we don't use more resources than we have access to
 			if nbr > len(self.reliabilities) - 1:
 				return -1
 			p = p * (1 - self.reliabilities[nbr])
