@@ -1,6 +1,0 @@
-# test1.calvin
-
-source : std.Counter()
-output : io.Print()
-
-source.integer > output.token

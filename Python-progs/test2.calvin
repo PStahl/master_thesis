@@ -1,8 +1,0 @@
-#test_script
-
-source : std.Increase(number = 2)
-delay : std.ClassicDelay(delay=2)
-output : io.Print()
-
-source.integer > delay.token
-delay.token > output.token
