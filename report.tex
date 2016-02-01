@@ -11,6 +11,8 @@
 
 \usepackage{hyperref}
 
+\newtheorem{definition}{Definition}[chapter]
+
 %\geometry{showframe}
 
 \author{
@@ -35,7 +37,7 @@
 If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
 
 We would like to thank MAPCI and our supervisor Björn Landfeldt for there input. % Maybe Ericsson as well!
-Shub...någonting for input. 
+Shub...something for input. 
 We also would like to thank our examiner Christian Nyberg.
 }
 
@@ -60,7 +62,7 @@ Leave a \textit{2cm} vertical space after the abstract and provide a few keyword
 \begin{document}
 \makefrontmatter
 
-\chapter{Introduction} \label{introduction} 
+\chapter{Introduction} \label{ch:introduction} 
 \section{Background and Motivation} 
 Ensuring a certain level of reliability is of major concern for many vendors. As cloud computing are growing rapidly and users are demanding more services and higher performance load balancing and task scheduling in the cloud has become a very important and interesting research area. 
 % Five -nine means less than 5 min and 15 seconds downtime/year, i.e. operational 99,999 % of the time
@@ -79,18 +81,12 @@ Drawbacks of simply replicating a task n times, is that the resources needed inc
 \section{Our contributions}
 
 
-\section{Related work}
+\section{Related work} \label{sec:related_work}
 
 
-\chapter{Approach} \label{approach}
-\section{Method}
-we decided that our approach in this master thesis should be to use an action research oriented methodology. That means that we first studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the problem which was to be solved.
-The second step was to suggest a proper solution and implement it. Here we got input from our supervisor and literature. The third and most important step was to evaluate the solution in an objective way. 
-
-Same experimenting aspects also...
-
-\section{Theory} 
-\subsection{Defintions}
+\chapter{Approach} \label{ch:approach}
+\section{Theory} \label{sec:theory}
+\subsection{Defintions} \label{subsec:definitions}
 I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
 Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -103,12 +99,20 @@ Reliability could also be interpreted more as the availability of a system, for 
 \item Have the ability to run correctly even after scaling is done with reference to some aspects.
 \end{itemize}
 
-%Some conclusion regarding what def we will use.
+For simplicity we will start with a very simple reliability definition, Definition \ref{def:simple_reliability}.
+\begin{definition} \label{def:simple_reliability}
+The reliability of a process is measured by the probability that the hardware is functioning during the execution time.
+\end{definition}
+Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} which is a combination of the above definitions. 
+
+\begin{definition} \label{def:dyn_reliability}
+The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing a hardware, software or a network failure during it's time of execution.
+\end{definition}
 
 To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
 \begin{itemize}
-\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. I.e. the inability to perform as required
-\item Fault: A fault is a the state of software. It is also called defect/bug.
+\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required
+\item Fault: A fault is the state of software. It is also called defect/bug.
 \item Error: An error is a human mistake.
 \end{itemize} 
 To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
@@ -149,7 +153,7 @@ Fault tolerance techniques can also be divided into reactive and proactive techn
 
 
 \subsection{Load balancing}
-The term load balancing is generally used for the process of transferring load fro overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
+The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
 
 The load balancing algorithms can be divided into three categorize based on the initiation of the process:
@@ -159,9 +163,9 @@ The load balancing algorithms can be divided into three categorize based on the 
 \item Symmetric - A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
-Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory at the moment which might lead to the disadvantage that the selected node gets overloaded \cite{perfAnalysisLoadCloud}
+Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory which might lead to the disadvantage that the selected node gets overloaded \cite{perfAnalysisLoadCloud}
 
-A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load  balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing?
+A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load  balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
 
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks \cite{perfAnalysisLoadCloud}.
 
@@ -170,36 +174,66 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \begin{itemize}
 \item Central Queue Algorithm - A non-distributed algorithm where the central manager maintains a cyclic FIFO-queue. Whenever a new activity arrives the manager inserts it into the queue and whenever a new request arrives it simply picks the first activity in the queue. 
 
-\item Local Queue Algorithm - 
+\item Local Queue Algorithm - When a new task is created on the main host it will be allocated on under-loaded nodes. Afterwards all new tasks are allocated locally since ... \cite{perfAnalysisLoadCloud}. The algorithm is receiver initiated since when a node is under-loaded it randomly sends requests to remote load managers
 
-\item Ant Colony Optimization Algorithm - 
+\item Ant Colony Optimization Algorithm - As the name implies this algorithm is inspired by the behavior of real ants to find a optimal solution. Whenever an ant find food it moves back to the colony while leaving "markers", i.e. laying pheromone on the way. When more ants find the same place the path the pheromone will become denser. 
+%Förtydliga om det ska ingå i rapporten.
 
-\item Honey Bee Foraging Algorithm - 
+\item Honey Bee Foraging Algorithm - This algorithm is quite similar to the Ant Colony Optimization algorithm. When bees find food they return to the bee's colony and use special dance movements for informing the other bees of how much food there is and where it's located. When the forager bees find more food a more energetic dance takes place. This phenomenon can be applied to servers, when an overloaded server receives a request it redirects it to other under loaded servers.
+
 % De fyra ovan är från \cite{perfAnalysisLoadCloud}
 
-\item \ldots
+% Static algorithms: (?)
+\item Bidding - An overloaded node request bids from other nodes. The node with the best bid (i.e. lowest load) wins the job.
+
+\item Max-Min - 
+
+\item Min-Min - 
 \end{itemize}
-
-\subsection{Probability measurements}
-In order to examine whether a certain level of reliability we need to define how we measure reliability. 
-
-One usual measurements for hardware reliability is Mean-Time Between Failure, MTBF which is defined as 
-$$MTBF = (nbr of failures) / (total time)$$.
-From MTBF a reliability function can be expressed as 
-$$R(t) = e^{-t/MTBF}$$
-which describes the probability that the hardware will work for time $t$ without a single failure.
-
-If we consider the case when a application is duplicated to secondary hardware the reliability function above become
-$$R_{tot}(t) = 1 - (1 - e^{-t/MTBF_1})(1 - e^{-t/MTBF_2})\cdots(1 - e^{-t/MTBF_n})$$
-for $n$ replicas. 
 
 \subsection{Task scheduling}
 
-\section{Implementation}
 
-\chapter{Evaluation} \label{evaluation}
 
-\chapter{Conclusions} \label{conclusions}
+\subsection{Formulas}
+When examine whether a certain level of reliability is reached we need to be able to put figures on the definitions of reliability. Let's consider Definition \ref{def:simple_reliability}. Somehow we need to measure the probability that the hardware is functioning. One usual measurements for hardware reliability is Mean-Time Between Failure, MTBF which is defined as 
+\begin{equation} \label{eq:MTBF}
+MTBF = (nbr  of  failures) / (total time)
+\end{equation}
+From MTBF a reliability function can be expressed as 
+\begin{equation} \label{eq:HW_reliability}
+R_{HW}(t) = e^{-t/MTBF}
+\end{equation}
+which describes the probability that the hardware will work for time $t$ without a single failure.
+
+For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
+
+
+%---------- -------------------------DECIDE WHICH FACTOR WE SHOULD USE-----------------------------------------
+
+
+\begin{equation} \label{eq:overall_reliability}
+R(t) = R_{HW}(t) \cdot R_{SW}(t) \cdot R_{Network}(t)
+\end{equation}
+where $R_{SW}(t)$ and $R_{Network}(t)$ is the probability that the software respectively the network is free from failures during time $t$. 
+
+\subsection{Task scheduling}
+
+\section{Method} \label{sec:method}
+We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
+The second step was to suggest a proper solution and implement it. Here we got input from literature and our supervisor among with Jörn och Shub. The third and most important step was to evaluate the solution in an objective way. % At implementation and evaluation phase we also experimented with the system. 
+
+% More details
+First of all we put together the necessary master thesis documents, a goal document and a project plan. 
+
+Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is a huge interest in this subject...etc
+Philip implemented the replication functionality in Calvin and Jonatan wrote a first model to the task scheduling/supervisor mechanism. 
+
+\section{Implementation} \label{sec:implementation}
+
+\chapter{Evaluation} \label{ch:evaluation}
+
+\chapter{Conclusions} \label{ch:conclusions}
 
 \begin{thebibliography}{50}
 
