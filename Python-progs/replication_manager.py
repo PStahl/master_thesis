@@ -1,7 +1,54 @@
 # Small test script for Static model
 import subprocess, math
 
-from static_model import StaticModel
+class ReplicationManager(object):
+	"""
+	A central replication manager. 
+	Examines the connected nodes reliabilities and replicates tasks in order to achieve a given reliability level 
+	"""
+	def __init__(self):
+		self.nodes = {}
+		self.actors = {}
+		self.actor_ids = {}
+	
+	def add_node(self, node_id):
+		self.nodes[node_id] = None
+		self._update_reliabilities()
+		print "Added a node with id:", node_id
+	
+	def add_actor(self, actor_id, reliability_level):
+		self.actor_ids[actor_id] = reliability_level
+		self._update_reliabilities()
+		n = self._nbr_of_replicas(actor_id)
+		for k in range(0, n-1):
+			self._relicate_actor_to(self.nodes[k], actor_id)
+		print "Added an actor with id:", actor_id, "and reliability level", reliability_level
+
+	def lost_node(self, actor_id, node_id):
+		del self.nodes[node_id]
+		print "We lost node:", node_id
+
+	def _update_reliabilities(self):
+		# Examine each nodes reliability level and update the list.
+		for node in self.nodes:
+			self.nodes[node] = 0.8
+		print "Updated the reliabilities"
+
+	def _relicate_actor_to(self, node_id, actor_id):
+		n = _nbr_of_replicas(actor_id)
+		print "Replicated actor to node", node
+
+	def _nbr_of_replicas(self, actor_id):
+		nbr = 1
+		p = 1 - self.nodes[0]
+		while (1 - p) < reliability_level:
+			# Check that we don't use more resources than we have access to
+			if nbr > len(self.nodes) - 1:
+				return -1
+			p = p * (1 - self.reliabilities[nbr])
+			nbr = nbr + 1
+		return nbr	
+
 
 """
 # Here are several alternatives for calculating the reliabilities for available resources. 
@@ -15,7 +62,7 @@ from static_model import StaticModel
 """
 
 #1
-reliabilities = [0.7, 0.6, 0.5, 0.6, 0.9, 0.8, 0.9]
+#reliabilities = [0.7, 0.6, 0.5, 0.6, 0.9, 0.8, 0.9]
 
 #2
 """
@@ -60,18 +107,3 @@ p = 1 - float(load_avg)
 for i in range(1,10):
 	reliabilities.append(p)
 """
-
-
-# Send the reliabilities to the model and print the result
-statmodel = StaticModel(reliabilities)
-print "The reliabilities are: "
-for x in (reliabilities): print x
-
-level_of_reliability = input("Enter a desired level of reliability (0.0 - 1.0): ")
-nbr_of_replicas = statmodel.nbr_of_replicas(level_of_reliability)
-print 'We will need', str(nbr_of_replicas), 'replicas.'
-# Replicate the actor
-
-# Make a class Supervisor
-# Add a method which is to be called whenever a actor sences that it lost a actor
-# 
