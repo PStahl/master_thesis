@@ -1,53 +1,83 @@
 # Small test script for Static model
 import subprocess, math
+from collections import defaultdict
+
 
 class ReplicationManager(object):
 	"""
 	A central replication manager. 
 	Examines the connected nodes reliabilities and replicates tasks in order to achieve a given reliability level 
+	Does not take into account that the ReplicationManager itself can fail. 
 	"""
 	def __init__(self):
+		"""
+		nodes = {key, value} with key = nodes_id, value = current reliability level
+		actors = {key, value} = key = actor_id, value = list of nodes where the actor is running
+		actor_ids = {key, value} with key = actor_id, value = required reliability level 
+		"""
 		self.nodes = {}
-		self.actors = {}
+		self.actor_on_nodes = defaultdict(list)
 		self.actor_ids = {}
 	
 	def add_node(self, node_id):
-		self.nodes[node_id] = None
-		self._update_reliabilities()
+		self.nodes[node_id] = 0
+		self._update_reliabilities() # Or just find the reliability for node_id only
 		print "Added a node with id:", node_id
 	
 	def add_actor(self, actor_id, reliability_level):
 		self.actor_ids[actor_id] = reliability_level
-		self._update_reliabilities()
-		n = self._nbr_of_replicas(actor_id)
-		for k in range(0, n-1):
-			self._relicate_actor_to(self.nodes[k], actor_id)
+		self.schedule(actor_id)
 		print "Added an actor with id:", actor_id, "and reliability level", reliability_level
 
-	def lost_node(self, actor_id, node_id):
+	def schedule(self, actor_id):
+		self._update_reliabilities()
+		n = self._nbr_of_replicas(actor_id)
+		self.actor_on_nodes[actor_id] = []
+		print "We need", n, "replicas"
+		if n > 0:
+			k = 0
+			for node in self.nodes:
+				if k < n:# and not node in self.actor_on_nodes[actor_id]:
+					self._replicate_actor_to(node, actor_id)
+					k = k + 1
+		
+	def lost_node(self, node_id):
 		del self.nodes[node_id]
+		for actor_id in self.actor_on_nodes:
+			if node_id in self.actor_on_nodes[actor_id]:
+				self.schedule(actor_id)
 		print "We lost node:", node_id
 
+	# Just for testing
+	def print_nodes(self, actor_id):
+		print actor_id, "lives on:"
+		for node in self.actor_on_nodes[actor_id]:
+			print node
+
 	def _update_reliabilities(self):
-		# Examine each nodes reliability level and update the list.
+		# Examine each nodes reliability level and update the list. For now each node has a static reliability of 0.8
 		for node in self.nodes:
 			self.nodes[node] = 0.8
-		print "Updated the reliabilities"
+		#print "Updated the reliabilities"
 
-	def _relicate_actor_to(self, node_id, actor_id):
-		n = _nbr_of_replicas(actor_id)
-		print "Replicated actor to node", node
+	def _replicate_actor_to(self, node_id, actor_id):
+		# Do the actual replication
+		if not actor_id in self.actor_on_nodes:
+			self.actor_on_nodes[actor_id] = [node_id]
+		else:
+			self.actor_on_nodes[actor_id].append(node_id)
+			#self.actor_on_nodes[actor_id] = [self.actor_on_nodes[actor_id], node_id]
+		print "Replicated actor", actor_id, "to node", node_id
 
 	def _nbr_of_replicas(self, actor_id):
-		nbr = 1
-		p = 1 - self.nodes[0]
-		while (1 - p) < reliability_level:
-			# Check that we don't use more resources than we have access to
-			if nbr > len(self.nodes) - 1:
-				return -1
-			p = p * (1 - self.reliabilities[nbr])
+		nbr = 0
+		p = 1
+		for node in self.nodes:
+			p = p * (1-self.nodes[node])
 			nbr = nbr + 1
-		return nbr	
+			if 1-p > self.actor_ids[actor_id]:
+				return nbr
+		return -1	
 
 
 """
