@@ -55,11 +55,12 @@ class ReplicationManager(object):
 				return
 
 	def lost_node(self, node_id):
-		print "We lost node:", node_id, "so we:"
+		print "We lost node:", node_id
 		del self.nodes[node_id]
 		for actor_id in self.actor_on_nodes:
 			if node_id in self.actor_on_nodes[actor_id]:
 				self.actor_on_nodes[actor_id].remove(node_id)
+				self.print_nodes(actor_id)
 				self.reschedule(actor_id)
 
 	# Just for testing
