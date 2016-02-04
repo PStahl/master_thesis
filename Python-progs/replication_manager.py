@@ -12,12 +12,12 @@ class ReplicationManager(object):
 	def __init__(self):
 		"""
 		nodes = {key, value} with key = nodes_id, value = current reliability level
-		actors = {key, value} = key = actor_id, value = list of nodes where the actor is running
-		actor_ids = {key, value} with key = actor_id, value = required reliability level 
+		actor_on_nodes = {key, value} = key = actor_id, value = list of nodes where the actor is running
+		actors = {key, value} with key = actor_id, value = required reliability level 
 		"""
 		self.nodes = {}
 		self.actor_on_nodes = defaultdict(list)
-		self.actor_ids = {}
+		self.actors = {}
 	
 	def add_node(self, node_id):
 		self.nodes[node_id] = 0
@@ -25,32 +25,46 @@ class ReplicationManager(object):
 		print "Added a node with id:", node_id
 	
 	def add_actor(self, actor_id, reliability_level):
-		self.actor_ids[actor_id] = reliability_level
-		self.schedule(actor_id)
-		print "Added an actor with id:", actor_id, "and reliability level", reliability_level
-
-	def schedule(self, actor_id):
+		print "Adds actor", actor_id
+		self.actors[actor_id] = reliability_level
 		self._update_reliabilities()
 		n = self._nbr_of_replicas(actor_id)
 		self.actor_on_nodes[actor_id] = []
 		print "We need", n, "replicas"
+		# Deploy the actor on the n first nodes in the list node
 		if n > 0:
 			k = 0
 			for node in self.nodes:
 				if k < n:# and not node in self.actor_on_nodes[actor_id]:
 					self._replicate_actor_to(node, actor_id)
 					k = k + 1
-		
+
+	def reschedule(self, actor_id):
+		# For now just replicate the actor enough times and keep the existing replicas
+		# Reliability for the moment:
+		p = 1
+		p_desired = self.actors[actor_id]
+		for node in self.actor_on_nodes[actor_id]:
+			p = p * (1 - self.nodes[node])
+		# Replicate to new nodes until p is large enough  
+		for node_id in self.nodes:
+			if node_id not in self.actor_on_nodes[actor_id]:
+				self._replicate_actor_to(node_id,actor_id)
+				p = p * (1 - self.nodes[node_id])
+			if 1 - p > p_desired:
+				return
+
 	def lost_node(self, node_id):
+		print "We lost node:", node_id, "so we:"
 		del self.nodes[node_id]
 		for actor_id in self.actor_on_nodes:
 			if node_id in self.actor_on_nodes[actor_id]:
-				self.schedule(actor_id)
-		print "We lost node:", node_id
+				self.actor_on_nodes[actor_id].remove(node_id)
+				self.reschedule(actor_id)
 
 	# Just for testing
 	def print_nodes(self, actor_id):
-		print actor_id, "lives on:"
+		print actor_id, "is running on:"
 		for node in self.actor_on_nodes[actor_id]:
 			print node
 
@@ -75,10 +89,9 @@ class ReplicationManager(object):
 		for node in self.nodes:
 			p = p * (1-self.nodes[node])
 			nbr = nbr + 1
-			if 1-p > self.actor_ids[actor_id]:
+			if 1-p > self.actors[actor_id]:
 				return nbr
 		return -1	
-
 
 """
 # Here are several alternatives for calculating the reliabilities for available resources. 

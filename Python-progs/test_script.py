@@ -11,7 +11,7 @@ rm.add_node("n4")
 rm.add_actor("a1", 0.99)
 rm.print_nodes("a1")
 
-rm.add_actor("a2", 0.7)
+rm.add_actor("a2", 0.9)
 rm.print_nodes("a2")
 
 rm.lost_node("n1")
