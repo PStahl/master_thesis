@@ -132,6 +132,12 @@ Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} 
 The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
 \end{definition}
 
+In the case of stream-data processing and replicated actors we can't express an execution time, instead we have focus on the time it takes to replicate an actor.
+
+\begin{definition} \label{def:dyn_repl_reliability}
+The reliability of a process with several replicas is defined as the probability that it always is at least one replica running, i.e. the probability that not all replicas fails during the time it takes to start a new replica.
+\end{definition}
+
 To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
 \begin{itemize}
 \item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required
@@ -245,6 +251,11 @@ R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
 \end{equation}
 where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). For simplicity we will use one reliability for all static factors and chose a number of dynamic factors to consider.
 
+In our case when we use actors we will according to Definition \ref{dyn_repl_reliability} express the reliability as:
+\begin{equation} \label{eq:replica_reliability}
+R = 1 - (1 - R_{replica 1}(t_0) \cdot (1 - R_{replica 2}(t_0) \cdots (1 - R_{replica n}(t_0)
+\end{equation}
+where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
 
 \subsection{Task scheduling}
 
