@@ -106,7 +106,7 @@ The reliability of a process is measured by the probability that the hardware is
 Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} which is a combination of the above definitions. 
 
 \begin{definition} \label{def:dyn_reliability}
-The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing a hardware, software or a network failure during it's time of execution.
+The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
 \end{definition}
 
 To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
@@ -131,7 +131,7 @@ HDCS, or Heterogeneous Distributed Computing System is a system of numerous high
 % Ev. skriva om static vs dynamic env.
 
 \subsection{Replication techniques}
-There are a number of different strategies for replication a task:
+There are a number of different strategies for replicating a task:
 \begin{itemize}
 \item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
 
@@ -209,15 +209,17 @@ which describes the probability that the hardware will work for time $t$ without
 For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
 
 
-%---------- -------------------------DECIDE WHICH FACTOR WE SHOULD USE-----------------------------------------
+%---------- -------------------------DECIDE WHICH FACTORS WE SHOULD USE-----------------------------------------
 
 
 \begin{equation} \label{eq:overall_reliability}
-R(t) = R_{HW}(t) \cdot R_{SW}(t) \cdot R_{Network}(t)
+R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
 \end{equation}
-where $R_{SW}(t)$ and $R_{Network}(t)$ is the probability that the software respectively the network is free from failures during time $t$. 
+where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). For simplicity we will use one reliability for all static factors and chose a number of dynamic factors to consider.
+
 
 \subsection{Task scheduling}
+
 
 \section{Method} \label{sec:method}
 We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
@@ -226,10 +228,13 @@ The second step was to suggest a proper solution and implement it. Here we got i
 % More details
 First of all we put together the necessary master thesis documents, a goal document and a project plan. 
 
-Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is a huge interest in this subject...etc
-Philip implemented the replication functionality in Calvin and Jonatan wrote a first model to the task scheduling/supervisor mechanism. 
+Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is an certain interest in this subject...etc
+
+During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
+
 
 \section{Implementation} \label{sec:implementation}
+
 
 \chapter{Evaluation} \label{ch:evaluation}
 
