@@ -77,7 +77,7 @@ Reliability can be increased by cloning application tasks, where all clones prod
 Some of the drawbacks of replicating a task n times, is that the resources needed increases. With n replicas, all performing the same computation on the same input, one need n times as much resources, and since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
 
 \section{Our contributions}
-
+%TODO
 
 \section{Related work} \label{sec:related_work}
 A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
@@ -110,7 +110,65 @@ Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compu
 
 \chapter{Approach} \label{ch:approach}
 \section{Theory} \label{sec:theory}
-\subsection{Defintions} \label{subsec:definitions}
+\subsection{Computational Environment}
+\subsubsection{Types of distributed computing}
+There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
+
+Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task. 
+
+Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. 
+
+Cloud an be described as the next generation of grids and clusters. It is indeed quite similar to grid and clusters, e.g. parallel and distributed, but with the important difference that cloud has multiple domains \cite{compStudyLoadAndCloud}. Due to that machines can be geographically distributed, software and hardware components heterogeneous and that every application has it own deployment requirements analyzing and predicting workload and reliability is very challenging \cite{surveyReliabilityDistr}. 
+
+HDCS, or Heterogeneous Distributed Computing System is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved. 
+\subsubsection{Dynamic versus static environments}
+%TODO
+\subsubsection{Heterogeneous versus Homogenous environments}
+%TODO
+\subsection{Fault Models}
+The failure of a node or a link is assumed to follow a Poisson process with constant failure rate. Failures of different nodes are assumed to be statistically independent. Although such assumptions may not hold in reality, reasonably useful mathemat- ical models can be achieved using this simplified assumption [22] [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
+
+[A Large-scale Study of Failures in High- performance-computing Systems]
+
+the Byzantine failure model, which is the most general and widely accepted threat model [29], [33], [38], [41] and has been applied to numerous dis- tributed software systems [1], [3], [33]. [Self-Adapting Reliability in Distributed Software Systems]
+
+hese models were based on different measures such as Markov State [25], Factoring theorem [27], architectural level based approach [3,4,21], and users collaborative approach [3]. [A survey on reliability in distributed systems]
+
+In order to make an analysis mathematically tractable, many reliability models assume that the failure pattern of a particular computer system forms a Poisson process. In practice, interfailure times are rarely exponentially distributed [6, 18, 26]. In fact, successive interfailure times are often not even independent, that is, they do not form a renewal process. [Performance Analysis of Checkpointing Strategies]
+
+Errors: These kinds of errors are commonly met in distributed systems as well as in Grid environments [2,7,32,33], and most often include: (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval.
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. We denote   as the desired failure probability threshold. Thus, for each task, a sufficient number of replicas is created to satisfy the condition:
+In this paper, we examine the failure probability of a task
+with respect to the mobile resource it is assigned for execution. Based on the various types of failures, we assume that a task or a replica fails if the resource on which it is assigned fails during the execution time. This failure is not necessarily a processor (crash) failure, but can also be an omission (such as time omission) due to an unreliable connection. For this reason, the mean time to failure (MTTF) is used, which is the expected time
+that a mobile Grid resource will function before it fails for any reason. Conventionally, MTTF refers to non-repairable objects, while mean time between failure (MTBF) refers to repairable objects. In large and complex systems such as Mobile Grids, although the individual component reliabilities can be high, the overall reliability of the system can possibly be low [34], due to coupled failure modes or various extrinsic factors. The lifetime of the Mobile Grid resources under discussion is assumed to start at time t = 0, and any events occurring at times t < 0 are irrelevant
+The Weibull distribution is often used to model the time until failure of many different physical systems and, for this reason, it is more suitable for our study compared to other distributions such as the Poisson or exponential distributions
+ [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
+ 
+ time. Byzantine nodes may try to report incorrect results or not report a result at all. For the purposes of this paper, we assume a node that does not report a result in a timely fash- ion to have failed. [Self-Adapting Reliability in Distributed Software Systems]
+ 
+ \subsection{Fault tolerance techniques}
+Fault-tolerance techniques can be divided into two categorizes:
+Task-level techniques and work-flow level techniques.
+Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level tehcniques fail to cover \cite{gridWorkflow}.
+
+Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
+
+% Checkpointing, job migration, voting etc
+
+\subsubsection{Checkpoint/Restart}
+%TODO
+
+\subsubsection{Replication}
+There are a number of different strategies for replicating a task:
+\begin{itemize}
+\item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+
+\item Semi-Acitve - Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
+
+\item Passive - A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
+\end{itemize}
+
+\subsection{Reliability} \label{subsec:definitions}
 I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
 Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -146,45 +204,6 @@ To fully understand the above definitions we give a brief definition of the thre
 \item Error: An error is a human mistake.
 \end{itemize} 
 To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
-
-\subsection{Types of distributed computing}
-There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
-
-Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task. 
-
-Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. 
-
-Cloud an be described as the next generation of grids and clusters. It is indeed quite similar to grid and clusters, e.g. parallel and distributed, but with the important difference that cloud has multiple domains \cite{compStudyLoadAndCloud}. Due to that machines can be geographically distributed, software and hardware components heterogeneous and that every application has it own deployment requirements analyzing and predicting workload and reliability is very challenging \cite{surveyReliabilityDistr}. 
-
-HDCS, or Heterogeneous Distributed Computing System is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved. 
-
-% Ev. skriva om static vs dynamic env.
-
-\subsection{Replication techniques}
-There are a number of different strategies for replicating a task:
-\begin{itemize}
-\item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
-
-\item Semi-Acitve - Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
-
-\item Passive - A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
-\end{itemize}
-
-\subsection{Fault tolerance techniques}
-Fault-tolerance techniques can be divided into two categorizes:
-Task-level techniques and work-flow level techniques.
-Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level tehcniques fail to cover \cite{gridWorkflow}.
-
-Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
-
-% Checkpointing, job migration, voting etc
-
-\subsection{Fault Model}
-The failure of a node or a link is assumed to follow a Poisson process with constant failure rate. Failures of different nodes are assumed to be statistically independent. Although such assumptions may not hold in reality, reasonably useful mathemat- ical models can be achieved using this simplified assumption [22] [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
-
-[A Large-scale Study of Failures in High- performance-computing Systems]
-
-the Byzantine failure model, which is the most general and widely accepted threat model [29], [33], [38], [41] and has been applied to numerous dis- tributed software systems [1], [3], [33]. [Self-Adapting Reliability in Distributed Software Systems]
 
 
 \subsection{Load balancing}
@@ -274,6 +293,12 @@ During the first weeks Philip implemented a replication functionality in Calvin 
 
 
 \section{Implementation} \label{sec:implementation}
+
+\chapter{Limitations} \label{ch:limitations}
+\subsection{Reliability model} \label{sec:limitations_reliability_model}
+Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. [Discrete and continuous reliability models for systems with identically distributed correlated components]
+
+We do not take into account parameters such as X and Y [TODO].
 
 
 \chapter{Evaluation} \label{ch:evaluation}
