@@ -93,7 +93,8 @@ powerful monitor.  [A Survey of Fault-Tolerance and Fault-Recovery Techniques in
 
 Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
 
-Traditional redundancy, also called k-modular redun- dancy [38], which performs k 2 f3; 5; 7; . . .g indepen- dent executions of the same task in parallel and then takes a vote on the correctness of the result. [Self-Adapting Reliability in Distributed Software Systems]
+Traditional redundancy, also called k-modular redun- dancy [38], which performs k 2 f3; 5; 7; . . .g indepen- dent executions of the same task in parallel and then takes a vote on the correctness of the result. 
+Progressie-redundancy, self-adaptive iterative redundancy [Self-Adapting Reliability in Distributed Software Systems]
 
 Scheduling:
 Some focus on reliability while ensuring time constraints? [Z][TODO].
@@ -132,15 +133,15 @@ Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} 
 The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
 \end{definition}
 
-In the case of stream-data processing and replicated actors we can't express an execution time, instead we have focus on the time it takes to replicate an actor.
+In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
 
 \begin{definition} \label{def:dyn_repl_reliability}
-The reliability of a process with several replicas is defined as the probability that it always is at least one replica running, i.e. the probability that not all replicas fails during the time it takes to start a new replica.
+The reliability of a process with several replicas is defined as the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
 \end{definition}
 
 To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
 \begin{itemize}
-\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required
+\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required.
 \item Fault: A fault is the state of software. It is also called defect/bug.
 \item Error: An error is a human mistake.
 \end{itemize} 
