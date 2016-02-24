@@ -80,6 +80,31 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 
 
 \section{Related work} \label{sec:related_work}
+A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
+
+To optimize the performance of a DCS, several issues arise such as the minimization of time and cost as well as maximization of system reliability [9, 26]. [	An Algorithm for Optimized Time, Cost, and Reliability in a Distributed Computing
+System]
+
+
+Furthermore, [X] [Y] and [Z] focus not on the reliability that the application provides a result, but that it provides the correct result. This is achieved by various consensus algorithms. [Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies]
+
+Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty. This method allows for the detection of Byzantine faults, resulting in a much more
+powerful monitor.  [A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems]
+
+Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
+
+Traditional redundancy, also called k-modular redun- dancy [38], which performs k 2 f3; 5; 7; . . .g indepen- dent executions of the same task in parallel and then takes a vote on the correctness of the result. [Self-Adapting Reliability in Distributed Software Systems]
+
+Scheduling:
+Some focus on reliability while ensuring time constraints? [Z][TODO].
+
+SLA aware scheduling: 
+ (i) to enable cloud storage systems with I/O performance management (ii) to minimize the I/O throughput SLA violations using effective scheduling policies. I/O throughput SLA in cloud storage service is defined as the I/O throughput of user’s volume is higher or equal to a specific number of IO operations per second (IOPS) in at least 99.9% of time. [SLA-aware Resource Scheduling for Cloud Storage]
+
+
+For reliability evaluation, researchers often design some algorithms to simplify Markov models, generate corresponding File Spanning Tree (FST) to evaluate the K-terminal reliability factoring theorems [2, 7, 9, 10] or the graph theories and probability synthetically 
+Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compute the reliability of a distributed computing system with imperfect nodes [10].
+[A Real-Time Performance Evaluation Model for Distributed Software with Reliability Constrains]
 \cite{taskSchedulingReplication}
 
 \chapter{Approach} \label{ch:approach}
@@ -147,7 +172,12 @@ Fault tolerance techniques can also be divided into reactive and proactive techn
 
 % Checkpointing, job migration, voting etc
 
-\subsection{Fault Models?}
+\subsection{Fault Model}
+The failure of a node or a link is assumed to follow a Poisson process with constant failure rate. Failures of different nodes are assumed to be statistically independent. Although such assumptions may not hold in reality, reasonably useful mathemat- ical models can be achieved using this simplified assumption [22] [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
+
+[A Large-scale Study of Failures in High- performance-computing Systems]
+
+the Byzantine failure model, which is the most general and widely accepted threat model [29], [33], [38], [41] and has been applied to numerous dis- tributed software systems [1], [3], [33]. [Self-Adapting Reliability in Distributed Software Systems]
 
 
 \subsection{Load balancing}
