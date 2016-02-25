@@ -79,13 +79,25 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 \section{Our contributions}
 %TODO
 
+Most previous work uses statis, non-adaptive, probability models for determining the reliability of a node or a system of nodes. Furthermore, assumptions such as constant failure rate are often made, even though they do not reflect reality very well [X]. Instead, we use an static model only at deployment of a system, after which the model self-adapts to the real situations. As failures are encountered, the mean-time-to-failure is updated.
+
+Furthermore, previous work related to reliability either defines reliability as that the application produces the correct result [X], or they bla bla bla. In our work, we only check-point the state of the system, so we do not lose any information about the system in case of a failure. 
+
+... calculating number of replication at deployment ... ours is dynamic and the number of replicas changes over time as the reliability of the system varies.
+
+... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
+
 \section{Related work} \label{sec:related_work}
 A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
 
 maximized reliability under end-to-end delay constraint.
 Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probabil- ity of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
 
+In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. [Optimal task allocation for maximizing reliability in distributed real-time systems]
+
 To reduce the effect of failures on an application executing on a failure-prone system, matching and scheduling algorithms which minimize not only the execution time but also the probability of failure of the application must be devised [Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing]
+
+Reliability of distributed simulation is define to be the probability that the given distributed simulation application can run successfully under the distributed computing environment. (assumes execution time) [ Reliability model of distributed simulation system]
 
 We present an efficient scheme based on task replication, which utilizes the Weibull reliability function for the Grid resources so as to estimate the number of replicas that are going to be scheduled in order to guarantee a specific fault tolerance level for the Grid environment. The number of replicas is calculated by the Grid middleware and is based on the failure probability of the Grid resources and the policy that is adopted for providing a specific level of fault tolerance. The adopted replication model is based on static replication [2], meaning that, when a replica fails, it is not substituted by a new one. replicas causes an overhead in the workload that is allocated to the Grid for execution. Scheduling and resource management are important in optimizing Grid resource allocation [3] and determining its ability to deliver the negotiated Quality of Service to all users [4,5] [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
@@ -141,7 +153,8 @@ Hardware is the largest (30 - 60\%) [A large-scale study of failures in high-per
 
 (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
-
+\subsubsection{Fault life-cycle techniques}
+prevention, removal, tolerance, forecasting. [A survey on reliability in distributed systems]
 
 \subsubsection{Fault models}
 \subsubsection*{Byzantine Faults}
@@ -190,6 +203,21 @@ The Weibull distribution is often used to model the time until failure of many d
  time. Byzantine nodes may try to report incorrect results or not report a result at all. For the purposes of this paper, we assume a node that does not report a result in a timely fash- ion to have failed. [Self-Adapting Reliability in Distributed Software Systems]
  
  Poisson random process, random variable  ri has an exponential probability density function f ri  t     ri e  ri t. Consequently, the reliability of a resource is given by R ri  t    e  ri t [23]. [Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing]
+ 
+ chance of hardware failure approaches to maximum in the initial and end life of any specific hardware [A survey on reliability in distributed systems]
+ 
+ faults or failures can be classified into three categories i.e. Application level, System level, and Network level. To handle these faults timely, a fault tolerant system can be used either as spatial or temporal redundancy, including replication of hardware (with additional components), software (with special programs), and time (with the diversified of operations) [A survey on reliability in distributed systems]%Multimedia object placement for transparent data replication
+ 
+ \subsubsection{Failure assumptions}
+ %TODO
+ possible assumptions:
+ \begin{itemize}
+  \item  Each component of the distributed system (node, communication link, LP being executed) only has two states: operational or failed.
+ \item Failures of components are statistically independent.
+ \item The “future life” of a component (the time to the next failure) follows exponential distribution, i.e., the failure of a component follows a Poisson process.
+ \end{itemize}
+
+ 
  
  \subsection{Fault tolerance techniques}
 Fault-tolerance techniques can be divided into two categorizes:
@@ -256,7 +284,24 @@ To fully understand the above definitions we give a brief definition of the thre
 \end{itemize} 
 To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
 
-Since many real-time systems are non-deterministic environment in which even dangerous, system fault tolerance is necessary and important. In order to effectively verify the level of fault-tolerant systems, a reliability model needs to be proposed, it is generally assumed that the error arrival rate is stable and the error probability at any time intervals meets Poisson distribution [7-8] [Real-time fault-tolerant scheduling algorithm for distributed computing systems.pdf]
+Since many real-time systems are non-deterministic environment in which even dangerous, system fault tolerance is necessary and important. In order to effectively verify the level of fault-tolerant systems, a reliability model needs to be proposed, it is generally assumed that the error arrival rate is stable and the error probability at any time intervals meets Poisson distribution [7-8] [Real-time fault-tolerant scheduling algorithm for distributed computing systems]
+
+While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
+optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] Optimal task allocation for maximizing reliability in distributed real-time systems]
+
+the reliability of processing node Pk in
+time interval [0,t] can be achieved by:
+R (t)=            (5) P 
+where       is hazard rate at time  . By assuming a constant hazard rate (like [3] and [25]), Eq. (5) reduces to:
+RP (t) =       t (6) Total hazard rate of each node can be computed by adding failure rate of its hardware and failure rate of its OS if we assume that they are independent 
+
+System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) [Optimal task allocation for maximizing reliability in distributed real-time systems]
+
+the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a com- mon assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
+There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. [ A Hierarchical Modeling and Analysis for Grid Service Reliability.pdf]
+
+\subsubsection{Extended model}
+Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. [A survey on reliability in distributed systems]
 
 \subsection{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
@@ -297,7 +342,11 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \item Min-Min - 
 \end{itemize}
 
+
 \subsection{Task scheduling}
+%TODO
+
+Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate [Optimal task allocation for maximizing reliability in distributed real-time systems]
 
 
 
@@ -329,8 +378,6 @@ R = 1 - (1 - R_{replica 1}(t_0) \cdot (1 - R_{replica 2}(t_0) \cdots (1 - R_{rep
 \end{equation}
 where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
 
-\subsection{Task scheduling}
-
 
 \section{Method} \label{sec:method}
 We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
@@ -357,7 +404,13 @@ Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are 
 \subsection{Reliability model} \label{sec:limitations_reliability_model}
 Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. [Discrete and continuous reliability models for systems with identically distributed correlated components]
 
+the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. [ Reliability model of distributed simulation system]
+
 We do not take into account parameters such as X and Y [TODO].
+
+Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment [A survey on reliability in distributed systems]
+
+A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique [A survey on reliability in distributed systems]
 
 
 \chapter{Evaluation} \label{ch:evaluation}
