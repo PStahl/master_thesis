@@ -76,16 +76,6 @@ Reliability can be increased by cloning application tasks, where all clones prod
 
 Some of the drawbacks of replicating a task n times, is that the resources needed increases. With n replicas, all performing the same computation on the same input, one need n times as much resources, and since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
 
-\section{Our contributions}
-%TODO
-
-Most previous work uses statis, non-adaptive, probability models for determining the reliability of a node or a system of nodes. Furthermore, assumptions such as constant failure rate are often made, even though they do not reflect reality very well [X]. Instead, we use an static model only at deployment of a system, after which the model self-adapts to the real situations. As failures are encountered, the mean-time-to-failure is updated.
-
-Furthermore, previous work related to reliability either defines reliability as that the application produces the correct result [X], or they bla bla bla. In our work, we only check-point the state of the system, so we do not lose any information about the system in case of a failure. 
-
-... calculating number of replication at deployment ... ours is dynamic and the number of replicas changes over time as the reliability of the system varies.
-
-... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
 
 \section{Related work} \label{sec:related_work}
 A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
@@ -122,10 +112,27 @@ SLA aware scheduling:
  (i) to enable cloud storage systems with I/O performance management (ii) to minimize the I/O throughput SLA violations using effective scheduling policies. I/O throughput SLA in cloud storage service is defined as the I/O throughput of user’s volume is higher or equal to a specific number of IO operations per second (IOPS) in at least 99.9% of time. [SLA-aware Resource Scheduling for Cloud Storage]
 
 
+This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model.
+This paper proposes a Service-Oriented software Reliability Model (SORM). This model evaluates the reliability of WS in two steps: (1) Use highly efficient group testing to evaluate the reliability of atomic services.
+(2) Evaluate the reliability of a composite service based on the reliabilities of the component services (they can be atomic services or composite services) and the structure (relationships) among the component services. Both evaluation steps are dynamic and at runtime. [A SOFTWARE RELIABILITY MODEL FOR WEB SERVICE]
+
+
 For reliability evaluation, researchers often design some algorithms to simplify Markov models, generate corresponding File Spanning Tree (FST) to evaluate the K-terminal reliability factoring theorems [2, 7, 9, 10] or the graph theories and probability synthetically 
 Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compute the reliability of a distributed computing system with imperfect nodes [10].
 [A Real-Time Performance Evaluation Model for Distributed Software with Reliability Constrains]
 \cite{taskSchedulingReplication}
+
+
+\section{Our contributions}
+%TODO
+
+Most previous work uses statis, non-adaptive, probability models for determining the reliability of a node or a system of nodes. Furthermore, assumptions such as constant failure rate are often made, even though they do not reflect reality very well [X]. Instead, we use an static model only at deployment of a system, after which the model self-adapts to the real situations. As failures are encountered, the mean-time-to-failure is updated.
+
+Furthermore, previous work related to reliability either defines reliability as that the application produces the correct result [X], or they bla bla bla. In our work, we only check-point the state of the system, so we do not lose any information about the system in case of a failure. 
+
+... calculating number of replication at deployment ... ours is dynamic and the number of replicas changes over time as the reliability of the system varies.
+
+... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
 
 \chapter{Approach} \label{ch:approach}
 \section{Theory} \label{sec:theory}
@@ -162,9 +169,11 @@ A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pd
 
 in which pro- cessors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
-\subsubsection*{Fail-stop Faults}
+\subsubsection*{Fail-stop (crash-stop?) Faults}
 A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pdf
 fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+
+This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
 \subsubsection*{Fail-stutter Faults}
 A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pdf
@@ -300,6 +309,22 @@ System reliability: Due to independence of node and path failures, system reliab
 the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a com- mon assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
 There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. [ A Hierarchical Modeling and Analysis for Grid Service Reliability.pdf]
 
+Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hypercube reliability assuming that the system works as long as there is no disconnectedworking node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hypercube computers]
+
+The dependability model is based on the following assump- tions All the processors (nodes) are homogeneous with iden- tical and exponential distribution of failure time. We define X as the failure rate of a node. Fortheavailabilitymodel,thereisasinglerepairfacility with exponential distribution of repair time. The average repair rate is given by p.
+The link failure rate is negligible compared to the node failure rate. [ A unified task-based dependability model for hypercube computers]
+
+(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. [ Reliability analysis of distributed systems based on a fast reliability algorithm]
+
+This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model [A SOFTWARE RELIABILITY MODEL FOR WEB SERVICE]
+
+What affects software reliability? ...lists 32 factors ... [An analysis of factors affecting software reliability]
+
+The most common simplifying assumptions em- ployed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topol- ogy [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+
+In this paper, we consider three key performance and reliability metrics: the average service time of an application, the QoS and the service reliability in executing an applica- tion [2], [3], [16], [22]. While precise mathematical definitions of these metrics are presented in Section 3.3, at this point we will briefly introduce them and describe their scope of applicability. The average service time is critical to assess the speedup in the runtime of applications when executed in parallel on a DCS. The average service time is a reasonable metric (i.e., it takes a finite value) only in settings where servers are completely reliable or in settings where servers are allowed to recover after a failure. The QoS, which is defined as the probability of executing an application by a prescribed time deadline, is a reasonable metric in settings where server nodes may or may not fail. The QoS metric is of interest to system users and analysts, specially in real-time or in time constrained applications. Finally, the service reliability, which is defined as the probability of successfully executing an entire application, is an important metric for assessing the dependability of applications executed on DCSs, and it is a reasonable metric only when servers can fail without recovery and/or in settings where applications cannot continue their execution after a failure [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+
+
 \subsubsection{Extended model}
 Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. [A survey on reliability in distributed systems]
 
@@ -398,6 +423,9 @@ Error logs of different types that are often produced by software components. So
 Statistical monitors which track auxiliary system attri- butes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
 Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
 
+\chapter{System model}
+\section{Reliability model}
+\section{Application}
 \section{Implementation} \label{sec:implementation}
 
 \chapter{Limitations} \label{ch:limitations}
