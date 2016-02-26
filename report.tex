@@ -387,7 +387,7 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 
 In our case when we use actors we will according to Definition \ref{dyn_repl_reliability} express the reliability as:
 \begin{equation} \label{eq:replica_reliability}
-R = 1 - (1 - R_{replica 1}(t_0) \cdot (1 - R_{replica 2}(t_0) \cdots (1 - R_{replica n}(t_0)
+R = 1 - (1 - R_{replica 1}(t_0)) \cdot (1 - R_{replica 2}(t_0)) \cdots (1 - R_{replica n}(t_0))
 \end{equation}
 where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
 
