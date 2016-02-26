@@ -134,30 +134,29 @@ Furthermore, previous work related to reliability either defines reliability as 
 
 ... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
 
-\chapter{Approach} \label{ch:approach}
-\section{Theory} \label{sec:theory}
-\subsection{Computational Environment}
-\subsubsection{Types of distributed computing}
+\chapter{Background Theory} \label{ch:background_theory}
+\section{Computational Environment}
+\subsection{Types of distributed computing}
 %TODO källsa
 There are a number of different types of distributed environments, e.g. grid, clusters, cloud and Heterogeneous Distributed Computing System (HDCS).
 
-Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloudt}.
+Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud}.
 
-Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloudt}
+Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}
 
 Cloud can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analyzing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 
 HDCS, is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 
-\subsubsection{Dynamic versus static environments}
+\subsection{Dynamic versus static environments}
 In static environment the cloud provider installs homogeneous resources. Also the resources in the cloud are not  exible when environment is made static. In this scenario, the cloud requires prior knowledge of nodes capacity, processing power , memory, performance and statistics of user requirements.
 
-In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{compStudyLoadAndCloudt}
+In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{compStudyLoadAndCloud}
 
 
 
-\subsection{Faults in distributed environments}
-\subsubsection{Types of Faults}
+\section{Faults in distributed environments}
+\subsection{Types of Faults}
 In distributed environments, especially with heteregenous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, hardware malfunction, software errors, network failure, loss of energy, etc.
 
 %TODO 
@@ -165,10 +164,10 @@ In \cite{studyOfFailures}, real-world failure data is studied and in that data, 
 
 (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
-\subsubsection{Fault life-cycle techniques}
+\subsection{Fault life-cycle techniques}
 prevention, removal, tolerance, forecasting. \cite{surveyReliabilityDistr}
 
-\subsubsection{Fault models}
+\subsection{Fault models}
 \subsubsection*{Byzantine Faults}
 \cite{surveyFaultParallel}
 
@@ -182,10 +181,10 @@ This failure model has the practical implication that avoids the use of complica
 
 \subsubsection*{Fail-stutter Faults}
 \cite{surveyFaultParallel}
-\subsubsection{Crash-failure model}
+\subsubsection*{Crash-failure model}
 Well- known examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
-\subsubsection{Failure Distribution}
+\subsection{Failure Distribution}
 %TODO
 Previous work usually assumes resource failure within a system follows a Poisson process \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}, with a constant failure rate. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
 
@@ -212,7 +211,7 @@ Assumptions such as constant resource failure rate and statistically independent
 
  
  
- \subsection{Fault tolerance techniques}
+ \section{Fault tolerance techniques}
 Fault-tolerance techniques can be divided into two categorizes:
 Task-level techniques and work-flow level techniques.
 Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
@@ -223,12 +222,12 @@ One way of taking failures into account is to employ a reliable matching and sch
 
 % Checkpointing, job migration, voting etc
 
-\subsubsection{Checkpoint/Restart}
+\subsection{Checkpoint/Restart}
 %TODO
 
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
-\subsubsection{Replication}
+\subsection{Replication}
 There are a number of different strategies for replicating a task:
 \begin{itemize}
 \item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
@@ -240,7 +239,7 @@ There are a number of different strategies for replicating a task:
 
 The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
-\subsection{Reliability Model} \label{subsec:definitions}
+\section{Reliability Model} \label{subsec:definitions}
 I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
 Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -311,10 +310,7 @@ In this paper, we consider three key performance and reliability metrics: the av
 We focus on the study of task allocation deci- sion to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliabil- ity maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was com- puted from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we di- vide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability [The decision model of task allocation for constrained stochastic distributed systems]
 
 
-\subsubsection{Extended model}
-Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
-
-\subsection{Load balancing}
+\section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
 
@@ -354,7 +350,7 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \end{itemize}
 
 
-\subsection{Task scheduling}
+\section{Task scheduling}
 %TODO
 
 Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
@@ -389,6 +385,15 @@ R = 1 - (1 - R_{replica 1}(t_0) \cdot (1 - R_{replica 2}(t_0) \cdots (1 - R_{rep
 \end{equation}
 where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
 
+\section{Monitoring}
+Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
+Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OS- level pings and SNMP queries to application level testing, e.g., a test query to a database object.
+End-to-end monitors which emulate actual user requests. Such monitors can identify that a problem is somewhere along the request path but not its precise location.
+Error logs of different types that are often produced by software components. Some error messages can be modeled as monitors which alert when the error message is produced.
+Statistical monitors which track auxiliary system attri- butes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
+Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
+
+\chapter{Approach} \label{ch:approach}
 
 \section{Method} \label{sec:method}
 We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
@@ -400,19 +405,10 @@ First of all we put together the necessary master thesis documents, a goal docum
 Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is an certain interest in this subject...etc
 
 During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
-
-\section{Monitoring}
-Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
-Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OS- level pings and SNMP queries to application level testing, e.g., a test query to a database object.
-End-to-end monitors which emulate actual user requests. Such monitors can identify that a problem is somewhere along the request path but not its precise location.
-Error logs of different types that are often produced by software components. Some error messages can be modeled as monitors which alert when the error message is produced.
-Statistical monitors which track auxiliary system attri- butes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
-Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
-
-\chapter{System model}
-\section{Reliability model}
-\section{Application}
-\section{Implementation} \label{sec:implementation}
+\section{System model}
+\subsection{Reliability model}
+\subsection{Application}
+\subsection{Implementation} \label{sec:implementation}
 
 \chapter{Limitations} \label{ch:limitations}
 \subsection{Reliability model} \label{sec:limitations_reliability_model}
@@ -425,6 +421,10 @@ We do not take into account parameters such as X and Y [TODO].
 Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
 
 A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique \cite{surveyReliabilityDistr}
+
+\chapter{Future Work} \label{ch:future_work}
+\subsection{Extended model}
+Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
 
 
 \chapter{Evaluation} \label{ch:evaluation}
