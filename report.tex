@@ -202,11 +202,6 @@ Wellknown examples are the crash failure model (in which processors simply stop 
 %TODO
 Previous work usually assumes resource failure within a system follows a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
 
-\begin{equation} \label{eq:resource_failure}
-%TODO 
-MTBF = (nbr  of  failures) / (total time)
-\end{equation}
-
 Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
 \cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increses with the number of components on which the job is running.
 
@@ -353,36 +348,6 @@ Many studies have been recently done to improve reliability by proper task alloc
 
 The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. [Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization]
 
-
-
-\subsection{Formulas}
-When examine whether a certain level of reliability is reached we need to be able to put figures on the definitions of reliability. Let's consider Definition \ref{def:simple_reliability}. Somehow we need to measure the probability that the hardware is functioning. One usual measurements for hardware reliability is Mean-Time Between Failure, MTBF which is defined as 
-\begin{equation} \label{eq:MTBF}
-MTBF = (nbr  of  failures) / (total time)
-\end{equation}
-From MTBF a reliability function can be expressed as 
-\begin{equation} \label{eq:HW_reliability}
-R_{HW}(t) = e^{-t/MTBF}
-\end{equation}
-which describes the probability that the hardware will work for time $t$ without a single failure.
-
-For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
-
-
-%----------------------------------DECIDE WHICH FACTORS WE SHOULD USE-----------------------------------------
-
-
-\begin{equation} \label{eq:overall_reliability}
-R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
-\end{equation}
-where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). For simplicity we will use one reliability for all static factors and chose a number of dynamic factors to consider.
-
-In our case when we use actors we will according to Definition \ref{dyn_repl_reliability} express the reliability as:
-\begin{equation} \label{eq:replica_reliability}
-R = 1 (1 R_{replica 1}(t_0) \cdot (1 R_{replica 2}(t_0) \cdots (1 R_{replica n}(t_0)
-\end{equation}
-where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
-
 \section{Monitoring}
 Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
 Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OSlevel pings and SNMP queries to application level testing, e.g., a test query to a database object.
@@ -412,7 +377,7 @@ Thereafter we began our literature study of today's situation, as seen in \ref{s
 During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
 \section{System model}
 
-\section{Computational environment}
+\subsection{Computational environment}
 In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes.
 
 \subsubsection{Monitoring}
@@ -434,10 +399,8 @@ However, when a system first is put into action (use other words), no knowledge 
 Furthermore, the time to replica a task is not known at deployment time. Therefore a heuristic approach is taken where we assume XXX number of replicas is needed. During the execution of the application, tasks will fail and new replicas will be spawned. The actual time to spawn new replicas will then be learned by the system, and used in future calculations of number of replicas.
 
 \subsection{Reliability model}
+\subsubsection*{Reliabilty definition}
 Reliability at least one replica is alive during the time to spawn a new replica --> 1 P(all replicas die during the time to spawn a new replica).
-\\\\
-Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is: xxx
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
 \\\\
 We suppose that a mobile resource has survived until time t. The hazard function, h(t), is its failure rate during the short time interval (t , t + 1t ]. Given that a mobile resource is still alive at time t , the probability of failure during the next 1t time units can be expressed generally as follows:
 P(t < s < t + 1t|s > t) = P(t < s < t + 1t)/P(s > t) \cite{effTaskReplMobGrid}
@@ -456,11 +419,53 @@ The reliability of a process is the probability that the task is executed within
 Finally, for our application model with replicated tasks, we define reliability as
 for In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
 
-\begin{definition} \label{def:dyn_repl_reliability}
+\begin{definition} \label{def:replica_reliability}
 The reliability of a process, with n task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
 \end{definition}
 
+\subsubsection*{Reliability models}
+Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is: xxx
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
+\\\\
+Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}. Since resources, e.g. computational nodes in the system, will be restarted upon failure, we use MTBF, defined as
 
+\begin{equation} \label{eq:MTBF}
+MTBF = (number  of  failures) / (total time)
+\end{equation}
+
+From \ref{eq:MTBF} a reliability function can be expressed as 
+\begin{equation} \label{eq:resource_reliability}
+R_{r}(t) = e^{-t/MTBF_{r}}
+\end{equation}
+
+Equation~\ref{eq:resource_reliability} expresses the probability that  resource $r$ will work for a time $t$.
+
+For a complete analysis of system reliability, one must take all factors affecting reliability into account. However, including all factors if unfeasible.  \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. In our framework, we only care whether or not a node is available or has died.
+
+
+Using replication of a task, and reliability defined as in definition~\ref{def:replica_reliability}, the probability that a task $T$  with $n$ replicas is successful during a time $t$ can be expressed as 
+
+\begin{equation} \label{eq:task_failure_probability}
+R_{T}(t) = R_{replica_1}(t) \cdot R_{replica_2}(t) \cdots R_{replica_n}(t)
+\end{equation}
+
+where $R_{replica i}(t)$ is the reliability that replica $i$ is reliable during the time $t$, which it takes to replicate an actor. 
+
+Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the node failure, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_failure_probability} can with equation~\ref{eq:resource_reliability} be re-written as
+
+\begin{equation} \label{eq:task_failure_probability_2}
+R_{T}(t) = R_{r_1}(t) \cdot R_{r_2}(t) \cdots R_{r_k}(t)
+\end{equation}
+
+where $R_{r_1} \cdots R_{r_k}$ are the resources on which the $n$ replicas are using.
+\\\\
+Given an task with $m-1$ replicas, the time $t$ it takes to replicate a task, and the failure probability $Pf_{k}$ during the time $t$ for each of the $m$ replicas, the task failure probability is
+\begin{equation}
+\label{eq:task_reliability}
+Pf = \prod\limits_{k=1}^m Pf_{k}(t)
+\end{equation}
+
+Expressed in words, equation \ref{eq:task_reliability} is the probability that all replicas fail, during the time it takes to start a new one.
 
 
 \section{Implementation} \label{sec:implementation}
@@ -489,13 +494,18 @@ Given the failure probability Pfik of each one of the mi replicas Ti k of task T
 Pfi =Pfi· Pfik. (2) k=1
 The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
 
-Conventionally, MTTF refers to non-repairable objects, while mean time between failure (MTBF) refers to repairable objects. In large and complex systems such as Mobile Grids, although the individual component reliabilities can be high, the overall reliability of the system can possibly be low [34], due to coupled failure modes or various extrinsic factors. The lifetime of the Mobile Grid resources under discussion is assumed to start at time t = 0, and any events occurring at times t < 0 are irrelevant. \cite{effTaskReplMobGrid}
-
 
 
 \chapter{Future Work} \label{ch:future_work}
 \subsection{Extended model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
+
+For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
+
+\begin{equation} \label{eq:overall_reliability}
+R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
+\end{equation}
+where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). For simplicity we will use one reliability for all static factors and chose a number of dynamic factors to consider.
 
 
 \chapter{Conclusions} \label{ch:conclusions}
@@ -576,6 +586,9 @@ Distributed Diagnosis in Dynamic Fault Environments
 
 \bibitem{optCheckpointInterval}
 A higher order estimate of the optimum checkpoint interval for restart dumps
+
+\bibitem{factorsAffectingRel}
+An analysis of factors affecting software reliability
 
 \end{thebibliography}
 
