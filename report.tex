@@ -84,7 +84,7 @@ Previous work has been done which aims at achieving fault-tolerance through repl
 
 
 maximized reliability under end-to-end delay constraint.
-Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probabil- ity of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [algoMaxRelEndToEndConstraint]
+Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probability of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [algoMaxRelEndToEndConstraint]
 
 In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. \cite{optTaskAllocationForMaxRel}
 
@@ -98,15 +98,18 @@ To optimize the performance of a DCS, several issues arise such as the minimizat
 System]
 
 
-Furthermore, [X] [Y] and [Z] focus not on the reliability that the application provides a result, but that it provides the correct result. This is achieved by various consensus algorithms. [Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies]
+Furthermore, [X] [Y] and [Z] focus not on the reliability that the application provides a result, but that it provides the correct result. This is achieved by various consensus algorithms. [Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies] (k-modular redundancy \cite{Self-Adapting Reliability in Distributed Software Systems})
 
-Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty. This method allows for the detection of Byzantine faults, resulting in a much more
-powerful monitor.  \cite{surveyFaultParallel}
+Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty (k-modular redundancy \cite{Self-Adapting Reliability in Distributed Software Systems}). This method allows for the detection of Byzantine faults, resulting in a much more powerful monitor.  \cite{surveyFaultParallel}
 
 Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
 
-Traditional redundancy, also called k-modular redun- dancy [38], which performs k 2 f3; 5; 7; . . .g indepen- dent executions of the same task in parallel and then takes a vote on the correctness of the result. 
+Traditional redundancy, also called k-modular redundancy [38], which performs k 2 f3; 5; 7; . . .g independent executions of the same task in parallel and then takes a vote on the correctness of the result. 
+
+
+... previous work with self-adapting systems ... [Improving reliability in resource management through adaptive reinforcement learning for distributed systems]
 Progressie-redundancy, self-adaptive iterative redundancy [Self-Adapting Reliability in Distributed Software Systems]
+
 
 Scheduling:
 Some focus on reliability while ensuring time constraints? [Z][TODO].
@@ -139,6 +142,8 @@ Furthermore, previous work related to reliability either defines reliability as 
 
 ... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
 
+...The network topology of the computer system is cycle-free such as star, bus, hierarchical, or connected star. \cite{taskAllocation}...
+
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
 \subsection{Types of distributed computing}
@@ -169,6 +174,14 @@ In \cite{studyOfFailures}, real-world failure data is studied and in that data, 
 
 (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. \cite{effTaskReplMobGrid}
 
+three terms failure, fault and error. 
+\begin{itemize}
+\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required.
+\item Fault: A fault is the state of software. It is also called defect/bug.
+\item Error: An error is a human mistake.
+\end{itemize} 
+To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
+
 \subsection{Fault life-cycle techniques}
 prevention, removal, tolerance, forecasting. \cite{surveyReliabilityDistr}
 
@@ -176,7 +189,7 @@ prevention, removal, tolerance, forecasting. \cite{surveyReliabilityDistr}
 \subsubsection*{Byzantine Faults}
 \cite{surveyFaultParallel}
 
-in which pro- cessors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsubsection*{Fail-stop (crash-stop?) Faults}
 \cite{surveyFaultParallel}
@@ -187,11 +200,11 @@ This failure model has the practical implication that avoids the use of complica
 \subsubsection*{Fail-stutter Faults}
 \cite{surveyFaultParallel}
 \subsubsection*{Crash-failure model}
-Well- known examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsection{Failure Distribution}
 %TODO
-Previous work usually assumes resource failure within a system follows a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
+Previous work usually assumes resource failure within a system follows a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
 
 \begin{equation} \label{eq:resource_failure}
 %TODO 
@@ -199,7 +212,7 @@ MTBF = (nbr  of  failures) / (total time)
 \end{equation}
 
 Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
-\cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better.
+\cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increses with the number of components on which the job is running.
 
  
  \subsubsection{Failure assumptions}
@@ -224,6 +237,11 @@ One way of taking failures into account is to employ a reliable matching and sch
 
 The basics, however, are checkpoint recovery and task replication The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed  \cite{effTaskReplMobGrid}. 
 
+
+In case of a long running task, checkpoint periodically and restart from the last good state;
+In case of a task running on unreliable execution environments, have multiple replicas of the task run on different machines, so that as long as not all replicated tasks fail, the task will succeed to execute; \cite{gridWorkflow}.
+
+
 % Checkpointing, job migration, voting etc
 
 \subsection{Checkpoint/Restart}
@@ -234,19 +252,17 @@ The basics, however, are checkpoint recovery and task replication. The former is
 \subsection{Replication}
 There are a number of different strategies for replicating a task:
 \begin{itemize}
-\item Active - A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+\item Active A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
 
-\item Semi-Acitve - Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
+\item Semi-Acitve Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
 
-\item Passive - A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
+\item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
 \end{itemize}
 
 The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. 
 
 \section{Reliability Model} \label{subsec:definitions}
-I order to examine a systems reliability we must first define what we mean with reliability. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application that in a certain environment  maintain a performance level for a specified amount of time. 
-Reliability could also be interpreted more as the availability of a system, for example a percentage describing the up-time of the system. 
-\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
+Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
 \item Perform well in specified time t without undergoing halting state
 \item Perform exactly the way it is designed
@@ -255,30 +271,6 @@ Reliability could also be interpreted more as the availability of a system, for 
 \item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
 \item Have the ability to run correctly even after scaling is done with reference to some aspects.
 \end{itemize}
-
-For simplicity we will start with a very simple reliability definition, Definition \ref{def:simple_reliability}.
-\begin{definition} \label{def:simple_reliability}
-The reliability of a process is measured by the probability that the hardware is functioning during the execution time.
-\end{definition}
-Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} which is a combination of the above definitions. 
-
-\begin{definition} \label{def:dyn_reliability}
-The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
-\end{definition}
-
-In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
-
-\begin{definition} \label{def:dyn_repl_reliability}
-The reliability of a process with several replicas is defined as the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
-\end{definition}
-
-To fully understand the above definitions we give a brief definition of the three terms failure, fault and error. 
-\begin{itemize}
-\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required.
-\item Fault: A fault is the state of software. It is also called defect/bug.
-\item Error: An error is a human mistake.
-\end{itemize} 
-To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
 
 Since many real-time systems are non-deterministic environment in which even dangerous, system fault tolerance is necessary and important. In order to effectively verify the level of fault-tolerant systems, a reliability model needs to be proposed, it is generally assumed that the error arrival rate is stable and the error probability at any time intervals meets Poisson distribution [7-8] \cite{realTimeSchedAlgo}
 
@@ -291,16 +283,16 @@ R (t)=            (5) P
 where       is hazard rate at time  . By assuming a constant hazard rate (like [3] and [25]), Eq. (5) reduces to:
 RP (t) =       t (6) Total hazard rate of each node can be computed by adding failure rate of its hardware and failure rate of its OS if we assume that they are independent 
 
-Discrete and continuous reliability models for systems with identically distributed correlated components.pdf
+\cite{discContRelModel}
 
 System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) \cite{optTaskAllocationForMaxRel}
 
-the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a com- mon assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
-There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. [ A Hierarchical Modeling and Analysis for Grid Service Reliability.pdf]
+the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a common assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
+There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. [ A Hierarchical Modeling and Analysis for Grid Service Reliability]
 
 Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hypercube reliability assuming that the system works as long as there is no disconnectedworking node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hypercube computers]
 
-The dependability model is based on the following assump- tions All the processors (nodes) are homogeneous with iden- tical and exponential distribution of failure time. We define X as the failure rate of a node. Fortheavailabilitymodel,thereisasinglerepairfacility with exponential distribution of repair time. The average repair rate is given by p.
+The dependability model is based on the following assumptions All the processors (nodes) are homogeneous with identical and exponential distribution of failure time. We define X as the failure rate of a node. Fortheavailabilitymodel,thereisasinglerepairfacility with exponential distribution of repair time. The average repair rate is given by p.
 The link failure rate is negligible compared to the node failure rate. [ A unified task-based dependability model for hypercube computers]
 
 (the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{Reliability analysis of distributed systems based on a fast reliability algorithm}
@@ -309,11 +301,13 @@ This paper proposes a service-oriented software reliability model that dynamical
 
 What affects software reliability? ...lists 32 factors ... [An analysis of factors affecting software reliability]
 
-The most common simplifying assumptions em- ployed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topol- ogy [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+The most common simplifying assumptions employed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topology [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
-In this paper, we consider three key performance and reliability metrics: the average service time of an application, the QoS and the service reliability in executing an applica- tion [2], [3], [16], [22]. While precise mathematical definitions of these metrics are presented in Section 3.3, at this point we will briefly introduce them and describe their scope of applicability. The average service time is critical to assess the speedup in the runtime of applications when executed in parallel on a DCS. The average service time is a reasonable metric (i.e., it takes a finite value) only in settings where servers are completely reliable or in settings where servers are allowed to recover after a failure. The QoS, which is defined as the probability of executing an application by a prescribed time deadline, is a reasonable metric in settings where server nodes may or may not fail. The QoS metric is of interest to system users and analysts, specially in real-time or in time constrained applications. Finally, the service reliability, which is defined as the probability of successfully executing an entire application, is an important metric for assessing the dependability of applications executed on DCSs, and it is a reasonable metric only when servers can fail without recovery and/or in settings where applications cannot continue their execution after a failure [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+In this paper, we consider three key performance and reliability metrics: the average service time of an application, the QoS and the service reliability in executing an application [2], [3], [16], [22]. While precise mathematical definitions of these metrics are presented in Section 3.3, at this point we will briefly introduce them and describe their scope of applicability. The average service time is critical to assess the speedup in the runtime of applications when executed in parallel on a DCS. The average service time is a reasonable metric (i.e., it takes a finite value) only in settings where servers are completely reliable or in settings where servers are allowed to recover after a failure. The QoS, which is defined as the probability of executing an application by a prescribed time deadline, is a reasonable metric in settings where server nodes may or may not fail. The QoS metric is of interest to system users and analysts, specially in real-time or in time constrained applications. Finally, the service reliability, which is defined as the probability of successfully executing an entire application, is an important metric for assessing the dependability of applications executed on DCSs, and it is a reasonable metric only when servers can fail without recovery and/or in settings where applications cannot continue their execution after a failure [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
-We focus on the study of task allocation deci- sion to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliabil- ity maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was com- puted from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we di- vide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability [The decision model of task allocation for constrained stochastic distributed systems]
+We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability [The decision model of task allocation for constrained stochastic distributed systems]
+
+This paper presents effective resource management using adaptive reinforcement learning (RL) that focuses on improving successful execution with low computational complexity. The approach uses an emerging methodology of RL in conjunction with neural network to help a scheduler that effectively observes and adapts to dynamic changes in execution environments [Improving reliability in resource management through adaptive reinforcement learning for distributed systems]
 
 
 \section{Load balancing}
@@ -322,9 +316,9 @@ The term load balancing is generally used for the process of transferring load f
 
 The load balancing algorithms can be divided into three categorize based on the initiation of the process:
 \begin{itemize}
-\item Sender Initiated - An overloaded node send requests until it find a proper node which can except its load.
-\item Receiver Initiated - An under loaded node sends a message for requests until it finds an overloaded node.
-\item Symmetric - A combination of sender initiated and receiver initiated. 
+\item Sender Initiated An overloaded node send requests until it find a proper node which can except its load.
+\item Receiver Initiated An under loaded node sends a message for requests until it finds an overloaded node.
+\item Symmetric A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
 Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory which might lead to the disadvantage that the selected node gets overloaded \cite{perfAnalysisLoadCloud}
@@ -336,23 +330,23 @@ In the non-distributed case the load balancing algorithms is done by only a sing
 We will briefly mention some dynamic load balancing algorithms: % skip static load balancing algorithms or not?
 
 \begin{itemize}
-\item Central Queue Algorithm - A non-distributed algorithm where the central manager maintains a cyclic FIFO-queue. Whenever a new activity arrives the manager inserts it into the queue and whenever a new request arrives it simply picks the first activity in the queue. 
+\item Central Queue Algorithm A non-distributed algorithm where the central manager maintains a cyclic FIFO-queue. Whenever a new activity arrives the manager inserts it into the queue and whenever a new request arrives it simply picks the first activity in the queue. 
 
-\item Local Queue Algorithm - When a new task is created on the main host it will be allocated on under-loaded nodes. Afterwards all new tasks are allocated locally since ... \cite{perfAnalysisLoadCloud}. The algorithm is receiver initiated since when a node is under-loaded it randomly sends requests to remote load managers
+\item Local Queue Algorithm When a new task is created on the main host it will be allocated on under-loaded nodes. Afterwards all new tasks are allocated locally since ... \cite{perfAnalysisLoadCloud}. The algorithm is receiver initiated since when a node is under-loaded it randomly sends requests to remote load managers
 
-\item Ant Colony Optimization Algorithm - As the name implies this algorithm is inspired by the behavior of real ants to find a optimal solution. Whenever an ant find food it moves back to the colony while leaving "markers", i.e. laying pheromone on the way. When more ants find the same place the path the pheromone will become denser. 
+\item Ant Colony Optimization Algorithm As the name implies this algorithm is inspired by the behavior of real ants to find a optimal solution. Whenever an ant find food it moves back to the colony while leaving "markers", i.e. laying pheromone on the way. When more ants find the same place the path the pheromone will become denser. 
 %Förtydliga om det ska ingå i rapporten.
 
-\item Honey Bee Foraging Algorithm - This algorithm is quite similar to the Ant Colony Optimization algorithm. When bees find food they return to the bee's colony and use special dance movements for informing the other bees of how much food there is and where it's located. When the forager bees find more food a more energetic dance takes place. This phenomenon can be applied to servers, when an overloaded server receives a request it redirects it to other under loaded servers.
+\item Honey Bee Foraging Algorithm This algorithm is quite similar to the Ant Colony Optimization algorithm. When bees find food they return to the bee's colony and use special dance movements for informing the other bees of how much food there is and where it's located. When the forager bees find more food a more energetic dance takes place. This phenomenon can be applied to servers, when an overloaded server receives a request it redirects it to other under loaded servers.
 
 % De fyra ovan är från \cite{perfAnalysisLoadCloud}
 
 % Static algorithms: (?)
-\item Bidding - An overloaded node request bids from other nodes. The node with the best bid (i.e. lowest load) wins the job.
+\item Bidding An overloaded node request bids from other nodes. The node with the best bid (i.e. lowest load) wins the job.
 
-\item Max-Min - 
+\item Max-Min 
 
-\item Min-Min - 
+\item Min-Min 
 \end{itemize}
 
 
@@ -360,6 +354,8 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 %TODO
 
 Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
+
+The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. [Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization]
 
 
 
@@ -377,7 +373,7 @@ which describes the probability that the hardware will work for time $t$ without
 For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
 
 
-%---------- -------------------------DECIDE WHICH FACTORS WE SHOULD USE-----------------------------------------
+%----------------------------------DECIDE WHICH FACTORS WE SHOULD USE-----------------------------------------
 
 
 \begin{equation} \label{eq:overall_reliability}
@@ -387,20 +383,23 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 
 In our case when we use actors we will according to Definition \ref{dyn_repl_reliability} express the reliability as:
 \begin{equation} \label{eq:replica_reliability}
-R = 1 - (1 - R_{replica 1}(t_0)) \cdot (1 - R_{replica 2}(t_0)) \cdots (1 - R_{replica n}(t_0))
+R = 1 (1 R_{replica 1}(t_0) \cdot (1 R_{replica 2}(t_0) \cdots (1 R_{replica n}(t_0)
 \end{equation}
 where $R_{replica 1}(t_0)$ is the reliability that replica 1 is reliable during the time $t_0$, it takes to replicate an actor. Each $R_{replica 1}(t)$ can be expressed as above \ref{eq:overall_reliability}
 
 \section{Monitoring}
 Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
-Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OS- level pings and SNMP queries to application level testing, e.g., a test query to a database object.
+Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OSlevel pings and SNMP queries to application level testing, e.g., a test query to a database object.
 End-to-end monitors which emulate actual user requests. Such monitors can identify that a problem is somewhere along the request path but not its precise location.
 Error logs of different types that are often produced by software components. Some error messages can be modeled as monitors which alert when the error message is produced.
-Statistical monitors which track auxiliary system attri- butes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
-Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
+Statistical monitors which track auxiliary system attributes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
+Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
 
 
 Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
+
+Nodes can alternate between working correctly and being crashed in our model.3 Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic
+latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
 
 
 \chapter{Approach} \label{ch:approach}
@@ -417,7 +416,7 @@ Thereafter we began our literature study of today's situation, as seen in \ref{s
 During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
 \section{System model}
 \subsection{Reliability model}
-Reliability - at least one replica is alive during the time to spawn a new replica --> 1 - P(all replicas die during the time to spawn a new replica).
+Reliability at least one replica is alive during the time to spawn a new replica --> 1 P(all replicas die during the time to spawn a new replica).
 
 
 Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is: xxx
@@ -426,7 +425,23 @@ The above corresponds to the probability of the event “all the replicas and th
 We suppose that a mobile resource has survived until time t. The hazard function, h(t), is its failure rate during the short time interval (t , t + 1t ]. Given that a mobile resource is still alive at time t , the probability of failure during the next 1t time units can be expressed generally as follows:
 P(t < s < t + 1t|s > t) = P(t < s < t + 1t)/P(s > t) \cite{effTaskReplMobGrid}
 
-\subsection{Application}
+For simplicity we will start with a very simple reliability definition, Definition \ref{def:simple_reliability}.
+\begin{definition} \label{def:simple_reliability}
+The reliability of a process is measured by the probability that a resource is functioning during the time of execution of a task.
+\end{definition}
+Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} which is a combination of the above definitions. 
+
+\begin{definition} \label{def:dyn_reliability}
+The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
+\end{definition}
+
+In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
+
+\begin{definition} \label{def:dyn_repl_reliability}
+The reliability of a process with several replicas is defined as the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
+\end{definition}
+
+\subsection{Application model}
 \subsection{Implementation} \label{sec:implementation}
 
 \chapter{Limitations} \label{ch:limitations}
@@ -456,7 +471,7 @@ Conventionally, MTTF refers to non-repairable objects, while mean time between f
 
 \chapter{Future Work} \label{ch:future_work}
 \subsection{Extended model}
-Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
+Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
 
 
 \chapter{Evaluation} \label{ch:evaluation}
@@ -504,7 +519,7 @@ Reliability of server’s availability and scala- bility (such as File Server, D
 \bibitem{taskSchedulingReplication}
 	Shuli Wang et. al.
 	\emph{A Task Scheduling Algorithm Based on Replication for Maximizing Reliability on Heterogeneous Computing Systems},
-	Parallel \& Distributed Processing Symposium Workshops (IPDPSW), 2014 IEEE International, p. 1562 - 1571, 
+	Parallel \& Distributed Processing Symposium Workshops (IPDPSW), 2014 IEEE International, p. 1562 1571, 
 	May 2014
 	
 \bibitem{algoMaxRelEndToEndConstraint}
@@ -533,6 +548,12 @@ Efficient task replication and management for adaptive fault tolerance in Mobile
 
 \bibitem{realTimeSchedAlgo}
 Real-time fault-tolerant scheduling algorithm for distributed computing systems
+
+\bibitem{distDiagnosis}
+Distributed Diagnosis in Dynamic Fault Environments
+
+\bibitem{optCheckpointInterval}
+A higher order estimate of the optimum checkpoint interval for restart dumps
 
 \end{thebibliography}
 
