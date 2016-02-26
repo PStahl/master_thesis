@@ -81,13 +81,13 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
 
 maximized reliability under end-to-end delay constraint.
-Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probabil- ity of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
+Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probabil- ity of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [algoMaxRelEndToEndConstraint]
 
-In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. [Optimal task allocation for maximizing reliability in distributed real-time systems]
+In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. \cite{optTaskAllocationForMaxRel}
 
-To reduce the effect of failures on an application executing on a failure-prone system, matching and scheduling algorithms which minimize not only the execution time but also the probability of failure of the application must be devised [Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing]
+To reduce the effect of failures on an application executing on a failure-prone system, matching and scheduling algorithms which minimize not only the execution time but also the probability of failure of the application must be devised \cite{algoMinExTime}
 
-Reliability of distributed simulation is define to be the probability that the given distributed simulation application can run successfully under the distributed computing environment. (assumes execution time) [ Reliability model of distributed simulation system]
+Reliability of distributed simulation is define to be the probability that the given distributed simulation application can run successfully under the distributed computing environment. (assumes execution time) \cite{relModelDistSimSystem}
 
 We present an efficient scheme based on task replication, which utilizes the Weibull reliability function for the Grid resources so as to estimate the number of replicas that are going to be scheduled in order to guarantee a specific fault tolerance level for the Grid environment. The number of replicas is calculated by the Grid middleware and is based on the failure probability of the Grid resources and the policy that is adopted for providing a specific level of fault tolerance. The adopted replication model is based on static replication [2], meaning that, when a replica fails, it is not substituted by a new one. replicas causes an overhead in the workload that is allocated to the Grid for execution. Scheduling and resource management are important in optimizing Grid resource allocation [3] and determining its ability to deliver the negotiated Quality of Service to all users [4,5] [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
@@ -98,7 +98,7 @@ System]
 Furthermore, [X] [Y] and [Z] focus not on the reliability that the application provides a result, but that it provides the correct result. This is achieved by various consensus algorithms. [Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies]
 
 Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty. This method allows for the detection of Byzantine faults, resulting in a much more
-powerful monitor.  [A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems]
+powerful monitor.  \cite{surveyFaultParallel}
 
 Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
 
@@ -141,9 +141,9 @@ Furthermore, previous work related to reliability either defines reliability as 
 %TODO källsa
 There are a number of different types of distributed environments, e.g. grid, clusters, cloud and Heterogeneous Distributed Computing System (HDCS).
 
-Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}.
+Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloudt}.
 
-Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
+Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloudt}
 
 Cloud can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analyzing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 
@@ -152,7 +152,7 @@ HDCS, is a system of numerous high-performance machines connected in a high-spee
 \subsubsection{Dynamic versus static environments}
 In static environment the cloud provider installs homogeneous resources. Also the resources in the cloud are not  exible when environment is made static. In this scenario, the cloud requires prior knowledge of nodes capacity, processing power , memory, performance and statistics of user requirements.
 
-In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
+In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{compStudyLoadAndCloudt}
 
 
 
@@ -161,33 +161,33 @@ In dynamic environment the cloud provider installs heterogeneous resources. The 
 In distributed environments, especially with heteregenous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, hardware malfunction, software errors, network failure, loss of energy, etc.
 
 %TODO 
-In \cite{A large-scale study of failures in high-performance computing systems}, real-world failure data is studied and in that data, hardware failures was the single most common type of failure, ranging from 30 to more than 60\%.
+In \cite{studyOfFailures}, real-world failure data is studied and in that data, hardware failures was the single most common type of failure, ranging from 30 to more than 60\%.
 
 (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
 \subsubsection{Fault life-cycle techniques}
-prevention, removal, tolerance, forecasting. [A survey on reliability in distributed systems]
+prevention, removal, tolerance, forecasting. \cite{surveyReliabilityDistr}
 
 \subsubsection{Fault models}
 \subsubsection*{Byzantine Faults}
-A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pdf
+\cite{surveyFaultParallel}
 
 in which pro- cessors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsubsection*{Fail-stop (crash-stop?) Faults}
-A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pdf
+\cite{surveyFaultParallel}
 fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
 \subsubsection*{Fail-stutter Faults}
-A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems.pdf
+\cite{surveyFaultParallel}
 \subsubsection{Crash-failure model}
 Well- known examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsubsection{Failure Distribution}
 %TODO
-Previous work usually assumes resource failure within a system follows a Poisson process \cite{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint} \cite{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing} \cite{Reliability model of distributed simulation system} \cite{Optimal task allocation for maximizing reliability in distributed real-time systems} \cite{Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems}, with a constant failure rate. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint}. 
+Previous work usually assumes resource failure within a system follows a Poisson process \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}, with a constant failure rate. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
 
 
 \begin{equation} \label{eq:resource_failure}
@@ -195,8 +195,8 @@ Previous work usually assumes resource failure within a system follows a Poisson
 MTBF = (nbr  of  failures) / (total time)
 \end{equation}
 
-Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing}. 
-\cite{A survey on reliability in distributed systems} show that chances of hardware failure are greater in the beginning and end of lifetime. However, by studying failures in high-performance computing systems, \cite{A large-scale study of failures in high-performance computing systems} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better.
+Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
+\cite{surveyReliabilityDistr} show that chances of hardware failure are greater in the beginning and end of lifetime. However, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better.
 
 
 
@@ -280,7 +280,7 @@ To give a clear picture of the definitions above you can say that when a human w
 Since many real-time systems are non-deterministic environment in which even dangerous, system fault tolerance is necessary and important. In order to effectively verify the level of fault-tolerant systems, a reliability model needs to be proposed, it is generally assumed that the error arrival rate is stable and the error probability at any time intervals meets Poisson distribution [7-8] [Real-time fault-tolerant scheduling algorithm for distributed computing systems]
 
 While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
-optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] Optimal task allocation for maximizing reliability in distributed real-time systems]
+optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] \cite{optTaskAllocationForMaxRel}
 
 the reliability of processing node Pk in
 time interval [0,t] can be achieved by:
@@ -288,7 +288,7 @@ R (t)=            (5) P
 where       is hazard rate at time  . By assuming a constant hazard rate (like [3] and [25]), Eq. (5) reduces to:
 RP (t) =       t (6) Total hazard rate of each node can be computed by adding failure rate of its hardware and failure rate of its OS if we assume that they are independent 
 
-System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) [Optimal task allocation for maximizing reliability in distributed real-time systems]
+System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) \cite{optTaskAllocationForMaxRel}
 
 the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a com- mon assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
 There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. [ A Hierarchical Modeling and Analysis for Grid Service Reliability.pdf]
@@ -298,7 +298,7 @@ Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Na
 The dependability model is based on the following assump- tions All the processors (nodes) are homogeneous with iden- tical and exponential distribution of failure time. We define X as the failure rate of a node. Fortheavailabilitymodel,thereisasinglerepairfacility with exponential distribution of repair time. The average repair rate is given by p.
 The link failure rate is negligible compared to the node failure rate. [ A unified task-based dependability model for hypercube computers]
 
-(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. [ Reliability analysis of distributed systems based on a fast reliability algorithm]
+(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{Reliability analysis of distributed systems based on a fast reliability algorithm}
 
 This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model [A SOFTWARE RELIABILITY MODEL FOR WEB SERVICE]
 
@@ -312,7 +312,7 @@ We focus on the study of task allocation deci- sion to achieve maximal distribut
 
 
 \subsubsection{Extended model}
-Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. [A survey on reliability in distributed systems]
+Reliability of server’s availability and scala- bility (such as File Server, DB servers, Web servers, and email servers, etc.), communica- tion infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
 
 \subsection{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
@@ -357,7 +357,7 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \subsection{Task scheduling}
 %TODO
 
-Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate [Optimal task allocation for maximizing reliability in distributed real-time systems]
+Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
 
 
 
@@ -416,15 +416,15 @@ Diagnostic tools such as filesystem and memory check- ers (e.g., fsck) that are 
 
 \chapter{Limitations} \label{ch:limitations}
 \subsection{Reliability model} \label{sec:limitations_reliability_model}
-Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. [Discrete and continuous reliability models for systems with identically distributed correlated components]
+Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{Discrete and continuous reliability models for systems with identically distributed correlated components}
 
-the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. [ Reliability model of distributed simulation system]
+the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
 
 We do not take into account parameters such as X and Y [TODO].
 
-Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment [A survey on reliability in distributed systems]
+Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
 
-A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique [A survey on reliability in distributed systems]
+A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique \cite{surveyReliabilityDistr}
 
 
 \chapter{Evaluation} \label{ch:evaluation}
@@ -469,33 +469,29 @@ A lot of researchers are of the view that service providers must provide some ot
 	Computer Communication and Informatics (ICCCI), 2015 International Conference on,
 	Jan 2015
 	
-	
 \bibitem{taskSchedulingReplication}
 	Shuli Wang et. al.
 	\emph{A Task Scheduling Algorithm Based on Replication for Maximizing Reliability on Heterogeneous Computing Systems},
 	Parallel \& Distributed Processing Symposium Workshops (IPDPSW), 2014 IEEE International, p. 1562 - 1571, 
 	May 2014
 	
-\bibitem{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint}
-	Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
+\bibitem{algoMaxRelEndToEndConstraint}
+Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
 
-\bibitem{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing}
+\bibitem{algoMinExTime}
 Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing
 
-\bibitem{Reliability model of distributed simulation system}
+\bibitem{relModelDistSimSystem}
 Reliability model of distributed simulation system
 
-\bibitem{Optimal task allocation for maximizing reliability in distributed real-time systems}
+\bibitem{optTaskAllocationForMaxRel}
 Optimal task allocation for maximizing reliability in distributed real-time systems
 
-\bibitem{Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems}
+\bibitem{perfImplPerCheckPoint}
 Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems
 
-\bibitem{A survey on reliability in distributed systems}
-A survey on reliability in distributed systems
-
-\bibitem{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
-A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment
+\bibitem{studyOfFailures}
+A large-scale study of failures in high-performance computing systems
 
 \end{thebibliography}
 
