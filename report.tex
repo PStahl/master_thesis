@@ -138,25 +138,30 @@ Furthermore, previous work related to reliability either defines reliability as 
 \section{Theory} \label{sec:theory}
 \subsection{Computational Environment}
 \subsubsection{Types of distributed computing}
-There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
+%TODO källsa
+There are a number of different types of distributed environments, e.g. grid, clusters, cloud and Heterogeneous Distributed Computing System (HDCS).
 
-Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task. 
+Grid computing is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}.
 
-Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. 
+Clusters are similar to grid but with the difference that they aren't distributed geographically. They work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
 
-Cloud an be described as the next generation of grids and clusters. It is indeed quite similar to grid and clusters, e.g. parallel and distributed, but with the important difference that cloud has multiple domains \cite{compStudyLoadAndCloud}. Due to that machines can be geographically distributed, software and hardware components heterogeneous and that every application has it own deployment requirements analyzing and predicting workload and reliability is very challenging \cite{surveyReliabilityDistr}. 
+Cloud can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analyzing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 
-HDCS, or Heterogeneous Distributed Computing System is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved. 
+HDCS, is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
+
 \subsubsection{Dynamic versus static environments}
-%TODO
-\subsubsection{Heterogeneous versus Homogenous environments}
-%TODO
+In static environment the cloud provider installs homogeneous resources. Also the resources in the cloud are not  exible when environment is made static. In this scenario, the cloud requires prior knowledge of nodes capacity, processing power , memory, performance and statistics of user requirements.
+
+In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
+
+
+
 \subsection{Faults in distributed environments}
 \subsubsection{Types of Faults}
-%TODO
-Hardware, software, network failure, energy, etc.
+In distributed environments, especially with heteregenous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, hardware malfunction, software errors, network failure, loss of energy, etc.
 
-Hardware is the largest (30 - 60\%) [A large-scale study of failures in high-performance computing systems
+%TODO 
+In \cite{A large-scale study of failures in high-performance computing systems}, real-world failure data is studied and in that data, hardware failures was the single most common type of failure, ranging from 30 to more than 60\%.
 
 (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
 
@@ -182,40 +187,19 @@ Well- known examples are the crash failure model (in which processors simply sto
 
 \subsubsection{Failure Distribution}
 %TODO
-The failure of a resource in the system is assumed to follow a Poisson process and each resource ri 2 R is associated with a constant failure rate  ri accordingly. It should be noted that modeling the failure of a resource by a Poisson process may not always coincide with the actual failure dynamic of the resource. However, it is experimentally shown in [20] that such an assumption may still result in reasonably useful mathematical models. [Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing]
+Previous work usually assumes resource failure within a system follows a Poisson process \cite{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint} \cite{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing} \cite{Reliability model of distributed simulation system} \cite{Optimal task allocation for maximizing reliability in distributed real-time systems} \cite{Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems}, with a constant failure rate. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint}. 
 
 
-We present an efficient scheme based on task replication, which utilizes the Weibull reliability function for the Grid resources so as to estimate the number of replicas that are going to be scheduled in order to guarantee a specific fault tolerance level for the Grid environment [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
+\begin{equation} \label{eq:resource_failure}
+%TODO 
+MTBF = (nbr  of  failures) / (total time)
+\end{equation}
 
-If the failure rate at all nodes followed a Poisson process with the same mean (as often assumed e.g. in work on checkpointing protocols), the distribution of failures across nodes would be expected to match a Poisson distribution. Instead we find that the Poisson distribution is a poor fit, since the measured data has a higher variability than that of the Poisson fit. The normal and lognormal dis- tribution are a much better fit, visually as well as measured by the negative log-likelihood. This indicates that the as- sumption of Poisson failure rates with equal means across nodes is suspect.[A large-scale study of failures in high-performance computing systems]
+Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing}. 
+\cite{A survey on reliability in distributed systems} show that chances of hardware failure are greater in the beginning and end of lifetime. However, by studying failures in high-performance computing systems, \cite{A large-scale study of failures in high-performance computing systems} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better.
 
 
 
-The failure of a node or a link is assumed to follow a Poisson process with constant failure rate. Failures of different nodes are assumed to be statistically independent. Although such assumptions may not hold in reality, reasonably useful mathemat- ical models can be achieved using this simplified assumption [22] [Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint]
-
-[A Large-scale Study of Failures in High- performance-computing Systems]
-
-the Byzantine failure model, which is the most general and widely accepted threat model [29], [33], [38], [41] and has been applied to numerous dis- tributed software systems [1], [3], [33]. [Self-Adapting Reliability in Distributed Software Systems]
-
-hese models were based on different measures such as Markov State [25], Factoring theorem [27], architectural level based approach [3,4,21], and users collaborative approach [3]. [A survey on reliability in distributed systems]
-
-In order to make an analysis mathematically tractable, many reliability models assume that the failure pattern of a particular computer system forms a Poisson process. In practice, interfailure times are rarely exponentially distributed [6, 18, 26]. In fact, successive interfailure times are often not even independent, that is, they do not form a renewal process. [Performance Analysis of Checkpointing Strategies]
-
-Errors: These kinds of errors are commonly met in distributed systems as well as in Grid environments [2,7,32,33], and most often include: (i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval.
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. We denote   as the desired failure probability threshold. Thus, for each task, a sufficient number of replicas is created to satisfy the condition:
-In this paper, we examine the failure probability of a task
-with respect to the mobile resource it is assigned for execution. Based on the various types of failures, we assume that a task or a replica fails if the resource on which it is assigned fails during the execution time. This failure is not necessarily a processor (crash) failure, but can also be an omission (such as time omission) due to an unreliable connection. For this reason, the mean time to failure (MTTF) is used, which is the expected time
-that a mobile Grid resource will function before it fails for any reason. Conventionally, MTTF refers to non-repairable objects, while mean time between failure (MTBF) refers to repairable objects. In large and complex systems such as Mobile Grids, although the individual component reliabilities can be high, the overall reliability of the system can possibly be low [34], due to coupled failure modes or various extrinsic factors. The lifetime of the Mobile Grid resources under discussion is assumed to start at time t = 0, and any events occurring at times t < 0 are irrelevant
-The Weibull distribution is often used to model the time until failure of many different physical systems and, for this reason, it is more suitable for our study compared to other distributions such as the Poisson or exponential distributions
- [Efficient task replication and management for adaptive fault tolerance in Mobile Grid environments]
- 
- time. Byzantine nodes may try to report incorrect results or not report a result at all. For the purposes of this paper, we assume a node that does not report a result in a timely fash- ion to have failed. [Self-Adapting Reliability in Distributed Software Systems]
- 
- Poisson random process, random variable  ri has an exponential probability density function f ri  t     ri e  ri t. Consequently, the reliability of a resource is given by R ri  t    e  ri t [23]. [Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing]
- 
- chance of hardware failure approaches to maximum in the initial and end life of any specific hardware [A survey on reliability in distributed systems]
- 
- faults or failures can be classified into three categories i.e. Application level, System level, and Network level. To handle these faults timely, a fault tolerant system can be used either as spatial or temporal redundancy, including replication of hardware (with additional components), software (with special programs), and time (with the diversified of operations) [A survey on reliability in distributed systems]%Multimedia object placement for transparent data replication
  
  \subsubsection{Failure assumptions}
  %TODO
@@ -231,7 +215,7 @@ The Weibull distribution is often used to model the time until failure of many d
  \subsection{Fault tolerance techniques}
 Fault-tolerance techniques can be divided into two categorizes:
 Task-level techniques and work-flow level techniques.
-Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level tehcniques fail to cover \cite{gridWorkflow}.
+Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
 
 Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
 
@@ -323,6 +307,8 @@ What affects software reliability? ...lists 32 factors ... [An analysis of facto
 The most common simplifying assumptions em- ployed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topol- ogy [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
 In this paper, we consider three key performance and reliability metrics: the average service time of an application, the QoS and the service reliability in executing an applica- tion [2], [3], [16], [22]. While precise mathematical definitions of these metrics are presented in Section 3.3, at this point we will briefly introduce them and describe their scope of applicability. The average service time is critical to assess the speedup in the runtime of applications when executed in parallel on a DCS. The average service time is a reasonable metric (i.e., it takes a finite value) only in settings where servers are completely reliable or in settings where servers are allowed to recover after a failure. The QoS, which is defined as the probability of executing an application by a prescribed time deadline, is a reasonable metric in settings where server nodes may or may not fail. The QoS metric is of interest to system users and analysts, specially in real-time or in time constrained applications. Finally, the service reliability, which is defined as the probability of successfully executing an entire application, is an important metric for assessing the dependability of applications executed on DCSs, and it is a reasonable metric only when servers can fail without recovery and/or in settings where applications cannot continue their execution after a failure [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+
+We focus on the study of task allocation deci- sion to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliabil- ity maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was com- puted from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we di- vide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability [The decision model of task allocation for constrained stochastic distributed systems]
 
 
 \subsubsection{Extended model}
@@ -489,6 +475,27 @@ A lot of researchers are of the view that service providers must provide some ot
 	\emph{A Task Scheduling Algorithm Based on Replication for Maximizing Reliability on Heterogeneous Computing Systems},
 	Parallel \& Distributed Processing Symposium Workshops (IPDPSW), 2014 IEEE International, p. 1562 - 1571, 
 	May 2014
+	
+\bibitem{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint}
+	Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
+
+\bibitem{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing}
+Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing
+
+\bibitem{Reliability model of distributed simulation system}
+Reliability model of distributed simulation system
+
+\bibitem{Optimal task allocation for maximizing reliability in distributed real-time systems}
+Optimal task allocation for maximizing reliability in distributed real-time systems
+
+\bibitem{Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems}
+Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems
+
+\bibitem{A survey on reliability in distributed systems}
+A survey on reliability in distributed systems
+
+\bibitem{A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment}
+A Comparative Study of Load Balancing Algorithms in Cloud Computing Environment
 
 \end{thebibliography}
 
