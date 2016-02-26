@@ -257,7 +257,7 @@ There are a number of different strategies for replicating a task:
 
 The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. 
 
-\section{Reliability Model} \label{subsec:definitions}
+\section{Reliability} \label{subsec:definitions}
 Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
 \item Perform well in specified time t without undergoing halting state
@@ -411,34 +411,59 @@ Thereafter we began our literature study of today's situation, as seen in \ref{s
 
 During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
 \section{System model}
-\subsection{Reliability model}
-Reliability at least one replica is alive during the time to spawn a new replica --> 1 P(all replicas die during the time to spawn a new replica).
 
+\section{Computational environment}
+In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes.
 
-Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is: xxx
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
-
-We suppose that a mobile resource has survived until time t. The hazard function, h(t), is its failure rate during the short time interval (t , t + 1t ]. Given that a mobile resource is still alive at time t , the probability of failure during the next 1t time units can be expressed generally as follows:
-P(t < s < t + 1t|s > t) = P(t < s < t + 1t)/P(s > t) \cite{effTaskReplMobGrid}
-
-For simplicity we will start with a very simple reliability definition, Definition \ref{def:simple_reliability}.
-\begin{definition} \label{def:simple_reliability}
-The reliability of a process is measured by the probability that a resource is functioning during the time of execution of a task.
-\end{definition}
-Later on we use a more dynamic definition, Definition \ref{def:dyn_reliability} which is a combination of the above definitions. 
-
-\begin{definition} \label{def:dyn_reliability}
-The reliability of a process is measured by the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during it's time of execution.
-\end{definition}
-
-In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
-
-\begin{definition} \label{def:dyn_repl_reliability}
-The reliability of a process with several replicas is defined as the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
-\end{definition}
+\subsubsection{Monitoring}
+%TODO
 
 \subsection{Application model}
-\subsection{Implementation} \label{sec:implementation}
+The fault-tolerant framework presented in this paper is general and may be adapted to fit the special cases. However, it is of special value for long running applications where a certain level of reliability must be met, e.g. a data stream process where no data must be lost.
+
+In our framework, we ensure reliability based on task replication.
+\begin{definition} \label{def:task_replica}
+Is replica is ... (finns bra i nagon artikel tror jag)
+\end{definition}
+
+\subsection{Failure model}
+Since actual failure rates of dynamic environment are not typically constant, we no not assume a Poission distribution of failures. Instead, through the monitoring of system resource usage and failures over time, the framework is self-adaptive is dynamic in terms of failure rates for nodes.
+
+However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
+
+Furthermore, the time to replica a task is not known at deployment time. Therefore a heuristic approach is taken where we assume XXX number of replicas is needed. During the execution of the application, tasks will fail and new replicas will be spawned. The actual time to spawn new replicas will then be learned by the system, and used in future calculations of number of replicas.
+
+\subsection{Reliability model}
+Reliability at least one replica is alive during the time to spawn a new replica --> 1 P(all replicas die during the time to spawn a new replica).
+\\\\
+Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is: xxx
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
+\\\\
+We suppose that a mobile resource has survived until time t. The hazard function, h(t), is its failure rate during the short time interval (t , t + 1t ]. Given that a mobile resource is still alive at time t , the probability of failure during the next 1t time units can be expressed generally as follows:
+P(t < s < t + 1t|s > t) = P(t < s < t + 1t)/P(s > t) \cite{effTaskReplMobGrid}
+\\\\
+In this paper, we define the reliability of an application using a single resource as
+\begin{definition} \label{def:simple_reliability}
+The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
+\end{definition}
+
+For multi-task applications, where the tasks use more than one resource, reliability is defined as
+
+\begin{definition} \label{def:dyn_reliability}
+The reliability of a process is the probability that the task is executed within a specified amount of time without experiencing any type of failure (internal or external) during the time of execution.
+\end{definition}
+
+Finally, for our application model with replicated tasks, we define reliability as
+for In the case of stream-data processing, we assume a continously running application, without a deterministic execution time. Instead, a more suitable definition of reliability in this case is:
+
+\begin{definition} \label{def:dyn_repl_reliability}
+The reliability of a process, with n task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
+\end{definition}
+
+
+
+
+\section{Implementation} \label{sec:implementation}
 
 \chapter{Limitations} \label{ch:limitations}
 \subsection{Reliability model}
