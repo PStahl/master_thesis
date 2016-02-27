@@ -64,54 +64,39 @@ Leave a \textit{2cm} vertical space after the abstract and provide a few keyword
 
 \chapter{Introduction} \label{ch:introduction} 
 \section{Background and Motivation} 
-Ensuring a certain level of reliability is of major concern for many vendors. As cloud computing are growing rapidly and users are demanding more services and higher performance load balancing and task scheduling in the cloud has become a very important and interesting research area. 
+Ensuring a certain level of reliability is of major concern for many cloud system providers. As cloud computing is growing rapidly and users are demanding more services and higher performance, load balancing and task scheduling in the cloud has become a very important and interesting research area. 
 % Five -nine means less than 5 min and 15 seconds downtime/year, i.e. operational 99,999 % of the time
 Cloud systems often consists of heterogeneous hardware and  ensuring a certain level of reliability is therefore a complex task as any of the components may fail at any time. 
 
-Guaranteeing properties such as high reliability, raises complexity to the resource allocation decisions, and fault-tolerance mechanisms in highly dynamic and complex distributed systems. For cloud service providers, it is necessary that this increased complexity is taken care of without putting extra burden on the user. The system should therefore ensure these properties in a seamless way.
+Guaranteeing properties such as high reliability, raises complexity to the resource allocation decisions, and fault-tolerance mechanisms in highly dynamic distributed systems. For cloud service providers, it is necessary that this increased complexity is taken care of without putting extra burden on the user. The system should therefore ensure these properties in a seamless way.
 
-As computational work is distributed across multiple resources, the overall reliability of the application decreases. To cope with this issue, a fault-tolerant design or error handling mechanism need to be in place. This is of particular interest for cloud service providers, as users often desire a certain level of reliability. In some cases, vendors, for example carrier providers, are even obliged by law to achieve a certain level of availability or reliability. In these cases, one may need to sacrifice other quality aspects such as latency and resource usage. By using static and dynamic analysis of the infrastructure and the mean-time-to-failure for the given resources, a statistical model can be used in order to verify  that the desired level is reached.
+As computational work is distributed across multiple resources, the overall reliability of the application decreases. To cope with this issue, a fault-tolerant design or error handling mechanism need to be in place. This is of particular interest for cloud service providers, as users often desire a certain level of reliability. In some cases, vendors, for example carrier providers, are obliged by law to achieve a certain level of availability or reliability. In these cases, one may need to sacrifice other quality aspects such as latency and resource usage. By using static and dynamic analysis of the infrastructure and the mean-time-between-failure for the given resources, a statistical model can be used in order to verify  that the desired level is reached. However, such a model should be dynamic, as failure rates are likely to vary over time, for example due to high or low load on the system. This is of particular importance for long running applications when requiring a certain level of reliability. Dispite fulfilling the required level at the time of deployment, as the state of the system changes, the level may no longer be fulfilled. This speaks for a dyanmic model.
 
-Reliability can be increased by cloning application tasks, where all clones produce the same output. This allows for both increased redundancy and an easy way of detecting errors. If the execution of one clone stops or the link between a clone and the receiver is broken, this can easily be detected at the receiver side and the scheduler mechanism can automatically find a proper location for a new clone. This allows for continuing execution of the application even in case of e.g. hardware failure. Seamlessly being able to continue the execution, without losing any data is of particular interest in data stream processing.
+Reliability can be increased by cloning application tasks, where all clones produce the same output. This allows for both increased redundancy and an easy way of detecting errors. If the execution of one clone stops, e.g. due to hardware or link failure, it can easily be detected at the receiver side which allows for a scheduling mechanism to find a proper location for a new clone. This allows for continuing execution of the application even in case failure. Seamlessly being able to continue the execution, without losing any data is of particular interest in data stream processing.
 
-Some of the drawbacks of replicating a task n times, is that the resources needed increases. With n replicas, all performing the same computation on the same input, one need n times as much resources, and since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing.
+Some of the drawbacks of replicating a task n times, is that the resources needed increases. With $n$ replicas, all performing the same computation on the same input, one need $n$ times as much resources, and since only the work of one task is needed, a lot of computational resources is thus wasted. Dynamic analysis of the system could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing. 
 
 
 \section{Related work} \label{sec:related_work}
-A lot of work has been done in the area of designing fault-tolerant applications. Most of them use a checkpoint/restart based approach [X][Y][TODO]. These examples relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. 
+A lot of work has been done in the area of designing fault-tolerant applications for distributed systems. Most of them use a checkpoint/restart based approach [X][TODO]. These techniques relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure.
 \\\\
-Previous work has been done which aims at achieving fault-tolerance through replication. \cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment, and calculates the number of replicas based on the reliability of the grid resources. However, their approach is limited to the fact that they use static replication, i.e. when a replica fails it is not replaces with a new one. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures.
+To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaces with a new one. Furthermore, they do not take the dynamicy of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
 \\\\
-maximized reliability under end-to-end delay constraint.
-Several approaches can be employed to improve the execution reliability such as task duplication and checkpoint-restart. Task duplication executes each task more than once in order to decrease the probability of failure by redundancy. The main problem of this approach is increased network traffic and computing needs. Alternatively, it is possible to record the checkpoints and restart the application when a failure occurs. However, this approach may also incur extra overhead and slow down the execution by restarting the application and repeated computations and communications [14]. [algoMaxRelEndToEndConstraint]
+Other work define reliability as producing the correct result \cite{selfAdaptRel} \cite{imprRelAdaptRL} \cite{X}. In these cases, reliability is achieved by various consensus algorithms, e.g. $k-modular redundancy$. 
+\\\\
+A lot of work has been done focusing on reliability through scheduling techniques. \cite{SLASched} focus on meeting SLA by scheduling techniques, and while reliability can be part of an SLA, they focus on I/O performance and throughput. \cite{algoMaxRelEndToEndConstraint} focuses of maximizing reliability while still meeting end-to-end delay constraint, and \cite{algoMinExTime} and \cite{algoOptTimeMaxRel} both design algorithms aiming at minimizing time and cost while maximization of system reliability.
 \\\\
 In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. \cite{optTaskAllocationForMaxRel}
-\\\\
-To reduce the effect of failures on an application executing on a failure-prone system, matching and scheduling algorithms which minimize not only the execution time but also the probability of failure of the application must be devised \cite{algoMinExTime}
 \\\\
 Reliability of distributed simulation is define to be the probability that the given distributed simulation application can run successfully under the distributed computing environment. (assumes execution time) \cite{relModelDistSimSystem}
 \\\\
 We present an efficient scheme based on task replication, which utilizes the Weibull reliability function for the Grid resources so as to estimate the number of replicas that are going to be scheduled in order to guarantee a specific fault tolerance level for the Grid environment. The number of replicas is calculated by the Grid middleware and is based on the failure probability of the Grid resources and the policy that is adopted for providing a specific level of fault tolerance. The adopted replication model is based on static replication [2], meaning that, when a replica fails, it is not substituted by a new one. replicas causes an overhead in the workload that is allocated to the Grid for execution. Scheduling and resource management are important in optimizing Grid resource allocation [3] and determining its ability to deliver the negotiated Quality of Service to all users [4,5] \cite{effTaskReplMobGrid}
 \\\\
-To optimize the performance of a DCS, several issues arise such as the minimization of time and cost as well as maximization of system reliability [9, 26]. [	An Algorithm for Optimized Time, Cost, and Reliability in a Distributed Computing
-System]
-\\\\
-Furthermore, [X] [Y] and [Z] focus not on the reliability that the application provides a result, but that it provides the correct result. This is achieved by various consensus algorithms. [Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies] (k-modular redundancy \cite{Self-Adapting Reliability in Distributed Software Systems})
-\\\\
-Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty (k-modular redundancy \cite{Self-Adapting Reliability in Distributed Software Systems}). This method allows for the detection of Byzantine faults, resulting in a much more powerful monitor.  \cite{surveyFaultParallel}
+Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty (k-modular redundancy \cite{selfAdaptRel}). This method allows for the detection of Byzantine faults, resulting in a much more powerful monitor.  \cite{surveyFaultParallel}
 \\\\
 Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
 \\\\
-Traditional redundancy, also called k-modular redundancy [38], which performs k 2 f3; 5; 7; . . .g independent executions of the same task in parallel and then takes a vote on the correctness of the result. 
-\\\\
-... previous work with self-adapting systems ... [Improving reliability in resource management through adaptive reinforcement learning for distributed systems]
-Progressie-redundancy, self-adaptive iterative redundancy [Self-Adapting Reliability in Distributed Software Systems]
-\\\\
-Scheduling:
-Some focus on reliability while ensuring time constraints? [Z][TODO].
-\\\\
-SLA aware scheduling: 
- (i) to enable cloud storage systems with I/O performance management (ii) to minimize the I/O throughput SLA violations using effective scheduling policies. I/O throughput SLA in cloud storage service is defined as the I/O throughput of user’s volume is higher or equal to a specific number of IO operations per second (IOPS) in at least 99.9\% of time. [SLA-aware Resource Scheduling for Cloud Storage]
+Traditional redundancy, also called k-modular redundancy [38], which performs k 2 f3; 5; 7; . . .g independent executions of the same task in parallel and then takes a vote on the correctness of the result. ]
  \\\\
  Previous work usually assumes a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}. Such assumptions are unlikely to model the dynamicity of heterogeneous systems correctly. Therefore, we adapt a self-learning model, which adapts the failure rate for nodes in the system, and tries to avoid scheduling of tasks on unreliable nodes.
 \\\\
@@ -343,6 +328,8 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 
 \section{Task scheduling}
 %TODO
+
+\cite{schedReplicas}
 
 Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
 
@@ -589,6 +576,21 @@ A higher order estimate of the optimum checkpoint interval for restart dumps
 
 \bibitem{factorsAffectingRel}
 An analysis of factors affecting software reliability
+
+\bibitem{SLASched}
+SLA-aware Resource Scheduling for Cloud Storage
+
+\bibitem{algoOptTimeMaxRel}
+An Algorithm for Optimized Time, Cost, and Reliability in a Distributed Computing System
+
+\bibitem{imprRelAdaptRL}
+Improving reliability in resource management through adaptive reinforcement learning for distributed systems
+
+\bibitem{selfAdaptRel}
+Self-Adapting Reliability in Distributed Software Systems
+
+\bibitem{schedReplicas}
+Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies
 
 \end{thebibliography}
 
