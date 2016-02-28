@@ -474,6 +474,10 @@ which must be fulfilled by the system. Since assuming hetereogenous failure rate
 
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2} exceeds $\lambda$.
 
+\subsection{Self-adapting model}
+%TODO
+
+%TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
 
 \section{Implementation} \label{sec:implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}. Calvin is developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
