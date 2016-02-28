@@ -391,7 +391,9 @@ During the first weeks Philip implemented a replication functionality in Calvin 
 \section{System model}
 
 \subsection{Computational environment}
-In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes.
+In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+
+All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
 \subsubsection{Monitoring}
 %TODO
@@ -412,15 +414,20 @@ In our framework, we ensure reliability based on task replication. Figure~\ref{f
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model_replication.pdf} 
-\caption{An application model where a producer transmits data to all replicas of task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
+\caption{An application model where a producer transmits data to all replicas of task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model_replication}
 \end{figure}
 
 \subsection{Failure model}
-Since actual failure rates of dynamic environment are not typically constant, we no not assume a Poission distribution of failures. Instead, through the monitoring of system resource usage and failures over time, the framework is self-adaptive is dynamic in terms of failure rates for nodes.
+In our framework, we assume the \emph{fail-stop} fault model. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
+
+The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
+
+We assume failures follow a Poission process, as this seems to be widely accepted in the research community. However, while most assumes constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates.
 
 However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
 
-Furthermore, the time to replica a task is not known at deployment time. Therefore a heuristic approach is taken where we assume XXX number of replicas is needed. During the execution of the application, tasks will fail and new replicas will be spawned. The actual time to spawn new replicas will then be learned by the system, and used in future calculations of number of replicas.
+Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replica tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
+
 
 \subsection{Reliability model}
 Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}. Since resources, e.g. computational nodes in the system, will be restarted upon failure, we use MTBF, defined as
@@ -467,7 +474,10 @@ The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$
 
 
 \section{Implementation} \label{sec:implementation}
+For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}. Calvin is developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
+\subsection{Scheduling algorithm}
+%TODO
 
 \chapter{Evaluation} \label{ch:evaluation}
 
