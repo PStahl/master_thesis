@@ -485,16 +485,14 @@ A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
 
 \begin{algorithmic}
 \State $n\gets 0$
-\State $nodes\gets available\_nodes$     // sorted by reliability, highest first
-\State $busy\_nodes\gets \{\}$
+\State $nodes\gets available\ nodes$\Comment{sorted by reliability, highest first}
 \While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
-	\State $node\gets nodes.first$
-	\State $busy\_nodes\gets node$
+	\State $node\gets nodes.pop$\Comment{take the node with highest reliability}
 	\State $n\gets n + 1$
 \EndWhile
 
 \For{each $node$ in nodes}
-	\State $replica\gets new\_replica$
+	\State $replica\gets new\ replica$
 	\State $node\gets replica$
 \EndFor
 \end{algorithmic}
