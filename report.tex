@@ -397,12 +397,23 @@ In this paper we assume a distributed cloud system, with heterogenous hardware a
 %TODO
 
 \subsection{Application model}
-The fault-tolerant framework presented in this paper is general and may be adapted to fit the special cases. However, it is of special value for long running applications where a certain level of reliability must be met, e.g. a data stream process where no data must be lost.
+The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time.
 
-In our framework, we ensure reliability based on task replication.
-\begin{definition} \label{def:task_replica}
-Is replica is ... (finns bra i nagon artikel tror jag)
-\end{definition}
+In this paper we use a simpel example application in our experiments. The application can be modeled as shown in figure~\ref{fig:app_model}.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/app_model.pdf} 
+\caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
+\end{figure}
+
+In our framework, we ensure reliability based on task replication. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task A.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/app_model_replication.pdf} 
+\caption{An application model where a producer transmits data to all replicas of task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
+\end{figure}
 
 \subsection{Failure model}
 Since actual failure rates of dynamic environment are not typically constant, we no not assume a Poission distribution of failures. Instead, through the monitoring of system resource usage and failures over time, the framework is self-adaptive is dynamic in terms of failure rates for nodes.
