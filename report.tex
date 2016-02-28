@@ -410,7 +410,8 @@ In this paper we use a simpel example application in our experiments. The applic
 \caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
 \end{figure}
 
-In our framework, we ensure reliability based on task replication. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task A.
+\subsection{Replication scheme}
+In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
 
 \begin{figure}[!hbt]
 \centering
@@ -627,6 +628,9 @@ Self-Adapting Reliability in Distributed Software Systems
 
 \bibitem{schedReplicas}
 Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies
+
+\bibitem{calvin}
+Calvin - Merging Cloud and IoT
 
 \end{thebibliography}
 
