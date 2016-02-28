@@ -7,6 +7,7 @@
 \usepackage{amsthm}
 %\usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{algpseudocode}
 \usepackage[titletoc, header, page]{appendix}
 
 \usepackage{hyperref}
@@ -395,8 +396,8 @@ In this paper we assume a distributed cloud system, with heterogenous hardware a
 
 All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
-\subsubsection{Monitoring}
-%TODO
+\subsection{Monitoring}
+Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
 
 \subsection{Application model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time.
@@ -476,8 +477,27 @@ The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$
 \section{Implementation} \label{sec:implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}. Calvin is developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
+The Calvin framework consists of \emph{runtimes} on which one deploy applications consisting of connected \emph{actors}. We will use this model to reflect our system of nodes and application tasks. We will deploy a single runtime per node, and have an actor representing the task we will replicate.
+
+
 \subsection{Scheduling algorithm}
-%TODO
+A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
+
+\begin{algorithmic}
+\State $n\gets 0$
+\State $nodes\gets available\_nodes$     // sorted by reliability, highest first
+\State $busy\_nodes\gets \{\}$
+\While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
+	\State $node\gets nodes.first$
+	\State $busy\_nodes\gets node$
+	\State $n\gets n + 1$
+\EndWhile
+
+\For{each $node$ in nodes}
+	\State $replica\gets new\_replica$
+	\State $node\gets replica$
+\EndFor
+\end{algorithmic}
 
 \chapter{Evaluation} \label{ch:evaluation}
 
