@@ -235,7 +235,10 @@ There are a number of different strategies for replicating a task:
 \item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
 \end{itemize}
 
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. 
+A replica, whether active, semi-active or passive replication is used, is defined as
+\begin{definition} \label{def:replica}
+A replica of a task, is an exakt copy of the task, running in parallel. [TODO, there is some good replica definition in some paper]
+\end{definition}
 
 \section{Reliability} \label{subsec:definitions}
 Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -425,7 +428,7 @@ From \ref{eq:MTBF} a reliability function can be expressed as
 R_{r}(t) = e^{-t/MTBF_{r}}
 \end{equation}
 
-Equation~\ref{eq:resource_reliability} expresses the probability that  resource $r$ will work for a time $t$.
+Equation~\ref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$.
 
 For a complete analysis of system reliability, one must take all factors affecting reliability into account. However, including all factors if unfeasible.  \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. In our framework, we only care whether or not a node is available or has died.
 
@@ -433,26 +436,31 @@ For a complete analysis of system reliability, one must take all factors affecti
 Using replication of a task, and reliability defined as in definition~\ref{def:replica_reliability}, the probability that a task $T$  with $n$ replicas is successful during a time $t$ can be expressed as 
 
 \begin{equation} \label{eq:task_failure_probability}
-R_{T}(t) = R_{replica_1}(t) \cdot R_{replica_2}(t) \cdots R_{replica_n}(t)
+R_{T}(t) =  \prod\limits_{k=1}^n R_{Rep_k}(t)
 \end{equation}
 
-where $R_{replica i}(t)$ is the reliability that replica $i$ is reliable during the time $t$, which it takes to replicate an actor. 
+where $R_{replica k}(t)$ is the reliability that replica $k$ is reliable during the time $t$, which it takes to replicate an actor. 
 
-Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the node failure, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_failure_probability} can with equation~\ref{eq:resource_reliability} be re-written as
+Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting to model to node failure, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_failure_probability} can with equation~\ref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_failure_probability_2}
-R_{T}(t) = R_{r_1}(t) \cdot R_{r_2}(t) \cdots R_{r_k}(t)
+R_{T}(t) = \prod\limits_{k=1}^m  R_{Res_k}(t)
 \end{equation}
 
-where $R_{r_1} \cdots R_{r_k}$ are the resources on which the $n$ replicas are using.
+Using this model, reliability is only increased through replication is the replicas are scheduled on separate nodes.
+
+Given a time $t$ it takes to replica a task, a desired reliability level $\lambda$, we get
+
+\begin{equation} \label{eq:desired_rel}
+\lambda \leq \prod\limits_{k=1}^m  R_{Res_k}(t)
+\end{equation}
+
+which must be fulfilled by the system. Since assuming hetereogenous failure rates for the various nodes, fulfilling equation~\ref{eq:desired_rel} is a scheduling problem.
 \\\\
-Given an task with $m-1$ replicas, the time $t$ it takes to replicate a task, and the failure probability $Pf_{k}$ during the time $t$ for each of the $m$ replicas, the task failure probability is
-\begin{equation}
-\label{eq:task_reliability}
-Pf = \prod\limits_{k=1}^m Pf_{k}(t)
-\end{equation}
 
-Expressed in words, equation \ref{eq:task_reliability} is the probability that all replicas fail, during the time it takes to start a new one.
+
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. 
+
 
 
 \section{Implementation} \label{sec:implementation}
