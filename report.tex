@@ -183,21 +183,25 @@ Fault tolerance and fault forecasting is considered the most important fault lif
 
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
-\cite{surveyFaultParallel}
+The Byzantine fault model is the most adversarial model. It allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has accord and even if it was known that a failure has accord they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all and it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
+The Byzantine fault model is very broad making it very difficult to analyse.
 
-in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+% in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
-\subsubsection*{Fail-stop (crash-stop?) Faults}
-\cite{surveyFaultParallel}
-fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+\subsubsection*{Fail-stop Faults}
+%Also called the crash-stop model
+In comparison to the Byzantine fault model the fail-stop model is much simpler. When a node fails it stops producing output and its interaction with the other nodes. This results in that the rest of the system automatically gets aware of that the node has failed. It is a simple model and does not handle subtle failures such as memory corruption but rather failures such as system crash or hangs \cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
-This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
+% fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+
+% This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
 \subsubsection*{Fail-stutter Faults}
-\cite{surveyFaultParallel}
+Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}.
 
 \subsubsection*{Crash-failure model}
-Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+
+%Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsection{Failure Distribution}
 %TODO
@@ -517,8 +521,6 @@ A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
 \chapter{Evaluation} \label{ch:evaluation}
 
 \chapter{Limitations} \label{ch:limitations}
-%TODO scalability...
-
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
 Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
@@ -539,10 +541,6 @@ The above corresponds to the probability of the event “all the replicas and th
 
 
 \chapter{Future Work} \label{ch:future_work}
-
-%TODO load-balancing?
-
-
 \subsection{Extended model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
 
