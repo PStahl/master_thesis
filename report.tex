@@ -81,7 +81,7 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 \section{Related work} \label{sec:related_work}
 A lot of work has been done in the area of designing fault-tolerant applications for distributed systems. Most of them use a checkpoint/restart based approach [X][TODO]. These techniques relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure.
 \\\\
-To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaces with a new one. Furthermore, they do not take the dynamicy of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
+To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaced with a new one, no replicas are made during execution. Furthermore, they do not take the dynamic of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
 \\\\
 Other work define reliability as producing the correct result \cite{selfAdaptRel} \cite{imprRelAdaptRL} \cite{X}. In these cases, reliability is achieved by various consensus algorithms, e.g. $k-modular redundancy$. 
 \\\\
@@ -141,22 +141,28 @@ Cloud can be described as the next generation of grids and clusters. While it is
 HDCS, is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 
 \subsection{Dynamic versus static environments}
-In static environment the cloud provider installs homogeneous resources. Also the resources in the cloud are not  exible when environment is made static. In this scenario, the cloud requires prior knowledge of nodes capacity, processing power , memory, performance and statistics of user requirements.
+Based on how the environment is configured it can be either static or dynamic. 
 
-In dynamic environment the cloud provider installs heterogeneous resources. The resources are  exible in dynamic environment. In this scenario cloud cannot rely on the prior knowledge whereas it takes into account run-time statistics. \cite{compStudyLoadAndCloud}
+In static environment only homogeneous resources are installed. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources \cite{compStudyLoadAndCloud}.
 
+In dynamic environment heterogeneous resources are installed. In this scenario prior knowledge isn't enough since the requirements of the user can change during run time. Therefore run time statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to run time changes in load \cite{compStudyLoadAndCloud}.
 
 
 \section{Faults in distributed environments}
 \subsection{Types of Faults}
-In distributed environments, especially with heteregenous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, hardware malfunction, software errors, network failure, loss of energy, etc.
+In distributed environments, especially with heterogeneous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, hardware malfunction, software errors, network failure, loss of energy, etc.
 
-%TODO 
-In \cite{studyOfFailures}, real-world failure data is studied and in that data, hardware failures was the single most common type of failure, ranging from 30 to more than 60\%.
+The possible kind of errors in a Grid environment can be divided into the following three kinds \cite{effTaskReplMobGrid}:
+\begin{itemize}
+\item Crash failure - When a correctly working server comes to a halt.
+\item Omission failure - When a server fails to respond to incoming requests and to send messages
+\item Timing failure - When a servers responds correctly but beyond the specified time interval
+\end{itemize}
 
-(i) Crash failures, where a server halts, but was working correctly until that moment; (ii) Omission failures, where a server fails to respond to incoming requests and to send messages; (iii) Timing failures, where the server succeeds in responding but its response is beyond the specified time interval. \cite{effTaskReplMobGrid}
+In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
 
-three terms failure, fault and error. 
+% (Definition nedan delvis tagen från slides testkurs ETS200, LTH)
+When talking about incorrectly behaviour of software three terms are widely used: failure, fault and error. For better understanding we give a definition for each of them.
 \begin{itemize}
 \item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required.
 \item Fault: A fault is the state of software. It is also called defect/bug.
@@ -319,9 +325,9 @@ The term load balancing is generally used for the process of transferring load f
 
 The load balancing algorithms can be divided into three categorize based on the initiation of the process:
 \begin{itemize}
-\item Sender Initiated An overloaded node send requests until it find a proper node which can except its load.
-\item Receiver Initiated An under loaded node sends a message for requests until it finds an overloaded node.
-\item Symmetric A combination of sender initiated and receiver initiated. 
+\item Sender Initiated - An overloaded node send requests until it find a proper node which can except its load.
+\item Receiver Initiated - An under loaded node sends a message for requests until it finds an overloaded node.
+\item Symmetric - A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
 Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory which might lead to the disadvantage that the selected node gets overloaded \cite{perfAnalysisLoadCloud}
@@ -454,7 +460,7 @@ Using replication of a task, and reliability defined as in definition~\ref{def:r
 R_{T}(t) =  \prod\limits_{k=1}^n R_{Rep_k}(t)
 \end{equation}
 
-where $R_{replica k}(t)$ is the reliability that replica $k$ is reliable during the time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
+where $R_{Rep_k}(t)$ is the reliability that replica $k$ is reliable during the time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
 
 Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting to model to node failure, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
 
@@ -462,9 +468,9 @@ Assuming tasks themselves do not fail unless the resources they use fail, the re
 R_{T}(t) = \prod\limits_{k=1}^m  R_{Res_k}(t)
 \end{equation}
 
-Where $R_{Res_1}(t) \cdots R_{Res_m}(t)$ are the reliability of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication is the replicas are scheduled on separate nodes.
+Where $R_{Res_1}(t) \cdots R_{Res_m}(t)$ are the reliabilities of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
 
-Given a time $t$ it takes to replica a task, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
+Given a time $t$ it takes to replicate a task, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
 \lambda \leq \prod\limits_{k=1}^n  R_{Res_k}(t)
