@@ -171,7 +171,15 @@ When talking about incorrectly behaviour of software three terms are widely used
 To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
 
 \subsection{Fault life-cycle techniques}
-prevention, removal, tolerance, forecasting. \cite{surveyReliabilityDistr}
+According to \cite{softRelRoadmap} the following four technical areas can be regarded as fault life-cycle techniques.
+\begin{itemize}
+\item Fault prevention - The initial mechanism for a reliable system, trying to avoid faults already in the development phase. A fault which isn't committed cost nothing to fix. 
+\item Fault removal - The next line of defence, trying to detect and eliminate faults by validation and validation. For instance by testing and inspection. 
+\item Fault tolerance - The last line of defence against faults which are undetected by fault removal. Can be obtained by catching faults as exceptions and/or by redundancy.
+\item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
+\end{itemize}
+
+Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they deal with failures that haven't been prevented or detected. 
 
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
@@ -187,6 +195,7 @@ This failure model has the practical implication that avoids the use of complica
 
 \subsubsection*{Fail-stutter Faults}
 \cite{surveyFaultParallel}
+
 \subsubsection*{Crash-failure model}
 Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
@@ -584,6 +593,12 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	\emph{A Task Scheduling Algorithm Based on Replication for Maximizing Reliability on Heterogeneous Computing Systems},
 	Parallel \& Distributed Processing Symposium Workshops (IPDPSW), 2014 IEEE International, p. 1562 1571, 
 	May 2014
+
+\bibitem{softRelRoadmap}
+	Michael R. Lyu
+	\emph{Reliability Engineering: A Roadmap},
+	Future of Software Engineering, FOSE ’07, p. 153-170,
+	23–25 May 2007
 	
 \bibitem{algoMaxRelEndToEndConstraint}
 Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
