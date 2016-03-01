@@ -521,6 +521,10 @@ A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
 \chapter{Evaluation} \label{ch:evaluation}
 
 \chapter{Limitations} \label{ch:limitations}
+
+%TODO
+our model do not account for link failures. In case of a failure, a node is dead, hence we do not consider cases where for example a link between two nodes fails. Instead, in case of a failure, the node is dead, and all other nodes are aware of this.
+
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
 Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
