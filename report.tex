@@ -89,10 +89,14 @@ A lot of work has been done focusing on reliability through scheduling technique
 \\\\
 Previous work usually assumes a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}. Such assumptions are unlikely to model the dynamicity of heterogeneous systems correctly. Therefore, we adapt a self-learning model, which adapts the failure rate for nodes in the system, and tries to avoid scheduling of tasks on unreliable nodes.
 \\\\
-\cite{selfAdaptRel} presents iterative redundancy and demonstrates that it is self-adapting. They says that the iterative redundancy self-adapts in three steps: (i) automatically detecting when a resource reliability drops and deploying more resources, (ii) by identifying unlucky parts of the computation and injecting extra redundancy and (iii) not relying on previous estimates of a resource reliability by making runtime resource allocations. Iterative redundancy calculates how many replicas is needed, executes them and check their result. If all results agree the task is done, otherwise the algorithm calculates the minimum number of addition jobs, deploys them and compare their result with the previous ones. The algorithm iterates this until the required level of reliability is met.
-
-% 
-More or less copied:
+There are a number of different redundancy alternatives, traditional redundancy executes an odd number of replicas and takes a vote for which result is correct. Progressive redundancy minimizes the number of replicas. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If consensus is not reached an additional number of replicas is executed until consensus is reached \cite{selfAdaptRel}. Furthermore there is an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a level of consensus.
+\\\\
+\cite{selfAdaptRel} presents iterative redundancy and demonstrates that it is self-adapting. They say that the iterative redundancy self-adapts in three steps: (i) automatically detecting when a resource reliability drops and deploying more resources, (ii) by identifying unlucky parts of the computation and injecting extra redundancy and (iii) not relying on previous estimates of a resource reliability by making runtime resource allocations. Iterative redundancy calculates how many replicas is needed, executes them and check their result. If all results agree the task is done, otherwise the algorithm calculates the minimum number of addition jobs, deploys them and compare their result with the previous ones. The algorithm iterates this until the required level of reliability is met.
+\\\\
+...Reliability evaluation?...
+\\\\
+MORE OR LESS COPIED:
+\\\\
 In this paper, we consider a heterogeneous DS that runs a hard real-time application (all the tasks should meet their deadlines). The goal is to find a task to processor assignment under which the overall reliability of the system (probability that all tasks run successfully) is maximized, while memory, communication bandwidth, and processing load constraints, as well as real-time requirements are met. \cite{optTaskAllocationForMaxRel}
 \\\\
 Reliability of distributed simulation is define to be the probability that the given distributed simulation application can run successfully under the distributed computing environment. (assumes execution time) \cite{relModelDistSimSystem}
@@ -102,8 +106,6 @@ We present an efficient scheme based on task replication, which utilizes the Wei
 Byzantine consensus among component replicas is another form of monitoring. The replicas vote on the correct output or action based on the observed inputs. In the event of a disagreement, the minority is considered faulty (k-modular redundancy \cite{selfAdaptRel}). This method allows for the detection of Byzantine faults, resulting in a much more powerful monitor.  \cite{surveyFaultParallel}
 \\\\
 Consensus [Fundamentals of Fault-Tolerant Distributed Computing]
-\\\\
-Traditional redundancy, also called k-modular redundancy [38], which performs k 2 f3; 5; 7; . . .g independent executions of the same task in parallel and then takes a vote on the correctness of the result. ] 
 \\\\
 This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model.
 This paper proposes a Service-Oriented software Reliability Model (SORM). This model evaluates the reliability of WS in two steps: (1) Use highly efficient group testing to evaluate the reliability of atomic services.
