@@ -93,6 +93,8 @@ There are a number of different redundancy alternatives, traditional redundancy 
 \\\\
 \cite{selfAdaptRel} presents iterative redundancy and demonstrates that it is self-adapting. They say that the iterative redundancy self-adapts in three steps: (i) automatically detecting when a resource reliability drops and deploying more resources, (ii) by identifying unlucky parts of the computation and injecting extra redundancy and (iii) not relying on previous estimates of a resource reliability by making runtime resource allocations. Iterative redundancy calculates how many replicas is needed, executes them and check their result. If all results agree the task is done, otherwise the algorithm calculates the minimum number of addition jobs, deploys them and compare their result with the previous ones. The algorithm iterates this until the required level of reliability is met.
 \\\\
+A quite old but still relevant work is found in \cite{dynAdaptRepl} where they present a framework for dynamic replication with an adaptive control in an multi-agent system. They introduce the software architecture which can act as support for building reliable multi-agent systems. Since the available resources often are limited they say that it isn't feasible to replicate all components. Therefore they use a criticality for each agent which is allowed to evolve during runtime. The proposed solution allows for dynamically adapt the number of replicas and the replication strategy. The number of replicas is partly based on the agents critically and a predefined minimum number of replicas. From CPU usage time and communication activity an agent activity is calculated which is used in calculating the agents critically. One restriction they do in their fault model is that processes can only fail by permanent crashes.
+\\\\
 ...Reliability evaluation?...
 \\\\
 MORE OR LESS COPIED:
@@ -145,6 +147,7 @@ There are a number of different types of distributed environments, e.g. grid, mo
 \item Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}
 \item Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 \item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
+\item Mobile grid? - ...
 \end{itemize}
 
 \subsection{Dynamic versus static environments}
@@ -612,6 +615,12 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	Future of Software Engineering, FOSE ’07, p. 153-170,
 	23–25 May 2007
 	
+\bibitem{dynAdaptRepl}
+	Guessoum Z. et. al.
+	\emph{Dynamic and Adaptive Replication for Large-Scale Reliable Multi-agent Systems},
+	Lecture Notes in Computer Science pp 182-198,
+	April 2003
+
 \bibitem{algoMaxRelEndToEndConstraint}
 Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
 
