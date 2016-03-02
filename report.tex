@@ -85,11 +85,13 @@ A lot of scheduling techniques has been designed, aiming at maximizing reliabili
 
 A lot of work has been done in the area of designing fault-tolerant systems by using checkpoint/restart techniques [TODO]. %TODO add reference
 
-Some attempts at designing fault-tolerant systems by the use of replication has been made \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{effTaskReplMobGrid}. \cite{evalReplicationSched} assumes a static number of replicas, which is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed when resources are available. While both \cite{effTaskReplMobGrid} and \cite{designFaultTolerantSched} all dynamically determines the number of replicas based on the state of the system, it is static in the way thay failed replicas are not restarted. The reliability level for long running applications are therefore decreased if replicas fail.
+Some attempts at designing fault-tolerant systems by the use of replication has been made \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid}. \cite{evalReplicationSched} assumes a static number of replicas, which is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed when resources are available. While both \cite{effTaskReplMobGrid}, \cite{taskSchedulingReplication} and \cite{designFaultTolerantSched} all dynamically determines the number of replicas based on the state of the system, it is static in the way thay failed replicas are not restarted. The reliability level for long running applications are therefore decreased if replicas fail.
 
 A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
+
+
 
 \iffalse %TODO start previous text
 \newpage
@@ -136,6 +138,14 @@ Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compu
 \fi %TODO End previous text
 
 \section{Our contributions}
+To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed one.
+
+We propose a framework which ensures a user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. The system is continously monitored in order to adapt the number of replicas as the state of the system changes.
+
+The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
+
+
+\iffalse
 %TODO
 \begin{itemize}
 \item ensuring a certain level of realiability
@@ -144,6 +154,7 @@ Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compu
 \item minimizing resource usage while ensuring reliability level is reached
 \item long running tasks
 \end{itemize}
+
 
 While a lot of work has been done in maximizing reliability level \cite{X}, and TODO, not much work has been done in the area of ensuring a certain level of reliability for long running applications, in a dynamic and self-adaptive manner.
 \\\\
@@ -159,6 +170,7 @@ Furthermore, previous work related to reliability either defines reliability as 
 \\\\
 
 I this paper we present a framework for dynamic fault tolerance and task scheduling in a general distributed environment. We don't restrict the framework for a single type of distributed environment since it is our belief that it will adapt to any environment. We will test the framework with help of Ericssons actor-based system Calvin and test it both on a cloud environment and on a cluster.
+\fi 
 
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
