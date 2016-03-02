@@ -91,6 +91,7 @@ A fault-tolerant scheduling technique incorporates a replication scheme is prese
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
 
+\iffalse %TODO start previous text
 \newpage
 PREVIOUS:
 \\\\
@@ -132,10 +133,17 @@ For reliability evaluation, researchers often design some algorithms to simplify
 Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compute the reliability of a distributed computing system with imperfect nodes [10].
 [A Real-Time Performance Evaluation Model for Distributed Software with Reliability Constrains]
 \cite{taskSchedulingReplication}
-
+\fi %TODO End previous text
 
 \section{Our contributions}
 %TODO
+\begin{itemize}
+\item ensuring a certain level of realiability
+\item dynamically adapt the number of replicas based on system state
+\item takes historic failure events into account
+\item minimizing resource usage while ensuring reliability level is reached
+\item long running tasks
+\end{itemize}
 
 While a lot of work has been done in maximizing reliability level \cite{X}, and TODO, not much work has been done in the area of ensuring a certain level of reliability for long running applications, in a dynamic and self-adaptive manner.
 \\\\
