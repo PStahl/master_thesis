@@ -560,7 +560,11 @@ performance metrics
 \chapter{Limitations} \label{ch:limitations}
 
 %TODO
-our model do not account for link failures. In case of a failure, a node is dead, hence we do not consider cases where for example a link between two nodes fails. Instead, in case of a failure, the node is dead, and all other nodes are aware of this.
+Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorihtm as well.
+
+Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being availble for another.
+
+Our primary objective is to ensure a certain level of reliability. By using active replication, we require a lot more resources, which puts an extra burden on the system. In addition, the extra load on the system may affect the execution time, thus decreasing task performance.
 
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
