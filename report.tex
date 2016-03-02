@@ -474,6 +474,14 @@ In this paper we use a simpel example application in our experiments. The applic
 \caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
 \end{figure}
 
+%TODO
+"we should have some real examples of applications which would benefit from using our framework. 
+\begin{itemize}
+\item telephone system?
+\item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would inrease the amount of transmitted data to the user's mobile, it would also increase the user experience.
+\end{itemize}
+
+
 \subsection{Replication scheme}
 In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
 
