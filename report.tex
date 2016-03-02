@@ -144,10 +144,10 @@ I this paper we present a framework for dynamic fault tolerance and task schedul
 There are a number of different types of distributed environments, e.g. grid, mobile grid, clusters, cloud and HDCS.
 \begin{itemize}
 \item Grid computing - A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud}.
+\item Mobile grid? - %TODO
 \item Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}
 \item Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 \item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
-\item Mobile grid? - ...
 \end{itemize}
 
 \subsection{Dynamic versus static environments}
@@ -201,22 +201,24 @@ The Byzantine fault model is very broad making it very difficult to analyse.
 In comparison to the Byzantine fault model the fail-stop model is much simpler. When a node fails it stops producing output and its interaction with the other nodes. This results in that the rest of the system automatically gets aware of that the node has failed. It is a simple model and does not handle subtle failures such as memory corruption but rather failures such as system crash or hangs \cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
 % fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
-
 % This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. [Performance and Reliability of Non-Markovian Heterogeneous Distributed Computing Systems]
 
 \subsubsection*{Fail-stutter Faults}
 Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}.
 
 \subsubsection*{Crash-failure model}
-
+%TODO Källa
+The crash failure model is quite alike the fail-stop model but with the difference that the other nodes does not get aware of that the node has failed.
 %Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
 
 \subsection{Failure Distribution}
-%TODO
-Previous work usually assumes resource failure within a system follows a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
+%TODO ev. källa för att bathtub är vanligt för HW och decreasing for SW
+The failure rate for a hardware component is usually modelled with a bathtub shaped curve. The failure rate is higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
+Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
+But when considering resource failure it is usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
 \\\\
 Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
-\cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increses with the number of components on which the job is running.
+\cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 
  
 \subsubsection{Failure assumptions}
