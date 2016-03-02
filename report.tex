@@ -79,6 +79,21 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 
 
 \section{Related work} \label{sec:related_work}
+The interest in reliability in distributed systems has gain increased knowledge. Due to the uncertain heteregenous environment of cloud and grid systems, increasing reliability is a complex task.
+
+A lot of scheduling techniques has been designed, aiming at maximizing reliability of jobs in distributed environments, under various constraints such as meeting task deadlines or minimizing execution time \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas}. Maximizing reliability for these algorithms are a secondary concern, while meeting the constraints are the primary. Other algorithms have been developed which put greater focus on increasing the reliability {\cite{optResourceAllMaxPerformance} \cite{matchSchedAlgoMinFailure}, and some have increased reliability as the primary objective \cite{safetyRelTaskAllocation} \cite{improvedTaskAllMaxRel}. Common for these scheduling techniques are that while they try to maximize reliability, they do not ensure a certain level of reliability to the user. Furthermore, the algorithms are usually static in the way that they do not account for the dynamic behaviour of distirbuted system, and they make assumptions such as known execution times of tasks.
+
+A lot of work has been done in the area of designing fault-tolerant systems by using checkpoint/restart techniques [TODO]. %TODO
+
+Some attempts at designing fault-tolerant systems by the use of replication has been made \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{effTaskReplMobGrid}. \cite{evalReplicationSched} assumes a static number of replicas, which is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed when resources are available. While both \cite{effTaskReplMobGrid} and \cite{designFaultTolerantSched} all dynamically determines the number of replicas based on the state of the system, it is static in the way thay failed replicas are not restarted. The reliability level for long running applications are therefore decreased if replicas fail.
+
+A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
+
+The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
+
+\newpage
+PREVIOUS:
+\\\\
 A lot of work has been done in the area of designing fault-tolerant applications for distributed systems. Most of them use a checkpoint/restart based approach [X][TODO]. These techniques relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure.
 \\\\
 To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaced with a new one, no replicas are made during execution. Furthermore, they do not take the dynamic of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
@@ -677,6 +692,30 @@ Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the 
 
 \bibitem{calvin}
 Calvin - Merging Cloud and IoT
+
+\bibitem{taskAllocationSwarm}
+Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization
+
+\bibitem{optResourceAllMaxPerformance}
+Optimal Resource Allocation for Maximizing Performance and Reliability in Tree-Structured Grid Services 
+
+\bibitem{matchSchedAlgoMinFailure}
+Matching and Scheduling Algorithms for Minimizing Execution Time and Failure Probability of Applications in Heterogeneous Computing
+
+\bibitem{safetyRelTaskAllocation}
+Safety and Reliability Driven Task Allocation in Distributed Systems
+
+\bibitem{improvedTaskAllMaxRel}
+Improved Task-Allocation Algorithms to Maximize Reliability of Redundant Distributed Computing Systems 
+
+\bibitem{designFaultTolerantSched}
+Design of a Fault-Tolerant Scheduling System for Grid Computing
+
+\bibitem{evalReplicationSched}
+Evaluation of replication and rescheduling heuristics for grid systems with varying resource availability
+
+\bibitem{faultTolerantSchedPolicy}
+Fault-Tolerant Scheduling Policy for Grid Computing Systems
 
 \end{thebibliography}
 
