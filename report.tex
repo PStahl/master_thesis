@@ -571,6 +571,7 @@ Our definition of reliability excludes the possibility of tasks calculating inco
 
 Our primary objective is to ensure a certain level of reliability. By using active replication, we require a lot more resources, which puts an extra burden on the system. In addition, the extra load on the system may affect the execution time, thus decreasing task performance.
 
+Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
 
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
