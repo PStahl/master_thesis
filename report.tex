@@ -87,6 +87,9 @@ A lot of work has been done in the area of designing fault-tolerant systems by u
 
 Some attempts at designing fault-tolerant systems by the use of replication has been made \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid}. \cite{evalReplicationSched} assumes a static number of replicas, which is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed when resources are available. While both \cite{effTaskReplMobGrid}, \cite{taskSchedulingReplication} and \cite{designFaultTolerantSched} all dynamically determines the number of replicas based on the state of the system, it is static in the way thay failed replicas are not restarted. The reliability level for long running applications are therefore decreased if replicas fail.
 
+%TODO
+\cite{adaptiveCheckPointAndRep} proposes algorithms using checkpointing, replication, and a combination of both. One algorithm dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load [TODO reference], one should increase the number of replicas to keep the desired level of reliability.
+
 A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
@@ -594,7 +597,7 @@ The above corresponds to the probability of the event “all the replicas and th
 
 \chapter{Future Work} \label{ch:future_work}
 %TODO
-Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. ("Adaptive Task Checkpointing and Replication- Toward Efficient Fault-Tolerant Grids" combines checkpointing and replication)
+Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
 \\\\
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
 
@@ -747,6 +750,9 @@ Evaluation of replication and rescheduling heuristics for grid systems with vary
 
 \bibitem{faultTolerantSchedPolicy}
 Fault-Tolerant Scheduling Policy for Grid Computing Systems
+
+\bibitem{adaptiveCheckPointAndRep}
+Adaptive Task Checkpointing and Replication: Toward Efficient Fault-Tolerant Grids
 
 \end{thebibliography}
 
