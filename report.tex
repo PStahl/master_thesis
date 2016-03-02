@@ -106,7 +106,7 @@ A lot of work has been done in the area of designing fault-tolerant applications
 \\\\
 To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaced with a new one, no replicas are made during execution. Furthermore, they do not take the dynamic of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
 \\\\
-Other work define reliability as producing the correct result \cite{selfAdaptRel} \cite{imprRelAdaptRL} \cite{X}. In these cases, reliability is achieved by various consensus algorithms, e.g. $k-modular redundancy$. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets a task execute multiple times in parallel, independent of each other and afterwards they vote for which result is correct. This allows for detecting of Byzantine faults, i.e. when a node crashes or produce the incorrect result.
+Other work define reliability as producing the correct result \cite{selfAdaptRel} \cite{imprRelAdaptRL} \cite{X}. In these cases, reliability is achieved by various consensus algorithms, e.g. $k-modular redundancy$. 
 \\\\
 A lot of work has been done focusing on reliability through scheduling techniques. \cite{SLASched} focus on meeting SLA by scheduling techniques, and while reliability can be part of an SLA, they focus on I/O performance and throughput. \cite{algoMaxRelEndToEndConstraint} focuses of maximizing reliability while still meeting end-to-end delay constraint, and \cite{algoMinExTime} and \cite{algoOptTimeMaxRel} both design algorithms aiming at minimizing time and cost while maximization of system reliability.
 \\\\
@@ -304,10 +304,11 @@ A replica of a task, is an exact copy of the task, running in parallel. [TODO, t
 \end{definition}
 
 \subsubsection*{Consensus}
-In order to reach a certain level of reliability by replicating a task some consensus has to be in order for deciding which result is correct if the replicas would produce different results. Usually the replicas vote for which result is correct. %TODO Is there other ways?
+The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they vote for which result is correct. This allows for detecting of Byzantine faults, i.e. when a node crashes or produce an incorrect result.
 
-According to \cite{selfAdaptRel} there are two usual schemes when replicating, either by using traditional redundancy or by progressive redundancy. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct. Progressive redundancy on the other hand minimizes the number of replicas needed. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If consensus is not reached an additional number of replicas is executed until consensus is reached. 
-Furthermore \cite{selfAdaptRel} present a third scheme, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
+Based on achieving consensus two different redundancy (replication) strategies can be identified, traditional and progressive consensus \cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached. %TODO is consensus guaranteed?
+In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. 
+Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -319,7 +320,6 @@ Reliability in the context of software applications can have several meanings. O
 \item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
 \item Have the ability to run correctly even after scaling is done with reference to some aspects.
 \end{itemize}
-
 
 In this paper, we use the following definitions of reliability:
 \begin{definition} \label{def:single_task_reliability}
@@ -613,6 +613,8 @@ The above corresponds to the probability of the event “all the replicas and th
 Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
 \\\\
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
+\\\\
+Implement consensus in Calvin system
 
 \subsection{Extended model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
