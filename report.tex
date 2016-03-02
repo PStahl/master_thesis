@@ -79,6 +79,27 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 
 
 \section{Related work} \label{sec:related_work}
+The interest in reliability in distributed systems has gain increased knowledge. Due to the uncertain heteregenous environment of cloud and grid systems, increasing reliability is a complex task [TODO]. %TODO add reference
+
+A lot of scheduling techniques has been designed, aiming at maximizing reliability of jobs in distributed environments, under various constraints such as meeting task deadlines or minimizing execution time \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas}. Maximizing reliability for these algorithms are a secondary concern, while meeting the constraints are the primary. Other algorithms have been developed which put greater focus on increasing the reliability {\cite{optResourceAllMaxPerformance} \cite{matchSchedAlgoMinFailure}, and some have increased reliability as the primary objective \cite{safetyRelTaskAllocation} \cite{improvedTaskAllMaxRel}. Common for these scheduling techniques are that while they try to maximize reliability, they do not ensure a certain level of reliability to the user. Furthermore, the algorithms are usually static in the way that they do not account for the dynamic behaviour of distirbuted system, and they make assumptions such as known execution times of tasks.
+
+A lot of work has been done in the area of designing fault-tolerant systems by using checkpoint/restart techniques [TODO]. %TODO add reference
+
+Some attempts at designing fault-tolerant systems by the use of replication has been made \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid}. \cite{evalReplicationSched} assumes a static number of replicas, which is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed when resources are available. While both \cite{effTaskReplMobGrid}, \cite{taskSchedulingReplication} and \cite{designFaultTolerantSched} all dynamically determines the number of replicas based on the state of the system, it is static in the way thay failed replicas are not restarted. The reliability level for long running applications are therefore decreased if replicas fail.
+
+%TODO
+\cite{adaptiveCheckPointAndRep} proposes algorithms using checkpointing, replication, and a combination of both. One algorithm dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load [TODO reference], one should increase the number of replicas to keep the desired level of reliability.
+
+A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
+
+The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
+
+
+
+\iffalse %TODO start previous text
+\newpage
+PREVIOUS:
+\\\\
 A lot of work has been done in the area of designing fault-tolerant applications for distributed systems. Most of them use a checkpoint/restart based approach [X][TODO]. These techniques relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure.
 \\\\
 To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaced with a new one, no replicas are made during execution. Furthermore, they do not take the dynamic of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
@@ -117,10 +138,29 @@ For reliability evaluation, researchers often design some algorithms to simplify
 Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compute the reliability of a distributed computing system with imperfect nodes [10].
 [A Real-Time Performance Evaluation Model for Distributed Software with Reliability Constrains]
 \cite{taskSchedulingReplication}
-
+\fi %TODO End previous text
 
 \section{Our contributions}
+To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed one.
+
+We propose a framework which ensures a user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. The system is continously monitored in order to adapt the number of replicas as the state of the system changes.
+
+The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
+
 %TODO
+Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
+
+
+\iffalse
+%TODO
+\begin{itemize}
+\item ensuring a certain level of realiability
+\item dynamically adapt the number of replicas based on system state
+\item takes historic failure events into account
+\item minimizing resource usage while ensuring reliability level is reached
+\item long running tasks
+\end{itemize}
+
 
 While a lot of work has been done in maximizing reliability level \cite{X}, and TODO, not much work has been done in the area of ensuring a certain level of reliability for long running applications, in a dynamic and self-adaptive manner.
 \\\\
@@ -136,6 +176,7 @@ Furthermore, previous work related to reliability either defines reliability as 
 \\\\
 
 I this paper we present a framework for dynamic fault tolerance and task scheduling in a general distributed environment. We don't restrict the framework for a single type of distributed environment since it is our belief that it will adapt to any environment. We will test the framework with help of Ericssons actor-based system Calvin and test it both on a cloud environment and on a cluster.
+\fi 
 
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
@@ -527,7 +568,15 @@ performance metrics
 \chapter{Limitations} \label{ch:limitations}
 
 %TODO
-our model do not account for link failures. In case of a failure, a node is dead, hence we do not consider cases where for example a link between two nodes fails. Instead, in case of a failure, the node is dead, and all other nodes are aware of this.
+Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorihtm as well.
+
+Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being availble for another.
+
+Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
+
+Our primary objective is to ensure a certain level of reliability. By using active replication, we require a lot more resources, which puts an extra burden on the system. In addition, the extra load on the system may affect the execution time, thus decreasing task performance.
+
+Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
 
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
@@ -550,7 +599,7 @@ The above corresponds to the probability of the event “all the replicas and th
 
 \chapter{Future Work} \label{ch:future_work}
 %TODO
-Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased.
+Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
 \\\\
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
 
@@ -679,6 +728,33 @@ Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the 
 
 \bibitem{calvin}
 Calvin - Merging Cloud and IoT
+
+\bibitem{taskAllocationSwarm}
+Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization
+
+\bibitem{optResourceAllMaxPerformance}
+Optimal Resource Allocation for Maximizing Performance and Reliability in Tree-Structured Grid Services 
+
+\bibitem{matchSchedAlgoMinFailure}
+Matching and Scheduling Algorithms for Minimizing Execution Time and Failure Probability of Applications in Heterogeneous Computing
+
+\bibitem{safetyRelTaskAllocation}
+Safety and Reliability Driven Task Allocation in Distributed Systems
+
+\bibitem{improvedTaskAllMaxRel}
+Improved Task-Allocation Algorithms to Maximize Reliability of Redundant Distributed Computing Systems 
+
+\bibitem{designFaultTolerantSched}
+Design of a Fault-Tolerant Scheduling System for Grid Computing
+
+\bibitem{evalReplicationSched}
+Evaluation of replication and rescheduling heuristics for grid systems with varying resource availability
+
+\bibitem{faultTolerantSchedPolicy}
+Fault-Tolerant Scheduling Policy for Grid Computing Systems
+
+\bibitem{adaptiveCheckPointAndRep}
+Adaptive Task Checkpointing and Replication: Toward Efficient Fault-Tolerant Grids
 
 \end{thebibliography}
 
