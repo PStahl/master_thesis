@@ -112,8 +112,6 @@ A lot of work has been done focusing on reliability through scheduling technique
 \\\\
 Previous work usually assumes a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint}. Such assumptions are unlikely to model the dynamicity of heterogeneous systems correctly. Therefore, we adapt a self-learning model, which adapts the failure rate for nodes in the system, and tries to avoid scheduling of tasks on unreliable nodes.
 \\\\
-There are a number of different redundancy alternatives, traditional redundancy executes an odd number of replicas and takes a vote for which result is correct. Progressive redundancy minimizes the number of replicas. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If consensus is not reached an additional number of replicas is executed until consensus is reached \cite{selfAdaptRel}. Furthermore there is an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a level of consensus.
-\\\\
 \cite{selfAdaptRel} presents iterative redundancy and demonstrates that it is self-adapting. They say that the iterative redundancy self-adapts in three steps: (i) automatically detecting when a resource reliability drops and deploying more resources, (ii) by identifying unlucky parts of the computation and injecting extra redundancy and (iii) not relying on previous estimates of a resource reliability by making runtime resource allocations. Iterative redundancy calculates how many replicas is needed, executes them and check their result. If all results agree the task is done, otherwise the algorithm calculates the minimum number of addition jobs, deploys them and compare their result with the previous ones. The algorithm iterates this until the required level of reliability is met.
 \\\\
 ...Reliability evaluation?...
@@ -228,7 +226,7 @@ According to \cite{softRelRoadmap} the following four technical areas can be reg
 \item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
 \end{itemize}
 
-Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they deal with failures that haven't been prevented or detected. 
+Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they are the last line of defence against failures that haven't been prevented or detected.
 
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
@@ -295,15 +293,20 @@ The basics, however, are checkpoint recovery and task replication. The former is
 \subsection{Replication}
 There are a number of different strategies for replicating a task:
 \begin{itemize}
-\item Active A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behavior and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
-\item Semi-Acitve Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site. 
-\item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed. 
+\item Active A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+\item Semi-Active Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
+\item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 \end{itemize}
 
 A replica, whether active, semi-active or passive replication is used, is defined as
 \begin{definition} \label{def:replica}
-A replica of a task, is an exakt copy of the task, running in parallel. [TODO, there is some good replica definition in some paper]
+A replica of a task, is an exact copy of the task, running in parallel. [TODO, there is some good replica definition in some paper]
 \end{definition}
+
+\subsubsection*{Consensus}
+In order to reach a certain level of reliability by replicating a task some consensus has to be in order for deciding which result is correct if the replicas would produce different results. Usually the replicas vote for which result is correct. %TODO Is there other ways?
+
+According to \cite{selfAdaptRel} there are two different schemes when replicating, either by using traditional redundancy or by progressive redundancy. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct. Progressive redundancy on the other hand minimizes the number of replicas needed. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If consensus is not reached an additional number of replicas is executed until consensus is reached \cite{selfAdaptRel}. Furthermore there is an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -372,7 +375,6 @@ In this paper, we consider three key performance and reliability metrics: the av
 We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability [The decision model of task allocation for constrained stochastic distributed systems]
 \\\\
 This paper presents effective resource management using adaptive reinforcement learning (RL) that focuses on improving successful execution with low computational complexity. The approach uses an emerging methodology of RL in conjunction with neural network to help a scheduler that effectively observes and adapts to dynamic changes in execution environments [Improving reliability in resource management through adaptive reinforcement learning for distributed systems]
-
 
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
