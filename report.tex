@@ -253,6 +253,12 @@ Models which describes the reliability of distributed systems, or distributed ap
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglected assumptions since the RMS in this case in fast is a single point of failure.
 
 \section{Fault tolerance techniques}
+Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
+\begin{itemize}
+	\item Predicting reliability early at architectural level to better analyze the system before actual application development.
+	\item Providing a fault tolerant system to ensure seamless environment for end users in case if any unanticipated or unpredicted scenario has occurred during execution in real environment.
+\end{itemize}
+
 Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur
 \cite{faultToleranceChallenges}
 
@@ -299,7 +305,6 @@ Checkpointing is a fault-tolerance technique which periodically saves the state 
 
 %TODO
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
-\\\\
 
 \subsection{Replication}
 Job replication is a commonly used fault tolerant techinique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously \cite{faultToleranceGrid}.
@@ -424,13 +429,6 @@ in fact, the reliability of individual element is affected by various conditions
 COPIED:
 the operational probabilities are affected by various conditions such as failure rate, transmitted data, available bandwidth, and operation time \cite{hierarchicalRelModeling}
 \fi
-
-\subsection{Providing Reliability}
-Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
-\begin{itemize}
-	\item Predicting reliability early at architectural level to better analyze the system before actual application development.
-	\item Providing a fault tolerant system to ensure seamless environment for end users in case if any unanticipated or unpredicted scenario has occurred during execution in real environment.
-\end{itemize}
 
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
