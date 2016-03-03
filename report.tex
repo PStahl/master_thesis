@@ -179,6 +179,8 @@ I this paper we present a framework for dynamic fault tolerance and task schedul
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
 \subsection{Types of distributed computing}
+Distributed systems are composed of a number of interconnected components or subsystems \cite{relModelDistSimSystem}.
+
 %TODO källsa
 There are a number of different types of distributed environments, e.g. grid, mobile grid, clusters, cloud and HDCS.
 \begin{itemize}
@@ -263,7 +265,7 @@ Hardware failures do not usually have a constant rate of failure. Instead, hardw
 \\\\
 Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}.
  
-\subsubsection{Failure assumptions}
+\subsection{Failure assumptions}
 Common assumptions about failures include \cite{surveyReliabilityDistr}.
 \begin{itemize}
 \item Not all factors are considered
@@ -272,14 +274,13 @@ Common assumptions about failures include \cite{surveyReliabilityDistr}.
 
 Furthermore, another common assumption is statistically independent failures. However, this is very unlikely to reflect the real dynamic behaviour of distributed systems. %TODO \cite{surveyReliabilityDistr}
 
-%TODO
-possible assumptions:
+Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}:
 \begin{itemize}
-\item  Each component of the distributed system (node, communication link, LP being executed) only has two states: operational or failed.
-\item Failures of components are statistically independent.
-\item The “future life” of a component (the time to the next failure) follows exponential distribution, i.e., the failure of a component follows a Poisson process.
+	\item Each component in the system has only two states: operational or failed
+	\item Failures of components are statistically independent
+	\item The network topology is cycle free
+	\item Components have a constant failure rate, i.e. the failure of a component follows a Poisson process
 \end{itemize}
-
  
 \section{Fault tolerance techniques}
 Considering the whole life-span of a software application, fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
@@ -349,7 +350,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -378,6 +379,19 @@ The reliability of a process, with $n$ task replicas, is the probability at leas
 
 \subsection{Reliability Model}
 In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. 
+
+For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}.
+
+Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}.
+
+\begin{definition} \label{def:mttf}
+The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
+\end{definition}
+
+\begin{definition} \label{def:mtbf}
+The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
+\end{definition}
+
 
 \iffalse 
 \newpage
@@ -762,6 +776,9 @@ Matching and Scheduling Algorithms for Minimising Execution Time and Failure Pro
 
 \bibitem{relModelDistSimSystem}
 Reliability model of distributed simulation system
+
+\bibitem{relModelAnalysis}
+Reliability Modeling and Analysis of Computer Networks
 
 \bibitem{optTaskAllocationForMaxRel}
 Optimal task allocation for maximizing reliability in distributed real-time systems
