@@ -330,7 +330,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is that reliability is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -405,6 +405,10 @@ This paper presents effective resource management using adaptive reinforcement l
 
 \subsection{Factors affecting reliability}
 Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}.
+
+COPIED:
+overloaded resources leaving no reserve capacity for variations in demand
+·      lack of flexibility in design that cause serious consequences for schedules and costs \cite{relDistApplications}
 
 \subsection{Providing Reliability}
 Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
@@ -682,6 +686,9 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	
 \bibitem{surveyRelPrediction}
 Survey of reliability and availability prediction methods from the viewpoint of software architecture
+
+\bibitem{relDistApplications}
+Reliability in Distributed Software Applications
 
 \bibitem{compStudyLoadAndCloud}
 	Mayanka Katyal and Atul Mishra,
