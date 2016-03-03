@@ -330,7 +330,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is that reliability is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is that reliability is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -402,6 +402,17 @@ We focus on the study of task allocation decision to achieve maximal distributed
 \\\\
 This paper presents effective resource management using adaptive reinforcement learning (RL) that focuses on improving successful execution with low computational complexity. The approach uses an emerging methodology of RL in conjunction with neural network to help a scheduler that effectively observes and adapts to dynamic changes in execution environments \cite{imprRelAdaptRL}
 \fi
+
+\subsection{Factors affecting reliability}
+Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}.
+
+\subsection{Providing Reliability}
+Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
+\begin{itemize}
+	\item Predicting reliability early at architectural level to better analyze the system before actual application development.
+	\item Providing a fault tolerant system to ensure seamless environment for end users in case if any unanticipated or unpredicted scenario has occurred during execution in real environment.
+\end{itemize}
+
 
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
@@ -668,6 +679,9 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	\emph{A survey on reliability in distributed systems},
 	Journal of Computer and System Sciences Volume 78 Issue 8,
 	December 2013, Pages 1243–1255
+	
+\bibitem{surveyRelPrediction}
+Survey of reliability and availability prediction methods from the viewpoint of software architecture
 
 \bibitem{compStudyLoadAndCloud}
 	Mayanka Katyal and Atul Mishra,
