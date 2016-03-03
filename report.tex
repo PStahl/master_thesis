@@ -99,25 +99,6 @@ The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWeb
 An adaptive approach, which adapts to changes  in the execution environment is presented in \cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume a task's profile is available.
 
 
-\iffalse %TODO start previous text
-\newpage
-PREVIOUS (own words):
-\\\\
-To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.
-
-
-MORE OR LESS COPIED:
-\\\\
-This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model.
-This paper proposes a Service-Oriented software Reliability Model (SORM). This model evaluates the reliability of WS in two steps: (1) Use highly efficient group testing to evaluate the reliability of atomic services.
-(2) Evaluate the reliability of a composite service based on the reliabilities of the component services (they can be atomic services or composite services) and the structure (relationships) among the component services. Both evaluation steps are dynamic and at runtime. \cite{relModelWebServices}
-\\\\
-For reliability evaluation, researchers often design some algorithms to simplify Markov models, generate corresponding File Spanning Tree (FST) to evaluate the K-terminal reliability factoring theorems [2, 7, 9, 10] or the graph theories and probability synthetically 
-Symbolic Method (SM) and Factoring Method (FM) algorithms were proposed to compute the reliability of a distributed computing system with imperfect nodes [10].
-[A Real-Time Performance Evaluation Model for Distributed Software with Reliability Constrains]
-\cite{taskSchedulingReplication}
-\fi %TODO End previous text
-
 \section{Our contributions}
 To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed one.
 
