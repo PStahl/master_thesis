@@ -252,6 +252,85 @@ Models which describes the reliability of distributed systems, or distributed ap
 
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglected assumptions since the RMS in this case in fast is a single point of failure.
 
+\section{Reliability} \label{sec:theory_reliability}
+Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
+
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
+
+
+\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
+\begin{itemize}
+\item Perform well in specified time t without undergoing halting state
+\item Perform exactly the way it is designed
+\item Resist various failures and recover in case of any failure that occurs during system execution without proceeding any incorrect result.
+\item Successfully run software operation or its intended functions for a specified period of time in a specified environment.
+\item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
+\item Have the ability to run correctly even after scaling is done with reference to some aspects.
+\end{itemize}
+
+In this paper, we use the following definitions of reliability:
+\begin{definition} \label{def:single_task_reliability}
+The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
+\end{definition}
+
+For multi-task applications, where the tasks use more than one resource, reliability is defined as
+\begin{definition} \label{def:multi_task_reliability}
+The reliability of a multi-task process is the probability that the tasks being executed within a given time without experiencing any type of failure (internal or external) during the time of execution.
+\end{definition}
+
+Finally, for long running applications, where a replication scheme used, the reliability can be defined as \cite{effTaskReplMobGrid}
+\begin{definition} \label{def:task_replica_reliability}
+The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
+\end{definition}
+
+\subsection{Reliability Model}
+In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. 
+
+For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}.
+
+Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}.
+
+\begin{definition} \label{def:mttf}
+The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
+\end{definition}
+
+\begin{definition} \label{def:mtbf}
+The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
+\end{definition}
+
+\iffalse
+While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
+optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] \cite{optTaskAllocationForMaxRel}
+\\\\
+\cite{discContRelModel}
+\\\\
+System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) \cite{optTaskAllocationForMaxRel}
+\\\\
+the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a common assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
+There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. \cite{hierarchicalRelModeling}
+\\\\
+Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hypercube reliability assuming that the system works as long as there is no disconnectedworking node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hypercube computers]
+\\\\
+(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{relAnalysisFRA}
+\\\\
+We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability \cite{decisionModelTaskAllocation}
+\fi
+
+\subsection{Factors affecting reliability}
+Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}. When modeling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time \cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
+
+\iffalse
+COPIED:
+overloaded resources leaving no reserve capacity for variations in demand
+·      lack of flexibility in design that cause serious consequences for schedules and costs \cite{relDistApplications}
+
+COPIED:
+in fact, the reliability of individual element is affected by various conditions such as failure rate, amount of data, bandwidth, operation time, etc \cite{cloudServiceRel}.
+
+COPIED:
+the operational probabilities are affected by various conditions such as failure rate, transmitted data, available bandwidth, and operation time \cite{hierarchicalRelModeling}
+\fi
+
 \section{Fault tolerance techniques}
 Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
 \begin{itemize}
@@ -350,85 +429,6 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \subsection{Rollback recovery}
 COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
 
-
-\section{Reliability} \label{sec:theory_reliability}
-Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
-
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
-
-
-\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
-\begin{itemize}
-\item Perform well in specified time t without undergoing halting state
-\item Perform exactly the way it is designed
-\item Resist various failures and recover in case of any failure that occurs during system execution without proceeding any incorrect result.
-\item Successfully run software operation or its intended functions for a specified period of time in a specified environment.
-\item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
-\item Have the ability to run correctly even after scaling is done with reference to some aspects.
-\end{itemize}
-
-In this paper, we use the following definitions of reliability:
-\begin{definition} \label{def:single_task_reliability}
-The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
-\end{definition}
-
-For multi-task applications, where the tasks use more than one resource, reliability is defined as
-\begin{definition} \label{def:multi_task_reliability}
-The reliability of a multi-task process is the probability that the tasks being executed within a given time without experiencing any type of failure (internal or external) during the time of execution.
-\end{definition}
-
-Finally, for long running applications, where a replication scheme used, the reliability can be defined as \cite{effTaskReplMobGrid}
-\begin{definition} \label{def:task_replica_reliability}
-The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
-\end{definition}
-
-\subsection{Reliability Model}
-In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. 
-
-For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}.
-
-Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}.
-
-\begin{definition} \label{def:mttf}
-The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
-\end{definition}
-
-\begin{definition} \label{def:mtbf}
-The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
-\end{definition}
-
-\iffalse
-While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
-optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] \cite{optTaskAllocationForMaxRel}
-\\\\
-\cite{discContRelModel}
-\\\\
-System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) \cite{optTaskAllocationForMaxRel}
-\\\\
-the reliability model of the subdistributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a common assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
-There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. \cite{hierarchicalRelModeling}
-\\\\
-Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hypercube reliability assuming that the system works as long as there is no disconnectedworking node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hypercube computers]
-\\\\
-(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{relAnalysisFRA}
-\\\\
-We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability \cite{decisionModelTaskAllocation}
-\fi
-
-\subsection{Factors affecting reliability}
-Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}. When modeling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time \cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
-
-\iffalse
-COPIED:
-overloaded resources leaving no reserve capacity for variations in demand
-·      lack of flexibility in design that cause serious consequences for schedules and costs \cite{relDistApplications}
-
-COPIED:
-in fact, the reliability of individual element is affected by various conditions such as failure rate, amount of data, bandwidth, operation time, etc \cite{cloudServiceRel}.
-
-COPIED:
-the operational probabilities are affected by various conditions such as failure rate, transmitted data, available bandwidth, and operation time \cite{hierarchicalRelModeling}
-\fi
 
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
