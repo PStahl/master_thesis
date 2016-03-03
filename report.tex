@@ -154,30 +154,21 @@ In a dynamic environment heterogeneous resources are installed. In this scenario
 \subsection{Types of Faults}
 A fault is usually used to describe a defect at the lowest level of abstraction \cite{faultTolerantFundamentals}. A fault may cause an error which in turn may lead to a failure, which is when a system has not behaved according to its specification.
 
-In distributed environments, especially with heterogeneous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, overflow failure, timeout failure, resource missing failure, network failure, hardware failure, software failure, and database failure \cite{cloudServiceRel}. The possible kind of errors in a Grid environment can be divided into the following three kinds \cite{effTaskReplMobGrid}:
+In distributed environments, especially with heterogeneous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, overflow failure, timeout failure, resource missing failure, network failure, hardware failure, software failure, and database failure \cite{cloudServiceRel}. Failures are usually considered to be either \cite{evalOfGridRel}:
+\begin{enumerate}
+	\item Job related, or
+	\item System related, or
+	\item Network related.
+\end{enumerate}
+
+The possible kind of errors in a Grid environment can be divided into the following three kinds \cite{effTaskReplMobGrid}:
 \begin{itemize}
 \item Crash failure - When a correctly working server comes to a halt.
 \item Omission failure - When a server fails to respond to incoming requests and to send messages
 \item Timing failure - When a servers responds correctly but beyond the specified time interval
 \end{itemize}
 
-Failures are usually considered to be either
-\begin{enumerate}
-	\item Job related, or
-	\item System related, or
-	\item Network related \cite{evalOfGridRel}.
-\end{enumerate}
-
 In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
-\\\\
-% (Definition nedan delvis tagen från slides testkurs ETS200, LTH)
-When talking about incorrectly behaviour of software three terms are widely used: failure, fault and error. For better understanding we give a definition for each of them.
-\begin{itemize}
-\item Failure: Is defined as the event, e.g. when the software produces the wrong result or when a server crashes. Or simply the inability to perform as required.
-\item Fault: A fault is the state of software. It is also called defect/bug.
-\item Error: An error is a human mistake.
-\end{itemize} 
-To give a clear picture of the definitions above you can say that when a human writes code and does a mistake an error is committed and a fault is introduced in the code. Later, when the fault effects the execution of the software in an undesired way we have experienced a failure. 
 
 \subsection{Fault life-cycle techniques}
 According to \cite{softRelRoadmap} the following four technical areas can be regarded as fault life-cycle techniques.
@@ -188,7 +179,7 @@ According to \cite{softRelRoadmap} the following four technical areas can be reg
 \item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
 \end{itemize}
 
-Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they are the last line of defence against failures that haven't been prevented or detected.
+Fault prevention and fault removal are to consider during development of an application, while fault tolerance and fault forecasting are to use for already developed applications. Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they are the last line of defence against failures that haven't been prevented or detected.
 
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
