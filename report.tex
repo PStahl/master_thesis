@@ -94,7 +94,7 @@ A quite old but still relevant work is found in \cite{dynAdaptRepl} where they p
 
 A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
-The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
+The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
 
 
 
@@ -185,7 +185,6 @@ COPIED: Cloud computing is different from but related with grid computing, utili
 The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
 \\\\
 %TODO källsa
-\\\\
 There are a number of different types of distributed environments, e.g. grid, mobile grid, clusters, cloud and HDCS.
 \begin{itemize}
 \item Grid computing - A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices}.
@@ -194,6 +193,8 @@ There are a number of different types of distributed environments, e.g. grid, mo
 \item Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 \item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 \end{itemize}
+
+COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
 
 \subsection{Dynamic versus static environments}
 Based on how the environment is configured it can be either static or dynamic. 
@@ -279,7 +280,7 @@ Common assumptions about failures include \cite{surveyReliabilityDistr}.
 
 Furthermore, another common assumption is statistically independent failures. However, this is very unlikely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr}  \cite{cloudServiceRel}. %TODO källor
 
-Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel}:
+Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel}:
 \begin{itemize}
 	\item Each component in the system has only two states: operational or failed
 	\item Failures of components are statistically independent
@@ -357,7 +358,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}  \cite{surveyReliabilityDistr}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}  \cite{surveyReliabilityDistr}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -891,6 +892,12 @@ Reliability analysis of distributed systems based on a fast reliability algorith
 
 \bibitem{relGridServicePredConstraint}
 Reliability and Performance of Star Topology Grid Service with Precedence Constraints on Subtask Execution
+
+\bibitem{relModelWebServices}
+A Software Reliability Model for Web Services
+
+\bibitem{studyServiceRel}
+A study of service reliability and availability for distributed systems
 
 \end{thebibliography}
 
