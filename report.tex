@@ -414,16 +414,18 @@ The term replica or task replica is used to denote an identical copy of the orig
 
 While replication increases the system load, is may help improving performance by reducing task completion time \cite{improvingPerformanceReplication}.
 
+\subsubsection*{Consensus}
+Replication is usually used to implement some form of consensus algorithm. Consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they vote for which result is correct. These algorithms are usually use the Byzantine fault model, where a resource can crash or produce an incorrect result.
+
+Based on achieving consensus two different redundancy (replication) strategies can be identified, traditional and progressive consensus \cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached. %TODO is consensus guaranteed?
+
+In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. 
+
+Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 \subsection{Rollback recovery}
 COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
 
-\subsubsection*{Consensus}
-The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they vote for which result is correct. This allows for detecting of Byzantine faults, i.e. when a node crashes or produce an incorrect result.
-
-Based on achieving consensus two different redundancy (replication) strategies can be identified, traditional and progressive consensus \cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached. %TODO is consensus guaranteed?
-In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. 
-Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
