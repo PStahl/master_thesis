@@ -194,6 +194,8 @@ There are a number of different types of distributed environments, e.g. grid, mo
 \item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 \end{itemize}
 
+COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
+
 COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
 \\\\
 COPIED:
@@ -318,6 +320,9 @@ Models which describes the reliability of distributed systems, or distributed ap
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglected assumptions since the RMS in this case in fast is a single point of failure.
  
 \section{Fault tolerance techniques}
+Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur \cite{faultToleranceChallenges}
+Fault Tolerance Challenges, Techniques and Implementation in Cloud Computing}
+
 Considering the whole life-span of a software application, fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
 \begin{enumerate}
 \item Fault prevention - elimination of errors before thay happen, e.g. during development phase
@@ -366,6 +371,8 @@ The basics, however, are checkpoint recovery and task replication. The former is
 \\\\
 
 \subsection{Replication}
+Job replication is a commonly used fault tolerant techinique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously \cite{faultToleranceGrid}.
+
 Using replication, several identifical processes are scheduled on different resources and simultaneously perform the same computations \cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure \cite{faultToleranceGrid}.
 
 There are a number of different strategies for replicating a task:
@@ -733,7 +740,15 @@ A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
 
 \chapter{Evaluation} \label{ch:evaluation}
 %TODO
+\section{Performance metrics}
+%TODO
 performance metrics
+
+COPIED:
+performance metrics: The performance of fault tolerance techniques is measured by standards metrics turnaround time, throughput, fail tendency and grid load. The parameters are defined as:
+Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
+
+
 
 \chapter{Limitations} \label{ch:limitations}
 
@@ -990,6 +1005,9 @@ Collaborative Reliability Prediction of Service-Oriented Systems
 
 \bibitem{faultToleranceGrid}
 Fault Tolerance Techniques in Grid Computing Systems
+
+\bibitem{faultToleranceChallenges}
+Fault Tolerance Challenges, Techniques and Implementation in Cloud Computing
 
 \end{thebibliography}
 
