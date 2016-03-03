@@ -209,6 +209,8 @@ In a dynamic environment heterogeneous resources are installed. In this scenario
 
 \section{Faults in distributed environments}
 \subsection{Types of Faults}
+A fault is usually used to describe a defect at the lowest level of abstraction \cite{faultTolerantFundamentals}. A fault may cause an error which in turn may lead to a failure, which is when a system has not behaved according to its specification.
+
 In distributed environments, especially with heterogeneous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, overflow failure, timeout failure, resource missing failure, network failure, hardware failure, software failure, and database failure \cite{cloudServiceRel}. The possible kind of errors in a Grid environment can be divided into the following three kinds \cite{effTaskReplMobGrid}:
 \begin{itemize}
 \item Crash failure - When a correctly working server comes to a halt.
@@ -360,8 +362,6 @@ Fault-tolerance by the use of periodic checkpointing and rollback recovery is th
 
 Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage \cite{relGridSystems} \cite{surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
-COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
-
 %TODO
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 \\\\
@@ -391,6 +391,9 @@ A replica, whether active, semi-active or passive replication is used, is define
 \begin{definition} \label{def:replica}
 A replica of a task, is an exact copy of the task, running in parallel. [TODO, there is some good replica definition in some paper]
 \end{definition}
+
+\subsection{Rollback recovery}
+COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
 
 \subsubsection*{Consensus}
 The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they vote for which result is correct. This allows for detecting of Byzantine faults, i.e. when a node crashes or produce an incorrect result.
