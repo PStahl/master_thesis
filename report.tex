@@ -287,8 +287,13 @@ COPIED: “where failure rates vary significantly depending on a node’s worklo
 \\\\
 COPIED: “Failure rates are high initially, and then drop significantly during the first months. “  “Number of failures by hour of the day (left) vary” \cite{studyOfFailures}
  \\\\
- COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
- 
+COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
+\\\\
+COPIED: “In fact, it has been shown in [28] that there are strong spatial correlations between failures and nodes where a small fraction of the nodes incurs most of the failures. Possible reasons include: (1) some components (both hardware and software) are more vulnerable than others [37]; and (2) a component that just failed is more likely to fail again in the near future [13]. “ \cite{implicationsOfFailures}
+\\\\
+COPIED: “studies have pointed out that the likelihood of failures increases with the load on the nodes [2]. At the same time, there have also been other studies [3] showing that load on clusters exhibit some amount of periodicity, e.g. higher in the day/evenings, and lower at nights." \cite{implicationsOfFailures}
+\\\\
+COPIED: "“nodes that have failed in the past are more likely to fail again. We propose a scheduling strategy (rather a node assignment strategy for jobs), called Least Failure First (LFF), to take advantage of this observation. "  \cite{implicationsOfFailures}
 
 \subsection{Failure assumptions}
 Common assumptions about failures include \cite{surveyReliabilityDistr}.
@@ -598,6 +603,8 @@ COPIED:
 “Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
 \\\\
 COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “  \cite{studyOfFailures}
+\\\\
+COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “  \cite{implicationsOfFailures}. 
 
 \subsection{Replication scheme}
 In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
@@ -851,6 +858,9 @@ Performance Implications of Periodic Checkpointing on Large-scale Cluster System
 
 \bibitem{studyOfFailures}
 A large-scale study of failures in high-performance computing systems
+
+\bibitem{implicationsOfFailures}
+Performance Implications of Failures in Large-Scale Cluster Scheduling
 
 \bibitem{discContRelModel}
 Discrete and continuous reliability models for systems with identically distributed correlated components
