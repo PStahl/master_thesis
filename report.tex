@@ -260,6 +260,8 @@ Assumptions such as constant resource failure rate and statistically independent
 \cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 \\\\
 Hardware failures do not usually have a constant rate of failure. Instead, hardware is less reliable and more likely to fail in the beginning and of its life-cycle \cite{surveyReliabilityDistr}. %TODO bath-tub curve
+\\\\
+Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}.
  
 \subsubsection{Failure assumptions}
 Common assumptions about failures include \cite{surveyReliabilityDistr}.
@@ -280,13 +282,19 @@ possible assumptions:
 
  
 \section{Fault tolerance techniques}
-Fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
+Considering the whole life-span of a software application, fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
 \begin{enumerate}
 \item Fault prevention - elimination of errors before thay happen, e.g. during development phase
 \item Fault removal - elimination of bugs or faults after repeated testing phases
 \item Fault tolerance - provide service complying with the specification in spite of faults
 \item Fault forecasting - Predicting or estimating faults at architectural level during design phase or before actual deployment
 \end{enumerate}
+
+Limiting the span to already developed and deployed applications, fault-tolerance consists of \cite{relGridSystems}:
+\begin{itemize}
+	\item detecting fault and failures
+	\item recovery to allow computations to continue
+\end{itemize}
 
 Fault-tolerance techniques can be divided into two categorizes:
 Task-level techniques and work-flow level techniques.
@@ -417,7 +425,6 @@ Two techniques can be used in order to ensure reliability \cite{surveyReliabilit
 	\item Providing a fault tolerant system to ensure seamless environment for end users in case if any unanticipated or unpredicted scenario has occurred during execution in real environment.
 \end{itemize}
 
-
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
@@ -506,7 +513,7 @@ All information is globally accessed, hence we do not assume a single stable sto
 Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
 
 \subsection{Application model}
-The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time.
+The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
 
 In this paper we use a simpel example application in our experiments. The application can be modeled as shown in figure~\ref{fig:app_model}.
 
@@ -689,6 +696,9 @@ Survey of reliability and availability prediction methods from the viewpoint of 
 
 \bibitem{relDistApplications}
 Reliability in Distributed Software Applications
+
+\bibitem{relGridSystems}
+Reliability in grid computing systems
 
 \bibitem{compStudyLoadAndCloud}
 	Mayanka Katyal and Atul Mishra,
