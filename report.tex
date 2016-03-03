@@ -515,8 +515,9 @@ This paper presents effective resource management using adaptive reinforcement l
 \fi
 
 \subsection{Factors affecting reliability}
-Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}. When modeling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. 
+Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}. When modeling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time \cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
 
+\iffalse
 COPIED:
 overloaded resources leaving no reserve capacity for variations in demand
 ·      lack of flexibility in design that cause serious consequences for schedules and costs \cite{relDistApplications}
@@ -526,6 +527,7 @@ in fact, the reliability of individual element is affected by various conditions
 
 COPIED:
 the operational probabilities are affected by various conditions such as failure rate, transmitted data, available bandwidth, and operation time \cite{hierarchicalRelModeling}
+\fi
 
 \subsection{Providing Reliability}
 Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
@@ -694,7 +696,7 @@ The probability that a resource will fail during a time $t$ is therefore
 Rf_{r}(t) = 1 - e^{-t/MTBF_{r}}
 \end{equation}
 
-For a complete analysis of system reliability, one must take all factors affecting reliability into account. However, including all factors if unfeasible.  \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. In our framework, we only care whether or not a node is available or has died.
+For a complete analysis of system reliability, one must take all factors affecting reliability into account. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. In our framework, we only care whether or not a node is available or has died.
 
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
