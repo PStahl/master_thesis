@@ -170,17 +170,6 @@ The possible kind of errors in a Grid environment can be divided into the follow
 
 In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
 
-\subsection{Fault life-cycle techniques}
-According to \cite{softRelRoadmap} the following four technical areas can be regarded as fault life-cycle techniques.
-\begin{itemize}
-\item Fault prevention - The initial mechanism for a reliable system, trying to avoid faults already in the development phase. A fault which isn't committed cost nothing to fix. 
-\item Fault removal - The next line of defence, trying to detect and eliminate faults by validation and validation. For instance by testing and inspection. 
-\item Fault tolerance - The last line of defence against faults which are undetected by fault removal. Can be obtained by catching faults as exceptions and/or by redundancy.
-\item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
-\end{itemize}
-
-Fault prevention and fault removal are to consider during development of an application, while fault tolerance and fault forecasting are to use for already developed applications. Fault tolerance and fault forecasting is considered the most important fault life-cycle techniques since they are the last line of defence against failures that haven't been prevented or detected.
-
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
 COPIED: The Byzantine fault model is the most adversarial model. It allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
@@ -339,9 +328,7 @@ Two techniques can be used in order to ensure reliability \cite{surveyReliabilit
 \end{itemize}
 
 Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur
-\cite{faultToleranceChallenges}
-
-Considering the whole life-span of a software application, fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
+\cite{faultToleranceChallenges}. Considering the whole life-span of a software application, fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
 \begin{enumerate}
 \item Fault prevention - elimination of errors before thay happen, e.g. during development phase
 \item Fault removal - elimination of bugs or faults after repeated testing phases
@@ -349,31 +336,34 @@ Considering the whole life-span of a software application, fault-tolerant techni
 \item Fault forecasting - Predicting or estimating faults at architectural level during design phase or before actual deployment
 \end{enumerate}
 
-Limiting the span to already developed and deployed applications, fault-tolerance consists of \cite{relGridSystems}:
+\iffalse
+\subsection{Fault life-cycle techniques}
+According to \cite{softRelRoadmap} the following four technical areas can be regarded as fault life-cycle techniques.
 \begin{itemize}
-	\item detecting fault and failures
-	\item recovery to allow computations to continue
+\item Fault prevention - The initial mechanism for a reliable system, trying to avoid faults already in the development phase. A fault which isn't committed cost nothing to fix. 
+\item Fault removal - The next line of defence, trying to detect and eliminate faults by validation and validation. For instance by testing and inspection. 
+\item Fault tolerance - The last line of defence against faults which are undetected by fault removal. Can be obtained by catching faults as exceptions and/or by redundancy.
+\item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
 \end{itemize}
+\fi
 
-Fault tolerance usually involves one of the following techniques \cite{relGridSystems}:
+Limited to already developed application, fault tolerance techniques can be divided into reactive and proactive techniques \cite{faultToleranceChallenges}. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. They therefore consists of detecting fault and failures, and recoverying from them to allow computations to continue \cite{relGridSystems}. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components. 
+
+Common fault tolerance techniques include \cite{relGridSystems}:
 \begin{enumerate}
 	\item checkpointing
 	\item replication
-	\item rescheduling
+	\item rescheduling/rollback recovery
 \end{enumerate}
 
-Fault-tolerance techniques can be divided into two categorizes:
-Task-level techniques and work-flow level techniques.
-Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
-\\\\
-Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
-COPIED:
-Software reliability prediction is a task to determine future reliability of software systems based on the past failure data [17]. “ \cite{collaborativeReliability}.
-\\\\
-The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed  \cite{effTaskReplMobGrid}. 
-\\\\
-In case of a long running task, checkpoint periodically and restart from the last good state;
-In case of a task running on unreliable execution environments, have multiple replicas of the task run on different machines, so that as long as not all replicated tasks fail, the task will succeed to execute; \cite{gridWorkflow}.
+Checkpointing is a method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically \cite{effTaskReplMobGrid}. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed.
+
+%Fault-tolerance techniques can be divided into two categorizes: Task-level techniques and work-flow level techniques. Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
+%\\\\
+%COPIED:
+%Software reliability prediction is a task to determine future reliability of software systems based on the past failure data [17]. “ \cite{collaborativeReliability}.
+%\\\\
+%In case of a long running task, checkpoint periodically and restart from the last good state;In case of a task running on unreliable execution environments, have multiple replicas of the task run on different machines, so that as long as not all replicated tasks fail, the task will succeed to execute; \cite{gridWorkflow}.
 
 
 % Checkpointing, job migration, voting etc
