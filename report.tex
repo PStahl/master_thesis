@@ -277,7 +277,19 @@ Assumptions such as constant resource failure rate and statistically independent
 Hardware failures do not usually have a constant rate of failure. Instead, hardware is less reliable and more likely to fail in the beginning and of its life-cycle \cite{surveyReliabilityDistr}. %TODO bath-tub curve
 \\\\
 Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}.
+\\\\
+COPIED: failures is modeled well by a Weibull distribution  (Weibull shape parameter of 0.7–0.8) with decreasing hazard rate.  \cite{studyOfFailures}.
+\\\\
+COPIED: correlation between the failure rate of a machine and the type and intensity of the workload running on it. \cite{studyOfFailures}.
+\\\\
+COPIED: “where failure rates vary significantly depending on a node’s workload… the front-end nodes, which run a more varied, interactive workload, exhibit a much higher failure rate than the other nodes “
+ \cite{studyOfFailures}
+\\\\
+COPIED: “Failure rates are high initially, and then drop significantly during the first months. “  “Number of failures by hour of the day (left) vary” \cite{studyOfFailures}
+ \\\\
+ COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
  
+
 \subsection{Failure assumptions}
 Common assumptions about failures include \cite{surveyReliabilityDistr}.
 \begin{itemize}
@@ -584,6 +596,8 @@ In this paper we use a simpel example application in our experiments. The applic
 
 COPIED:
 “Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
+\\\\
+COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “  \cite{studyOfFailures}
 
 \subsection{Replication scheme}
 In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
