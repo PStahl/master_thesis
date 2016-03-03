@@ -250,13 +250,13 @@ Fault tolerance and fault forecasting is considered the most important fault lif
 COPIED: The Byzantine fault model is the most adversarial model. It allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad making it very difficult to analyse.
 
-% in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+% in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
 
 \subsubsection*{Fail-stop Faults}
 %Also called the crash-stop model
 In comparison to the Byzantine fault model the fail-stop model is much simpler. When a node fails it stops producing output and its interaction with the other nodes. This results in that the rest of the system automatically gets aware of that the node has failed. It is a simple model and does not handle subtle failures such as memory corruption but rather failures such as system crash or hangs \cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
-% fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+% fail-stop (in which a processor crashes, but this may be easily detected by its neighbors) \cite{faultTolerantFundamentals}
 % This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
 \subsubsection*{Fail-stutter Faults}
@@ -265,7 +265,7 @@ Since the Byzantine model is very broad and complicated and the fail-stop model 
 \subsubsection*{Crash-failure model}
 %TODO Källa
 The crash failure model is quite alike the fail-stop model but with the difference that the other nodes does not get aware of that the node has failed.
-%Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
+%Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), \cite{faultTolerantFundamentals}
 
 \subsection{Failure Distribution}
 %TODO ev. källa för att bathtub är vanligt för HW och decreasing for SW
@@ -823,6 +823,9 @@ Reliability and Performance of Tree-Structured Grid Services
 	\emph{A Survey of Fault-Tolerance and Fault-Recovery Techniques in Parallel Systems},
 	Cornell University Library,
 	Jan 2005
+
+\bibitem{faultTolerantFundamentals}
+Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments
 
 \bibitem{gridWorkflow}
 	Soonwook Hwang and Carl Kesselman,
