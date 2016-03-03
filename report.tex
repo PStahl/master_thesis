@@ -402,6 +402,9 @@ A replica, whether active, semi-active or passive replication is used, is define
 The term replica or task replica is used to denote an identical copy of the original task
 \end{definition}
 
+While replication increases the system load, is may help improving performance by reducing task completion time \cite{improvingPerformanceReplication}.
+
+
 \subsection{Rollback recovery}
 COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
 
@@ -1016,6 +1019,9 @@ Fault Tolerance Techniques in Grid Computing Systems
 
 \bibitem{faultToleranceChallenges}
 Fault Tolerance Challenges, Techniques and Implementation in Cloud Computing
+
+\bibitem{improvingPerformanceReplication}
+Improving Performance via Computational Replication on a Large-Scale Computational Grid
 
 \end{thebibliography}
 
