@@ -731,7 +731,9 @@ The Calvin framework consists of \emph{runtimes} on which one deploy application
 
 
 \subsection{Scheduling algorithm}
-A simple scheduling which fulfills equation~\ref{eq:desired_rel} is shown below:
+A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
+
+%algorithm: “If inequality (3) is not met, then a new replica is produced and scheduled for execution on a new resource based on the scheduling scheme. The new failure probability of the replicated tasks based on Eq. (2) is then calculated, and this process is repeated until the total failure probability of all replicas of the task is less than the specified threshold “
 
 \begin{algorithmic}
 \State $n\gets 0$
