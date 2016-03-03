@@ -275,35 +275,42 @@ The crash failure model is quite alike the fail-stop model but with the differen
 
 \subsection{Failure Distribution}
 %TODO ev. källa för att bathtub är vanligt för HW och decreasing for SW
-The failure rate for a hardware component is usually modelled with a bathtub shaped curve. The failure rate is higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
-Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
-But when considering resource failure it is usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For this model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. 
-\\\\
-Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
-\cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
-\\\\
-Hardware failures do not usually have a constant rate of failure. Instead, hardware is less reliable and more likely to fail in the beginning and of its life-cycle \cite{surveyReliabilityDistr}. %TODO bath-tub curve
-\\\\
-Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}.
-\\\\
-COPIED: failures is modeled well by a Weibull distribution  (Weibull shape parameter of 0.7–0.8) with decreasing hazard rate.  \cite{studyOfFailures}.
-\\\\
-COPIED: "The model that is used is based on the Weibull distribution, since this model effectively represents the machine availability in large-scale computing environments [35] such as wide-area enterprises, the Internet and Grids." \cite{effTaskReplMobGrid}.
-\\\\
-COPIED: correlation between the failure rate of a machine and the type and intensity of the workload running on it. \cite{studyOfFailures}.
-\\\\
-COPIED: “where failure rates vary significantly depending on a node’s workload… the front-end nodes, which run a more varied, interactive workload, exhibit a much higher failure rate than the other nodes “
- \cite{studyOfFailures}
-\\\\
-COPIED: “Failure rates are high initially, and then drop significantly during the first months. “  “Number of failures by hour of the day (left) vary” \cite{studyOfFailures}
- \\\\
-COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
-\\\\
-COPIED: “In fact, it has been shown in [28] that there are strong spatial correlations between failures and nodes where a small fraction of the nodes incurs most of the failures. Possible reasons include: (1) some components (both hardware and software) are more vulnerable than others [37]; and (2) a component that just failed is more likely to fail again in the near future [13]. “ \cite{implicationsOfFailures}
-\\\\
-COPIED: “studies have pointed out that the likelihood of failures increases with the load on the nodes [2]. At the same time, there have also been other studies [3] showing that load on clusters exhibit some amount of periodicity, e.g. higher in the day/evenings, and lower at nights." \cite{implicationsOfFailures}
-\\\\
-COPIED: "“nodes that have failed in the past are more likely to fail again. We propose a scheduling strategy (rather a node assignment strategy for jobs), called Least Failure First (LFF), to take advantage of this observation. "  \cite{implicationsOfFailures}
+%The failure rate for a hardware component is usually modelled with a bathtub shaped curve. The failure rate is higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
+
+%Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
+
+When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For such a model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. Constant failure rates are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
+Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognormal distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
+
+Also, hardware do not usually have a constant rate of failure. Hardware is typically more likely to fail in the beginning and end of its lifetime \cite{surveyReliabilityDistr}.
+
+Statistically independent failures may also be an invalid assumption.  Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}
+
+While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modeled by a Weibull distribution with a shape parameter of 0.7 - 0.8.
+
+Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system \cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night \cite{implicationsOfFailures} \cite{studyOfFailures}.
+
+\iffalse
+While a Poisson process may not always reflect the true dynamic failure behaviour of a resource, it has been experimentally shown to be reasonable useful in mathematical models. \cite{experimentalFailureAssessment}.
+\fi
+
+
+%\\\\
+%COPIED: "The model that is used is based on the Weibull distribution, since this model effectively represents the machine availability in large-scale computing environments [35] such as wide-area enterprises, the Internet and Grids." \cite{effTaskReplMobGrid}.
+%\\\\
+%COPIED: correlation between the failure rate of a machine and the type and intensity of the workload running on it. \cite{studyOfFailures}.
+%\\\\
+%COPIED: “where failure rates vary significantly depending on a node’s workload… the front-end nodes, which run a more varied, interactive workload, exhibit a much higher failure rate than the other nodes “ \cite{studyOfFailures}
+%\\\\
+%COPIED: “Failure rates are high initially, and then drop significantly during the first months. “  “Number of failures by hour of the day (left) vary” \cite{studyOfFailures}
+%\\\\
+%COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
+%\\\\
+%COPIED: “In fact, it has been shown in [28] that there are strong spatial correlations between failures and nodes where a small fraction of the nodes incurs most of the failures. Possible reasons include: (1) some components (both hardware and software) are more vulnerable than others [37]; and (2) a component that just failed is more likely to fail again in the near future [13]. “ \cite{implicationsOfFailures}
+%\\\\
+%COPIED: “studies have pointed out that the likelihood of failures increases with the load on the nodes [2]. At the same time, there have also been other studies [3] showing that load on clusters exhibit some amount of periodicity, e.g. higher in the day/evenings, and lower at nights." \cite{implicationsOfFailures}
+%\\\\
+%COPIED: "“nodes that have failed in the past are more likely to fail again. We propose a scheduling strategy (rather a node assignment strategy for jobs), called Least Failure First (LFF), to take advantage of this observation. "  \cite{implicationsOfFailures}
 
 \subsection{Failure assumptions}
 Common assumptions about failures include \cite{surveyReliabilityDistr}.
@@ -1037,6 +1044,9 @@ Towards Reliable Multi-Agent Systems: An Adaptive Replication Mechanism
 
 \bibitem{replicationManagement}
 Fault Tolerant Algorithm for Replication Management in Distributed Cloud System
+
+\bibitem{experimentalFailureAssessment}
+Experimental Assessment of Workstation Failures and Their Impact on Checkpointing Systems
 
 \end{thebibliography}
 
