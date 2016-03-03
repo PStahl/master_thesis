@@ -179,7 +179,7 @@ I this paper we present a framework for dynamic fault tolerance and task schedul
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
 \subsection{Types of distributed computing}
-Distributed systems are composed of a number of interconnected components or subsystems \cite{relModelDistSimSystem}.
+Distributed computing systems (DCS) are composed of a number of components or subsystems interconnected via an arbitrary communication network \cite{relModelDistSimSystem} \cite{efficientRelAnalysisAlgo}.
 \\\\
 COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
 The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
@@ -213,6 +213,12 @@ In distributed environments, especially with heterogeneous commodity hardware, s
 \item Timing failure - When a servers responds correctly but beyond the specified time interval
 \end{itemize}
 
+Failures are usually considered to be either
+\begin{enumerate}
+	\item Job related, or
+	\item System related, or
+	\item Network related \cite{evalOfGridRel}.
+\end{enumerate}
 
 In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
 \\\\
@@ -636,6 +642,9 @@ which must be fulfilled by the system. Since assuming hetereogenous and non-cons
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
 
 \subsection{Self-adapting model}
+Adaption refers to changing the behaviour depending on the changing state of the system. %TODO reference
+
+COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
 %TODO
 
 %TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
@@ -898,6 +907,12 @@ A Software Reliability Model for Web Services
 
 \bibitem{studyServiceRel}
 A study of service reliability and availability for distributed systems
+
+\bibitem{efficientRelAnalysisAlgo}
+Efficient algorithms for reliability analysis of distributed computing systems
+
+\bibitem{evalOfGridRel}
+Evaluating the reliability of computational grids from the end user’s point of view
 
 \end{thebibliography}
 
