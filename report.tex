@@ -89,7 +89,7 @@ A quite old but still relevant work is found in \cite{dynAdaptRepl} where they p
 Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication is presented in \cite{replicatingAgents} \cite{adaptiveMASReplication} \cite{adaptiveAgentReplication}. While being adaptive to system state, the solution presented in \cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in \cite{adaptiveMASReplication}, where a decentralized solution is proposed, where the number of replicas and their placement depends on the system state. %TODO need to read \cite{adaptiveMASReplication} again...
 The solution proposed in \cite{adaptiveAgentReplication} involves distributed monitoring system  %TODO need to read this again...
 
-\cite{adaptiveCheckPointAndRep} proposes an algorithm based on replication which dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load [TODO reference], one should increase the number of replicas to keep the desired level of reliability.
+\cite{adaptiveCheckPointAndRep} proposes an algorithm based on replication which dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load \cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}, one should increase the number of replicas to keep the desired level of reliability.
 
 A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
@@ -270,7 +270,7 @@ Since the Byzantine model is very broad and complicated and the fail-stop model 
 The crash failure model is quite alike the fail-stop model but with the difference that the other nodes does not get aware of that the node has failed.
 %Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), \cite{faultTolerantFundamentals}
 
-\subsection{Failure Distribution}
+\subsection{Failure distribution}
 %TODO ev. källa för att bathtub är vanligt för HW och decreasing for SW
 %The failure rate for a hardware component is usually modelled with a bathtub shaped curve. The failure rate is higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
 
