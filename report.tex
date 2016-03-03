@@ -258,9 +258,18 @@ But when considering resource failure it is usually assumed to follow a Poisson 
 \\\\
 Assumptions such as constant resource failure rate and statistically independent failures, are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
 \cite{surveyReliabilityDistr} show that the probability of hardware failure are greater in the beginning and end of lifetime. Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognofmrla distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
-
+\\\\
+Hardware failures do not usually have a constant rate of failure. Instead, hardware is less reliable and more likely to fail in the beginning and of its life-cycle \cite{surveyReliabilityDistr}. %TODO bath-tub curve
  
 \subsubsection{Failure assumptions}
+Common assumptions about failures include \cite{surveyReliabilityDistr}.
+\begin{itemize}
+\item Not all factors are considered
+\item Hardware failure is considered as constant
+\end{itemize}
+
+Furthermore, another common assumption is statistically independent failures. However, this is very unlikely to reflect the real dynamic behaviour of distributed systems. %TODO \cite{surveyReliabilityDistr}
+
 %TODO
 possible assumptions:
 \begin{itemize}
@@ -271,6 +280,14 @@ possible assumptions:
 
  
 \section{Fault tolerance techniques}
+Fault-tolerant techniques cal be divided into four different categories \cite{surveyReliabilityDistr}:
+\begin{enumerate}
+\item Fault prevention - elimination of errors before thay happen, e.g. during development phase
+\item Fault removal - elimination of bugs or faults after repeated testing phases
+\item Fault tolerance - provide service complying with the specification in spite of faults
+\item Fault forecasting - Predicting or estimating faults at architectural level during design phase or before actual deployment
+\end{enumerate}
+
 Fault-tolerance techniques can be divided into two categorizes:
 Task-level techniques and work-flow level techniques.
 Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
@@ -311,7 +328,11 @@ In progressive redundancy on the other hand the number of replicas needed is min
 Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 \section{Reliability} \label{sec:theory_reliability}
-Reliability in the context of software applications can have several meanings. One definition is that reliability is the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is the ability of a software application, running in a certain environment, to maintain a performance level for a specified amount of time \cite{X}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
+Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
+
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation}. A similar definition is that reliability is that reliability is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr}. Finally, it can also mean the probability that a task produces the correct result \cite{X}. 
+
+\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
 \item Perform well in specified time t without undergoing halting state
 \item Perform exactly the way it is designed
@@ -335,6 +356,9 @@ Finally, for long running applications, where a replication scheme used, the rel
 \begin{definition} \label{def:task_replica_reliability}
 The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time it takes start a new replica of the first dying one.
 \end{definition}
+
+\subsection{Reliability Model}
+In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. 
 
 \iffalse 
 \newpage
