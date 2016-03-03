@@ -102,40 +102,14 @@ An adaptive approach, which adapts to changes  in the execution environment is p
 \section{Our contributions}
 To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed one.
 
-We propose a framework which ensures a user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. The system is continously monitored in order to adapt the number of replicas as the state of the system changes.
+We propose a framework which ensures a user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Furthermore, the system is continously monitored in order to adapt the number of replicas as the state of the system changes.
 
 The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
 
 %TODO
 Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
 
-
-\iffalse
-%TODO
-\begin{itemize}
-\item ensuring a certain level of realiability
-\item dynamically adapt the number of replicas based on system state
-\item takes historic failure events into account
-\item minimizing resource usage while ensuring reliability level is reached
-\item long running tasks
-\end{itemize}
-
-
-While a lot of work has been done in maximizing reliability level \cite{X}, and TODO, not much work has been done in the area of ensuring a certain level of reliability for long running applications, in a dynamic and self-adaptive manner.
-\\\\
-Most previous work uses static, non-adaptive, probability models for determining the reliability of a node or a system of nodes. Furthermore, assumptions such as constant failure rate are often made, even though they do not reflect reality very well [X]. Instead, we use an static model only at deployment of a system, after which the model self-adapts to the real situations. As failures are encountered, the mean-time-to-failure is updated.
-\\\\
-Furthermore, previous work related to reliability either defines reliability as that the application produces the correct result [X], or they bla bla bla. In our work, we only check-point the state of the system, so we do not lose any information about the system in case of a failure. 
-\\\\
-... calculating number of replication at deployment ... ours is dynamic and the number of replicas changes over time as the reliability of the system varies.
-\\\\
-... known execution time ... our application is a long running data stream processing application, with no known execution time, of indefitive execution time. While some previous work focus on the reliability that the application finishes before a node failure, we focus on the reliability that at least one replica is always running.
-\\\\
-...The network topology of the computer system is cycle-free such as star, bus, hierarchical, or connected star. \cite{taskAllocation}...
-\\\\
-
-I this paper we present a framework for dynamic fault tolerance and task scheduling in a general distributed environment. We don't restrict the framework for a single type of distributed environment since it is our belief that it will adapt to any environment. We will test the framework with help of Ericssons actor-based system Calvin and test it both on a cloud environment and on a cluster.
-\fi 
+Our model is implemented by extending the actor-based application environment \emph{Calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated %TODO 
 
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
