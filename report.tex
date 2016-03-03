@@ -182,12 +182,14 @@ Distributed computing systems (DCS) are composed of a number of components or su
 COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
 The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
 \\\\
+COPIED: "Cluster systems are typically composed of a large number of identical, centrally managed computation nodes constructed from commodity components  and linked by one or more network infrastructures such as Ethernet or Myrinet" \cite{surveyFaultParallel}.
+\\\\
 %TODO källsa
 There are a number of different types of distributed environments, e.g. grid, mobile grid, clusters, cloud and HDCS.
 \begin{itemize}
 \item Grid computing - A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices}.
 \item Mobile grid? - %TODO
-\item Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}
+\item Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}. 
 \item Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 \item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 \end{itemize}
@@ -245,7 +247,7 @@ Fault tolerance and fault forecasting is considered the most important fault lif
 
 \subsection{Fault models}
 \subsubsection*{Byzantine Faults}
-The Byzantine fault model is the most adversarial model. It allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
+COPIED: The Byzantine fault model is the most adversarial model. It allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad making it very difficult to analyse.
 
 % in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model [Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments]
@@ -354,20 +356,33 @@ In case of a task running on unreliable execution environments, have multiple re
 
 % Checkpointing, job migration, voting etc
 \subsection{Checkpoint/Restart}
+Fault-tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of fault-tolerance \cite{surveyFaultParallel}.
+
+Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage \cite{relGridSystems} \cite{surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
+
+COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
+
 %TODO
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 \\\\
-Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage \cite{relGridSystems}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
 \subsection{Replication}
 Using replication, several identifical processes are scheduled on different resources and simultaneously perform the same computations \cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used.
 
 There are a number of different strategies for replicating a task:
 \begin{itemize}
-\item Active A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
-\item Semi-Active Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
-\item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
+\item Active
+\item Semi-active
+\item Passive
 \end{itemize}
+
+In active replication, one or several replicas are run on a other machine and receive an exact copy of the primary nodes input. From the input they perform the same calculations as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+
+Active replication can also be used in consensus algorithms such as  majority voting or k-modular redundancy, where one need to determien the correct output \cite{surveyFaultParallel}. In this case, there is no primary and backup replicas, instead every replica acts as a primary.
+
+Semi-Active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
+
+Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 
 COPIED:
 “Active replication removes the centralized control of primary backup and minimizes losses that occur when some replicas fail. Active replication incurs a high cost associated with keeping all replicas synchronized [50]. iterative redundancy complements active replication by specifying, at runtime, how many replicas should exist to guarantee a particular level or reliability“  \cite{selfAdaptRel}.
@@ -580,6 +595,8 @@ All information is globally accessed, hence we do not assume a single stable sto
 \subsection{Monitoring}
 Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
 
+COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
+
 \subsection{Application model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
 
@@ -605,6 +622,8 @@ COPIED:
 COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “  \cite{studyOfFailures}
 \\\\
 COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “  \cite{implicationsOfFailures}. 
+\\\\
+COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency"  \cite{surveyFaultParallel}.
 
 \subsection{Replication scheme}
 In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
@@ -616,7 +635,7 @@ In our framework, we ensure reliability based on task replication. We use active
 \end{figure}
 
 \subsection{Failure model}
-In our framework, we assume the \emph{fail-stop} fault model. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
+In our framework, we assume the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques \cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
 
 The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
 
