@@ -296,6 +296,13 @@ Limiting the span to already developed and deployed applications, fault-toleranc
 	\item recovery to allow computations to continue
 \end{itemize}
 
+Fault tolerance usually involves one of the following techniques \cite{relGridSystems}:
+\begin{enumerate}
+	\item checkpointing
+	\item replication
+	\item rescheduling
+\end{enumerate}
+
 Fault-tolerance techniques can be divided into two categorizes:
 Task-level techniques and work-flow level techniques.
 Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
@@ -314,8 +321,12 @@ In case of a task running on unreliable execution environments, have multiple re
 \subsection{Checkpoint/Restart}
 %TODO
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
+\\\\
+Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage \cite{relGridSystems}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
 \subsection{Replication}
+Using replication, several identifical processes are scheduled on different resources and simultaneously perform the same computations \cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used.
+
 There are a number of different strategies for replicating a task:
 \begin{itemize}
 \item Active A replica is run on a second machine and receives an exact copy of the primary nodes input. From the input it performs the same calculations as if it was the primary node. It monitor the primary node for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way the replica will promote itself as the primary node \cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
@@ -528,6 +539,7 @@ In this paper we use a simpel example application in our experiments. The applic
 \begin{itemize}
 \item telephone system?
 \item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would inrease the amount of transmitted data to the user's mobile, it would also increase the user experience.
+\item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
 
 
