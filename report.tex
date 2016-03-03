@@ -96,7 +96,7 @@ A fault-tolerant scheduling technique incorporates a replication scheme is prese
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
 
-
+An adaptive approach, which adapts to changes  in the execution environment is presented in \cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume a task's profile is available.
 
 \iffalse %TODO start previous text
 \newpage
@@ -105,8 +105,6 @@ PREVIOUS (own words):
 A lot of work has been done in the area of designing fault-tolerant applications for distributed systems. Most of them use a checkpoint/restart based approach [X][TODO]. These techniques relies of the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure.
 \\\\
 To our knowledge, not much work has been done in dynamically ensuring a certain level of reliability through replication.\cite{effTaskReplMobGrid} aims at providing a certain level of fault-tolerance through replication in a Grid environment. They calculate the number of replicas based on the reliability of the grid resources. However, their approach is limited in that they use static replication, i.e. when a replica fails it is not replaced with a new one, no replicas are made during execution. Furthermore, they do not take the dynamic of the system into their failure model. While this may be sufficient for task with short execution times, it will be insufficient for long running tasks, as one or several replicas then are likely to die during the time of execution, and the reliability of the system vary over time, and thereby not fulfilling the level of fault-tolerance. Furthermore, the reliability model used is based on non-repairable objects, why they use a Weibull distribution of failures (?).
-\\\\
-Other work define reliability as producing the correct result \cite{selfAdaptRel} \cite{imprRelAdaptRL} \cite{X}. In these cases, reliability is achieved by various consensus algorithms, e.g. $k-modular redundancy$. 
 \\\\
 A lot of work has been done focusing on reliability through scheduling techniques. \cite{SLASched} focus on meeting SLA by scheduling techniques, and while reliability can be part of an SLA, they focus on I/O performance and throughput. \cite{algoMaxRelEndToEndConstraint} focuses of maximizing reliability while still meeting end-to-end delay constraint, and \cite{algoMinExTime} and \cite{algoOptTimeMaxRel} both design algorithms aiming at minimizing time and cost while maximization of system reliability.
 \\\\
@@ -289,7 +287,7 @@ Common assumptions about failures include \cite{surveyReliabilityDistr}.
 
 Furthermore, another common assumption is statistically independent failures. However, this is very unlikely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr}  \cite{cloudServiceRel}. %TODO källor
 
-Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling}:
+Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
 \begin{itemize}
 	\item Each component in the system has only two states: operational or failed
 	\item Failures of components are statistically independent
@@ -354,6 +352,9 @@ There are a number of different strategies for replicating a task:
 \item Passive A second machine, typically in idle or power off state has  copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 \end{itemize}
 
+COPIED:
+“Active replication removes the centralized control of primary backup and minimizes losses that occur when some replicas fail. Active replication incurs a high cost associated with keeping all replicas synchronized [50]. iterative redundancy complements active replication by specifying, at runtime, how many replicas should exist to guarantee a particular level or reliability“  \cite{selfAdaptRel}.
+
 A replica, whether active, semi-active or passive replication is used, is defined as
 \begin{definition} \label{def:replica}
 A replica of a task, is an exact copy of the task, running in parallel. [TODO, there is some good replica definition in some paper]
@@ -369,7 +370,8 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
+
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -580,6 +582,8 @@ In this paper we use a simpel example application in our experiments. The applic
 \item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
 
+COPIED:
+“Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
 
 \subsection{Replication scheme}
 In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
@@ -600,6 +604,9 @@ We assume failures follow a Poission process, as this seems to be widely accepte
 However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
 
 Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replica tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
+
+COPIED:
+“we assume nodes’ failures depend on the nodes, and not on the computation they perform “\cite{selfAdaptRel}
 
 
 \subsection{Reliability model}
@@ -653,7 +660,9 @@ The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$
 Adaption refers to changing the behaviour depending on the changing state of the system. %TODO reference
 
 COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
-%TODO
+
+COPIED:
+“the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
 
 %TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
 
