@@ -279,7 +279,7 @@ The crash failure model is quite alike the fail-stop model but with the differen
 
 %Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
 
-When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval}. For such a model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. Constant failure rates are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
+When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. Constant failure rates are not likely to model the actual failure scenario of a dynamic heteregenous distributed system \cite{algoMinExTime}. 
 Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognormal distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 
 Also, hardware do not usually have a constant rate of failure. Hardware is typically more likely to fail in the beginning and end of its lifetime \cite{surveyReliabilityDistr}.
@@ -428,7 +428,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
@@ -471,21 +471,9 @@ The Mean-Time-To-Failure for a component is the average time it takes for a comp
 The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
 \end{definition}
 
-\iffalse 
-\newpage
-We suppose that a mobile resource has survived until time t. The hazard function, h(t), is its failure rate during the short time interval (t , t + 1t ]. Given that a mobile resource is still alive at time t , the probability of failure during the next 1t time units can be expressed generally as follows:
-P(t < s < t + 1t|s > t) = P(t < s < t + 1t)/P(s > t) \cite{effTaskReplMobGrid}
-\\\\
-Since many real-time systems are non-deterministic environment in which even dangerous, system fault tolerance is necessary and important. In order to effectively verify the level of fault-tolerant systems, a reliability model needs to be proposed, it is generally assumed that the error arrival rate is stable and the error probability at any time intervals meets Poisson distribution [7-8] \cite{realTimeSchedAlgo}
-\\\\
+\iffalse
 While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
 optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] \cite{optTaskAllocationForMaxRel}
-\\\\
-the reliability of processing node Pk in
-time interval [0,t] can be achieved by:
-R (t)=            (5) P 
-where       is hazard rate at time  . By assuming a constant hazard rate (like [3] and [25]), Eq. (5) reduces to:
-RP (t) =       t (6) Total hazard rate of each node can be computed by adding failure rate of its hardware and failure rate of its OS if we assume that they are independent 
 \\\\
 \cite{discContRelModel}
 \\\\
@@ -496,22 +484,9 @@ There are also many other reliability models for software, hardware, or small-sc
 \\\\
 Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hypercube reliability assuming that the system works as long as there is no disconnectedworking node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hypercube computers]
 \\\\
-The dependability model is based on the following assumptions All the processors (nodes) are homogeneous with identical and exponential distribution of failure time. We define X as the failure rate of a node. Fortheavailabilitymodel,thereisasinglerepairfacility with exponential distribution of repair time. The average repair rate is given by p.
-The link failure rate is negligible compared to the node failure rate. [ A unified task-based dependability model for hypercube computers]
-\\\\
 (the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{relAnalysisFRA}
 \\\\
-This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model \cite{relModelWebServices}
-\\\\
-What affects software reliability? ...lists 32 factors ... \cite{factorsAffectingRel}
-\\\\
-The most common simplifying assumptions employed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topology [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. \cite{perfRelNonMarkovian}
-\\\\
-In this paper, we consider three key performance and reliability metrics: the average service time of an application, the QoS and the service reliability in executing an application [2], [3], [16], [22]. While precise mathematical definitions of these metrics are presented in Section 3.3, at this point we will briefly introduce them and describe their scope of applicability. The average service time is critical to assess the speedup in the runtime of applications when executed in parallel on a DCS. The average service time is a reasonable metric (i.e., it takes a finite value) only in settings where servers are completely reliable or in settings where servers are allowed to recover after a failure. The QoS, which is defined as the probability of executing an application by a prescribed time deadline, is a reasonable metric in settings where server nodes may or may not fail. The QoS metric is of interest to system users and analysts, specially in real-time or in time constrained applications. Finally, the service reliability, which is defined as the probability of successfully executing an entire application, is an important metric for assessing the dependability of applications executed on DCSs, and it is a reasonable metric only when servers can fail without recovery and/or in settings where applications cannot continue their execution after a failure \cite{perfRelNonMarkovian}
-\\\\
 We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability \cite{decisionModelTaskAllocation}
-\\\\
-This paper presents effective resource management using adaptive reinforcement learning (RL) that focuses on improving successful execution with low computational complexity. The approach uses an emerging methodology of RL in conjunction with neural network to help a scheduler that effectively observes and adapts to dynamic changes in execution environments \cite{imprRelAdaptRL}
 \fi
 
 \subsection{Factors affecting reliability}
