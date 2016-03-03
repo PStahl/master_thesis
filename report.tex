@@ -326,6 +326,8 @@ Task-level techniques and work-flow level techniques.
 Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
 \\\\
 Fault tolerance techniques can also be divided into reactive and proactive techniques. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
+COPIED:
+Software reliability prediction is a task to determine future reliability of software systems based on the past failure data [17]. “ \cite{collaborativeReliability}.
 \\\\
 One way of taking failures into account is to employ a reliable matching and scheduling algorithm in which tasks of an application are assigned to machines to minimize the probability of failure of that application. This type of approach was followed for allocating undirected task graphs to nonredundant and redundant real-time distributed systems [8], [9], [10], [11].
 \\\\
@@ -367,7 +369,7 @@ Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundanc
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}  \cite{surveyReliabilityDistr}. Finally, it can also mean the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -441,7 +443,7 @@ The link failure rate is negligible compared to the node failure rate. [ A unifi
 \\\\
 This paper proposes a service-oriented software reliability model that dynamically evaluates the reliability of Web services. There are two kinds of Web services: atomic services without the structural information and the composite services consisting of atomic services. The model first evaluates the reliability of atomic services based on group testing and majority voting. Group testing is the key technique proposed in this paper to support the service-oriented reliability model \cite{relModelWebServices}
 \\\\
-What affects software reliability? ...lists 32 factors ... [An analysis of factors affecting software reliability]
+What affects software reliability? ...lists 32 factors ... \cite{factorsAffectingRel}
 \\\\
 The most common simplifying assumptions employed in the literature are heuristics related to applications’ service time [7], [8], [9], homogeneous capabilities of servers and/or communication links [8], time-invariant DCS topology [10], and the deterministic behavior of the transfer time of tasks [9], [11], [12]. \cite{perfRelNonMarkovian}
 \\\\
@@ -920,6 +922,14 @@ Efficient algorithms for reliability analysis of distributed computing systems
 \bibitem{evalOfGridRel}
 Evaluating the reliability of computational grids from the end user’s point of view
 
+\bibitem{generalAlgoRelEval}
+A Generalized Algorithm for Evaluating Distributed-Program Reliability
+
+\bibitem{realTimeRelAnalysis}
+Real-Time Distributed Program Reliability Analysis
+
+\bibitem{collaborativeReliability}
+Collaborative Reliability Prediction of Service-Oriented Systems
 
 \end{thebibliography}
 
