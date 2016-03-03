@@ -79,7 +79,7 @@ Some of the drawbacks of replicating a task n times, is that the resources neede
 
 
 \section{Related work} \label{sec:related_work}
-The interest in reliability in distributed systems has gain increased knowledge. Due to the uncertain heterogeneous environment of cloud and grid systems, increasing reliability is a complex task [TODO]. %TODO add reference
+The interest in reliability in distributed systems has gain increased knowledge \cite{replicationManagement}. Due to the uncertain heterogeneous environment of cloud and grid systems, increasing reliability is a complex task [TODO]. %TODO add reference
 
 A lot of scheduling techniques has been designed, aiming at maximizing reliability of jobs in distributed environments, under various constraints such as meeting task deadlines or minimizing execution time \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas}. Maximizing reliability for these algorithms are a secondary concern, while meeting the constraints are the primary. Other algorithms have been developed which put greater focus on increasing the reliability \cite{optResourceAllMaxPerformance} \cite{matchSchedAlgoMinFailure}, and some have increased reliability as the primary objective \cite{safetyRelTaskAllocation} \cite{improvedTaskAllMaxRel}. Common for these scheduling techniques are that while they try to maximize reliability, they do not ensure a certain level of reliability to the user. Furthermore, the algorithms are usually static in the way that they do not account for the dynamic behaviour of distributed system, and they make assumptions such as known execution times of tasks.
 
@@ -89,16 +89,16 @@ Some attempts at designing fault-tolerant systems by the use of replication has 
 
 A quite old but still relevant work is found in \cite{dynAdaptRepl} where they present a framework for dynamic replication with an adaptive control in an multi-agent system. They introduce the software architecture which can act as support for building reliable multi-agent systems. Since the available resources often are limited they say that it isn't feasible to replicate all components. Therefore they use a criticality for each agent which is allowed to evolve during runtime. The proposed solution allows for dynamically adapt the number of replicas and the replication strategy. The number of replicas is partly based on the agents critically and a predefined minimum number of replicas. From CPU usage time and communication activity an agent activity is calculated which is used in calculating the agents critically. One restriction they do in their fault model is that processes can only fail by permanent crashes.
 
-%TODO
-\cite{adaptiveCheckPointAndRep} proposes algorithms using checkpointing, replication, and a combination of both. One algorithm dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load [TODO reference], one should increase the number of replicas to keep the desired level of reliability.
+Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication is presented in \cite{replicatingAgents} \cite{adaptiveMASReplication} \cite{adaptiveAgentReplication}. While being adaptive to system state, the solution presented in \cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in \cite{adaptiveMASReplication}, where a decentralized solution is proposed, where the number of replicas and their placement depends on the system state. %TODO need to read \cite{adaptiveMASReplication} again...
+The solution proposed in \cite{adaptiveAgentReplication} involves distributed monitoring system  %TODO need to read this again...
+
+\cite{adaptiveCheckPointAndRep} proposes an algorithm based on replication which dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load [TODO reference], one should increase the number of replicas to keep the desired level of reliability.
 
 A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
 
 An adaptive approach, which adapts to changes  in the execution environment is presented in \cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume a task's profile is available.
-
-Approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication is presented in \cite{replicatingAgents} and \cite{adaptiveMASReplication}. While being adaptive to system state, the solution presented in \cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in \cite{adaptiveMASReplication}, where a decentralized solution is proposed, where the number of replicas and their placement depends on the system state. %TODO need to read \cite{adaptiveMASReplication} again...
 
 
 \iffalse %TODO start previous text
@@ -1032,6 +1032,11 @@ Adaptive Replication in Fault-Tolerant Multi-Agent Systems
 \bibitem{replicatingAgents}
 Improving Fault-Tolerance by Replicating Agents
 
+\bibitem{adaptiveAgentReplication}
+Towards Reliable Multi-Agent Systems: An Adaptive Replication Mechanism
+
+\bibitem{replicationManagement}
+Fault Tolerant Algorithm for Replication Management in Distributed Cloud System
 
 \end{thebibliography}
 
