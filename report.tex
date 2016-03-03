@@ -114,35 +114,39 @@ Our model is implemented by extending the actor-based application environment \e
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
 \subsection{Types of distributed computing}
-Distributed computing systems (DCS) are composed of a number of components or subsystems interconnected via an arbitrary communication network \cite{relModelDistSimSystem} \cite{efficientRelAnalysisAlgo}.
-\\\\
-COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
-The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
-\\\\
-COPIED: "Cluster systems are typically composed of a large number of identical, centrally managed computation nodes constructed from commodity components  and linked by one or more network infrastructures such as Ethernet or Myrinet" \cite{surveyFaultParallel}.
-\\\\
-%TODO källsa
-There are a number of different types of distributed environments, e.g. grid, mobile grid, clusters, cloud and HDCS.
-\begin{itemize}
-\item Grid computing - A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices}.
-\item Mobile grid? - %TODO
-\item Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource. \cite{compStudyLoadAndCloud}. 
-\item Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
-\item HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
-\end{itemize}
+Distributed computing systems (DCS) are composed of a number of components or subsystems interconnected via an arbitrary communication network \cite{relModelDistSimSystem} \cite{efficientRelAnalysisAlgo} There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
 
-COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
+\subsubsection{Distributed computing systems}
+%TODO källa
+HDCS - Heterogeneous Distributed Computing Systems is a system of numerous high-performance machines connected in a high-speed network and therefore high-speed processing of heavy applications is achieved.
 
 COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
-\\\\
+
+\subsubsection{Grid computing}
+COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
+The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
+
+Grid computing - A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices}.
+
 COPIED:
 The grid computing system has emerged as an important new field, distinguished from conventional distributed computing systems by its focus on large-scale resource sharing, innovative applications, and, in some cases, high performance orientation. \cite{hierarchicalRelModeling}.
 
+\subsubsection{Cluster}
+COPIED: "Cluster systems are typically composed of a large number of identical, centrally managed computation nodes constructed from commodity components  and linked by one or more network infrastructures such as Ethernet or Myrinet" \cite{surveyFaultParallel}.
+
+Cluster - A cluster is similar to a grid but with the difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource.\cite{compStudyLoadAndCloud}. 
+
+\subsubsection{Cloud}
+Cloud - Can be described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analysing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
+
+COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
+
+
 \subsection{Dynamic versus static environments}
 Based on how the environment is configured it can be either static or dynamic. 
-\\\\
+
 In a static environment only homogeneous resources are installed. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources \cite{compStudyLoadAndCloud}.
-\\\\
+
 In a dynamic environment heterogeneous resources are installed. In this scenario prior knowledge isn't enough since the requirements of the user can change during run time. Therefore run time statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to run time changes in load \cite{compStudyLoadAndCloud}.
 
 
