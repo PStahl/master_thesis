@@ -213,7 +213,7 @@ Furthermore, by studying failures in high-performance computing systems, \cite{s
 
 Also, hardware do not usually have a constant rate of failure. Hardware is typically more likely to fail in the beginning and end of its lifetime \cite{surveyReliabilityDistr}.
 
-Statistically independent failures may also be an invalid assumption.  Fault may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}
+Statistically independent failures is also not very likely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr}  \cite{cloudServiceRel}. Faults may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}.
 
 While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modeled by a Weibull distribution with a shape parameter of 0.7 - 0.8.
 
@@ -242,14 +242,6 @@ While a Poisson process may not always reflect the true dynamic failure behaviou
 %COPIED: "“nodes that have failed in the past are more likely to fail again. We propose a scheduling strategy (rather a node assignment strategy for jobs), called Least Failure First (LFF), to take advantage of this observation. "  \cite{implicationsOfFailures}
 
 \subsection{Failure assumptions}
-Common assumptions about failures include \cite{surveyReliabilityDistr}.
-\begin{itemize}
-\item Not all factors are considered
-\item Hardware failure is considered as constant
-\end{itemize}
-
-Furthermore, another common assumption is statistically independent failures. However, this is very unlikely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr}  \cite{cloudServiceRel}. %TODO källor
-
 Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
 \begin{itemize}
 	\item Each component in the system has only two states: operational or failed
@@ -259,7 +251,7 @@ Models which describes the reliability of distributed systems, or distributed ap
 \end{itemize}
 
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglected assumptions since the RMS in this case in fast is a single point of failure.
- 
+
 \section{Fault tolerance techniques}
 Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur
 \cite{faultToleranceChallenges}
@@ -293,9 +285,7 @@ Fault tolerance techniques can also be divided into reactive and proactive techn
 COPIED:
 Software reliability prediction is a task to determine future reliability of software systems based on the past failure data [17]. “ \cite{collaborativeReliability}.
 \\\\
-One way of taking failures into account is to employ a reliable matching and scheduling algorithm in which tasks of an application are assigned to machines to minimize the probability of failure of that application. This type of approach was followed for allocating undirected task graphs to nonredundant and redundant real-time distributed systems [8], [9], [10], [11].
-\\\\
-The basics, however, are checkpoint recovery and task replication The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed  \cite{effTaskReplMobGrid}. 
+The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed  \cite{effTaskReplMobGrid}. 
 \\\\
 In case of a long running task, checkpoint periodically and restart from the last good state;
 In case of a task running on unreliable execution environments, have multiple replicas of the task run on different machines, so that as long as not all replicated tasks fail, the task will succeed to execute; \cite{gridWorkflow}.
