@@ -628,10 +628,21 @@ COPIED:
 COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
 
 \section{Implementation} \label{sec:implementation}
-For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}. Calvin is developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}.
 
-The Calvin framework consists of \emph{runtimes} on which one deploy applications consisting of connected \emph{actors}. We will use this model to reflect our system of nodes and application tasks. We will deploy a single runtime per node, and have an actor representing the task we will replicate.
+\subsection{Calvin} Calvin is a leight-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
+\subsubsection{Actor model}
+An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a devise, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
+
+\subsubsection{Runtimes}
+The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors.
+
+\subsubsection{Monitoring}
+The runtimes in the calvin framework use a heart-beat technique to detect runtime connectivity.
+
+\subsubsection{Actor replication}
+We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
 
 \subsection{Scheduling algorithm}
 A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
@@ -650,7 +661,13 @@ A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid
 \end{algorithmic}
 
 \chapter{Evaluation} \label{ch:evaluation}
-%TODO
+
+\section{Computational environment}
+In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted.
+
+\section{Reliability level}
+The reliability level over time was measured by continously counting the number of replicas running, and monitoring the reliability of the nodes.
+
 \section{Performance metrics}
 %TODO
 performance metrics
