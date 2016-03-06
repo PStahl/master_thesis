@@ -545,11 +545,12 @@ In our framework, we ensure reliability based on task replication. We use active
 \caption{An application model where a producer transmits data to all replicas of task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model_replication}
 \end{figure}
 
-\subsection{Failure model}
-In our framework, we assume the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques \cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
+\subsection{Fault model}
+In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques \cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
 
 The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
 
+%TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
 We assume failures follow a Poission process, as this seems to be widely accepted in the research community. However, while most assumes constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates.
 
 However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
