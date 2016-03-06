@@ -610,6 +610,10 @@ The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$
 \subsection{Self-adapting model}
 Adaption refers to changing the behaviour depending on the changing state of the system. %TODO reference
 
+To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
+
+When monitoring the system, once must monitor all parameters affecting the reliability. In our case, it is the node reliabilities and the time it takes to start a new replica. Node reliability is likely to vary over time, and the time it takes to start a new replica is likely to depend on the type of job.
+
 COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
 
 COPIED:
