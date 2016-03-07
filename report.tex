@@ -116,38 +116,38 @@ Our model is implemented by extending the actor-based application environment \e
 \subsection{Types of distributed computing}
 Distributed computing systems (DCS) are composed of a number of components or subsystems interconnected via an arbitrary communication network \cite{relModelDistSimSystem} \cite{efficientRelAnalysisAlgo}. There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
 
-\subsubsection{Heterogeneous Distributed computing systems}
+\subsubsection{Heterogeneous distributed computing systems}
 Heterogeneous Distributed Computing Systems, HDCS is a system of numerous high-performance machines connected in a high-speed network. Therefore high-speed processing of heavy applications is possible \cite{algoMinExTime}. %TODO add info
 
 The majority of distributed service systems can be viewed as CHDS, (Centralized Heterogeneous Distributed System). A CHDS consists of heterogeneous sub-systems which a managed by a centralized control center. The sub-systems have various operating platforms and are connected in diverse topological networks \cite{studyServiceRel}.
 
-COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
+%COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
 
 \subsubsection{Grid computing}
-A grid is the collection of autonomous resources that are distributed geographically and by a single domain work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices}.
+A grid is a collection of autonomous resources that are distributed geographically and across several administrative domains, and work together to achieve a common goal, i.e. to solve a single task \cite{compStudyLoadAndCloud} \cite{relAndPerfGridServices} \cite{evalOfGridRel}.
 
-The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}
+Each domain in a grid usually has a centralized scheduling service called Resource Management System (RMS) which accepts job execution requests and sends the job's tasks to the different resources for execution \cite{evalOfGridRel}.
 
-COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
-COPIED:
-The grid computing system has emerged as an important new field, distinguished from conventional distributed computing systems by its focus on large-scale resource sharing, innovative applications, and, in some cases, high performance orientation. \cite{hierarchicalRelModeling}.
+The reliability of the cloud computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them \cite{cloudServiceRel}.
+
+%COPIED:The grid computing system has emerged as an important new field, distinguished from conventional distributed computing systems by its focus on large-scale resource sharing, innovative applications, and, in some cases, high performance orientation. \cite{hierarchicalRelModeling}.
 
 \subsubsection{Cluster}
-A cluster system is usually a number of identical units managed by a central manager. In other words it is similar to a grid but with the biggest difference that the resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource \cite{compStudyLoadAndCloud}. 
-
-COPIED: "Cluster systems are typically composed of a large number of identical, centrally managed computation nodes constructed from commodity components  and linked by one or more network infrastructures such as Ethernet or Myrinet" \cite{surveyFaultParallel}.
+A cluster system is usually a number of identical units managed by a central manager. It is similar to a grid, but differ in that resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource \cite{compStudyLoadAndCloud}. 
 
 \subsubsection{Cloud}
-A cloud has been described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and analyzing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
+A cloud has been described as the next generation of grids and clusters. While it is similar to grid and clusters, for example parallel and distributed, the important difference is that cloud has multiple domains \cite{compStudyLoadAndCloud}. Machines can be geographically distributed, and software and hardware components are often heterogeneous, and therfore analyzing and predicting workload and reliability is usually very challenging \cite{surveyReliabilityDistr}. 
 
-COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
+%COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
+
+%COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
 
 \subsection{Dynamic versus static environments}
-Based on how the environment is configured it can be either static or dynamic. 
+A distributed computing environment can be either static or dynamic.
 
-In a static environment only homogeneous resources are installed. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources \cite{compStudyLoadAndCloud}.
+In a static environment only homogeneous resources are installed \cite{compStudyLoadAndCloud}. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources.
 
-In a dynamic environment heterogeneous resources are installed. In this scenario prior knowledge isn't enough since the requirements of the user can change during run time. Therefore run time statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to run time changes in load \cite{compStudyLoadAndCloud}.
+In a dynamic environment heterogeneous resources are installed \cite{compStudyLoadAndCloud}. In this scenario prior knowledge isn't enough since the requirements of the user can change during run time. Therefore run time statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to run time changes in load.
 
 
 \section{Faults in distributed environments}
@@ -169,82 +169,65 @@ The possible kind of errors in a Grid environment can be divided into the follow
 	\item Timing failure - When a server responds correctly but beyond the specified time interval
 \end{itemize}
 
-In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
+%I think we don't need this detailed description of the finding here.. I think we can just mention the important stuff
+%In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
+
+In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type, while 10 - 20 \% of the failures were software failures.
 
 \subsection{Fault models}
+When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model \cite{faultTolerantFundamentals}.
+
 \subsubsection*{Byzantine Faults}
 The Byzantine fault model allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary \cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes \cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, therefore it is very difficult to analyse.
 
-COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
+% COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
 
-\subsubsection*{Fail-stop Faults}
-The fail-stop model, also called the crash-stop model is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing output and stop interacting with the other nodes \cite{faultTolerantFundamentals}. This results in that the rest of the system automatically gets aware of that the node has failed. Since its simplicity it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs \cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
+\subsubsection*{Fail-stop faults}
+The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes \cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs \cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
-COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
+%COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
-\subsubsection*{Fail-stutter Faults}
-Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}. 
+\subsubsection*{Fail-stutter faults}
+Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}. 
 % fail-stutter modellen är knappt använd...
 
 \subsubsection*{Crash-failure model}
 %TODO Källa
-The crash failure model is quite alike the fail-stop model but with the difference that the other nodes does not get aware of that the node has failed.
-%Wellknown examples are the crash failure model (in which processors simply stop executing at a specific point in time), \cite{faultTolerantFundamentals}
+The crash failure model is quite alike the fail-stop model with the difference that the other nodes do not automatically detect that a node has failed \cite{faultTolerantFundamentals} \cite{adaptiveAgentReplication}.
 
 \subsection{Failure distribution}
 %TODO ev. källa för att reliability för sw är mer eller mindre strikt avtagande 
 %Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
 
 %TODO definera "failures", vilka brukar inkluderas?
-When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent \cite{algoMaxRelEndToEndConstraint}. Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system \cite{algoMinExTime}. 
-Furthermore, by studying failures in high-performance computing systems, \cite{studyOfFailures} found a Poisson distribution to be a poor fit, while a normal or lognormal distribution fitted the data much better. Furthermore, as failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
+When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate \cite{algoMaxRelEndToEndConstraint}. 
 
-Also, hardware do not usually have a constant rate of failure. The failure rate for a hardware component is usually modelled with a bathtub shaped curve \cite{surveyReliabilityDistr}. The failure rate is higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
+Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system \cite{algoMinExTime}. The failure rate for a hardware component usuallt follows a bathtub shaped curve \cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
 
-Statistically independent failures is also not very likely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr}  \cite{cloudServiceRel}. Faults may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}.
+Statistically independent failures is also not very likely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr} \cite{cloudServiceRel}. Faults may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}. As failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 
-While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8.
+Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system \cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night \cite{implicationsOfFailures} \cite{studyOfFailures}. Finally, components which have failed in the past are more likely to fail again \cite{implicationsOfFailures}.
 
-Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system \cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night \cite{implicationsOfFailures} \cite{studyOfFailures}.
-
-\iffalse
-While a Poisson process may not always reflect the true dynamic failure behaviour of a resource, it has been experimentally shown to be reasonable useful in mathematical models. \cite{experimentalFailureAssessment}.
-\fi
-
-
-%\\\\
-%COPIED: "The model that is used is based on the Weibull distribution, since this model effectively represents the machine availability in large-scale computing environments [35] such as wide-area enterprises, the Internet and Grids." \cite{effTaskReplMobGrid}.
-%\\\\
-%COPIED: correlation between the failure rate of a machine and the type and intensity of the workload running on it. \cite{studyOfFailures}.
-%\\\\
-%COPIED: “where failure rates vary significantly depending on a node’s workload… the front-end nodes, which run a more varied, interactive workload, exhibit a much higher failure rate than the other nodes “ \cite{studyOfFailures}
-%\\\\
-%COPIED: “Failure rates are high initially, and then drop significantly during the first months. “  “Number of failures by hour of the day (left) vary” \cite{studyOfFailures}
-%\\\\
-%COPIED: "During peak hours of the day the failure rate is two times higher than at its lowest during the night. Similarly the failure rate during weekdays is nearly two times as high as during the weekend. We interpret this as a correlation between a system’s failure rate and its workload" \cite{studyOfFailures}
-%\\\\
-%COPIED: “In fact, it has been shown in [28] that there are strong spatial correlations between failures and nodes where a small fraction of the nodes incurs most of the failures. Possible reasons include: (1) some components (both hardware and software) are more vulnerable than others [37]; and (2) a component that just failed is more likely to fail again in the near future [13]. “ \cite{implicationsOfFailures}
-%\\\\
-%COPIED: “studies have pointed out that the likelihood of failures increases with the load on the nodes [2]. At the same time, there have also been other studies [3] showing that load on clusters exhibit some amount of periodicity, e.g. higher in the day/evenings, and lower at nights." \cite{implicationsOfFailures}
-%\\\\
-%COPIED: "“nodes that have failed in the past are more likely to fail again. We propose a scheduling strategy (rather a node assignment strategy for jobs), called Least Failure First (LFF), to take advantage of this observation. "  \cite{implicationsOfFailures}
+While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, dispite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models \cite{experimentalFailureAssessment}.
 
 \subsection{Failure assumptions}
-Models which describes the reliability of distributed systems, or distributed applications, usually make assumptions such as \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
+% Should fit better with previous section? Here we mention some common assumptions, and in the section above we mention that some assumptions are maybe not that good...
+Models describing the nature of failures in distirbuted computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions include \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
 \begin{itemize}
 	\item Each component in the system has only two states: operational or failed
 	\item Failures of components are statistically independent
 	\item The network topology is cycle free
 	\item Components have a constant failure rate, i.e. the failure of a component follows a Poisson process
+	\item Fully reliable network
 \end{itemize}
 
-For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglected assumptions since the RMS in this case in fast is a single point of failure.
+For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglectable assumption since the RMS in this case in fact is a single point of failure.
 
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
 
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications} \cite{surveyReliabilityDistr}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
+Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
