@@ -663,7 +663,7 @@ A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid
 \chapter{Evaluation} \label{ch:evaluation}
 
 \section{Computational environment}
-In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted.
+In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
 
 \section{Reliability level}
 The reliability level over time was measured by continously counting the number of replicas running, and monitoring the reliability of the nodes.
