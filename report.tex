@@ -461,12 +461,12 @@ In this section, we describe the system and application models employed in this 
 \subsection{Computational environment}
 In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
 
-All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
+%All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
-\subsection{Monitoring}
-Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
+%\subsection{Monitoring}
+%Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
 
-COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
+%COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
 \subsection{Application model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
@@ -497,7 +497,7 @@ COPIED: “given the long execution times of many of the parallel applications t
 COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency"  \cite{surveyFaultParallel}.
 
 \subsection{Replication scheme}
-In our framework, we ensure reliability based on task replication. We use active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
+We will ensure reliability based on task replication, using active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
 
 \begin{figure}[!hbt]
 \centering
@@ -506,20 +506,17 @@ In our framework, we ensure reliability based on task replication. We use active
 \end{figure}
 
 \subsection{Fault model}
-In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques \cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{running} or \emph{dead}. If a node dies, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted.
+In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques \cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
 
-The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
+Like \cite{selfAdaptRel}, we assume failures depends on the nodes, not the jobs running on them and the computations they perform.
 
+\subsubsection{Failure distribution}
 %TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
 We assume failures follow a Poission process, as this seems to be widely accepted in the research community. However, while most assumes constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates.
 
 However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
 
 Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replica tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
-
-COPIED:
-“we assume nodes’ failures depend on the nodes, and not on the computation they perform “\cite{selfAdaptRel}
-
 
 \subsection{Reliability model}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
@@ -530,7 +527,7 @@ R_{T}(t) =  1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
 
 where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
 
-Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
+Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
 R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
@@ -564,23 +561,28 @@ A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid
 \end{algorithmic}
 
 \subsection{Self-adapting model}
-Adaption refers to changing the behaviour depending on the changing state of the system. %TODO reference
+Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour \cite{imprRelAdaptRL}.
 
 To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
 
 When monitoring the system, once must monitor all parameters affecting the reliability. In our case, it is the node reliabilities and the time it takes to start a new replica. Node reliability is likely to vary over time, and the time it takes to start a new replica is likely to depend on the type of job.
 
-COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
+% TODO machine learning section?
+Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day \cite{implicationsOfFailures} \cite{studyOfFailures}.
 
-COPIED:
-“the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
+
+
+%COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
+
+%COPIED:
+%"the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
 
 %TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
 
-COPIED:
-“The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
+%COPIED:
+%“The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
 
-COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
+%COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
 
 \section{Implementation} \label{sec:implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}.
