@@ -302,25 +302,7 @@ We focus on the study of task allocation decision to achieve maximal distributed
 \subsection{Factors affecting reliability}
 Reliability of a system highly depends on how the system is used \cite{surveyRelPrediction}. When modelling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time \cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
 
-\iffalse
-COPIED:
-overloaded resources leaving no reserve capacity for variations in demand
-·      lack of flexibility in design that cause serious consequences for schedules and costs \cite{relDistApplications}
-
-COPIED:
-in fact, the reliability of individual element is affected by various conditions such as failure rate, amount of data, bandwidth, operation time, etc \cite{cloudServiceRel}.
-
-COPIED:
-the operational probabilities are affected by various conditions such as failure rate, transmitted data, available bandwidth, and operation time \cite{hierarchicalRelModeling}
-\fi
-
 \section{Fault tolerance techniques}
-Two techniques can be used in order to ensure reliability \cite{surveyReliabilityDistr}:
-\begin{itemize}
-	\item Predicting reliability early at architectural level to better analyze the system before actual application development.
-	\item Providing a fault tolerant system to ensure seamless environment for end users in case if any unanticipated or unpredicted scenario has occurred during execution in real environment.
-\end{itemize}
-
 Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur
 \cite{faultToleranceChallenges}. Considering the whole life-span of a software application, fault-tolerant techniques can be divided into four different categories \cite{surveyReliabilityDistr}:
 \begin{enumerate}
@@ -343,22 +325,7 @@ According to \cite{softRelRoadmap} the following four technical areas can be reg
 
 Limited to already developed application, fault tolerance techniques can be divided into reactive and proactive techniques \cite{faultToleranceChallenges}. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. They therefore consists of detecting fault and failures, and recovering from them to allow computations to continue \cite{relGridSystems}. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components. 
 
-Common fault tolerance techniques include \cite{relGridSystems}:
-\begin{enumerate}
-	\item checkpointing
-	\item replication
-	\item rescheduling/rollback recovery
-\end{enumerate}
-
-Checkpointing is a method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically \cite{effTaskReplMobGrid}. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed. Task replication is another common method that aims to provide fault tolerance in distributed environments by scheduling redundant copies of the tasks, so as to increase the probability of having at least a simple task executed.
-
-%Fault-tolerance techniques can be divided into two categorizes: Task-level techniques and work-flow level techniques. Task-level techniques refer to those techniques which are applied in task-level to mask the effect of task crash failures. Work-flow techniques are those techniques that basically allow alternative task to launch to deal with user-defined exceptions and the failures the task-level techniques fail to cover \cite{gridWorkflow}.
-%\\\\
-%COPIED:
-%Software reliability prediction is a task to determine future reliability of software systems based on the past failure data [17]. “ \cite{collaborativeReliability}.
-%\\\\
-%In case of a long running task, checkpoint periodically and restart from the last good state;In case of a task running on unreliable execution environments, have multiple replicas of the task run on different machines, so that as long as not all replicated tasks fail, the task will succeed to execute; \cite{gridWorkflow}.
-
+Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback recovery} and \emph{replication} \cite{relGridSystems}.
 
 % Checkpointing, job migration, voting etc
 \subsection{Checkpoint/Restart}
@@ -368,6 +335,9 @@ Checkpointing is a fault-tolerance technique which periodically saves the state 
 
 %TODO
 The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
+
+\subsection{Rollback recovery}
+Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state \cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication}
 Job replication is a commonly used fault tolerant techinique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously \cite{faultToleranceGrid}.
@@ -391,9 +361,6 @@ Semi-Active replication is very similar to active replication but with the diffe
 
 Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 
-COPIED:
-“Active replication removes the centralized control of primary backup and minimizes losses that occur when some replicas fail. Active replication incurs a high cost associated with keeping all replicas synchronized [50]. iterative redundancy complements active replication by specifying, at runtime, how many replicas should exist to guarantee a particular level or reliability“  \cite{selfAdaptRel}.
-
 A replica, whether active, semi-active or passive replication is used, is defined as \cite{effTaskReplMobGrid}:
 \begin{definition} \label{def:replica}
 The term replica or task replica is used to denote an identical copy of the original task
@@ -409,9 +376,6 @@ Based on achieving consensus two different redundancy (replication) strategies c
 In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. 
 
 Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
-
-\subsection{Rollback recovery}
-COPIED: "Log-based rollback recovery protocols, or message logging protocols, supplement normal checkpointing with a record of messages sent by and received by each process. If the process fails, the log can be used to replay the progress of the process after the most recent checkpoint in order to reconstruct its previous state. This has the advantage that process recovery results in a more recent snapshot of the process state than checkpointing alone can provide" \cite{surveyFaultParallel}.
 
 
 \section{Load balancing}
