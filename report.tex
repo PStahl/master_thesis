@@ -411,9 +411,7 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 
 % Static algorithms: (?)
 \item Bidding An overloaded node request bids from other nodes. The node with the best bid (i.e. lowest load) wins the job.
-
 \item Max-Min 
-
 \item Min-Min 
 \end{itemize}
 
@@ -425,7 +423,8 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 
 Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
 
-The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. [Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization]
+COPIED:
+The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
 
 \section{Monitoring}
 Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
@@ -445,6 +444,7 @@ latency, start-up time, and state holding time achievable by any heartbeat-based
 \chapter{Approach} \label{ch:approach}
 
 \section{Method} \label{sec:method}
+% not sure this fit in a master thesis..
 We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
 The second step was to suggest a proper solution and implement it. Here we got input from literature and our supervisor among with Jörn och Shub. The third and most important step was to evaluate the solution in an objective way. % At implementation and evaluation phase we also experimented with the system. 
 
@@ -454,6 +454,7 @@ First of all we put together the necessary master thesis documents, a goal docum
 Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is an certain interest in this subject...etc
 
 During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
+
 \section{System model}
 In this section, we describe the system and application models employed in this work.
 
