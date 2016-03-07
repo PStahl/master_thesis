@@ -225,9 +225,7 @@ Models describing the nature of failures in distirbuted computing environments, 
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-neglectable assumption since the RMS in this case in fact is a single point of failure.
 
 \section{Reliability} \label{sec:theory_reliability}
-Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems.
-
-Generally, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar and common definition of reliability in distributed environments is that the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. 
+Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar definition of reliability, usually used for applications in distributed environments, is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. This definition is usually used together with the Byzantine fault model. 
 
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
@@ -251,15 +249,13 @@ The reliability of a multi-task process is the probability that the tasks being 
 
 Finally, for long running applications, where a replication scheme used, the reliability can be defined as \cite{effTaskReplMobGrid}
 \begin{definition} \label{def:task_replica_reliability}
-The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dyes until a new replica is up and running.
+The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
 \end{definition}
 
 \subsection{Reliability Model}
-In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. 
+In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. 
 
-For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}.
-
-Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}.
+For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}. Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}.
 
 \begin{definition} \label{def:mttf}
 The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
@@ -268,6 +264,22 @@ The Mean-Time-To-Failure for a component is the average time it takes for a comp
 \begin{definition} \label{def:mtbf}
 The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
 \end{definition}
+
+The MTBF can be calculated as
+
+\begin{equation} \label{eq:MTBF}
+MTBF = (number\ of\ failures) / (total\ time)
+\end{equation}
+
+From equation~\ref{eq:MTBF}, a reliability function for a component can be expressed as 
+\begin{equation} \label{eq:resource_reliability}
+R(t) = e^{-t/MTBF}
+\end{equation}
+
+Equation~\ref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time $t$ is
+\begin{equation} \label{eq:resource_failure_prob}
+F(t) = 1- e^{-t/MTBF}
+\end{equation}
 
 \iffalse
 While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
@@ -545,49 +557,29 @@ COPIED:
 
 
 \subsection{Reliability model}
-Since resources, e.g. computational nodes in the system, will be restarted upon failure, we use MTBF as defined in \ref{def:mtbf}, which can be calculated as
-
-\begin{equation} \label{eq:MTBF}
-MTBF = (number\ of\ failures) / (total\ time)
-\end{equation}
-
-From equation~\ref{eq:MTBF} a reliability function can be expressed as 
-\begin{equation} \label{eq:resource_reliability}
-R_{r}(t) = e^{-t/MTBF_{r}}
-\end{equation}
-
-Equation~\ref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$.
-
-The probability that a resource will fail during a time $t$ is therefore
-\begin{equation} \label{eq:resource_failure}
-Rf_{r}(t) = 1 - e^{-t/MTBF_{r}}
-\end{equation}
-
-For a complete analysis of system reliability, one must take all factors affecting reliability into account. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. In our framework, we only care whether or not a node is available or has died.
-
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
-R_{T}(t) =  1 - \prod\limits_{k=1}^n Rf_{Rep_k}(t)
+R_{T}(t) =  1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
 \end{equation}
 
-where $Rf_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
+where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
 
-Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting to model to node failure, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
+Assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m  Rf_{Res_k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
 \end{equation}
 
-Where $R_{Res_1}(t) \cdots R_{Res_m}(t)$ are the reliabilities of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
+Where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
 
 Given a time $t$ it takes to replicate a task, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
-\lambda \leq \prod\limits_{k=1}^n  R_{Res_k}(t)
+\lambda \leq 1 - \prod\limits_{k=1}^n  F_{Res_k}(t)
 \end{equation}
 
-which must be fulfilled by the system. Since assuming hetereogenous and non-constant failure rates for the various nodes, fulfilling equation~\ref{eq:desired_rel} is a scheduling problem.
+which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling equation~\ref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
 
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
 
