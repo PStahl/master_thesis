@@ -209,7 +209,7 @@ Statistically independent failures is also not very likely to reflect the real d
 
 Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system \cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night \cite{implicationsOfFailures} \cite{studyOfFailures}. Finally, components which have failed in the past are more likely to fail again \cite{implicationsOfFailures}.
 
-While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, dispite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models \cite{experimentalFailureAssessment}.
+While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models \cite{experimentalFailureAssessment}.
 
 \subsection{Failure assumptions}
 % Should fit better with previous section? Here we mention some common assumptions, and in the section above we mention that some assumptions are maybe not that good...
@@ -459,7 +459,7 @@ During the first weeks Philip implemented a replication functionality in Calvin 
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume a distributed cloud system, with heterogenous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+In this paper we assume a distributed cloud system, with  hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
 
 %All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
@@ -471,7 +471,7 @@ In this paper we assume a distributed cloud system, with heterogenous hardware a
 \subsection{Application model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
 
-In this paper we use a simpel example application in our experiments. The application can be modeled as shown in figure~\ref{fig:app_model}.
+In this paper we use a simple example application in our experiments. The application can be modelled as shown in figure~\ref{fig:app_model}.
 
 \begin{figure}[!hbt]
 \centering
@@ -483,7 +483,7 @@ In this paper we use a simpel example application in our experiments. The applic
 "we should have some real examples of applications which would benefit from using our framework. 
 \begin{itemize}
 \item telephone system?
-\item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would inrease the amount of transmitted data to the user's mobile, it would also increase the user experience.
+\item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
 \item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
 
@@ -516,7 +516,7 @@ We assume failures follow a Poission process, as this seems to be widely accepte
 
 However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
 
-Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replica tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
+Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replicate tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
 
 \subsection{Reliability model}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
@@ -596,7 +596,7 @@ An application in Calvin consist of a set of connected \emph{actors}. An actor u
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors.
 
 \subsubsection{Monitoring}
-The runtimes in the calvin framework use a heart-beat technique to detect runtime connectivity.
+The runtimes in the Calvin framework use a heart-beat technique to detect runtime connectivity.
 
 \subsubsection{Actor replication}
 We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
@@ -623,9 +623,9 @@ Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGri
 \chapter{Limitations} \label{ch:limitations}
 
 %TODO
-Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorihtm as well.
+Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorithm as well.
 
-Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being availble for another.
+Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being available for another.
 
 Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 
@@ -668,7 +668,7 @@ For measure reliability according to the dynamic definition (Definition \ref{def
 \begin{equation} \label{eq:overall_reliability}
 R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
 \end{equation}
-where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). For simplicity we will use one reliability for all static factors and chose a number of dynamic factors to consider.
+where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). 
 
 
 \chapter{Conclusions} \label{ch:conclusions}
