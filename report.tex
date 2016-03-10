@@ -203,7 +203,7 @@ The crash failure model is quite alike the fail-stop model with the difference t
 %TODO definera "failures", vilka brukar inkluderas?
 When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate \cite{algoMaxRelEndToEndConstraint}. 
 
-Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system \cite{algoMinExTime}. The failure rate for a hardware component usuallt follows a bathtub shaped curve \cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
+Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system \cite{algoMinExTime}. The failure rate for a hardware component usually follows a bathtub shaped curve \cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
 
 Statistically independent failures is also not very likely to reflect the real dynamic behaviour of distributed systems \cite{surveyReliabilityDistr} \cite{cloudServiceRel}. Faults may propagate throughout the system, thereby affecting other components as well \cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links \cite{optResourceAllMaxPerformance}. As failures are likely to be correlated \cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 
@@ -459,7 +459,7 @@ During the first weeks Philip implemented a replication functionality in Calvin 
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume a distributed cloud system, with hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+In this paper we assume a distributed cloud system, with heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
 
 %All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
@@ -514,7 +514,10 @@ Like \cite{selfAdaptRel}, we assume failures depends on the nodes, not the jobs 
 %TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
 We assume failures follow a Poission process, as this seems to be widely accepted in the research community. However, while most assumes constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates.
 
-However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we to start with assume constant failure rates.
+%constant failure rate Poisson = Homogeneous Poisson process
+%Non-Homogeneous Poisson - variable failure rate [System Reliability Concepts - Springer] <- Bok
+
+However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates.
 
 Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replicate tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
 
@@ -590,10 +593,10 @@ For implementing our model, we use an actor based application environment called
 \subsection{Calvin} Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Actor model}
-An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a devise, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
+An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
 
 \subsubsection{Runtimes}
-The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors.
+The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors. Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
 
 \subsubsection{Monitoring}
 The runtimes in the Calvin framework use a heart-beat technique to detect runtime connectivity.
@@ -621,13 +624,14 @@ performance metrics: The performance of fault tolerance techniques is measured b
 Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
 
 
-
 \chapter{Limitations} \label{ch:limitations}
-
 %TODO
 Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorithm as well.
 
 Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being available for another.
+
+%MOVE?
+In case of link failure two nodes might get unavailable of each other. Each node will assume that the other has failed and replicates new replicas until required reliability is achieved. Therefore, from a system perspective, there is a unnecessary high reliability. Since our system in a dynamic way keeps track of the total reliability during runtime and kills unnecessary replicas this type of link failure isn't a problem?
 
 Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 
