@@ -459,7 +459,7 @@ During the first weeks Philip implemented a replication functionality in Calvin 
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume a distributed cloud system, with  hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+In this paper we assume a distributed cloud system, with hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
 
 %All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
@@ -587,7 +587,7 @@ Furthermore, we will take node CPU usage, and the time of day of the event into 
 \section{Implementation} \label{sec:implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}.
 
-\subsection{Calvin} Calvin is a leight-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+\subsection{Calvin} Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Actor model}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a devise, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
@@ -601,6 +601,8 @@ The runtimes in the Calvin framework use a heart-beat technique to detect runtim
 \subsubsection{Actor replication}
 We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
 
+\subsubsection{Resource Manager}
+We added a resource manager actor which automatically deploys on a runtime at runtime started-up. It keeps track of the other nodes CPU usage and distributes its own usage once every second to the other nodes. It also keeps track of the connected nodes reliabilities. Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
 
 \chapter{Evaluation} \label{ch:evaluation}
 
@@ -608,7 +610,7 @@ We extended the Calvin framework to allow a fanout/fanin connectivity model wher
 In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
 
 \section{Reliability level}
-The reliability level over time was measured by continously counting the number of replicas running, and monitoring the reliability of the nodes.
+The reliability level over time was measured by continuously counting the number of replicas running, and monitoring the reliability of the nodes.
 
 \section{Performance metrics}
 %TODO
