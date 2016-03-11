@@ -348,11 +348,11 @@ The basics, however, are checkpoint recovery and task replication. The former is
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state \cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication}
-Job replication is a commonly used fault tolerant techinique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously \cite{faultToleranceGrid}.
+Job replication is a commonly used fault tolerant technique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously \cite{faultToleranceGrid}.
 
-Using replication, several identifical processes are scheduled on different resources and simultaneously perform the same computations \cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure \cite{faultToleranceGrid}.
+Using replication, several identification processes are scheduled on different resources and simultaneously perform the same computations \cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure \cite{faultToleranceGrid}.
 
-Replication also minimzes the risk of failurs affecting the execution time of jobs, since it avoids recomputation typically necessary when using checkpoint/restart techniques \cite{designFaultTolerantSched}.
+Replication also minimizes the risk of failures affecting the execution time of jobs, since it avoids recomputation typically necessary when using checkpoint/restart techniques \cite{designFaultTolerantSched}.
 
 There are a number of different strategies for replicating a task:
 \begin{itemize}
@@ -403,6 +403,7 @@ A dynamic load balancing can work in two ways, either distributed or non-distrib
 
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks \cite{perfAnalysisLoadCloud}.
 
+\iffalse
 We will briefly mention some dynamic load balancing algorithms: % skip static load balancing algorithms or not?
 
 \begin{itemize}
@@ -423,16 +424,28 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \item Min-Min 
 \end{itemize}
 
+\fi
 
 \section{Task scheduling}
-%TODO
+Task scheduling is the process of mapping tasks to available resource. A scheduling algorithm can be divided into three simple steps \cite{optSchedCloud}:
 
-\cite{schedReplicas}
+\begin{enumerate}
+	\item Collect the available resources
+	\item Based on task requirements and resource parameters choose resources to schedule the task on
+	\item Send the task to the selected resources
+\end{enumerate}
 
-Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}
+Based on which requirements and parameters are considered in step 2 above a task scheduling algorithm can achieve different goals. They can aim at maximizing the total reliability, minimizing the overall system load and meeting all the tasks deadlines \cite{schedulingSurvey}. 
 
-COPIED:
-The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
+Task scheduling algorithms can be divided into static and dynamic algorithms depending on if the scheduling mapping is based on pre-defined parameters or if the parameters might change during runtime \cite{schedReplicas}. 
+
+Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate \cite{optTaskAllocationForMaxRel}. In fact finding an optimal solution and maximizing the overall system reliability at the same time is a NP-hard problem \cite{optTaskAllocationForMaxRel} \cite{taskAllocationSwarm} \cite{schedulingSurvey}.
+
+%COPIED: 
+%One of the drawbacks with this type of scheduling is that its efficiency will have an impact on the cloud environment’s performance.
+
+%COPIED:
+%The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
 
 \section{Monitoring}
 Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
@@ -898,6 +911,12 @@ Fault Tolerant Algorithm for Replication Management in Distributed Cloud System
 
 \bibitem{experimentalFailureAssessment}
 Experimental Assessment of Workstation Failures and Their Impact on Checkpointing Systems
+
+\bibitem{schedulingSurvey}
+A Survey on Scheduling and the Attributes of Task Scheduling in the Cloud
+
+\bibitem{optSchedCloud}
+Scheduling Optimization in Cloud Computing
 
 \end{thebibliography}
 
