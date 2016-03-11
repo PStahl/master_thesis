@@ -35,23 +35,25 @@
 %\date{January 16, 2015}
 
 \acknowledgements{
-If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
-
 We would like to thank MAPCI and our supervisor Björn Landfeldt for there input. % Maybe Ericsson as well!
-Shub...something for input. 
+Shubhabatra for input. 
 We also would like to thank our examiner Christian Nyberg.
+
+%If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
 }
 
 \theabstract{
-This document describes the Master's Thesis format for the theses carried out at 
-the Department of Computer Science, Lund University. 
+Throughout the whole master thesis work extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
 
-Your abstract should capture, in English, the whole thesis with focus on the problem and solution in 150 words. It should be placed on a separate right-hand page, with an additional \textit{1cm} margin on both left and right. Avoid acronyms, footnotes, and references in the abstract if possible.
+%This document describes the Master's Thesis format for the theses carried out at the Department of Computer Science, Lund University. 
 
-Leave a \textit{2cm} vertical space after the abstract and provide a few keywords relevant for your report. Use five to six words, of which at most two should be from the title.
+%Your abstract should capture, in English, the whole thesis with focus on the problem and solution in 150 words. It should be placed on a separate right-hand page, with an additional \textit{1cm} margin on both left and right. Avoid acronyms, footnotes, and references in the abstract if possible.
+
+%Leave a \textit{2cm} vertical space after the abstract and provide a few keywords relevant for your report. Use five to six words, of which at most two should be from the title.
+
 }
 
-\keywords{MSc, template, report, style, structure}
+\keywords{reliability, distributed computing, dynamic fault-tolerance, task scheduling, Poisson}
 
 %% Only used to display font sizes
 \makeatletter
@@ -73,7 +75,11 @@ As computational work is distributed across multiple resources, the overall reli
 
 Reliability can be increased by replicating application tasks, where all replicas perform the same computations on the same input. This allows for both increased redundancy and an easy way of detecting errors. This allows for continuing execution of the application even in case of a filing replica. Seamlessly being able to continue the execution, without losing any data is of particular interest in data stream processing.
 
+%Some? one of the drawbacks..
 Some of the drawbacks of replicating a task n times, is that the resources needed increases. With $n$ replicas, all performing the same computation on the same input, one need $n$ times as much resources, hence a lot of computational resources is thus wasted. Dynamic analysis of the system and an adaptive scheduling technique could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing. 
+
+Throughout the whole master thesis work extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
+
 
 \section{Related work} \label{sec:related_work}
 The interest in reliability in distributed systems has gain increased knowledge \cite{replicationManagement}. Due to the uncertain heterogeneous environment of cloud and grid systems, increasing reliability is a complex task [TODO]. %TODO add reference
@@ -105,6 +111,8 @@ To our knowledge, no previous attempt has been made which in a fully dynamic man
 We propose a framework which ensures an user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Furthermore, the system is continuously monitored in order to adapt the number of replicas as the state of the system changes.
 
 The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
+
+The report is structured as follows, in Section \ref{ch:background_theory} all necessary background theory is provided, in Section \ref{ch:approach} we present our model and contribution in more detail, Section \ref{ch:evaluation} aims at evaluating our solution while Section \ref{ch:limitations} and \ref{ch:future_work} presents limitations in our model and future work. Section \ref{ch:conclusions} concludes the report. 
 
 %TODO
 Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
@@ -442,18 +450,6 @@ latency, start-up time, and state holding time achievable by any heartbeat-based
 
 
 \chapter{Approach} \label{ch:approach}
-
-\section{Method} \label{sec:method}
-% not sure this fit in a master thesis..
-We have decided that use an action research oriented methodology. First we studied today's situation from literature and with input from our supervisor Björn Landfeldt. Therefrom we could state the background and motivation to the problem to be solved.
-The second step was to suggest a proper solution and implement it. Here we got input from literature and our supervisor among with Jörn och Shub. The third and most important step was to evaluate the solution in an objective way. % At implementation and evaluation phase we also experimented with the system. 
-
-% More details
-First of all we put together the necessary master thesis documents, a goal document and a project plan. 
-
-Thereafter we began our literature study of today's situation, as seen in \ref{sec:related_work} there is an certain interest in this subject...etc
-
-During the first weeks Philip implemented a replication functionality in Calvin while Jonatan started writing the report and investigated how reliability can be defined. When the replication functionality was up and running Jonatan started writing an "actor lost" command which and deleted all the information about the lost actor used the replication functionality to start a new replica.
 
 \section{System model}
 In this section, we describe the system and application models employed in this work.
