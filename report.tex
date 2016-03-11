@@ -35,17 +35,16 @@
 %\date{January 16, 2015}
 
 \acknowledgements{
-We would like to thank MAPCI and our supervisor Björn Landfeldt for there input. % Maybe Ericsson as well!
-Shubhabatra for input. 
-We also would like to thank our examiner Christian Nyberg.
+We would like to thank our supervisor Björn Landfeldt and MAPCI for there input.
+
+Maybe also:
+Shubhabatra, Ericsson, Jörn, Duan, examiner Christian Nyberg.
 
 %If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
 }
 
 \theabstract{
-Throughout the whole master thesis work extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
-
-%This document describes the Master's Thesis format for the theses carried out at the Department of Computer Science, Lund University. 
+This document describes the Master's Thesis format for the theses carried out at the Department of Computer Science, Lund University. 
 
 %Your abstract should capture, in English, the whole thesis with focus on the problem and solution in 150 words. It should be placed on a separate right-hand page, with an additional \textit{1cm} margin on both left and right. Avoid acronyms, footnotes, and references in the abstract if possible.
 
@@ -75,8 +74,7 @@ As computational work is distributed across multiple resources, the overall reli
 
 Reliability can be increased by replicating application tasks, where all replicas perform the same computations on the same input. This allows for both increased redundancy and an easy way of detecting errors. This allows for continuing execution of the application even in case of a filing replica. Seamlessly being able to continue the execution, without losing any data is of particular interest in data stream processing.
 
-%Some? one of the drawbacks..
-Some of the drawbacks of replicating a task n times, is that the resources needed increases. With $n$ replicas, all performing the same computation on the same input, one need $n$ times as much resources, hence a lot of computational resources is thus wasted. Dynamic analysis of the system and an adaptive scheduling technique could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing. 
+One drawbacks of replicating a task n times, is that the resources needed increases. With $n$ replicas, all performing the same computation on the same input, one need $n$ times as much resources, hence a lot of computational resources is thus wasted. Dynamic analysis of the system and an adaptive scheduling technique could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing. 
 
 Throughout the whole master thesis work extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
 
@@ -94,7 +92,7 @@ Some attempts at designing fault-tolerant systems by the use of replication has 
 A quite old but still relevant work is found in \cite{dynAdaptRepl} where they present a framework for dynamic replication with an adaptive control in an multi-agent system. They introduce the software architecture which can act as support for building reliable multi-agent systems. Since the available resources often are limited they say that it isn't feasible to replicate all components. Therefore they use a criticality for each agent which is allowed to evolve during runtime. The proposed solution allows for dynamically adapt the number of replicas and the replication strategy itself (passive/active). The number of replicas is partly based on the agents critically and a predefined minimum number of replicas. From CPU usage time and communication activity an agent activity is calculated which is used in calculating the agents critically. One restriction they do in their fault model is that processes can only fail by permanent crashes. %TODO Do they meet a desrided level of reliablity?
 
 Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication is presented in \cite{replicatingAgents} \cite{adaptiveMASReplication} \cite{adaptiveAgentReplication}. While being adaptive to system state, the solution presented in \cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in \cite{adaptiveMASReplication}, where a decentralized solution is proposed, where the number of replicas and their placement depends on the system state. %TODO need to read \cite{adaptiveMASReplication} again...
-The solution proposed in \cite{adaptiveAgentReplication} involves distributed monitoring system  %TODO need to read this again...
+The solution proposed in \cite{adaptiveAgentReplication} involves distributed monitoring system...  %TODO need to read this again...
 
 \cite{adaptiveCheckPointAndRep} proposes an algorithm based on replication which dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load \cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}, one should increase the number of replicas to keep the desired level of reliability.
 
@@ -112,12 +110,12 @@ We propose a framework which ensures an user determined level of reliability for
 
 The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
 
-The report is structured as follows, in Section \ref{ch:background_theory} all necessary background theory is provided, in Section \ref{ch:approach} we present our model and contribution in more detail, Section \ref{ch:evaluation} aims at evaluating our solution while Section \ref{ch:limitations} and \ref{ch:future_work} presents limitations in our model and future work. Section \ref{ch:conclusions} concludes the report. 
-
 %TODO
 Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
 
-Our model is implemented by extending the actor-based application environment \emph{Calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated %TODO 
+Our model is implemented by extending the actor-based application environment \emph{Calvin} \ref{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated by... %TODO 
+
+The report is structured as follows: in Section \ref{ch:background_theory} all necessary background theory is provided, in Section \ref{ch:approach} we present our model and contribution in more detail, Section \ref{ch:evaluation} aims at evaluating our solution while Section \ref{ch:limitations} and \ref{ch:future_work} presents limitations in our model and future work. Section \ref{ch:conclusions} concludes the report. 
 
 \chapter{Background Theory} \label{ch:background_theory}
 \section{Computational Environment}
@@ -170,15 +168,12 @@ In distributed environments, especially with heterogeneous commodity hardware, s
 	\item Network related.
 \end{enumerate}
 
-The possible kind of errors in a Grid environment can be divided into the following three kinds \cite{effTaskReplMobGrid}:
+The possible errors in a Grid environment can be divided into the following three categorize \cite{effTaskReplMobGrid}:
 \begin{itemize}
 	\item Crash failure - When a correctly working server comes to a halt.
 	\item Omission failure - When a server fails to respond to incoming requests and to send messages
 	\item Timing failure - When a server responds correctly but beyond the specified time interval
 \end{itemize}
-
-%I think we don't need this detailed description of the finding here.. I think we can just mention the important stuff
-%In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied. The failures root-causes is divided into five categorize, Human, Environment, Network, Software and Hardware failure. The computing system can be divided into different hardware types, based on processor/memory chip model. From the data it is seen that hardware failures was the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type. The second most common failure was software failure where ranging from approximately 10 - 20 \%. But the root cause of 20 - 30 \% of the failures are unknown, which for a majority of the hardware types leaves the possibility that any of the three other types of failure could be the second most common failure.
 
 In \cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type, while 10 - 20 \% of the failures were software failures.
 
@@ -197,7 +192,7 @@ The fail-stop model, also called the crash-stop model, is in comparison to the B
 %COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
 \subsubsection*{Fail-stutter faults}
-Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}. 
+Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node \cite{surveyFaultParallel}.
 % fail-stutter modellen är knappt använd...
 
 \subsubsection*{Crash-failure model}
@@ -209,7 +204,7 @@ The crash failure model is quite alike the fail-stop model with the difference t
 %Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
 
 %TODO definera "failures", vilka brukar inkluderas?
-When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate \cite{algoMaxRelEndToEndConstraint}. 
+When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate \cite{algoMaxRelEndToEndConstraint}. 
 
 Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system \cite{algoMinExTime}. The failure rate for a hardware component usually follows a bathtub shaped curve \cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
 
@@ -342,7 +337,7 @@ Fault-tolerance by the use of periodic checkpointing and rollback recovery is th
 Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage \cite{relGridSystems} \cite{surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
 %TODO
-The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
+%The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 
 \subsection{Rollback recovery}
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state \cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
@@ -455,11 +450,11 @@ Error logs of different types that are often produced by software components. So
 Statistical monitors which track auxiliary system attributes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
 Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
 
-COPIED:
-Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
+%COPIED:
+%Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
 
-Nodes can alternate between working correctly and being crashed in our model.3 Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic
-latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
+%COPIED
+%Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
 
 
 \chapter{Approach} \label{ch:approach}
@@ -476,7 +471,7 @@ In this paper we assume a distributed cloud system, with heterogeneous hardware 
 \caption{Computational environment, interconnected nodes} \label{fig:computational_environment}
 \end{figure}
 
-%All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
+All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
 
 %\subsection{Monitoring}
 %Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
@@ -495,12 +490,14 @@ In this paper we use a simple example application in our experiments. The applic
 \end{figure}
 
 %TODO
-"we should have some real examples of applications which would benefit from using our framework. 
+COMMENT: we should have some real examples of applications which would benefit from using our framework.
 \begin{itemize}
 \item telephone system?
 \item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
 \item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
+
+\iffalse
 
 COPIED:
 “Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
@@ -510,6 +507,8 @@ COPIED: “Most workloads are large-scale long-running 3D scientific simulations
 COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “  \cite{implicationsOfFailures}. 
 \\\\
 COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency"  \cite{surveyFaultParallel}.
+
+\fi
 
 \subsection{Replication scheme}
 We will ensure reliability based on task replication, using active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
@@ -532,7 +531,7 @@ We assume failures follow a Poission process, as this seems to be widely accepte
 %constant failure rate Poisson = Homogeneous Poisson process
 %Non-Homogeneous Poisson - variable failure rate [System Reliability Concepts - Springer] <- Bok
 
-However, when a system first is put into action (use other words), no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates.
+However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates.
 
 Furthermore, the time it takes to replicate a task is not known at deployment time. First when several applications has been deployed, and the time to replicate tasks been measured, one can get an average replication time. The replication time will also be dynamic, and application dependent. Some tasks may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
 
@@ -551,7 +550,7 @@ Since we assume tasks themselves do not fail unless the resources they use fail,
 R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
 \end{equation}
 
-Where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
+where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
 
 Given a time $t$ it takes to replicate a task, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
@@ -588,19 +587,19 @@ When monitoring the system, once must monitor all parameters affecting the relia
 % TODO machine learning section?
 Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day \cite{implicationsOfFailures} \cite{studyOfFailures}.
 
+\iffalse
+COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
 
-
-%COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
-
-%COPIED:
-%"the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
+COPIED:
+"the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
 
 %TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
 
-%COPIED:
-%“The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
+COPIED:
+“The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
 
-%COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
+COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
+\fi
 
 \section{Implementation} \label{sec:implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin} \cite{calvin}.
@@ -628,16 +627,16 @@ We added a resource manager actor which automatically deploys on a runtime at ru
 In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
 
 \section{Reliability level}
-The reliability level over time was measured by continuously counting the number of replicas running, and monitoring the reliability of the nodes.
+The reliability level over time was measured by continuously and monitoring the reliability of the nodes on which replicas where running.
 
 \section{Performance metrics}
 %TODO
-performance metrics
 
+\iffalse
 COPIED:
 performance metrics: The performance of fault tolerance techniques is measured by standards metrics turnaround time, throughput, fail tendency and grid load. The parameters are defined as:
 Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
-
+\fi
 
 \chapter{Limitations} \label{ch:limitations}
 %TODO
@@ -646,7 +645,8 @@ Our model is obviously limited in that we do not account for link failures. Howe
 Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being available for another.
 
 %MOVE?
-In case of link failure two nodes might get unavailable of each other. Each node will assume that the other has failed and replicates new replicas until required reliability is achieved. Therefore, from a system perspective, there is a unnecessary high reliability. Since our system in a dynamic way keeps track of the total reliability during runtime and kills unnecessary replicas this type of link failure isn't a problem?
+In case of link failure two nodes might get unavailable of each other. Each node will assume that the other has failed and try to restart it while replicating new replicas until required reliability is achieved. Therefore, from a system perspective, there is a unnecessary high reliability which result in an unnecessary high impact on the network load.
+%Since our system in a dynamic way keeps track of the total reliability during runtime and kills unnecessary replicas this type of link failure isn't a problem? (TODO)
 
 Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 
@@ -656,8 +656,10 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 
 \subsection{Reliability model}
 \label{sec:limitations_reliability_model}
-Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
+\iffalse
+COPIED:
 
+Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
 
 the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
 
@@ -671,11 +673,11 @@ Given the failure probability Pfik of each one of the mi replicas Ti k of task T
 0 mi Y
 Pfi =Pfi· Pfik. (2) k=1
 The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
-
+\fi
 
 \chapter{Future Work} \label{ch:future_work}
 %TODO
-Replication impose extra buden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
+Replication impose extra burden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
 \\\\
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
 \\\\
@@ -711,12 +713,12 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 \bibitem{surveyRelPrediction}
 	A. Immonen, E. Niemelä,
 	\emph{Survey of reliability and availability prediction methods from the viewpoint of software architecture},
-	Software & Systems Modeling, 7:49-65,
+	Software \& Systems Modeling, p.49-65,
 	February 2008
 
 \bibitem{relDistApplications}
 	C. A. Tănasie, S. Vîntutis, A. Grigorivici,
-	\epmh{Reliability in Distributed Software Applications},
+	\emph{Reliability in Distributed Software Applications},
 	Informatica Economică vol. 15, no. 4/2011,
 
 \bibitem{relGridSystems}
@@ -780,34 +782,63 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	April 2003
 
 \bibitem{algoMaxRelEndToEndConstraint}
-Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint
+	F. Cao , M. M. Zhu,
+	\emph{Distributed workflow mapping algorithm for maximized reliability under end-to-end delay constraint},
+	The Journal of Supercomputing, Vol. 66, Issue 3, p. 1462-1488,
+	December 2013
 
 \bibitem{algoMinExTime}
-Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing
+	A. Dogan, F. Özüner,
+	\emph{Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing},
+	IEEE Transactions on parallel and distributed systems, Vol. 13, No.3,
+	March 2002
 
 \bibitem{relModelDistSimSystem}
-Reliability model of distributed simulation system
+	H. Wan, H. Z. Huang, J. Yang, Y. Chen,
+	\emph{Reliability model of distributed simulation system},
+	Quality, Reliability, Risk, Maintenance, and Safety Engineering (ICQR2MSE), 2011 International Conference,
+	June 2011
 
 \bibitem{relModelAnalysis}
-Reliability Modeling and Analysis of Computer Networks
+	C. S. Raghavendra, S. V. Makam,
+	\emph{Reliability Modeling and Analysis of Computer Networks},
+	IEEE Transactions on Reliability  Vol. 35,  Issue. 2,
+	June 1986
 
 \bibitem{cloudServiceRel}
-Cloud Service Reliability: Modeling and Analysis
+	Y. Dai, B. Yang, J. Dongarra, G. Zhang
+	\emph{Cloud Service Reliability: Modeling and Analysis},
+	%TODO published?
 
 \bibitem{optTaskAllocationForMaxRel}
-Optimal task allocation for maximizing reliability in distributed real-time systems
+	H. R. Faragardi, R. Shojaee, M. A. Keshtkar, H. Tabani,
+	\emph{Optimal task allocation for maximizing reliability in distributed real-time systems},
+	Computer and Information Science (ICIS), 2013 IEEE/ACIS 12th International Conference,
+	June 2013
 
 \bibitem{perfImplPerCheckPoint}
-Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems
+	A. J. Oliner, R. K. Sahoo, J. E. Moreira, M. Gupta,
+	\emph{Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems},
+	Parallel and Distributed Processing Symposium, 2005. Proceedings. 19th IEEE International,
+	April 2005
 
 \bibitem{studyOfFailures}
-A large-scale study of failures in high-performance computing systems
+	B. Schroeder, G. Gibson,
+	\emph{A large-scale study of failures in high-performance computing systems},
+	IEEE Transactions on Dependable and Secure Computing (Volume:7,  Issue: 4),
+	November 2010
 
 \bibitem{implicationsOfFailures}
-Performance Implications of Failures in Large-Scale Cluster Scheduling
+	Y. Zhang, M. S. Squillante, A. Sivasubramaniam, R. K. Sahoo,
+	\emph{Performance Implications of Failures in Large-Scale Cluster Scheduling},
+	Job Scheduling Strategies for Parallel Processing, Volume 3277 of the series Lecture Notes in Computer Science pp 233-252,
+	2005
 
 \bibitem{discContRelModel}
-Discrete and continuous reliability models for systems with identically distributed correlated components
+	L. Fiondella, L. Xing,
+	\emph{Discrete and continuous reliability models for systems with identically distributed correlated components},
+	Reliability Engineering & System Safety p. 1-10,
+	Jan 2015
 
 \bibitem{effTaskReplMobGrid}
 	Antonios Litke et. al.,	
@@ -953,7 +984,7 @@ Scheduling Optimization in Cloud Computing
 
 
 
-
+\iffalse
 
 % Below is the report template found online
 
@@ -1207,5 +1238,6 @@ The following environments and tools were used to create this document:
 \end{itemize}
 \end{appendices}
 
+\fi
 
 \end{document}
