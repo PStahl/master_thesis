@@ -633,7 +633,11 @@ We added a resource manager actor which automatically deploys on a runtime at ru
 In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
 
 \section{Reliability level}
+%TODO
+
 The reliability level over time was measured by continuously and monitoring the reliability of the nodes on which replicas where running.
+
+Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
 
 \section{Performance metrics}
 %TODO
