@@ -624,13 +624,21 @@ The runtimes in the Calvin framework use a heart-beat technique to detect runtim
 \subsubsection{Actor replication}
 We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
 
-\subsubsection{Resource Manager}
-We added a resource manager actor which automatically deploys on a runtime at runtime started-up. It keeps track of the other nodes CPU usage and distributes its own usage once every second to the other nodes. It also keeps track of the connected nodes reliabilities. Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
+\subsection{Node Resource Reporter}
+we have added an actor which automatically deploys on a runtime at runtime started-up. It reports the nodes CPU usage once every second to the runtime which distributed it to all connected nodes. Each node has a resource manager which stores all nodes usages.
+
+\subsection{Resource Manager}
+Besides storing the connected nodes usages the resource manager stores information about node failures. If a node fails a timestamp and the failed node's usage is stored, among with the time it took to replicate a new replica for each of the actors which were running on the failed node.
+
+Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
 
 \chapter{Evaluation} \label{ch:evaluation}
 
 \section{Computational environment}
 In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
+
+REPLICATION TIME:
+An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
 
 \section{Reliability level}
 %TODO
