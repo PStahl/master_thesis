@@ -474,7 +474,7 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume a distributed cloud system, with heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+In this paper we assume a all resources are within the same cluster, with low latency connections between them. The nodes consist of heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
 
 \begin{figure}[!hbt]
 \centering
@@ -482,7 +482,8 @@ In this paper we assume a distributed cloud system, with heterogeneous hardware 
 \caption{Computational environment, interconnected nodes} \label{fig:computational_environment}
 \end{figure}
 
-All information is globally accessed, hence we do not assume a single stable storage, but instead, information is shared in a multicast approach.
+\subsection{Storage of data}
+All information, such as how many replicas are currently executing, and on which nodes they are running, are globally available. This is achieved by the use of Distributed Hash Table (DHT), further explained in ~\ref{ch:calvin_storage}. The use of DHT efficiently avoids having a single-point-of-failure which would have been the case with having a single database.
 
 %\subsection{Monitoring}
 %Heart beat monitoring detects when a connectivity to a node is lost. In the case of lost connectivity, the node is assumed dead.
@@ -490,14 +491,14 @@ All information is globally accessed, hence we do not assume a single stable sto
 %COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
 \subsection{Application model}
-The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
+The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic environment where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
 
 In this paper we use a simple example application in our experiments. The application can be modelled as shown in figure~\ref{fig:app_model}.
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model.pdf} 
-\caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer.}\label{fig:app_model}
+\caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer. A may be seen as a task or service requiring a certain level of reliability.}\label{fig:app_model}
 \end{figure}
 
 %TODO
@@ -522,7 +523,7 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme}
-We will ensure reliability based on task replication, using active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application looks like after replication of task $A$.
+We will ensure reliability based on task replication, using active replication, where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application in figure~\ref{fig:app_model} looks after replicating task $A$ 4 times.
 
 \begin{figure}[!hbt]
 \centering
@@ -559,7 +560,7 @@ Using replication of a task, and reliability defined as in definition~\ref{def:t
 R_{T}(t) =  1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
 \end{equation}
 
-where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$, which it takes to replicate an actor. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
+where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
 
 Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
 
@@ -569,7 +570,7 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
 
 where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
 
-Given a time $t$ it takes to replicate a task, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
+Given a time $t$, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
 \lambda \leq 1 - \prod\limits_{k=1}^n  F_{Res_k}(t)
@@ -579,6 +580,21 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
 
+\subsection{Expressing time t}
+The time $t$ used in \label{eq:desired_rel} can be expressed as the time it takes from that a failure happened, until a new replica is operational. We can therefore express t as
+
+\begin{equation} \label{eq:rep_time}
+	t = Tf + Tr
+\end{equation}
+
+where $Tf$ is the time to detect that a node has failed, and $Tr$ is the time it takes to spawn a new replica.
+
+\subsubsection{Replication time}
+The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate response to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, the receiving node must also find a node which has no replica already, and then send a request to that node including the current state of the task to replicate. %TODO show with a graph.
+
+
+\subsection{Failure detection time}
+The time to detect a failed node depends on the frequency of the heartbeats.
 
 \subsection{Scheduling algorithm}
 A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
@@ -623,6 +639,9 @@ For implementing our model, we use an actor based application environment called
 
 \subsection{Calvin} Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
+\subsection{Storage} \label{ch:calvin_storage}
+Calvin uses the Kademlia implementation of a DHT. This enables any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
+
 \subsubsection{Actor model}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
 
@@ -666,6 +685,18 @@ COPIED:
 performance metrics: The performance of fault tolerance techniques is measured by standards metrics turnaround time, throughput, fail tendency and grid load. The parameters are defined as:
 Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
 \fi
+
+\section{Experiments}
+
+\subsection{Node discovery time}
+
+
+\subsection{Constant failure rate}
+In this example, all eight nodes were given the same \emph{Mean-Time-Between-Failures}.
+
+The MTBF for each node was a normal distribution with mean 30 seconds and standard deviation set to 5. With a MTBF equal to 30, the reliability for each node in this experiement was %TODO.
+
+Furthermore, the desired reliability in this experiement was set to 0.999\%.
 
 \chapter{Limitations} \label{ch:limitations}
 %TODO
