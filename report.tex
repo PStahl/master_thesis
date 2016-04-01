@@ -546,12 +546,9 @@ The Poisson distribution is defined as follows:
 P(k failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
 \end{equation}
 
-where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to replicate an actor. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}. 
+where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and spawn a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}. 
 
-However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. 
-Thereafter, the failure rate is calculated from the the replication time and the MTBF, which is based on the number of experienced failures and the time they occurred.
-
-Furthermore, the time it takes to replicate a task is not known at deployment time. Before an actor has been replicated and the time to replicate it been measured we assume a constant replication time. The replication time is dynamic, and actor type dependent. Some actors may take longer time to replicate than others, why a system wide average may be far from correct for a given application.
+However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in ~\ref{sec:time_t}.
 
 \subsection{Reliability model}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
@@ -580,7 +577,7 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
 
-\subsection{Expressing time t}
+\subsection{Expressing time t} \label{sec:time_t}
 The time $t$ used in \ref{eq:desired_rel} can be expressed as the time it takes from that a failure happened, until a new replica is operational. We can therefore express t as
 
 \begin{equation} \label{eq:rep_time}
