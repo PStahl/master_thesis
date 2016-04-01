@@ -581,7 +581,7 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
 
 \subsection{Expressing time t}
-The time $t$ used in \label{eq:desired_rel} can be expressed as the time it takes from that a failure happened, until a new replica is operational. We can therefore express t as
+The time $t$ used in \ref{eq:desired_rel} can be expressed as the time it takes from that a failure happened, until a new replica is operational. We can therefore express t as
 
 \begin{equation} \label{eq:rep_time}
 	t = Tf + Tr
@@ -589,12 +589,36 @@ The time $t$ used in \label{eq:desired_rel} can be expressed as the time it take
 
 where $Tf$ is the time to detect that a node has failed, and $Tr$ is the time it takes to spawn a new replica.
 
+\subsubsection{Failure detection time}
+The time to detect a failed node depends on the frequency of the heartbeats.
+
 \subsubsection{Replication time}
 The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate response to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, the receiving node must also find a node which has no replica already, and then send a request to that node including the current state of the task to replicate. %TODO show with a graph.
 
+\begin{definition}
+Latency = propagation time + transmission time + queueing time + processing delay
+\end{definition}
 
-\subsection{Failure detection time}
-The time to detect a failed node depends on the frequency of the heartbeats.
+\begin{definition}
+Propagation time = distance / propagation speed
+\end{definition}
+
+\begin{definition}
+Handshake time = (ACK size / bandwidth) + (SYN+ACK size / bandwidth) + (ACK size / bandwidth)	
+\end{definition}
+
+\begin{definition}
+Transmission time = package size / bandwidth
+\end{definition}
+
+\begin{definition}
+Package size: handshake + message size
+Handshake size = ACK + (SYN+ACK) + ACK = 
+\end{definition}
+
+\begin{definition}
+Replication time = “node dead discovery time” + “time to retrieve data from storage” + “time to send data to node” + “time to replicate”
+\end{definition}
 
 \subsection{Scheduling algorithm}
 A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
