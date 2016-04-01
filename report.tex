@@ -474,7 +474,7 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume a all resources are within the same cluster, with low latency connections between them. The nodes consist of heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}.
+In this paper we assume that all resources are within the same cluster, with low latency connections between them. The nodes consist of heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the heterogenousity, nodes will have a varying behaviour in terms of failure, i.e. varying failure rates.
 
 \begin{figure}[!hbt]
 \centering
@@ -498,11 +498,11 @@ In this paper we use a simple example application in our experiments. The applic
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model.pdf} 
-\caption{An application model where a producer transmits data to a task A, which transforms the data, and sends the result to a consumer. A may be seen as a task or service requiring a certain level of reliability.}\label{fig:app_model}
+\caption{An application model where a producer transmits data to a task $A$, which transforms the data, and sends the result to a consumer. $A$ may be seen as a task or service running in a cluster and requiring a certain level of reliability.}\label{fig:app_model}
 \end{figure}
 
 %TODO
-COMMENT: we should have some real examples of applications which would benefit from using our framework.
+COMMENT: we should have some real examples of applications which would benefit from using our framework. ?
 \begin{itemize}
 \item telephone system?
 \item video transcoding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
