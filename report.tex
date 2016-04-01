@@ -639,9 +639,12 @@ Adaption refers to changing the behaviour depending on the changing state of the
 
 To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
 
-When monitoring the system, once must monitor all parameters affecting the reliability. In our case, it is the node reliabilities and the time it takes to start a new replica. Node reliability is likely to vary over time, and the time it takes to start a new replica is likely to depend on the type of job.
+When monitoring the system, onc must monitor all parameters affecting the reliability. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica.
+
+The replication time is stored per actor type. Since the state of different types of actors vary, and thereby the size of the states, the time to send the state from one node to another will also vary. 
 
 % TODO machine learning section?
+TODO: If we have time:
 Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day \cite{implicationsOfFailures} \cite{studyOfFailures}.
 
 \iffalse
@@ -689,7 +692,7 @@ Due to its continuously communication with other nodes it fits great as a monito
 \chapter{Evaluation} \label{ch:evaluation}
 
 \section{Computational environment}
-In order to evaluate our model using Calvin, we set up an execution environment consisting of 8 servers, and started a runtime on each server. The servers were given a random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
+In order to evaluate our model using Calvin, we set up an execution environment consisting of 6 servers, and started a runtime on each server. The runtimes were given psudeo-random time-between-failures $t_f$. After $t_f$ seconds, the runtime was killed and restarted. This also maps well to the fail-stop fault model. Through the heart-beat system, the other runtimes are aware of a killed runtime.
 
 REPLICATION TIME:
 An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
