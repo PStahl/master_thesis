@@ -488,6 +488,7 @@ Calvin
 Also wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms. At developing phase, no need of considering on which operating system the application should run.
 
 \chapter{Approach} \label{ch:approach}
+\section{?} %I think a section would be good here
 In the case of streaming processing, reliability is of particular interest in order not to lose any valueable data. In our model, we imagine the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider. The user of this service demands a certain level of reliability, and active replication is used to ensure this.
 
 Chosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algoirithms such as those presented in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} to determine whether or not the correct result was received.
@@ -506,7 +507,9 @@ As described in \ref{ch:approach} we limit our model to only consider node failu
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume that all resources are within the same cluster, with low latency connections between them. The nodes consist of heterogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the heterogenousity, nodes will have a varying behaviour in terms of failure, i.e. varying failure rates.
+In this paper we assume that all resources are within the same cluster, with low latency connections between them. The nodes consist of homogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to that the hardware components are homogeneous, approximately the same behaviour in terms of failure, we will simulate that the behaviour is different in order to get more interesting results.
+
+Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In Appendix \cite{appendix:___TODO___} a system of one replicated actor is shown before and after a node failure.
 
 \begin{figure}[!hbt]
 \centering
@@ -711,7 +714,7 @@ The runtimes in the Calvin framework use a heart-beat technique to detect runtim
 We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
 
 \subsection{Node Resource Reporter}
-we have added an actor which automatically deploys on a runtime at runtime started-up. It reports the nodes CPU usage once every second to the runtime which distributed it to all connected nodes. Each node has a resource manager which stores all nodes usages.
+We have added an actor which automatically deploys on a runtime at runtime started-up. It reports the nodes CPU usage once every second to the runtime which distributed it to all connected nodes. Each node has a resource manager which stores all nodes usages.
 
 \subsection{Resource Manager}
 Besides storing the connected nodes usages the resource manager stores information about node failures. If a node fails a timestamp and the failed node's usage is stored, among with the time it took to replicate a new replica for each of the actors which were running on the failed node.
@@ -1131,6 +1134,20 @@ Scheduling Optimization in Cloud Computing
 
 \begin{appendices}
 \chapter{A}
+In this appendix a system consisting of one actor is shown before and after a node fails. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/before_node_failure.pdf}
+\caption{Before a node failure. Here two replicas (placed on Node A and C) is required to achieve required reliability.} \label{fig:before_node_failure}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/after_node_failure.pdf}
+\caption{After Node C has failed. Now three replicacs (placed on Node A, B and D) is reuiqred to achieve reuiqred reliability.} \label{fig:before_node_failure}
+\end{figure}
+
 
 \end{appendices}
 
