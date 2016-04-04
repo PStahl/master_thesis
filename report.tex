@@ -474,6 +474,9 @@ Chosing streaming services with deterministic processing\footnote{A determistic 
 
 In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy sheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
+\section{Limitations} \label{sec:limitations}
+As described in \ref{ch:approach} we limit our model to only consider node failures. Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
+
 \section{System model}
 In this section, we describe the system and application models employed in this work.
 
