@@ -13,6 +13,8 @@
 \usepackage{hyperref}
 
 \newtheorem{definition}{Definition}[chapter]
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
 
 %\geometry{showframe}
 
@@ -681,7 +683,7 @@ For implementing our model, we use an actor based application environment called
 
 \subsection{Calvin} Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
-\subsection{Storage} \label{ch:calvin_storage}
+\subsubsection{Storage} \label{ch:calvin_storage}
 Calvin uses the Kademlia implementation of a DHT. This enables any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
 
 \subsubsection{Actor model}
