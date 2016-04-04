@@ -686,9 +686,10 @@ Besides storing the connected nodes usages the resource manager stores informati
 Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
 
 \chapter{Evaluation} \label{ch:evaluation}
+In order to validate our model, we conducted a set of experiments. These goal of the experiments were to show that our model supports dynamic ensurance of reliability, and doing so in an optimal way by chosing the most reliable nodes.
 
 \section{Computational environment}
-In order to evaluate our model using Calvin, we set up an execution environment consisting of 7 servers, and started a runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted. 
+We mentioned in~\sec{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
 
 \section{Application}
 The application used in the experiments is of simplest form, consisting only of one consuming  and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
