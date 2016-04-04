@@ -494,6 +494,11 @@ Chosing streaming services with deterministic processing\footnote{A determistic 
 
 In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy sheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
+For testing our model we have implemented it in Ericsson's actor-based system Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and out of the scope for this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see \cite{ch:???}. 
+
+%METHODOLOGY - small description
+test-driven, literature study...
+
 \section{Limitations} \label{sec:limitations}
 As described in \ref{ch:approach} we limit our model to only consider node failures. Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
 
@@ -761,7 +766,7 @@ The experiment ran for XXX minutes, and figure ~\ref{fig:exp_reliability_level} 
 \section{Optimal number of replicas}
 Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in table ~\ref{table:exp_nodes_means}, and all had a standard deviation of 4. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 20. 
 
-After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
 The test was considered successful if over time, the number of replicas used decreased, as the more reliable nodes were chosen, and the average reliability for the duration of the test exceeded 0.999.
 
@@ -772,8 +777,10 @@ it was assumed with mean of 30 and a standard deviation of 4. the 6 runtimes all
 The experiment ran for XXX minutes, and figure ~\ref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. Figure ~\ref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
 
 \section{?}
-
-Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
+%DELETE?
+Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. 
+%SAVE?
+From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
 
 \chapter{Discussion} \label{ch:discussion}
 %TODO
