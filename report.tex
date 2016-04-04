@@ -76,8 +76,7 @@ Reliability can be increased by replicating application tasks, where all replica
 
 One drawbacks of replicating a task n times, is that the resources needed increases. With $n$ replicas, all performing the same computation on the same input, one need $n$ times as much resources, hence a lot of computational resources is thus wasted. Dynamic analysis of the system and an adaptive scheduling technique could help in determining on which resources one should assign the tasks to for optimal resource usage and load balancing. 
 
-Throughout the whole master thesis work extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
-
+Throughout this master thesis, extensive literature studies has been made, first in order to find out what has already been done in the area and later in order to get valuable help in developing a reliability model.
 
 \section{Related work} \label{sec:related_work}
 The interest in reliability in distributed systems has gain increased knowledge \cite{replicationManagement}. Due to the uncertain heterogeneous environment of cloud and grid systems, increasing reliability is a complex task [TODO]. %TODO add reference
@@ -480,6 +479,14 @@ Calvin
 Wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms.
 
 \chapter{Approach} \label{ch:approach}
+In the case of streaming processing, reliability is of particular interest in order not to lose any valueable data. In our model, we imagine the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider. The user of this service demands a certain level of reliability, and active replication is used to ensure this.
+
+Chosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algoirithms such as those presented in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} to determine whether or not the correct result was received.
+
+In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy sheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
+
+\section{Limitations} \label{sec:limitations}
+As described in \ref{ch:approach} we limit our model to only consider node failures. Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
 
 \section{System model}
 In this section, we describe the system and application models employed in this work.
@@ -698,15 +705,22 @@ Besides storing the connected nodes usages the resource manager stores informati
 Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
 
 \chapter{Evaluation} \label{ch:evaluation}
+In order to validate our model, we conducted a set of experiments. These goal of the experiments were to show that our model supports dynamic ensurance of reliability, and doing so in an optimal way by chosing the most reliable nodes.
 
 \section{Computational environment}
-In order to evaluate our model using Calvin, we set up an execution environment consisting of 7 servers, and started a runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted. 
+We mentioned in ~\ref{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
 
 \section{Application}
 The application used in the experiments is of simplest form, consisting only of one consuming  and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
 
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
+
+\section{Replication time}
+%TODO
+
+\section{Node lost discovery time}
+%TODO
 
 \section{Reliability level}
 In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
@@ -737,26 +751,16 @@ The experiment ran for XXX minutes, and figure ~\ref{fig:exp_opt_replicas_reliab
 
 Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
 
-\section{Performance metrics}
+\chapter{Discussion} \label{ch:discussion}
 %TODO
-
 \iffalse
-COPIED:
-performance metrics: The performance of fault tolerance techniques is measured by standards metrics turnaround time, throughput, fail tendency and grid load. The parameters are defined as:
-Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
+Större drag, vad kan vi få ut av alla experimenten?
+Hur mycket kan vi lite på resulaten?
+Är det worst-case/best-case?
+Kommer det bara bli bättre/snabbare med tiden?
+Generalla slutsater
+Vi kan ej generalisera våra resultat. typ.
 \fi
-
-\section{Experiments}
-
-\subsection{Node discovery time}
-
-
-\subsection{Constant failure rate}
-In this example, all eight nodes were given the same \emph{Mean-Time-Between-Failures}.
-
-The MTBF for each node was a normal distribution with mean 30 seconds and standard deviation set to 5. With a MTBF equal to 30, the reliability for each node in this experiement was %TODO.
-
-Furthermore, the desired reliability in this experiement was set to 0.999\%.
 
 \chapter{Limitations} \label{ch:limitations}
 %TODO
