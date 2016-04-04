@@ -734,8 +734,12 @@ The application used in the experiments is of simplest form, consisting only of 
 As mentioned in \ref{sec:time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time}
+Because of Calvin's use of DHT with automatic node discovery, nodes automatically detect when other nodes fail, by the use of heartbeats, explained in ~\ref{sec:monitoring}.
 
-%TODO
+In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
+
+\subsubsection{Result}
+The average of the 50 measured times was $32.24 ms$.
 
 \subsection{Measurement of replication time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corrresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the in- and output queue of values. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate the actor.
