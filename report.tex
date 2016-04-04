@@ -726,16 +726,16 @@ As mentioned in \ref{sec:time_t}, the time $t$ is the time it takes from that a 
 %TODO
 
 \subsection{Measurement of replication time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corrresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the in- and output queue of values. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate the actor.
 
 Each experiment is conducted using two servers, connected with a $1000$ Mb/s link with a latency of less than $0.2$ ms. A runtime was started on both servers, and an actor started. The actor was then replicated 10 times and the time each replication took was measured.
 
 \subsubsection{Result}
-Figure ~\ref{fig:replication_time} shows how the replication time vary depending on the state size.
+Figure ~\ref{fig:replication_time} shows how the replication time vary depending on the state size. The replication time is clearly linear in relation to the size of the state.
 
 \begin{figure}[!hbt]
 \centering
-%\includegraphics[scale=2.5]{images/results/replication_time.pdf} 
+\includegraphics[scale=1.0]{images/results/replication_time.pdf} 
 \caption{The average replication time as a function of state size.}\label{fig:replication_time}
 \end{figure}
 
