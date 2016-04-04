@@ -467,6 +467,17 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 %COPIED
 %Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
 
+\section{Virtualization and containers}
+%TODO
+Virtualization for cloud - What makes virtualization so important for the cloud is that it decouples the software from the hardware. [dummies.com] 
+
+Compare with container - With virt. a machine running three virt. systems would have a hypervisor and three seperate operation systems running on to of it. Isolated from each other. With containers there's only one operating system and the three containers shares the systems kernel. [http://www.cio.com/article/2924995/enterprise-software/what-are-containers-and-why-do-you-need-them.html]
+
+Docker (Most popular container)
+Docker containers wrap up a piece of software in a complete filesystem that contains everything it needs to run:  code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
+
+Calvin
+Wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms.
 
 \chapter{Approach} \label{ch:approach}
 
@@ -983,7 +994,10 @@ Self-Adapting Reliability in Distributed Software Systems
 Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies
 
 \bibitem{calvin}
-Calvin - Merging Cloud and IoT
+	Per Persson, Ola Angelsmark,
+	\emph{Calvin - Merging Cloud and IoT},
+	Procedia Computer Science, Volume 52, p. 210–217,
+	2015
 
 \bibitem{taskAllocationSwarm}
 Task allocation for maximizing reliability of a distributed system using hybrid particle swarm optimization
