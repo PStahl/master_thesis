@@ -266,7 +266,7 @@ Finally, for long running applications, where a replication scheme used, the rel
 The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
 \end{definition}
 
-\subsection{Reliability Model}
+\subsection{Modelling reliability}
 In order to determine the reliability of a system, one need to take all factors affecting the reliability into account \cite{surveyReliabilityDistr}. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. 
 
 For distributed applications, the probability of failure increases since it is dependent on more components \cite{relModelDistSimSystem}. Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components \cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects \cite{effTaskReplMobGrid}.
