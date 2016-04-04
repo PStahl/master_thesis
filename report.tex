@@ -468,6 +468,11 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 
 
 \chapter{Approach} \label{ch:approach}
+In the case of streaming processing, reliability is of particular interest in order not to lose any valueable data. In our model, we imagine the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider. The user of this service demands a certain level of reliability, and active replication is used to ensure this.
+
+Chosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algoirithms such as those presented in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} to determine whether or not the correct result was received.
+
+In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy sheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
 \section{System model}
 In this section, we describe the system and application models employed in this work.
@@ -689,7 +694,7 @@ Due to its continuously communication with other nodes it fits great as a monito
 In order to validate our model, we conducted a set of experiments. These goal of the experiments were to show that our model supports dynamic ensurance of reliability, and doing so in an optimal way by chosing the most reliable nodes.
 
 \section{Computational environment}
-We mentioned in~\sec{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
+We mentioned in ~\ref{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
 
 \section{Application}
 The application used in the experiments is of simplest form, consisting only of one consuming  and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
