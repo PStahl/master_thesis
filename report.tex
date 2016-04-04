@@ -696,6 +696,12 @@ The application used in the experiments is of simplest form, consisting only of 
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
 
+\section{Replication time}
+%TODO
+
+\section{Node lost discovery time}
+%TODO
+
 \section{Reliability level}
 In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
 
@@ -725,26 +731,6 @@ The experiment ran for XXX minutes, and figure ~\ref{fig:exp_opt_replicas_reliab
 
 Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
 
-\section{Performance metrics}
-%TODO
-
-\iffalse
-COPIED:
-performance metrics: The performance of fault tolerance techniques is measured by standards metrics turnaround time, throughput, fail tendency and grid load. The parameters are defined as:
-Turnaround time, Throughput, Fail tendency, Grid load“ \cite{faultToleranceGrid}. 
-\fi
-
-\section{Experiments}
-
-\subsection{Node discovery time}
-
-
-\subsection{Constant failure rate}
-In this example, all eight nodes were given the same \emph{Mean-Time-Between-Failures}.
-
-The MTBF for each node was a normal distribution with mean 30 seconds and standard deviation set to 5. With a MTBF equal to 30, the reliability for each node in this experiement was %TODO.
-
-Furthermore, the desired reliability in this experiement was set to 0.999\%.
 
 \chapter{Limitations} \label{ch:limitations}
 %TODO
