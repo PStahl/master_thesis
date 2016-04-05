@@ -504,13 +504,15 @@ The methodology for developing our model is literature study. Apart from this we
 \section{Limitations} \label{sec:limitations}
 As described in \ref{ch:approach} we limit our model to only consider node failures. Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
 
+By doing these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in report \ref{ch:discussion}.
+
 \section{System model}
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
 In this paper we assume that all resources are within the same cluster, with low latency connections between them. The nodes consist of homogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to that the hardware components are homogeneous, approximately the same behaviour in terms of failure, we will simulate that the behaviour is different in order to get more interesting results.
 
-Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In Appendix \cite{appendix:___TODO___} a system of one replicated actor is shown before and after a node failure.
+Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In Appendix \ref{appendix:A} a system of one replicated actor is shown before and after a node failure.
 
 \begin{figure}[!hbt]
 \centering
@@ -1138,7 +1140,7 @@ Scheduling Optimization in Cloud Computing
 \end{thebibliography}
 
 \begin{appendices}
-\chapter{A}
+\chapter{A} \label{appendix:A}
 In this appendix a system consisting of one actor is shown before and after a node fails. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name.
 
 \begin{figure}[!hbt]
