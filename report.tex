@@ -620,6 +620,7 @@ However, when a system first is set up and started, no knowledge about the failu
 
 \section{Reliability model} \label{sec:reliability_model}
 %TODO Maybe change section name
+Here we present our main contribution, the self-adapting reliability model. But first we state some definitions of reliability.
 
 \subsection{Definitions}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
@@ -774,7 +775,7 @@ If the current reliability is not achieved more replicas is created and if the r
 When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, dispite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
+In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment}
 We mentioned in ~\ref{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
@@ -789,6 +790,7 @@ The application used in the experiments is of simplest form, consisting only of 
 As mentioned in \ref{sec:time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time}
+% Wrong? No heartbeat
 Because of Calvin's use of DHT with automatic node discovery, nodes automatically detect when other nodes fail, by the use of heartbeats, explained in ~\ref{sec:monitoring}.
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
@@ -852,14 +854,9 @@ Generalla slutsater
 Vi kan ej generalisera våra resultat. typ.
 \fi
 
-%TODO PREVIOUSLY chapter "Limitations"
-Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being available for another.
+When using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node, $A$ may become unavailable for one node $B$ while being available for another $C$. Assume that we have one replica on $A$ and one on $B$. Both node $A$ and $B$ will assume that the other has failed and tell the node with highest id to replicate its actors. If $C$ has the highest id of all three then nothing will happen since $C$ is aware of the replicas on both $A$ and $B$. But if at least one of $A$ and $B$ has higher id than $C$ it will send the replication request to itself and since it's not aware of that there is a running replica on the other node it will replicate the actor to $C$. Thereafter we have an unnecessary high reliability and, from a system perspective, there is a unnecessary high impact on the network load.
 
-%MOVE?
-In case of link failure two nodes might get unavailable of each other. Each node will assume that the other has failed and try to restart it while replicating new replicas until required reliability is achieved. Therefore, from a system perspective, there is a unnecessary high reliability which result in an unnecessary high impact on the network load.
-%Since our system in a dynamic way keeps track of the total reliability during runtime and kills unnecessary replicas this type of link failure isn't a problem? (TODO)
-
-Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
+Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use consensus techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 
 Our primary objective is to ensure a certain level of reliability. By using active replication, we require a lot more resources, which puts an extra burden on the system. In addition, the extra load on the system may affect the execution time, thus decreasing task performance.
 
