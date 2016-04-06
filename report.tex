@@ -620,6 +620,8 @@ However, when a system first is set up and started, no knowledge about the failu
 
 \section{Reliability model} \label{sec:reliability_model}
 %TODO Maybe change section name
+
+\subsection{Definitions}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
@@ -736,7 +738,7 @@ For implementing our model, we use an actor based application environment called
 Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
 
 \subsubsection{Actor model}
-An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
+An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their outports to other actors inports. %TODO
 
 \subsubsection{Runtimes}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors. Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
@@ -756,13 +758,17 @@ Besides storing the connected nodes usages the resource manager stores informati
 
 Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed.
 
-\subsubsection{Monitor} % Change name? Not to confuse with reliability monitor (i.e. the monitoring of each applications reliability)
-With a monitoring system node failures can get detected quickly, if a node stops answering at heartbeats we can assume if has failed.
+\subsubsection{Node monitor} %Or "Heartbeat"
+With a monitoring system, such as heartbeat node failures can get detected quickly, if a node stops answering at heartbeats we can assume if has failed.
 
 As mentioned above the resource manager fits great as a monitoring system but the packages which are sent between the resource managers are sent using TCP. In order not to assume a node has failed due to that a TCP-package got lost we wanted to have a monitoring system using UDP. Therefore we developed our own heartbeat system. The heartbeat system consist of an actor which is deployed at runtime startup. It sends heartbeats to all connected nodes and if it manages to send two heartbeats to a node without receiving a reply it assumes that node has failed. 
 %TODO make sure the number are correct (two heartbeats = node failure)
 
 Another bonus feature with our own heartbeat system is that we can send heartbeats more often than the resource managers send their data, due to that a heartbeat has a smaller amount of data than a package from the resource manager.
+
+\subsubsection{Application monitor}
+We have also added an application monitor on each node that once every five seconds checks the current reliability for all actors in the applications started on the node. % Mention any time at all? Five seconds??
+If the current reliability is not achieved more replicas is created and if the reliability is unnecessary high replicas are deleted.
 
 \subsubsection{Failed node mechanism}
 When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
