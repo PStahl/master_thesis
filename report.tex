@@ -392,6 +392,8 @@ In progressive redundancy on the other hand the number of replicas needed is min
 
 Furthermore \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
+%TODO ref to \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} 
+
 
 \section{Load balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
@@ -488,25 +490,51 @@ Calvin
 Also wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms. At developing phase, no need of considering on which operating system the application should run.
 
 \chapter{Approach} \label{ch:approach}
-\section{?} %I think a section would be good here
+\section{Methodology}
+%TODO
+The methodology for developing our model is literature study. Apart from this we have also had meetings and discussions with both our supervisor but also colleges at MAPCI. Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
+
+\section{Överblick över hela modellen} %I think a section would be good here, change name of section
 In the case of streaming processing, reliability is of particular interest in order not to lose any valueable data. In our model, we imagine the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider. The user of this service demands a certain level of reliability, and active replication is used to ensure this.
 
-Choosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} to determine whether or not the correct result was received.
-%TODO (or ref to \ref{subsub:consensus})
+Choosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \ref{subsub:consensus} to determine whether or not the correct result was received.
 
 In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
 For testing our model we have implemented it in Ericsson's actor-based system Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see \cite{ch:???}. 
 
-\subsection{Methodology}
-The methodology for developing our model is literature study. Apart from this we have also had meetings and discussions with both our supervisor but also colleges at MAPCI. Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
+The rest of this chapter is composed as follows, in \ref{sec:system_model} we describe our System Model more in detail, e.g. in which computational environment we test our model, how we model the faults... etc. In \ref{sec:reliability_model} we present our reliability model, which is our main contribution with this paper. We state diverse definitions, a scheduling algorithm and a self-adapting model. Last in this chapter \ref{sec:implementation} we briefly describe how we have implemented our model.
 
 \section{Limitations} \label{sec:limitations}
-As described in \ref{ch:approach} we limit our model to only consider node failures. Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
+As described in \ref{ch:XXXX} we limit our model to only consider node failures. E.g. we assume that links between nodes can not fail. However, the reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account for in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
+
+Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
 
 By doing these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in report \ref{ch:discussion}.
 
-\section{System model}
+%\subsection{Reliability model}
+%\label{sec:limitations_reliability_model}
+\iffalse
+COPIED:
+
+Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
+
+the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
+
+We do not take into account parameters such as X and Y [TODO].
+
+Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
+
+A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique \cite{surveyReliabilityDistr}
+
+Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is:
+0 mi Y
+Pfi =Pfi· Pfik. (2) k=1
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
+\fi
+
+
+\section{System model} \label{sec:system_model}
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
@@ -588,7 +616,7 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 
 However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in ~\ref{sec:time_t}.
 
-\subsection{Reliability model}
+\section{Reliability model} \label{sec:reliability_model}
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
@@ -803,10 +831,7 @@ Generalla slutsater
 Vi kan ej generalisera våra resultat. typ.
 \fi
 
-\chapter{Limitations} \label{ch:limitations}
-%TODO
-Our model is obviously limited in that we do not account for link failures. However, the reliability model could easily be extended to include link failure probabilities, which then need to be taken into account in the scheduling algorithm as well.
-
+%TODO PREVIOUSLY chapter "Limitations"
 Furthermore, using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node may become unavailable for one node while being available for another.
 
 %MOVE?
@@ -819,27 +844,6 @@ Our primary objective is to ensure a certain level of reliability. By using acti
 
 Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
 
-\subsection{Reliability model}
-\label{sec:limitations_reliability_model}
-\iffalse
-COPIED:
-
-Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
-
-the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
-
-We do not take into account parameters such as X and Y [TODO].
-
-Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
-
-A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique \cite{surveyReliabilityDistr}
-
-Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is:
-0 mi Y
-Pfi =Pfi· Pfik. (2) k=1
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
-\fi
-
 \chapter{Future Work} \label{ch:future_work}
 %TODO
 Replication impose extra burden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased. (\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
@@ -847,6 +851,10 @@ Replication impose extra burden on the system as additional resources are needed
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
 \\\\
 Implement consensus in Calvin system
+\\\\
+Accounting for link failures
+\\\\
+Test on highly unreliable systems during extreme load
 
 \subsection{Extended model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices. \cite{surveyReliabilityDistr}
