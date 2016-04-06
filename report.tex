@@ -490,20 +490,22 @@ Calvin
 Also wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms. At developing phase, no need of considering on which operating system the application should run.
 
 \chapter{Approach} \label{ch:approach}
-\section{Methodology}
+\section{Methodology} \label{sec:methodology}
 %TODO
-The methodology for developing our model is literature study. Apart from this we have also had meetings and discussions with both our supervisor but also colleges at MAPCI. Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
+The methodology for developing our model is mainly literature study. Apart from this we have also have had meetings and discussions with both our supervisor but also with colleges at MAPCI.
 
-\section{Överblick över hela modellen} %I think a section would be good here, change name of section
+For testing our model we have implemented it in Ericsson's actor-based system Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see \cite{ch:???}. 
+
+Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
+
+\section{Överblick över hela modellen} \label{sec:??} %I think a section would be good here, change name of section
 In the case of streaming processing, reliability is of particular interest in order not to lose any valueable data. In our model, we imagine the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider. The user of this service demands a certain level of reliability, and active replication is used to ensure this.
 
 Choosing streaming services with deterministic processing\footnote{A determistic function always produces the same output given a certain input.}, allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \ref{subsub:consensus} to determine whether or not the correct result was received.
 
 In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
-For testing our model we have implemented it in Ericsson's actor-based system Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see \cite{ch:???}. 
-
-The rest of this chapter is composed as follows, in \ref{sec:system_model} we describe our System Model more in detail, e.g. in which computational environment we test our model, how we model the faults... etc. In \ref{sec:reliability_model} we present our reliability model, which is our main contribution with this paper. We state diverse definitions, a scheduling algorithm and a self-adapting model. Last in this chapter \ref{sec:implementation} we briefly describe how we have implemented our model.
+The rest of this chapter is composed as follows, in \ref{sec:limitations} we go through what limitations we have done. \ref{sec:system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In \ref{sec:reliability_model} we present our reliability model, which is our main contribution with this paper. We state start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, \ref{sec:implementation} we briefly present our second contribution, the implementation of our model in the Calvin framework.
 
 \section{Limitations} \label{sec:limitations}
 As described in \ref{ch:XXXX} we limit our model to only consider node failures. E.g. we assume that links between nodes can not fail. However, the reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account for in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
@@ -617,6 +619,7 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in ~\ref{sec:time_t}.
 
 \section{Reliability model} \label{sec:reliability_model}
+%TODO Maybe change section name
 Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
@@ -697,12 +700,12 @@ A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid
 \EndWhile
 \end{algorithmic}
 
-\subsection{Self-adapting model}
+\subsection{Self-adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour \cite{imprRelAdaptRL}.
 
 To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
 
-When monitoring the system, onc must monitor all parameters affecting the reliability. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica.
+When monitoring the system, one must monitor all parameters affecting the reliability. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica.
 
 The replication time is stored per actor type. Since the state of different types of actors vary, and thereby the size of the states, the time to send the state from one node to another will also vary. 
 
