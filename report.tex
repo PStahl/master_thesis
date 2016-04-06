@@ -505,10 +505,10 @@ Choosing streaming services with deterministic processing\footnote{A determistic
 
 In contrast to the various scheduling algorithms in \cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}  \cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. Furthermore, unlike \cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure the desired reliability is met.
 
-The rest of this chapter is composed as follows, in \ref{sec:limitations} we go through what limitations we have done. \ref{sec:system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In \ref{sec:reliability_model} we present our reliability model, which is our main contribution with this paper. We state start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, \ref{sec:implementation} we briefly present our second contribution, the implementation of our model in the Calvin framework.
+The rest of this chapter is composed as follows, in \ref{sec:limitations} we go through what limitations we have done. \ref{sec:system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In \ref{sec:reliability_model} we present our reliability model, which is our main contribution with this paper. We state start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, \ref{sec:implementation} we briefly describe how Calvin works and present our second contribution, the implementation of our model.
 
 \section{Limitations} \label{sec:limitations}
-As described in \ref{ch:XXXX} we limit our model to only consider node failures. E.g. we assume that links between nodes can not fail. However, the reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account for in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
+As described in \ref{ch:XXXX} we limit our model to only consider node failures. E.g. we assume that links between nodes can not fail. However, the reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
 
 Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. 
 
@@ -733,7 +733,7 @@ For implementing our model, we use an actor based application environment called
 \subsection{Calvin} Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Storage} \label{ch:calvin_storage}
-Calvin uses the Kademlia implementation of a DHT. This enables any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
+Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
 
 \subsubsection{Actor model}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their outports to other actors inports.  %TODO
@@ -741,19 +741,31 @@ An application in Calvin consist of a set of connected \emph{actors}. An actor u
 \subsubsection{Runtimes}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors. Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
 
-\subsubsection{Monitoring}
-The runtimes in the Calvin framework use a heart-beat technique to detect runtime connectivity.
+\subsection{Our contributions} % ish?
+Here follows a small description of the most important parts of our implementation.
 
 \subsubsection{Actor replication}
 We extended the Calvin framework to allow a fanout/fanin connectivity model where actors can have multiple producers (fanin) and multiple consumers (fanout). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
+%Maybe mention that due to no consensus actors only use the first received value
 
-\subsection{Node Resource Reporter}
+\subsubsection{Node Resource Reporter}
 We have added an actor which automatically deploys on a runtime at runtime started-up. It reports the nodes CPU usage once every second to the runtime which distributed it to all connected nodes. Each node has a resource manager which stores all nodes usages.
 
-\subsection{Resource Manager}
+\subsubsection{Resource Manager}
 Besides storing the connected nodes usages the resource manager stores information about node failures. If a node fails a timestamp and the failed node's usage is stored, among with the time it took to replicate a new replica for each of the actors which were running on the failed node.
 
-Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed. But since there already is a built-in heartbeat system we will use that to detect node failures.
+Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed.
+
+\subsubsection{Monitor} % Change name? Not to confuse with reliability monitor (i.e. the monitoring of each applications reliability)
+With a monitoring system node failures can get detected quickly, if a node stops answering at heartbeats we can assume if has failed.
+
+As mentioned above the resource manager fits great as a monitoring system but the packages which are sent between the resource managers are sent using TCP. In order not to assume a node has failed due to that a TCP-package got lost we wanted to have a monitoring system using UDP. Therefore we developed our own heartbeat system. The heartbeat system consist of an actor which is deployed at runtime startup. It sends heartbeats to all connected nodes and if it manages to send two heartbeats to a node without receiving a reply it assumes that node has failed. 
+%TODO make sure the number are correct (two heartbeats = node failure)
+
+Another bonus feature with our own heartbeat system is that we can send heartbeats more often than the resource managers send their data, due to that a heartbeat has a smaller amount of data than a package from the resource manager.
+
+\subsubsection{Failed node mechanism}
+When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
 
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, dispite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
