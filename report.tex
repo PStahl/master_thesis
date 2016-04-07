@@ -116,7 +116,7 @@ The framework is not limited to a specific type of distributed environment, and 
 
 Our model is implemented by extending the actor-based application environment \emph{Calvin} \ref{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated by... %TODO 
 
-The report is structured as follows: in Section \ref{ch:background_theory} all necessary background theory is provided, in Section \ref{ch:approach} we present our model and contribution in more detail, Section \ref{ch:evaluation} aims at evaluating our solution while Section \ref{ch:limitations} and \ref{ch:future_work} presents limitations in our model and future work. Section \ref{ch:conclusions} concludes the report. 
+The report is structured as follows: in Section \ref{ch:background_theory} all necessary background theory is provided, in Section \ref{ch:design} we present our model and contribution in more detail, Section \ref{ch:evaluation} aims at evaluating our solution while Section \ref{ch:limitations} and \ref{ch:future_work} presents limitations in our model and future work. Section \ref{ch:conclusions} concludes the report. 
 
 \section{Goal}
 The goal of this thesis is to devise a method for dynamically ensuring a certain level of reliability for distributed applications or services. Reliability will be achieved through replication of tasks.
@@ -473,7 +473,7 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 
 \section{Virtualization and containers}
 %TODO
-Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The wins of virtualization is partly savings in hardware cost and space and partly in that the system becomes more dynamic. E.g. it is possible to virtualize a hundred servers on fifty physical servers since they usually have capacity left. Another con with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical server to another.
+Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The wins of virtualization is partly savings in hardware cost and space and partly in that the system becomes more dynamic. E.g. it is possible to virtualize a hundred servers on fifty physical servers since they usually have capacity left. Another advantage with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical server to another.
 
 %COPIED
 Virtualization for cloud
@@ -541,7 +541,9 @@ The above corresponds to the probability of the event “all the replicas and th
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment}
-In this paper we assume that all resources are within the same cluster, with low latency connections between them. The nodes consist of homogeneous hardware and interconnected nodes as shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to that the hardware components are homogeneous, approximately the same behaviour in terms of failure, we will simulate that the behaviour is different in order to get more interesting results.
+In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogenous hardware with high bandwidth low latency reduntant links between them.
+
+A small example of four interconnected nodes  is shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogenous hardware components, the cluster used the experiments consists of homogenous hardware components, and varying behaviour in terms of failure is simulated in the experiments. This if further described in chapter ~\ref{ch:evaluation}.
 
 Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In Appendix \ref{appendix:A} a system of one replicated actor is shown before and after a node failure.
 
@@ -785,7 +787,7 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment}
-We mentioned in ~\ref{ch:approach}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
+We mentioned in ~\ref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
 
 \section{Application}
 The application used in the experiments is of simplest form, consisting only of one consuming  and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
