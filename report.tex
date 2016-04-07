@@ -7,6 +7,7 @@
 \usepackage{amsthm}
 %\usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{algorithmicx}
 \usepackage{algpseudocode}
 \usepackage[titletoc, header, page]{appendix}
 
@@ -17,6 +18,8 @@
 \setcounter{tocdepth}{2}
 
 %\geometry{showframe}
+
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
 
 \author{
 	Philip Ståhl \\
@@ -709,16 +712,37 @@ Replication time = “node dead discovery time” + “time to retrieve data fro
 \subsection{Scheduling algorithm}
 A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
 
-\begin{algorithmic}
+\begin{algorithmic}\label{algo:scheduling}
 \State $n\gets 0$
 \State $nodes\gets available\ nodes$\Comment{sorted by reliability, highest first}
 \While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
 	\State $node\gets nodes.pop$\Comment{take the node with highest reliability}
 	\State{$replica\gets new\ replica$}
+	\State
 	\Call{place replica on node}{$replica$, $node$}
 	\State $n\gets n + 1$
 \EndWhile
 \end{algorithmic}
+
+\subsection{Handling node failure}
+%TODO not sure where to put this section
+In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in ~\ref{algo:scheduling}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
+
+To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfil the required reliability. If the sending nodes does for receive a reply for some time, they assume the selected node died, and a new selection process will begin.
+
+The algorithm is shown below:
+
+\begin{algorithmic}\label{algo:node_failure}
+\State $nodes\gets live\ nodes$\Comment{Alive nodes sorted by ID}
+\Do
+	\State $node\gets nodes.pop$\Comment{take the node with highest id}
+	\State
+	\Call{lost node request}{$node$}
+	\State {wait for reply}
+	\State $reply\gets reply\ from\ node$
+\doWhile {$reply\ is\ not\ successful\ OR\ request\ timeout$}
+\end{algorithmic}
+
 
 \subsection{Self-adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour \cite{imprRelAdaptRL}.
@@ -790,6 +814,8 @@ If the current reliability is not achieved more replicas is created and if the r
 
 \subsubsection{Failed node mechanism}
 When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
+
+
 
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
