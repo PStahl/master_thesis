@@ -97,7 +97,7 @@ The solution proposed in \cite{adaptiveAgentReplication} involves distributed mo
 
 \cite{adaptiveCheckPointAndRep} proposes an algorithm based on replication which dynamically varies the number of replicas depending on system load. However, the algorithm reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load \cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}, one should increase the number of replicas to keep the desired level of reliability.
 
-A fault-tolerant scheduling technique incorporates a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
+A fault-tolerant scheduling technique incorporating a replication scheme is presented in \cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
 The techniques used in \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
 %TODO  (above sentence) However?
@@ -105,7 +105,7 @@ An adaptive approach, which adapts to changes in the execution environment is pr
 
 
 \section{Our contributions}
-To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed one.
+To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed ones.
 
 We propose a framework which ensures an user determined level of reliability for long running applications by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Furthermore, the system is continuously monitored in order to adapt the number of replicas as the state of the system changes.
 
@@ -123,7 +123,7 @@ The goal of this thesis is to devise a method for dynamically ensuring a certain
 
 First, a reliability model will be designed, describing the reliability for an application running in a distributed environment.
 
-Secondly, a framework will be designed which will automatically detect node failures and based on the reliability model spawns enough replicas to reach above the desired reliability level.
+Secondly, a framework will be designed which will automatically detect node failures and based on the reliability model spawns enough replicas to reach the desired reliability level above.
 
 Lastly, the system will by periodically monitored in order to adapt the reliability model and the replicas needed as the properties of the system varies over time.
 
@@ -242,6 +242,7 @@ For reliability modelling for the grid, it is common to also assume a fully reli
 \section{Reliability} \label{sec:theory_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully \cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar definition of reliability, usually used for applications in distributed environments, is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time \cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result \cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. This definition is usually used together with the Byzantine fault model. 
 
+%Onödig definition??
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
 \item Perform well in specified time t without undergoing halting state
