@@ -564,6 +564,11 @@ The ability to detect node failures is crucial for knowing when we need to creat
 
 %COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
+\subsection{Storage of data}
+All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available. If stored on a single node, e.g. the executing node, that information is lost in the case of failure. Also, if a remote database is used, we introduce a single-point-of-failrue. Instead, to achieve a redundant storage, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. The DHT used is further explained in ~\ref{sec:calvin_storage}.
+
+%Skip reference to Calvin storage? It only says 'not explained in the thesis'
+
 \subsection{Application model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic environment where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results \cite{relGridSystems}.
 
