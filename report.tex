@@ -677,7 +677,7 @@ The time $t$ used in \ref{eq:desired_rel} consists of the time it takes from tha
 where $Tf$ is the time to detect that a node has failed, and $Tr$ is the time it takes to spawn a new replica.
 
 \subsubsection{Node failure detection time} \label{sec:node_failure_detection_time}
-The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are sent to all nodes in the system every 200ms. A node is considered dead when no heartbeat is received for 500 ms, which thus is the time to detect a node failure.
+The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are sent to all nodes in the system every 200 ms. A node is considered dead when no heartbeat is received for 500 ms, which thus is the time to detect a node failure.
 
 \subsubsection{Replication time} \label{sec:replication_time}
 The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate request to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, we must also find a node which has no replica already and include this in the request. The receiving node will then send a request to that node including the current state of the task to replicate. %TODO show with a graph.
