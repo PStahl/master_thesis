@@ -743,6 +743,13 @@ The algorithm is shown below:
 \doWhile {$reply\ is\ not\ successful\ OR\ request\ timeout$}
 \end{algorithmic}
 
+A small example is presented in figure~\ref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, 1 to 4, and the other nodes have just detected the failure of node 4. Nodes 1 to 4 will select the node with the highest ID, in this case node 3, which will be responsible for determining which actions to take.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/handling_node_failure.pdf}
+\caption{4 interconnected nodes after nodes 1 to 3 have detected the failure of node 4.}\label{fig:handling_node_failure}
+\end{figure}
 
 \subsection{Self-adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour \cite{imprRelAdaptRL}.
