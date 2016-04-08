@@ -827,11 +827,15 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
-\section{Computational environment}
-We mentioned in ~\ref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 7 servers, and started a Calvin runtime on each server. One of these runtimes was stable, while each of the other runtimes were continously killed and restarted, simulating a node failure, after which it was restarted.
+\section{Computational environment} \label{eval:comp_env}
+We mentioned in ~\ref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogeneous hardware components. A calvin runtime was started on each of these servers. One of these runtimes was stable, while each of the other runtimes were periodically killed and restarted, simulating node failures. 
 
-\section{Application}
-The application used in the experiments is of simplest form, consisting only of one consuming  and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
+The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in ~\ref{eval:application}.
+
+\section{Application} \label{eval:application}
+The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
+
+The computational environment and the application is shown in figure~\ref{fig:evaluation}.
 
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
