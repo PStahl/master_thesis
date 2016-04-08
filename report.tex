@@ -724,7 +724,9 @@ A simple greedy scheduling, similar to one presented in \cite{effTaskReplMobGrid
 \EndWhile
 \end{algorithmic}
 
-\subsection{Handling node failure}
+This algorithm is run by a master node, selected when failure is detected. The selection process is further described in section~\ref{sec:handling_failure}.
+
+\subsection{Handling node failure} \label{sec:handling_failure}
 %TODO not sure where to put this section
 In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in ~\ref{algo:scheduling}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
 
