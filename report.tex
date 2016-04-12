@@ -144,7 +144,9 @@ Lastly, the system will by periodically monitored in order to adapt the reliabil
 The model will be implemented and tested using the IoT application framework \emph{Calvin}.
 
 \chapter{Background} \label{ch:background}
+In this chapter we provide all the necessary background theory to fully understand the rest of the report.
 \section{Computational Environment} \label{sec:background_comp_env}
+The computational environment used in this thesis is distributed computing, i.e. several resources working together towards a common goal.
 \subsection{Types of distributed computing} \label{subsec:background_types_of_distr_comp}
 Distributed computing systems (DCS) are composed of a number of components or subsystems interconnected via an arbitrary communication network ~\cite{relModelDistSimSystem} ~\cite{efficientRelAnalysisAlgo}. There are a number of different types of distributed environments, e.g. grid, clusters, cloud and HDCS.
 
@@ -174,7 +176,7 @@ A cloud has been described as the next generation of grids and clusters. While i
 
 %COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
 
-\subsection{Dynamic versus static environments} \label{background_dyn_stat_env}
+\subsection{Dynamic versus static environments} \label{subsec:background_dyn_stat_env}
 A distributed computing environment can be either static or dynamic.
 
 In a static environment only homogenous resources are installed ~\cite{compStudyLoadAndCloud}. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources.
@@ -183,6 +185,7 @@ In a dynamic environment heterogeneous resources are installed ~\cite{compStudyL
 
 
 \section{Faults in distributed environments} \label{sec:background_faults_distr_env}
+In a distributed environment a larger number of faults can occur due to the higher complexity. Therefore a fault model is usually employed, describing what kind of faults which is considered.
 \subsection{Types of Faults} \label{subsec:background_types_of_faults}
 %TODO Perhaps research more which definition is the most usual. Per Runesson, head of Computer Science at LTH uses a different definition
 A fault is usually used to describe a defect at the lowest level of abstraction ~\cite{faultTolerantFundamentals}. A fault may cause an error which in turn may lead to a failure, which is when a system has not behaved according to its specification.
@@ -207,31 +210,43 @@ In ~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 hi
 \subsection{Fault models} \label{subsec:background_fault_models}
 When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model ~\cite{faultTolerantFundamentals}.
 
-\subsubsection*{Byzantine Faults}
+\subsubsection{Byzantine Faults}
 The Byzantine fault model allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary ~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes ~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, therefore it is very difficult to analyse.
 
 % COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
 
-\subsubsection*{Fail-stop faults}
+\subsubsection{Fail-stop faults}
 The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes ~\cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs ~\cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
 %COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
-\subsubsection*{Fail-stutter faults}
+\subsubsection{Fail-stutter faults}
 Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node ~\cite{surveyFaultParallel}.
 % fail-stutter modellen är knappt använd...
 
-\subsubsection*{Crash-failure model}
+\subsubsection{Crash-failure model}
 %TODO Källa
 The crash failure model is quite alike the fail-stop model with the difference that the other nodes do not automatically detect that a node has failed ~\cite{faultTolerantFundamentals} ~\cite{adaptiveAgentReplication}.
 
 \subsection{Failure distribution} \label{subsec:background_failure_distribution}
-%TODO ev. källa för att reliability för sw är mer eller mindre strikt avtagande 
-%Failure rate for software on the other hand is often assumed to only drop over time since bugs are fixed and removed by time. If updates etc. are installed the failure rate might increase if new bugs was inserted, however software does not get worn out so an overall drop is expected.
+Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions are stated in \autoref{def:failure_assumptions} ~\cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} ~\cite{selfAdaptRel}:
+
+\begin{definition} \label{def:failure_assumptions}
+Common assumptions when modelling failures are:
+\begin{itemize}
+	\item Each component in the system has only two states: operational or failed
+	\item Failures of components are statistically independent
+	\item The network topology is cycle free
+	\item Components have a constant failure rate, i.e. the failure of a component follows a Poisson process
+	\item Fully reliable network
+\end{itemize}
+\end{definition}
+
+For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) ~\cite{relAndPerfGridServices} ~\cite{relGridServicePredConstraint}, which is an non-neglectable assumption since the RMS in this case in fact is a single point of failure.
 
 %TODO definera "failures", vilka brukar inkluderas?
-When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate ~\cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} ~\cite{optCheckpointInterval} ~\cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate ~\cite{algoMaxRelEndToEndConstraint}. 
+%When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate ~\cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} ~\cite{optCheckpointInterval} ~\cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate ~\cite{algoMaxRelEndToEndConstraint}. %we use Poisson and have a non-constant failure rate?
 
 Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system ~\cite{algoMinExTime}. The failure rate for a hardware component usually follows a bathtub shaped curve ~\cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the systems lifetime. After a certain time the failure rate drops and later increases again due to that the component gets worn out.
 
@@ -240,20 +255,6 @@ Statistically independent failures is also not very likely to reflect the real d
 Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system ~\cite{studyOfFailures} ~\cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night ~\cite{implicationsOfFailures} ~\cite{studyOfFailures}. Finally, components which have failed in the past are more likely to fail again ~\cite{implicationsOfFailures}.
 
 While a Poisson process is commonly used to describe failures, ~\cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models ~\cite{experimentalFailureAssessment}.
-
-\subsection{Failure assumptions} \label{subsec:background_failure_assump}
-% Should fit better with previous section? Here we mention some common assumptions, and in the section above we mention that some assumptions are maybe not that good...
-Models describing the nature of failures in distirbuted computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions include ~\cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} ~\cite{selfAdaptRel}:
-
-\begin{itemize}
-	\item Each component in the system has only two states: operational or failed
-	\item Failures of components are statistically independent
-	\item The network topology is cycle free
-	\item Components have a constant failure rate, i.e. the failure of a component follows a Poisson process
-	\item Fully reliable network
-\end{itemize}
-
-For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS) ~\cite{relAndPerfGridServices} ~\cite{relGridServicePredConstraint}, which is an non-neglectable assumption since the RMS in this case in fact is a single point of failure.
 
 \section{Reliability} \label{sec:background_reliability}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully ~\cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} ~\cite{perfRelNonMarkovian}. A similar definition of reliability, usually used for applications in distributed environments, is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time ~\cite{surveyReliabilityDistr} ~\cite{surveyRelPrediction} ~\cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result ~\cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} ~\cite{selfAdaptRel}. This definition is usually used together with the Byzantine fault model. 
@@ -279,13 +280,13 @@ For multi-task applications, where the tasks use more than one resource, reliabi
 The reliability of a multi-task process is the probability that the tasks being executed within a given time without experiencing any type of failure (internal or external) during the time of execution.
 \end{definition}
 
-Finally, for long running applications, where a replication scheme used, the reliability can be defined as \cite{effTaskReplMobGrid}
+Finally, for long running applications, where a replication scheme is used, the reliability can be defined as \cite{effTaskReplMobGrid}
 \begin{definition} \label{def:task_replica_reliability}
-The reliability of a process, with $n$ task replicas, is the probability at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
+The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
 \end{definition}
 
 \subsection{Modelling reliability} \label{subsec:background_modelling_rel}
-In order to determine the reliability of a system, one need to take all factors affecting the reliability into account ~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. ~\cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. 
+Reliability of a system highly depends on how the system is used ~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account ~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time ~\cite{cloudServiceRel} ~\cite{hierarchicalRelModeling}.
 
 For distributed applications, the probability of failure increases since it is dependent on more components ~\cite{relModelDistSimSystem}. Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components ~\cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects ~\cite{effTaskReplMobGrid}.
 
@@ -331,12 +332,10 @@ Reliability evaluation of the hypercubes has been addressed recently [7]-[9]. Na
 We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability \cite{decisionModelTaskAllocation}
 \fi
 
-\subsection{Factors affecting reliability} \label{subsec:background_factors}
-Reliability of a system highly depends on how the system is used ~\cite{surveyRelPrediction}. When modelling a system's reliability, one must take all factors into account in order to create a proper model. However, with the vast number of factors affecting a system's reliability, it is practically unfeasible. ~\cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time ~\cite{cloudServiceRel} ~\cite{hierarchicalRelModeling}.
-
 \section{Fault tolerance techniques} \label{sec:background_fault_tol_tech}
-Fault tolerance techniques are used to predict failures and take an appropriate action before failures actually occur
-~\cite{faultToleranceChallenges}. Considering the whole life-span of a software application, fault-tolerant techniques can be divided into four different categories ~\cite{surveyReliabilityDistr}:
+Fault tolerance techniques are used to either predict failures and take an appropriate action before they actually occur
+~\cite{faultToleranceChallenges} or to prepare the system that failures might occur and take an appropriate action first when they occur. Considering the whole life-span of a software application, fault-tolerant techniques can be divided into four different categories ~\cite{surveyReliabilityDistr}:
+
 \begin{enumerate}
 \item Fault prevention - elimination of errors before they happen, e.g. during development phase
 \item Fault removal - elimination of bugs or faults after repeated testing phases
@@ -344,18 +343,7 @@ Fault tolerance techniques are used to predict failures and take an appropriate 
 \item Fault forecasting - Predicting or estimating faults at architectural level during design phase or before actual deployment
 \end{enumerate}
 
-\iffalse
-\subsection{Fault life-cycle techniques} \label{subsec:background_fault_life_cycle}
-According to ~\cite{softRelRoadmap} the following four technical areas can be regarded as fault life-cycle techniques.
-\begin{itemize}
-\item Fault prevention - The initial mechanism for a reliable system, trying to avoid faults already in the development phase. A fault which isn't committed cost nothing to fix. 
-\item Fault removal - The next line of defence, trying to detect and eliminate faults by validation and validation. For instance by testing and inspection. 
-\item Fault tolerance - The last line of defence against faults which are undetected by fault removal. Can be obtained by catching faults as exceptions and/or by redundancy.
-\item Fault forecasting - Estimate the presence of faults during design phase or before actual deployment. 
-\end{itemize}
-\fi
-
-Limited to already developed application, fault tolerance techniques can be divided into reactive and proactive techniques ~\cite{faultToleranceChallenges}. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. They therefore consists of detecting fault and failures, and recovering from them to allow computations to continue ~\cite{relGridSystems}. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components. 
+Limited to already developed application, fault tolerance techniques can be divided into reactive and proactive techniques ~\cite{faultToleranceChallenges}. A reactive fault tolerant technique reacts when a failure occur and tries to reduce the effect of the failure. They therefore consists of detecting fault and failures, and recovering from them to allow computations to continue ~\cite{relGridSystems}. The proactive technique on the other hand tries to predict failures and proactively replace the erroneous components.
 
 Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback recovery} and \emph{replication} ~\cite{relGridSystems}.
 
