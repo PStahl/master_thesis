@@ -899,12 +899,6 @@ it was assumed with mean of 30 and a standard deviation of 4. the 6 runtimes all
 
 The experiment ran for XXX minutes, and \autoref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
 
-\section{?}
-%DELETE?
-Discuss the total average reliability level, does the current level undergo the required during a node failure? We can have a reliability high enough so we can afford losing the most reliable node, but what if we lose the second most reliable node before we replaces the most reliable? We can't assure that the reliability always is above the required level. In our model we have chosen to have a reliability high enough so the required reliability is held even if the most reliable node is lost. 
-%SAVE?
-From performance metrics we have found a typical replication time of XXX ms, which is almost negligible compared to MTBF, i.e. the risk of losing the second most reliable node before we have replicated a new replica.
-
 \chapter{Discussion} \label{ch:discussion}
 %TODO
 \iffalse
@@ -923,6 +917,9 @@ Our definition of reliability excludes the possibility of tasks calculating inco
 Our primary objective is to ensure a certain level of reliability. By using active replication, we require a lot more resources, which puts an extra burden on the system. In addition, the extra load on the system may affect the execution time, thus decreasing task performance.
 
 Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
+
+Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
+% Should we afford losing the most reliable node? According to definition rel = prob that we don't loose all OTHER nodes during a node failure. What if we dont have a node failure? Simulate one by not including the most reliable node in the calculations of rel.
 
 \chapter{Future Work} \label{ch:future_work}
 To the best of our knowledge our model is the first of it's kind, due to its fully dynamic behaviour. Therefore we had to limit our scope a lot and considering these limitations there is a lot of possible future work. Our model could be extended by considering more types of failures, e.g. link failure and soft failures (e.g. an actor dies but not the node or the actor produce an incorrect result). A consensus algorithm should be implemented in order to hamper the risk of using incorrect results. Link failures could, for instance be detected if the node responsible for replicating actors after a node failure awaits request from several nodes. If it only receives one node fail request among ten nodes its safe to assume that the node is still alive and the link to the requesting node has failed.
