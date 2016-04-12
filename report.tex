@@ -210,7 +210,7 @@ In ~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 hi
 \subsection{Fault models} \label{subsec:background_fault_models}
 When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model ~\cite{faultTolerantFundamentals}.
 
-\subsubsection{Byzantine Faults}
+\subsubsection{Byzantine Faults} \label{subsub:background_byzantine}
 The Byzantine fault model allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary ~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes ~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, therefore it is very difficult to analyse.
 
@@ -349,9 +349,9 @@ Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback r
 
 % Checkpointing, job migration, voting etc
 \subsection{Checkpoint/Restart} \label{subsec:background_checkpoint}
-Fault-tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of fault-tolerance ~\cite{surveyFaultParallel}.
+Fault tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of fault tolerance ~\cite{surveyFaultParallel}.
 
-Checkpointing is a fault-tolerance technique which periodically saves the state of a computation to a persistent storage ~\cite{relGridSystems} ~\cite{surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
+Checkpointing is a fault tolerance technique which periodically saves the state of a computation to a persistent storage ~\cite{relGridSystems} ~\cite{surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
 %TODO
 %The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
@@ -360,26 +360,23 @@ Checkpointing is a fault-tolerance technique which periodically saves the state 
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state ~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
-Job replication is a commonly used fault tolerant technique, and is based on the assumptions that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously ~\cite{faultToleranceGrid}.
+Job replication is a commonly used fault tolerance technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously ~\cite{faultToleranceGrid}.
 
 Using replication, several identification processes are scheduled on different resources and simultaneously perform the same computations ~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure ~\cite{faultToleranceGrid}.
 
 Replication also minimizes the risk of failures affecting the execution time of jobs, since it avoids recomputation typically necessary when using checkpoint/restart techniques ~\cite{designFaultTolerantSched}.
 
-There are a number of different strategies for replicating a task:
+There are three different strategies for replicating a task: \emph{Active}, \emph{Semi-active} and \emph{Passive}.
 \begin{itemize}
-\item Active
-\item Semi-active
-\item Passive
-\end{itemize}
 
-In active replication, one or several replicas are run on a other machine and receive an exact copy of the primary nodes input. From the input they perform the same calculations as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node ~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
+\item In active replication, one or several replicas are run on a other machine and receive an exact copy of the primary nodes input. From the input they perform the same calculations as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node ~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
 
 Active replication can also be used in consensus algorithms such as majority voting or k-modular redundancy, where one need to determine the correct output ~\cite{surveyFaultParallel}. In this case, there is no primary and backup replicas, instead every replica acts as a primary.
 
-Semi-Active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
+\item Semi-Active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
 
-Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
+\item Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
+\end{itemize}
 
 A replica, whether active, semi-active or passive replication is used, is defined as ~\cite{effTaskReplMobGrid}:
 \begin{definition} \label{def:replica}
@@ -389,17 +386,18 @@ The term replica or task replica is used to denote an identical copy of the orig
 While replication increases the system load, is may help improving performance by reducing task completion time ~\cite{improvingPerformanceReplication}.
 
 \subsubsection*{Consensus} \label{subsub:consensus}
-Replication is usually used to implement some form of consensus algorithm. Consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they vote for which result is correct. These algorithms are usually use the Byzantine fault model, where a resource can crash or produce an incorrect result.
+Replication is usually used with some form of consensus algorithm. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they agree on which result is considered correct. These algorithms are usually used with the Byzantine fault model \autoref{subsub:background_byzantine}, where a resource can produce an incorrect result.
 
-Based on achieving consensus two different redundancy (replication) strategies can be identified, traditional and progressive consensus ~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executes simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached. %TODO is consensus guaranteed?
+Based on achieving consensus two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executed simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached.
 
-In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. 
+In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
 
 Furthermore ~\cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
-%TODO ref to \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} 
+%TODO ref to \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices}?
 
-
+\iffalse
+%Delete? We don't use load balancing at all
 \section{Load balancing} \label{sec:background_load_balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
@@ -416,6 +414,7 @@ Load balancing is often divided into two categorize, namely static and dynamic a
 A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load  balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
 
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks ~\cite{perfAnalysisLoadCloud}.
+\fi
 
 \iffalse
 We will briefly mention some dynamic load balancing algorithms: % skip static load balancing algorithms or not?
@@ -449,19 +448,22 @@ Task scheduling is the process of mapping tasks to available resource. A schedul
 	\item Send the task to the selected resources
 \end{enumerate}
 
-Based on which requirements and parameters are considered in step 2 above a task scheduling algorithm can achieve different goals. They can aim at maximizing the total reliability, minimizing the overall system load and meeting all the tasks deadlines \cite{schedulingSurvey}. 
+Based on which requirements and parameters are considered in step 2 above a task scheduling algorithm can achieve different goals. They can aim at maximizing the total reliability, minimizing the overall system load or meeting all the tasks deadlines \cite{schedulingSurvey}. 
 
 Task scheduling algorithms can be divided into static and dynamic algorithms depending on if the scheduling mapping is based on pre-defined parameters or if the parameters might change during runtime ~\cite{schedReplicas}.
 
 Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate ~\cite{optTaskAllocationForMaxRel}. In fact finding an optimal solution and maximizing the overall system reliability at the same time is a NP-hard problem ~\cite{optTaskAllocationForMaxRel} ~\cite{taskAllocationSwarm} \cite{schedulingSurvey}.
 
-%COPIED: 
-%One of the drawbacks with this type of scheduling is that its efficiency will have an impact on the cloud environment’s performance.
+Taking many factors in account when scheduling tasks results in a big overhead in the cloud, thus decreasing performance. 
 
 %COPIED:
 %The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
 
 \section{Monitoring} \label{sec:background_monitoring}
+Monitoring is common in distributed system for detecting when resources fail. The most common technique is based on heartbeats, i.e. the resources send "I'm still alive"-messages with a certain pulse to each other and if a resource stops receiving heartbeats from a resource it is assumed to have died. Another technique is to send a test message and wait for a reply and after a certain timeout assume that the resource has died \cite{probabilistic_recovery}.
+
+\iffalse
+COPIED:
 Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
 Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OSlevel pings and SNMP queries to application level testing, e.g., a test query to a database object.
 End-to-end monitors which emulate actual user requests. Such monitors can identify that a problem is somewhere along the request path but not its precise location.
@@ -469,14 +471,14 @@ Error logs of different types that are often produced by software components. So
 Statistical monitors which track auxiliary system attributes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
 Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
 
-%COPIED:
-%Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
+COPIED:
+Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
 
-%COPIED
-%Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
+COPIED
+Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
+\fi
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
-%TODO
 Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in hardware cost and space and in that the system becomes more dynamic. For instance, since hardware servers usually has a lot of free capacity it is possbile to run two virtual servers on each physical server. Another advantage with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical location to another.
 
 A container is very similar to a virtual machine but more light-weight. Containers running on the same physical machine share the machines operating system and binaries while virtual machines running on a single physical machine have their own operating systems, isolating them from each other \cite{vm_vs_container}.
@@ -1243,6 +1245,10 @@ Scheduling Optimization in Cloud Computing
 	\emph{Containers—Not Virtual Machines—Are the Future Cloud},
 	http://www.linuxjournal.com/content/containers\%E2\%80\%94not-virtual-machines\%E2\%80\%94are-future-cloud,
 	Jun 2013
+	
+\bibitem{probabilistic_recovery}
+	\emph{Probabilistic Model-Driven Recovery in Distributed Systems}
+
 
 \end{thebibliography}
 
