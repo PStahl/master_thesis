@@ -857,7 +857,7 @@ Because of Calvin's use of DHT with automatic node discovery, nodes automaticall
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
-\subsubsection{Result}
+\subsubsection*{Result}
 The average of the 50 measured times was $483.8 ms$. This corresponds to the theoretical average of $500 ms$. %TODO this experiment is not needed if we set a timeout of 500ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
 \subsection{Measurement of replication time} \label{subsec:eval_repl_time}
@@ -929,7 +929,10 @@ To the best of our knowledge our model is the first of it's kind, due to its ful
 
 There are a lot of different kinds of failures which could be taken into account, see ~\ref{future:extended_model} for an extended reliability model.
 
-Our model could also be extended with some sort of machine learning in order to predict future failures. In the case of a video service its likely that the system load is higher in the evening and therefore also the probability of a failure. By predicting these failures replicas an be created in advance, i.e. when the probability of failure reaches above a certain threshold. 
+Our model could also be extended with some sort of machine learning in order to predict future failures. In the case of a video service its likely that the system load is higher in the evening and therefore also the probability of a failure. By predicting these failures replicas an be created in advance, i.e. when the probability of failure reaches above a certain threshold.
+
+In our experiments we have had only one actor to replicate on the lost node, in bigger systems with many actors on each node we get the complexity of choosing which actor to replicate first. A solution could be to have a criticality of each actor type and start replicating the most critical actor on the lost node. However, replication time is defined as the time it takes from that we start replicating actors at all after a node failure to that the actor is up and running, i.e. all actors replication times have the same start time. This will result in that the least critical actor will have the largest replication time and thereby being having the most amount of replicas. %Is this a bad thing? I mean, the least ciritical actor will use a lot of network (bad) but since it is low prioritized after a node failure made it's ok?
+Another, perhaps better solution would be to replicate the actors with smallest states first in order to minimize each actor's replication time, kind of a earliest deadline first algorithm. We leave the investigation of which algorithm is the optimal to future work.
 
 %TODO
 \iffalse
