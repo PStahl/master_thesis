@@ -216,7 +216,7 @@ The Byzantine fault model is very broad since it allows failed nodes to continue
 
 % COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
 
-\subsubsection{Fail-stop faults}
+\subsubsection{Fail-stop faults} \label{subsub:background_fail_stop}
 The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes ~\cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs ~\cite{surveyFaultParallel}. The fail-stop model has been criticized for not representing enough real-world failures.
 
 %COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
@@ -882,8 +882,7 @@ After the application was started, the the reliability level of the nodes on whi
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.999.
 
 \subsection*{Result}
-PUT THIS IN RESULT CHAPTER?
-
+%PUT THIS IN RESULT CHAPTER?
 The experiment ran for XXX minutes, and \autoref{fig:exp_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.999.
 
 \section{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
@@ -894,7 +893,7 @@ After the application was started, the reliability level of the nodes on which r
 The test was considered successful if over time, the number of replicas used decreased, as the more reliable nodes were chosen, and the average reliability for the duration of the test exceeded 0.999.
 
 \subsection*{Result}
-PUT THIS IN RESULT CHAPTER?
+%PUT THIS IN RESULT CHAPTER?
 it was assumed with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
 
 The experiment ran for XXX minutes, and \autoref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
@@ -910,7 +909,7 @@ Generalla slutsater
 Vi kan ej generalisera våra resultat. typ.
 \fi
 
-When using a fail-stop fault model, we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure, a node, $A$ may become unavailable for one node $B$ while being available for another $C$. Assume that we have one replica on $A$ and one on $B$. Both node $A$ and $B$ will assume that the other has failed and tell the node with highest id to replicate its actors. If $C$ has the highest id of all three then nothing will happen since $C$ is aware of the replicas on both $A$ and $B$. But if at least one of $A$ and $B$ has higher id than $C$ it will send the replication request to itself and since it's not aware of that there is a running replica on the other node it will replicate the actor to $C$. Thereafter we have an unnecessary high reliability and, from a system perspective, there is a unnecessary high impact on the network load.
+When using a fail-stop fault model (see\autoref{subsub:background_fail_stop}), we assume that when a node dies all other nodes are aware of this. This is clearly limiting, as in the case of a link failure. Assume we have three nodes $A$, $B$ and $C$ and there is one replica on $A$ and one on $B$. In case of a link failure between $A$ and $B$, $A$ will assume that $B$ has failed and vice versa and both will ask the node with highest id to replicate the lost actors. If $C$ has the highest id of all three then nothing will happen since $C$ is aware of the replicas on both $A$ and $B$. But if $A$ has the highest id it will send the replication request to itself and since it's not aware of that there is a running replica on $B$, it will replicate its actor to $C$. Thereafter we have an unnecessary high reliability and, from a system perspective, there is a unnecessary high impact on the network load.
 
 Our definition of reliability excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use consensus techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 
