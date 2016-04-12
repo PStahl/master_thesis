@@ -489,23 +489,24 @@ Diagnostic tools such as filesystem and memory checkers (e.g., fsck) that are ex
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
 %TODO
-Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The wins of virtualization is partly savings in hardware cost and space and partly in that the system becomes more dynamic. E.g. it is possible to virtualize a hundred servers on fifty physical servers since they usually have capacity left. Another advantage with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical server to another.
+Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in hardware cost and space and in that the system becomes more dynamic. For instance, since hardware servers usually has a lot of free capacity it is possbile to run two virtual servers on each physical server. Another advantage with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical location to another.
 
+A container is very similar to a virtual machine but more light-weight. Containers running on the same physical machine share the machines operating system and binaries while virtual machines running on a single physical machine have their own operating systems, isolating them from each other \cite{vm_vs_container}.
+
+%TODO first mention of calvin?
+Calvin wraps up all necessary components to run the actors anywhere? All different actor types are embedded in the runtime. The runtimes work as containers and separate the hardware from the software, resulting in that it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
+
+\iffalse
 %COPIED
 Virtualization for cloud
 What makes virtualization so important for the cloud is that it decouples the software from the hardware. [dummies.com] 
-
 
 Compare with container - With virt. a machine running three virt. systems would have a hypervisor and three seperate operation systems running on to of it. Isolated from each other. With containers there's only one operating system and the three containers shares the systems kernel. [http://www.cio.com/article/2924995/enterprise-software/what-are-containers-and-why-do-you-need-them.html]
 
 %COPIED
 Docker (Most popular container)
 Docker containers wrap up a piece of software in a complete filesystem that contains everything it needs to run:  code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
-
-
-%TODO first mention of calvin?
-Calvin also wraps up all necessary components to run the actors anywhere? All different actors are embedded in the runtime. The runtimes seperate the hardware from the software in order to be able to use Calvin on different platforms. At developing phase, no need of considering on which operating system the application should run.
-
+\fi
 
 \chapter{Design of a dynamic fault-tolerant system} \label{ch:design}
 \section{Methodology} \label{sec:design_methodology}
@@ -943,7 +944,7 @@ There are a lot of different kinds of failures which could be taken into account
 Our model could also be extended with some sort of machine learning in order to predict future failures. In the case of a video service its likely that the system load is higher in the evening and therefore also the probability of a failure. By predicting these failures replicas an be created in advance, i.e. when the probability of failure reaches above a certain threshold.
 
 In our experiments we have had only one actor to replicate on the lost node, in bigger systems with many actors on each node we get the complexity of choosing which actor to replicate first. A solution could be to have a criticality of each actor type and start replicating the most critical actor on the lost node. However, replication time is defined as the time it takes from that we start replicating actors at all after a node failure to that the actor is up and running, i.e. all actors replication times have the same start time. This will result in that the least critical actor will have the largest replication time and thereby being having the most amount of replicas. %Is this a bad thing? I mean, the least ciritical actor will use a lot of network (bad) but since it is low prioritized after a node failure made it's ok?
-Another, perhaps better solution would be to replicate the actors with smallest states first in order to minimize each actor's replication time, kind of a earliest deadline first algorithm. We leave the investigation of which algorithm is the optimal to future work.
+Another, perhaps better solution would be to replicate the actors with smallest states first in order to minimize each actor's replication time, kind of an earliest deadline first algorithm. We leave the investigation of which algorithm is the optimal to future work.
 
 %TODO
 \iffalse
@@ -1011,9 +1012,9 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 	2013
 	
 \bibitem{relAndPerfGridServices}
-	Y. Dai, G. Levitin
+	Y. Dai, G. Levitin,
 	\emph{Reliability and Performance of Tree-Structured Grid Services},
-	IEEE TRANSACTIONS ON RELIABILITY, VOL. 55, NO. 2, 
+	IEEE transactions on reliability, Vol. 55, No. 2, 
 	June 2006
 
 \bibitem{surveyFaultParallel}
@@ -1085,7 +1086,7 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 \bibitem{cloudServiceRel}
 	Y. Dai, B. Yang, J. Dongarra, G. Zhang
 	\emph{Cloud Service Reliability: Modeling and Analysis},
-	%TODO published?
+	in PRDC, 2009	
 
 \bibitem{optTaskAllocationForMaxRel}
 	H. R. Faragardi, R. Shojaee, M. A. Keshtkar, H. Tabani,
@@ -1248,6 +1249,12 @@ A Survey on Scheduling and the Attributes of Task Scheduling in the Cloud
 
 \bibitem{optSchedCloud}
 Scheduling Optimization in Cloud Computing
+
+\bibitem{vm_vs_container}
+	David Strauss,
+	\emph{Containers—Not Virtual Machines—Are the Future Cloud},
+	http://www.linuxjournal.com/content/containers\%E2\%80\%94not-virtual-machines\%E2\%80\%94are-future-cloud,
+	Jun 2013
 
 \end{thebibliography}
 
