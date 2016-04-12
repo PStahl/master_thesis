@@ -21,6 +21,17 @@
 
 \algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
 
+%References
+\addto\extrasenglish{%
+  \renewcommand{\chapterautorefname}{Chapter}%
+  \renewcommand{\sectionautorefname}{Section}%
+  \renewcommand{\subsectionautorefname}{Subsection}%
+  \renewcommand{\subsubsectionautorefname}{}%
+}
+\newcommand*{\Appendixautorefname}{Appendix}
+\newcommand*{\definitionautorefname}{Definition}%
+
+
 \author{
 	Philip Ståhl \\
 	{\normalsize \href{mailto:ada10pst@student.lu.se}{\texttt{ada10pst@student.lu.se}}}
@@ -117,9 +128,9 @@ The framework is not limited to a specific type of distributed environment, and 
 %TODO
 %Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
 
-Our model is implemented by extending the actor-based application environment \emph{Calvin} ~\cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated by... %TODO
+Our model is implemented by extending the actor-based application environment \emph{Calvin}~\cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated by... %TODO
 
-The report is structured as follows: in Section ~\ref{ch:background} all necessary background theory is provided, in Section ~\ref{ch:design} we present our model and contribution in more detail, Section ~\ref{ch:evaluation} aims at evaluating our solution while Section ~\ref{ch:future_work} presents future work. Section ~\ref{ch:conclusions} concludes the report. 
+The report is structured as follows: in \autoref{ch:background} all necessary background theory is provided, in \autoref{ch:design} we present our model and contribution in more detail, \autoref{ch:evaluation} aims at evaluating our solution while \autoref{ch:future_work} presents future work. \autoref{ch:conclusions} concludes the report. 
 
 \section{Goal} \label{sec:introduction_goals}
 The goal of this thesis is to devise a method for dynamically ensuring a certain level of reliability for distributed applications or services. Reliability will be achieved through replication of tasks.
@@ -292,12 +303,12 @@ The MTBF can be calculated as
 MTBF = (total\ time) / (number\ of\ failures)
 \end{equation}
 
-From equation~\ref{eq:MTBF}, a reliability function for a component can be expressed as 
+From \autoref{eq:MTBF}, a reliability function for a component can be expressed as 
 \begin{equation} \label{eq:resource_reliability}
 R(t) = e^{-t/MTBF}
 \end{equation}
 
-Equation~\ref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time $t$ is
+\autoref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time $t$ is
 \begin{equation} \label{eq:resource_failure_prob}
 F(t) = 1- e^{-t/MTBF}
 \end{equation}
@@ -508,20 +519,20 @@ Since a lot of test were already written to the Calvin system a test-driven deve
 \section{Introduction} \label{sec:design_intro}
 In the case of streaming processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, we assume the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.
 
-Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in ~\ref{subsub:consensus} to determine whether or not the correct result was received. 
+Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \autoref{subsub:consensus} to determine whether or not the correct result was received. 
 
 Furthermore, long running applications or services, such as streaming applications, allows us to focus on ensuring a desired reliabity. Therefore, in contrast to the various scheduling algorithms in ~\cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} ~\cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas.
 
 Unlike ~\cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} ~\cite{relGridServicePredConstraint} we propose a fully dynamic model which monitors the system and create new replicas in order to ensure that the desired reliability is met. This is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt our reliability model as the properties of the system varies.
 
-The rest of this chapter is composed as follows, in ~\ref{sec:design_limitations} we go through what limitations we have done. \ref{sec:design_system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In ~\ref{sec:design_reliability_model} we present our reliability model, which is our main contribution with this paper. We start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, ~\ref{sec:design_implementation} we briefly describe how Calvin works and present the main parts of the implementation of our model.
+The rest of this chapter is composed as follows, in \autoref{sec:design_limitations} we go through what limitations we have done. \autoref{sec:design_system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In~\autoref{sec:design_reliability_model} we present our reliability model, which is our main contribution with this paper. We start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, \autoref{sec:design_implementation} we briefly describe how Calvin works and present the main parts of the implementation of our model.
 
 \section{Limitations} \label{sec:design_limitations}
-As described in ~\ref{ch:TODO} we limit our model to only consider node failures, i.e. we assume that links between nodes can not fail. However, the 	reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
+As described in \autoref{ch:TODO} we limit our model to only consider node failures, i.e. we assume that links between nodes can not fail. However, the reliability model could easily be extended to include link failure probabilities, but then they have to be taken into account in the scheduling algorithm as well which would have required a lot of more work on the scheduling algorithm.
 
 Furthermore, we assume the replicated task/service is deterministic and always produces the correct result for a given input. As mention before this can quite easily be solved by extending the model with consensus such as majority voting. Due to that we don't gain any extra useful information we have chosen to leave this a future work.
 
-By doing these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in report ~\ref{ch:discussion}.
+By doing these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in report, \autoref{ch:discussion}.
 
 %\subsection{Reliability model}
 %\label{sec:limitations_reliability_model}
@@ -548,11 +559,11 @@ The above corresponds to the probability of the event “all the replicas and th
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment} \label{subsec:design_comp_env}
-In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogenous hardware with high bandwidth low latency reduntant links between them.
+In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogenous hardware with high bandwidth low latency redundant links between them.
 
-A small example of four interconnected nodes  is shown in figure~\ref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogenous hardware components, the cluster used for experiments consists of homogenous hardware components, and varying behaviour in terms of failure is simulated in the experiments. This if further described in chapter ~\ref{ch:evaluation}.
+A small example of four interconnected nodes  is shown in \autoref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogenous hardware components, the cluster used for experiments consists of homogenous hardware components, and varying behaviour in terms of failure is simulated in the experiments. This if further described in~\autoref{ch:evaluation}.
 
-Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In Appendix~\ref{appendix:figures} a system of one replicated actor is shown before and after a node failure.
+Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\autoref{appendix:figures} a system of one replicated actor is shown before and after a node failure.
 
 \begin{figure}[!hbt]
 \centering
@@ -564,19 +575,19 @@ Since all nodes are interconnected we have redundant paths which results in that
 Monitoring the system is crucial to achieve full dynamicy in ensuring a certain reliability. One must know where replicas are executing and be able to detect node failures and store the time of failure.
 
 \subsubsection{Heartbeats}
-The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in ~\ref{sec:node_failure_detection_time}.
+The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in~\autoref{sec:node_failure_detection_time}.
 
 %COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
 \subsection{Storage of data} \label{subsec:design_storage}
-All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available. If stored on a single node, e.g. the executing node, that information is lost in the case of failure. Also, if a remote database is used, we introduce a single-point-of-failrue. Instead, to achieve a redundant storage, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. The DHT used is further explained in ~\ref{sec:calvin_storage}.
+All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available. If stored on a single node, e.g. the executing node, that information is lost in the case of failure. Also, if a remote database is used, we introduce a single-point-of-failrue. Instead, to achieve a redundant storage, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. The DHT used is further explained in~\autoref{sec:calvin_storage}.
 
 %Skip reference to Calvin storage? It only says 'not explained in the thesis'
 
 \subsection{Application model} \label{subsec:design_app_model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic environment where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results ~\cite{relGridSystems}.
 
-In this paper we use a simple example application in our experiments. The application can be modelled as shown in figure~\ref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. No assumptions are made about the execution time of the application. However, our model is particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures ~\cite{imprRelAdaptRL}.
+In this paper we use a simple example application in our experiments. The application can be modelled as shown in~\autoref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. No assumptions are made about the execution time of the application. However, our model is particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures ~\cite{imprRelAdaptRL}.
 
 \begin{figure}[!hbt]
 \centering
@@ -606,9 +617,9 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
-As previously mentioned, reliability will be ensured by the use of replication. More specifially, active replication will be used where each replica receives the same input, and performs the same calculations. Figure~\ref{fig:app_model_replication} shows how the application in figure~\ref{fig:app_model} looks after replicating task $A$ 4 times.
+As previously mentioned, reliability will be ensured by the use of replication. More specifially, active replication will be used where each replica receives the same input, and performs the same calculations. \autoref{fig:app_model_replication} shows how the application in \autoref{fig:app_model} looks after replicating task $A$ 4 times.
 
-In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in ~\ref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. %TODO do we have to have this? I don't think it really affects our model right?
+In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \autoref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. %TODO do we have to have this? I don't think it really affects our model right?
 
 \begin{figure}[!hbt]
 \centering
@@ -635,22 +646,22 @@ P(k failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
 
 where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and spawn a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}. 
 
-However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in ~\ref{sec:design_time_t}.
+However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\autoref{sec:design_time_t}.
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
 Here we present our main contribution, the self-adapting reliability model. But first we state some definitions of reliability.
 
 \subsection{Definitions} \label{subsec:design_definitions}
-Using replication of a task, and reliability defined as in definition~\ref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
+Using replication of a task, and reliability defined as in \autoref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
 R_{T}(t) =  1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
 \end{equation}
 
-where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. Equation~\ref{eq:task_reliability} corresponds to definition~\ref{def:task_replica_reliability}, i.e. at least one replica is always running.
+where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. \autoref{eq:task_reliability} corresponds to \autoref{def:task_replica_reliability}, i.e. at least one replica is always running.
 
-Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, equation~\ref{eq:task_reliability} can with equation~\ref{eq:resource_reliability} be re-written as
+Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, \autoref{eq:task_reliability} can with \autoref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
 R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
@@ -664,12 +675,12 @@ Given a time $t$, a desired reliability level $\lambda$, and assuming the replic
 \lambda \leq 1 - \prod\limits_{k=1}^n  F_{Res_k}(t)
 \end{equation}
 
-which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling equation~\ref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
+which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \autoref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
 
-The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in equation~\ref{eq:task_reliability_2}, exceeds $\lambda$.
+The scheduling problem to fulfil a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in \autoref{eq:task_reliability_2}, exceeds $\lambda$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
-The time $t$ used in ~\ref{eq:desired_rel} consists of the time it takes from that a failure happened, until a new replica is operational. $t$ can therefore be expressed as 
+The time $t$ used in \autoref{eq:desired_rel} consists of the time it takes from that a failure happened, until a new replica is operational. $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
 	t = Tf + Tr
@@ -681,7 +692,7 @@ where $Tf$ is the time to detect that a node has failed, and $Tr$ is the time it
 The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are sent to all nodes in the system every 200 ms. A node is considered dead when no heartbeat is received for 500 ms, which thus is the time to detect a node failure.
 
 \subsubsection{Replication time} \label{sec:replication_time}
-The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate request to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, we must also find a node which has no replica already and include this in the request. The receiving node will then send a request to that node including the current state of the task to replicate. See Appendix~\ref{appendix:figures}.
+The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate request to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, we must also find a node which has no replica already and include this in the request. The receiving node will then send a request to that node including the current state of the task to replicate. See~\autoref{appendix:figures}.
 
 \begin{definition}
 Latency = propagation time + transmission time + queueing time + processing delay
@@ -709,7 +720,7 @@ Replication time = “node dead discovery time” + “time to retrieve data fro
 \end{definition}
 
 \subsection{Scheduling algorithm} \label{subsec:design_sched_alg}
-A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGrid}, which fulfills equation~\ref{eq:desired_rel} is shown below:
+A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGrid}, which fulfills \autoref{eq:desired_rel} is shown below:
 
 \begin{algorithm} 
 	\caption{Greedy scheduling algorithm} \label{alg:scheduling}
@@ -726,11 +737,11 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 	\end{algorithmic}
 \end{algorithm}
 
-This algorithm is run by a master node, selected when failure is detected. The selection process is further described in section~\ref{subsec:design_handling_failure}.
+This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\autoref{subsec:design_handling_failure}.
 
 \subsection{Handling node failure} \label{subsec:design_handling_failure}
 %TODO not sure where to put this section
-In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in ~\ref{subsec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
+In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\autoref{subsec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
 
 To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfil the required reliability. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
 
@@ -750,7 +761,7 @@ The algorithm is shown below:
 	\end{algorithmic}
 \end{algorithm}
 
-A small example is presented in figure~\ref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, 1 to 4, and the other nodes have just detected the failure of node 4. Nodes 1 to 4 will select the node with the highest ID, in this case node 3, which will be responsible for determining which actions to take.
+A small example is presented in~\autoref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, 1 to 4, and the other nodes have just detected the failure of node 4. Nodes 1 to 4 will select the node with the highest ID, in this case node 3, which will be responsible for determining which actions to take.
 
 \begin{figure}[!hbt]
 \centering
@@ -836,24 +847,24 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-We mentioned in ~\ref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. A calvin runtime was started on each of these servers. One of these runtimes was stable, while each of the other runtimes were periodically killed and restarted, simulating node failures. 
+We mentioned in \autoref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. A calvin runtime was started on each of these servers. One of these runtimes was stable, while each of the other runtimes were periodically killed and restarted, simulating node failures. 
 
-The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in ~\ref{sec:eval_application}.
+The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\autoref{sec:eval_application}.
 
 \section{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
 
-The computational environment and the application is shown in figure~\ref{fig:evaluation}.
+The computational environment and the application is shown in~\autoref{fig:evaluation}.
 
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
 
 \section{Measurement of time t} \label{sec:eval_time_t}
-As mentioned in ~\ref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
+As mentioned in~\autoref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Wrong? No heartbeat
-Because of Calvin's use of DHT with automatic node discovery, nodes automatically detect when other nodes fail, by the use of heartbeats, explained in ~\ref{subsec:design_monitoring}.
+Because of Calvin's use of DHT with automatic node discovery, nodes automatically detect when other nodes fail, by the use of heartbeats, explained in~\autoref{subsec:design_monitoring}.
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
@@ -866,7 +877,7 @@ The time it takes to replicate a task, depends on the size of the task state, wh
 Each experiment is conducted using two servers, connected with a $1000$ Mb/s link with a latency of less than $0.2$ ms. A runtime was started on both servers, and an actor started. The actor was then replicated 10 times and the time each replication took was measured.
 
 \subsubsection*{Result}
-Figure ~\ref{fig:replication_time} shows how the replication time vary depending on the state size. The replication time is clearly linear in relation to the size of the state.
+\autoref{fig:replication_time} shows how the replication time vary depending on the state size. The replication time is clearly linear in relation to the size of the state.
 
 \begin{figure}[!hbt]
 \centering
@@ -884,10 +895,10 @@ The test was considered successful if the average reliability level during the d
 \subsection*{Result}
 PUT THIS IN RESULT CHAPTER?
 
-The experiment ran for XXX minutes, and figure ~\ref{fig:exp_reliability_level} shows a 5-second average reliability during this period. Figure ~\ref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.999.
+The experiment ran for XXX minutes, and \autoref{fig:exp_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.999.
 
 \section{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
-Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in table ~\ref{table:exp_nodes_means}, and all had a standard deviation of 4. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 20. 
+Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \autoref{table:exp_nodes_means}, and all had a standard deviation of 4. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 20. 
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
@@ -897,7 +908,7 @@ The test was considered successful if over time, the number of replicas used dec
 PUT THIS IN RESULT CHAPTER?
 it was assumed with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
 
-The experiment ran for XXX minutes, and figure~\ref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. Figure ~\ref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
+The experiment ran for XXX minutes, and \autoref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
 
 \section{?}
 %DELETE?
@@ -927,7 +938,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 \chapter{Future Work} \label{ch:future_work}
 To the best of our knowledge our model is the first of it's kind, due to its fully dynamic behaviour. Therefore we had to limit our scope a lot and considering these limitations there is a lot of possible future work. Our model could be extended by considering more types of failures, e.g. link failure and soft failures (e.g. an actor dies but not the node or the actor produce an incorrect result). A consensus algorithm should be implemented in order to hamper the risk of using incorrect results. Link failures could, for instance be detected if the node responsible for replicating actors after a node failure awaits request from several nodes. If it only receives one node fail request among ten nodes its safe to assume that the node is still alive and the link to the requesting node has failed.
 
-There are a lot of different kinds of failures which could be taken into account, see ~\ref{future:extended_model} for an extended reliability model.
+There are a lot of different kinds of failures which could be taken into account, see \autoref{subsec:future_extended_model} for an extended reliability model.
 
 Our model could also be extended with some sort of machine learning in order to predict future failures. In the case of a video service its likely that the system load is higher in the evening and therefore also the probability of a failure. By predicting these failures replicas an be created in advance, i.e. when the probability of failure reaches above a certain threshold.
 
@@ -948,10 +959,11 @@ Accounting for link failures
 Test on highly unreliable systems during extreme load
 \fi
 
-\subsection{Extended model} \label{future:extended_model}
+\subsection{Extended model} \label{subsec:future_extended_model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices~\cite{surveyReliabilityDistr}.
 
-For measure reliability according to the dynamic definition (Definition \ref{def:dyn_reliability}) we will use the following formula:
+For measure reliability according to the dynamic definition (\autoref{TODO}) we will use the following formula:
+% Jag tror inte vi har en dynamisk definition
 
 \begin{equation} \label{eq:overall_reliability}
 R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
