@@ -491,8 +491,6 @@ Calvin wraps up all necessary components to run the actors anywhere? All differe
 Virtualization for cloud
 What makes virtualization so important for the cloud is that it decouples the software from the hardware. [dummies.com] 
 
-Compare with container - With virt. a machine running three virt. systems would have a hypervisor and three seperate operation systems running on to of it. Isolated from each other. With containers there's only one operating system and the three containers shares the systems kernel. [http://www.cio.com/article/2924995/enterprise-software/what-are-containers-and-why-do-you-need-them.html]
-
 %COPIED
 Docker (Most popular container)
 Docker containers wrap up a piece of software in a complete filesystem that contains everything it needs to run:  code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
@@ -501,9 +499,9 @@ Docker containers wrap up a piece of software in a complete filesystem that cont
 \chapter{Design of a dynamic fault-tolerant system} \label{ch:design}
 \section{Methodology} \label{sec:design_methodology}
 %TODO
-The methodology for divising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
+The methodology for devising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
 
-To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see ~\cite{ch:TODO}. 
+To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourself to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see~\autoref{ch:discussion}. 
 
 Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
 
@@ -950,11 +948,11 @@ Accounting for link failures
 Test on highly unreliable systems during extreme load
 \fi
 
+%Should we have this section?
 \section{Extended model} \label{subsec:future_extended_model}
 Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices~\cite{surveyReliabilityDistr}.
 
-For measure reliability according to the dynamic definition (\autoref{TODO}) we will use the following formula:
-% Jag tror inte vi har en dynamisk definition
+For measuring reliability more accurate, more factors must be included (not only node failures). The overall reliability can then be expressed as:
 
 \begin{equation} \label{eq:overall_reliability}
 R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
