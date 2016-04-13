@@ -928,11 +928,25 @@ After the application was started, the reliability level of the nodes on which r
 
 The test was considered successful if the number of replicas used decreased over time, as the system learnt the actual mtbf for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999.
 
-\subsection*{Result}
+\subsubsection*{Result}
 %TODO
 The experiment ran for XXX minutes, and \autoref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
 
 As shown in the figure, the number of replicas decreased over time. Furthermore, figure~\ref{fig:exp_opt_replicas_node_replicas} shows that the more reliable nodes, 8-10, were chosen more often than the less reliable ones.
+
+\subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
+%TODO the mean-time-between-failure does not vary, really... must rephrase this sentence
+In this experiment, the mtbf for the various nodes varied over time, following a $sinus-curve$. The psudeo-random numbers for the nodes followed a normal distribution with mean 20 and standard deviation of 1. However, the time to sleep between failures were calculated by ~\ref{eq:eval_sleep_time}.
+
+%TODO how long should before we're back? 60 sec?
+\begin{equation} \label{eq:eval_sleep_time}
+T_{sleep} = t_i * 10 * \sin{(2\pi / 60)}
+\end{equation}
+
+Where $t_i$ are the numbers following the normal distribution, and $T_{total}$ is the total elapsed time for the test. Given $t_i=20$, the ~\autoref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
+
+\subsubsection*{Result}
+
 
 \chapter{Discussion} \label{ch:discussion}
 %TODO
