@@ -945,7 +945,10 @@ T_{sleep} = t_i * 10 * \sin{(2\pi / 60)}
 
 Where $t_i$ are the numbers following the normal distribution, and $T_{total}$ is the total elapsed time for the test. Given $t_i=20$, the ~\autoref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
 
+The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
+
 \subsubsection*{Result}
+The test ran for XXX minutes. ~\autoref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and ~\autoref{fig:eval_self_adaptive_rel_mtbfs} shows the time between failures for the various nodes throughout the time of the test.
 
 
 \chapter{Discussion} \label{ch:discussion}
