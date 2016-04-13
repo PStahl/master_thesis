@@ -837,7 +837,7 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-We mentioned in \autoref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. A calvin runtime was started on each of these servers. One of these runtimes was stable, while each of the other runtimes were periodically killed and restarted, simulating node failures. 
+We mentioned in \autoref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. On five of these servers, two calvin runtimes were started. These runtimes were periodically killed and restarted, simulating node failures. On the sixth server a single runtime was started, which was not killed.
 
 The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\autoref{sec:eval_application}.
 
@@ -883,7 +883,7 @@ After the application was started, the the reliability level of the nodes on whi
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
 
 \subsection*{Result}
-%PUT THIS IN RESULT CHAPTER?
+%TODO remove reference to number of replicas graph?? Do not show in this experiment?
 The experiment ran for 7 minutes, and \autoref{fig:exp_reliability_level} shows the reliability every $0.5$ seconds during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
 
 Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
@@ -897,16 +897,36 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \end{figure}
 
 \section{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
-Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \autoref{table:exp_nodes_means}, and all had a standard deviation of 4. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 20. 
+Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \autoref{table:exp_nodes_means}, and all had a standard deviation of 1. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 10. 
+
+\begin{table}[h]
+	\begin{center}
+	\begin{tabular}{| c  | c |}
+	 \hline
+	 node & MTBF (s)  \\
+	 \hline		
+	  1 & 7.5 \\
+	  2 & 7.5 \\
+	  3 & 15 \\
+	  4 & 15 \\
+	  5 & 22.5 \\
+	  6 & 22.5 \\
+	  7 & 30 \\
+	  8 & 30 \\
+	   \hline
+	\end{tabular}
+	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment in ~\autoref{sec:eval_opt_nbr_replicas}.}
+	 \end{center}
+ \end{table}
+
+
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
 The test was considered successful if over time, the number of replicas used decreased, as the more reliable nodes were chosen, and the average reliability for the duration of the test exceeded 0.999.
 
 \subsection*{Result}
-%PUT THIS IN RESULT CHAPTER?
-it was assumed with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
-
+%TODO
 The experiment ran for XXX minutes, and \autoref{fig:exp_opt_replicas_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_opt_replicas_node_replicas} shows the number of replicas per node.
 
 \chapter{Discussion} \label{ch:discussion}
