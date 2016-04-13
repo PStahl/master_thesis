@@ -476,6 +476,8 @@ Globus [9] provides a heartbeat service to monitor running processes to detect f
 
 COPIED
 Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
+
+COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 \fi
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
@@ -564,17 +566,15 @@ Since all nodes are interconnected we have redundant paths which results in that
 Monitoring the system is crucial to achieve full dynamicy in ensuring a certain reliability. One must know where replicas are executing and be able to detect node failures and store the time of failure.
 
 \subsubsection{Heartbeats}
-The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in~\autoref{sec:node_failure_detection_time}.
-
-\subsubsection{Updating storage}
-In order to know where replicas are executing, this information must be stored and globally accessed, see ~\autoref(subsec:deign_storage} for further info. When a task is replicated to another node, it must not be considered successful before the storage is properly updated. Otherwhise, the replication must be partially reflected in the storage and will become useless. %TODO this text needs work, I just put it there not to forget about it, not sure it should be here
-
-%COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
+The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in~\autoref{sec:background_monitoring}.
 
 \subsection{Storage of data} \label{subsec:design_storage}
-All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available. If stored on a single node, e.g. the executing node, that information is lost in the case of failure. Also, if a remote database is used, we introduce a single-point-of-failrue. Instead, to achieve a redundant storage, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. The DHT used is further explained in~\autoref{sec:calvin_storage}.
+All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available. If stored on a single node, e.g. the executing node, that information is lost in the case of failure. Also, if a remote database is used, we introduce a single-point-of-failure. Instead, to achieve a redundant storage, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. The DHT used is further explained in~\autoref{sec:calvin_storage}.
 
 %Skip reference to Calvin storage? It only says 'not explained in the thesis'
+
+\subsubsection{Updating storage}
+In order to know where replicas are executing, this information must be stored and globally accessed, see ~\autoref{subsec:design_storage} for further info. When a task is replicated to another node, it must not be considered successful before the storage is properly updated. Otherwhise, the replication must be partially reflected in the storage and will become useless. %TODO this text needs work, I just put it there not to forget about it, not sure it should be here
 
 \subsection{Application model} \label{subsec:design_app_model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is of special value for long running applications in a dynamic environment where a certain level of reliability must be met, but the reliability of the resources vary over time. Long running applications are particularly vulnerable to failure because they require many resources and usually must produce precise results ~\cite{relGridSystems}.
