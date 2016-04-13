@@ -567,7 +567,7 @@ Monitoring the system is crucial to achieve full dynamicy in ensuring a certain 
 The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in~\autoref{sec:node_failure_detection_time}.
 
 \subsubsection{Updating storage}
-In order to know where replicas are executing, this information must be stored and globally accessed, see ~\autoref(subsec:deign_storage} for further info. When a task is replicated to another node, it must not be considered successful before the storage is properly updated. Otherwhise, the replication must be partially reflected in the storage and will become useless. %TODO this text needs work, I just put it there not to forget about it, not sure it should be here
+In order to know where replicas are executing, this information must be stored and globally accessed, see ~\autoref{subsec:design_storage} for further info. When a task is replicated to another node, it must not be considered successful before the storage is properly updated. Otherwhise, the replication must be partially reflected in the storage and will become useless. %TODO this text needs work, I just put it there not to forget about it, not sure it should be here
 
 %COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
@@ -878,15 +878,21 @@ Each experiment is conducted using two servers, connected with a $1000$ Mb/s lin
 \end{figure}
 
 \section{Reliability level} \label{sec:eval_rel_level}
-In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 30 and a standard deviation of 4. the 6 runtimes all had the same mtbf, 30 seconds. 
+In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same mtbf, 20 seconds. 
 
-After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
+After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
-The test was considered successful if the average reliability level during the duration of the test exceeded 0.999.
+The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
 
 \subsection*{Result}
 %PUT THIS IN RESULT CHAPTER?
-The experiment ran for XXX minutes, and \autoref{fig:exp_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.999.
+The experiment ran for XXX minutes, and \autoref{fig:exp_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.98.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/reliability.pdf}
+\caption{Reliability over time as node fail.} \label{fig:exp_reliability_level}
+\end{figure}
 
 \section{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
 Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \autoref{table:exp_nodes_means}, and all had a standard deviation of 4. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 20. 
