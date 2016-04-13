@@ -844,7 +844,13 @@ The reason for having a stable runtime was to have the consumer deployed to this
 \section{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
 
-The computational environment and the application is shown in~\autoref{fig:evaluation}.
+The computational environment and the application is shown in~\autoref{fig:evaluation_application}.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/evaluation_application.pdf} 
+\caption{The computational environment used in the experiments. The servers in the cluster has gotten names and in the figure there is one producer replica on Dave, Mark och Jerry. Gru is the stable server which holds the consuming actor.} \label{fig:evaluation_application}
+\end{figure}
 
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
