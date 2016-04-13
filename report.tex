@@ -849,7 +849,9 @@ The computational environment and the application is shown in~\autoref{fig:evalu
 %REPLICATION TIME:
 %An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
 
-\section{Measurement of time t} \label{sec:eval_time_t}
+\section{Experiments}
+
+\subsection{Measurement of time t} \label{sec:eval_time_t}
 As mentioned in~\autoref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
@@ -859,7 +861,7 @@ Because of Calvin's use of DHT with automatic node discovery, nodes automaticall
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
 \subsubsection*{Result}
-The average of the 50 measured times was $483.8 ms$. This corresponds to the theoretical average of $500 ms$. %TODO this experiment is not needed if we set a timeout of 500ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
+The average of the 50 measured times was $483.8 ms$. This corresponds well to the theoretical average of $500 ms$. %TODO this experiment is not needed if we set a timeout of 500ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
 \subsection{Measurement of replication time} \label{subsec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corrresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the in- and output queue of values. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate the actor.
@@ -875,14 +877,14 @@ Each experiment is conducted using two servers, connected with a $1000$ Mb/s lin
 \caption{The average replication time as a function of state size.}\label{fig:replication_time}
 \end{figure}
 
-\section{Reliability level} \label{sec:eval_rel_level}
+\subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
 In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same mtbf, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the mtbf for a node was 10 seconds.
 
 After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
 
-\subsection*{Result}
+\subsubsection*{Result}
 %TODO remove reference to number of replicas graph?? Do not show in this experiment?
 The experiment ran for 7 minutes, and \autoref{fig:exp_reliability_level} shows the reliability every $0.5$ seconds during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
 
@@ -896,7 +898,7 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \caption{Reliability over time as node fail.} \label{fig:exp_reliability_level}
 \end{figure}
 
-\section{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
+\subsection{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
 Similar to the previous experiment, each runtime was given psudeo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \autoref{table:exp_nodes_means}, and all had a standard deviation of 1. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 10. 
 
 \begin{table}[h]
