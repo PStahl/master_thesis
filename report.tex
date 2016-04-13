@@ -876,7 +876,7 @@ Each experiment is conducted using two servers, connected with a $1000$ Mb/s lin
 \end{figure}
 
 \section{Reliability level} \label{sec:eval_rel_level}
-In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same mtbf, 20 seconds. 
+In this experiment, each runtime was given psudeo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same mtbf, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the mtbf for a node was 10 seconds.
 
 After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
@@ -884,7 +884,11 @@ The test was considered successful if the average reliability level during the d
 
 \subsection*{Result}
 %PUT THIS IN RESULT CHAPTER?
-The experiment ran for XXX minutes, and \autoref{fig:exp_reliability_level} shows a 5-second average reliability during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was XXX, above the desired level of 0.98.
+The experiment ran for 7 minutes, and \autoref{fig:exp_reliability_level} shows the reliability every $0.5$ seconds during this period. \autoref{fig:exp_reliability_level_replicas} shows the number of replicas used over time. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
+
+Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
+
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming a mtbf of 10 seconds. As the nodes starts failing, the system learns their actual mtbf, which in the test was 20 seconds.
 
 \begin{figure}[!hbt]
 \centering
