@@ -566,6 +566,9 @@ Monitoring the system is crucial to achieve full dynamicy in ensuring a certain 
 \subsubsection{Heartbeats}
 The ability to detect node failures is crucial for knowing when we need to create a new replica in order to keep the desired reliability. To achieve this, a heartbeat system is used, where nodes send a UDP message, called heartbeat, containing the node id to the other nodes in the system. If no heartbeat is received from a node for a certain period of time, the node is assumed dead. The heartbeats are further described in~\autoref{sec:node_failure_detection_time}.
 
+\subsubsection{Updating storage}
+In order to know where replicas are executing, this information must be stored and globally accessed, see ~\autoref(subsec:deign_storage} for further info. When a task is replicated to another node, it must not be considered successful before the storage is properly updated. Otherwhise, the replication must be partially reflected in the storage and will become useless. %TODO this text needs work, I just put it there not to forget about it, not sure it should be here
+
 %COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
 
 \subsection{Storage of data} \label{subsec:design_storage}
