@@ -952,6 +952,9 @@ Our primary objective is to ensure a certain level of reliability. By using acti
 Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
+
+Finally, since using a \emph{default mtbf} of nodes for which we have not yet experienced failure, our model is obciously limited, as this default value may be incorrect. To use in a real-world situation by a service provider, the reliability model must be extended. To cope with the mtbf, one could use past failure data from their cluster. Furthermore, the model should be extended to also take into account parameters like system load, link failures, etc. 
+
 % Should we afford losing the most reliable node? According to definition rel = prob that we don't loose all OTHER nodes during a node failure. What if we dont have a node failure? Simulate one by not including the most reliable node in the calculations of rel.
 
 \chapter{Future Work} \label{ch:future_work}
