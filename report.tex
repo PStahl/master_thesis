@@ -905,14 +905,16 @@ Similar to the previous experiment, each runtime was given psudeo-random numbers
 	 \hline
 	 node & MTBF (s)  \\
 	 \hline		
-	  1 & 7.5 \\
-	  2 & 7.5 \\
-	  3 & 15 \\
-	  4 & 15 \\
-	  5 & 22.5 \\
-	  6 & 22.5 \\
-	  7 & 30 \\
+	  1 & 10 \\
+	  2 & 10 \\
+	  3 & 10 \\
+	  4 & 20 \\
+	  5 & 20 \\
+	  6 & 20 \\
+	  7 & 20 \\
 	  8 & 30 \\
+	  9 & 30 \\
+	  10 & 30 \\
 	   \hline
 	\end{tabular}
 	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment in ~\autoref{sec:eval_opt_nbr_replicas}.}
@@ -920,10 +922,9 @@ Similar to the previous experiment, each runtime was given psudeo-random numbers
  \end{table}
 
 
-
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
-The test was considered successful if over time, the number of replicas used decreased, as the more reliable nodes were chosen, and the average reliability for the duration of the test exceeded 0.999.
+The test was considered successful if the number of replicas used decreased over time, as the system learnt the actual mtbf for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999.
 
 \subsection*{Result}
 %TODO
