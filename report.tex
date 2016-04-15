@@ -679,7 +679,16 @@ The time $t$ used in \autoref{eq:desired_rel} consists of the time it takes from
 where $Tf$ is the time to detect that a node has failed, and $Tr$ is the time it takes to spawn a new replica.
 
 \subsubsection{Node failure detection time} \label{sec:node_failure_detection_time}
-The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are sent to all nodes in the system every 200 ms. A node is considered dead when no heartbeat is received for 500 ms, which thus is the time to detect a node failure.
+The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are sent to all nodes in the system every 200ms. A node is considered dead when no heartbeat is received for 500ms, which is an upper bound to how long it takes to detect a node failure.
+
+500ms is only an upper bound since a node may fail just before sending a heartbeat, or directly after, which will affect the actual time it took to detect the failure. This corresponds to the best and worst case scenario. 
+
+If a node A dies before sending a heartbeat to B, the last received heartbeat from A was for B received 200ms ago. The timeout on that heartbeat will timeout after 500ms, resulting in the node A has been dead for close to 300ms before detecting it. 
+
+In the latter case, node A dies directly after sending a heartbeat, since it will no longer send heartbeats, that one will timeout, and the time to detect it will therefore be 500ms, which is thus an upper bound of deteecting node failures.
+
+%TODO
+"""Should we use the upper bound in our model, or the 'average value'???"""
 
 \subsubsection{Replication time} \label{sec:replication_time}
 The time it takes to replicate a task depends on the time to find out on which nodes current replicas are running, and sending a replicate request to one of these nodes. Since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, we must also find a node which has no replica already and include this in the request. The receiving node will then send a request to that node including the current state of the task to replicate. See~\autoref{appendix:figures}.
@@ -861,8 +870,8 @@ The computational environment and the application is shown in~\autoref{fig:evalu
 As mentioned in~\autoref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
-% Wrong? No heartbeat
-Because of Calvin's use of DHT with automatic node discovery, nodes automatically detect when other nodes fail, by the use of heartbeats, explained in~\autoref{subsec:design_monitoring}.
+% Is this needed really?
+As described in~\autoref{subsec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within $500ms$, it is assumed dead. 
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
