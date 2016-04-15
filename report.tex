@@ -843,10 +843,10 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
+In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, and doing so in an optimal way by chosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-We mentioned in \autoref{ch:design}, we implemented our model using Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. On five of these servers, two calvin runtimes were started. These runtimes were periodically killed and restarted, simulating node failures. On the sixth server a single runtime was started, which was not killed.
+As mentioned in \autoref{ch:design}, the model was implemented in the IoT application environment Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogenous hardware components. On five of these servers, two calvin runtimes were started. These runtimes were periodically killed and restarted, simulating node failures. On the sixth server a single runtime was started, which was not killed.
 
 The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\autoref{sec:eval_application}.
 
@@ -876,7 +876,9 @@ As described in~\autoref{subsec:design_monitoring}, heartbeats are used to decid
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
 \subsubsection*{Result}
-The average of the 50 measured times was $483.8 ms$. This corresponds well to the theoretical average of $500 ms$. %TODO this experiment is not needed if we set a timeout of 500ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
+The average of the 50 measured times was $483.8 ms$. This above the theoretical average of $400ms$, but lower than the upper bound of $500ms$.
+
+% corresponds well to the theoretical average of $500 ms$. %TODO this experiment is not needed if we set a timeout of 500ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
 \subsection{Measurement of replication time} \label{subsec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corrresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the in- and output queue of values. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate the actor.
@@ -921,13 +923,13 @@ Similar to the previous experiment, each runtime was given psudeo-random numbers
 	 \hline
 	 node & MTBF (s)  \\
 	 \hline		
-	  $dave_1$ & 10 \\
-	  $dave_2$ & 10 \\
-	  $tim_1$ & 10 \\
-	  $tim_2$ & 20 \\
-	  $kevin_1$ & 20 \\
-	  $kevin_2$ & 20 \\
-	  $mark_1$ & 20 \\
+	  $dave_1$ & 7.5 \\
+	  $dave_2$ & 7.5 \\
+	  $tim_1$ & 7.5 \\
+	  $tim_2$ & 7.5 \\
+	  $kevin_1$ & 15 \\
+	  $kevin_2$ & 15 \\
+	  $mark_1$ & 15 \\
 	  $mark_2$ & 30 \\
 	  $jerry_1$ & 30 \\
 	  $jerry_2$ & 30 \\
@@ -944,9 +946,34 @@ The test was considered successful if the number of replicas used decreased over
 
 \subsubsection*{Result}
 %TODO
-The experiment ran for 30 minutes, and \autoref{fig:exp_opt_replicas_rel_level} shows how the number of replicas vary during this period.
+The experiment ran for 5 minutes, and ~\autoref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\autoref{fig:exp_opt_replicas_mtbf_30}, ~\autoref{fig:exp_opt_replicas_mtbf_15}, and ~\autoref{fig:exp_opt_replicas_mtbf_75} show the number of replicas per node over time.
 
-As shown in the figure, the number of replicas decreased over time. Furthermore, figure~\ref{fig:exp_opt_replicas_node_replicas} shows that the more reliable nodes, 8-10, were chosen more often than the less reliable ones.
+As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only needing two. Furthermore, ~\autoref{fig:exp_opt_replicas_mtbf_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in ~\autoref{fig:exp_opt_replicas_mtbf_30} and ~\autoref{fig:exp_opt_replicas_mtbf_75}.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/total.pdf}
+\caption{Total number of replicas.} \label{fig:exp_opt_replicas_total}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_30.pdf}
+\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_mtbf_30}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_15.pdf}
+\caption{Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_mtbf_15}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_75.pdf}
+\caption{Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_mtbf_75}
+\end{figure}
+
 
 \subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
 %TODO the mean-time-between-failure does not vary, really... must rephrase this sentence
