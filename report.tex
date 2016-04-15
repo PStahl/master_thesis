@@ -945,10 +945,16 @@ In this experiment, the mtbf for the various nodes varied over time, following a
 
 %TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
-T_{sleep} = t_i * 20 * \sin{(2\pi\*T_{elapsed} / 300)}
+T_{sleep} = t_i + 20 * \sin{(2\*\pi\*T_{elapsed} / 300)}
 \end{equation}
 
-Where $t_i$ are the numbers following the normal distribution, and $T_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, the ~\autoref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
+Where $t_i$ are the numbers following a normal distribution with mean 25 and standard deviation of 1, and $T_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, the ~\autoref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/sinus_failure_times.pdf}
+\caption{Time between failures as of~\autoref{eq:eval_sleep_time}.} \label{fig:eval_sleep_time}
+\end{figure}
 
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
 
