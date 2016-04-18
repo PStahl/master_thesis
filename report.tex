@@ -815,15 +815,15 @@ COPIED: “in the proposed system, we need to determine the degree of over-provi
 For implementing our model, we use an actor based application environment called \emph{Calvin} ~\cite{calvin}.
 
 \subsection{Calvin} \label{subsec:design_calvin}
-Calvin is a light-weight actor-based application environment for IoT applications and was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+Calvin is a light-weight actor-based application environment for IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
-Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis.
+Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{TODO Kademlia} for further information about DHT and Kademlia especially.
 
 \subsubsection{Actor model}
-An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their out-ports to other actors in-ports. The runtime, see~\autoref{sec:calvin_runtime}, in which an actor is executing handles the communication between runtimes and between actors.
+An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their out-ports to other actors in-ports. The runtime, see~\autoref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
-The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and queue positions for sent and acknowledged values. The processing queue is the major part of the message size.
+The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues is the major part of the message size.
 
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors. Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
@@ -832,32 +832,34 @@ The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runti
 Here follows a small description of the most important parts of our implementation.
 
 \subsubsection{Actor replication}
-We extended the Calvin framework to allow a fan-out/fan-in connectivity model where actors can have multiple producers (fan-in) and multiple consumers (fan-out). Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
+We extended the Calvin framework to allow a fan-out/fan-in connectivity model where actors can have multiple producers (fan-in) and multiple consumers (fan-out). 
+
+Furthermore, we implemented functionality for dynamically connecting and disconnecting actors, which allowed for dynamically adding and removing replicas of an actor.
+
 %Maybe mention that due to no consensus actors only use the first received value
 
 \subsubsection{Node Resource Reporter}
-We have added an actor which automatically deploys on a runtime at runtime started-up. It reports the nodes CPU usage once every second to the runtime which distributed it to all connected nodes. Each node has a resource manager which stores all nodes usages.
+We have added an actor which automatically deploys on a runtime at runtime started-up. It reports the node's CPU usage once every second to the runtime which distributes it to all connected nodes. Each node has a resource manager which stores the other nodes' usages.
+
+%TODO we currently do not use the CPU usage, this is therefore not neccessary?
 
 \subsubsection{Resource Manager}
 Besides storing the connected nodes usages the resource manager stores information about node failures. If a node fails a time stamp and the failed node's usage is stored, among with the time it took to replicate a new replica for each of the actors which were running on the failed node.
 
-Due to its continuously communication with other nodes it fits great as a monitoring system. If a node stops receiving updates from a node we can assume that it has failed.
 
-\subsubsection{Node monitor} %Or "Heartbeat"
-With a monitoring system, such as heartbeat node failures can get detected quickly, if a node stops answering at heartbeats we can assume if has failed.
+\subsubsection{Heartbeat Actor}
+As each node periodically sends updates to the other nodes, it could be used as a heartbeat system. However, the messages and sent using TCP, which involved a initial handshake to setup the communication channel. For a heartbeat system, this is unnecessary overhead. Fort this reason, every runtime also starts a heartbeat actor, which periodically sends heartbeats in form of UDP messages to the other nodes. It also listens on a port and registers incoming heartbeats.
 
-As mentioned above the resource manager fits great as a monitoring system but the packages which are sent between the resource managers are sent using TCP. In order not to assume a node has failed due to that a TCP-package got lost we wanted to have a monitoring system using UDP. Therefore we developed our own heartbeat system. The heartbeat system consist of an actor which is deployed at runtime start up. It sends heartbeats to all connected nodes and if it manages to send two heartbeats to a node without receiving a reply it assumes that node has failed. 
-%TODO make sure the number are correct (two heartbeats = node failure)
-
-Another bonus feature with our own heartbeat system is that we can send heartbeats more often than the resource managers send their data, due to that a heartbeat has a smaller amount of data than a package from the resource manager.
+For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the node to which the heartbeat was sent is assumed dead, and when a heartbeat is received, all timeouts related to that node is canceled.
 
 \subsubsection{Application monitor}
-We have also added an application monitor on each node that once every five seconds checks the current reliability for all actors in the applications started on the node. % Mention any time at all? Five seconds??
+Each runtime also periodically monitors the applications deployed to it. We have also added an application monitor on each node that once every five seconds checks the current reliability for all actors in the applications started on the node. 
+
+% Mention any time at all? Five seconds??
 If the current reliability is not achieved more replicas is created and if the reliability is unnecessary high replicas are deleted.
 
 \subsubsection{Failed node mechanism}
 When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
-
 
 
 \chapter{Evaluation} \label{ch:evaluation}
