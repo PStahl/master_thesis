@@ -512,7 +512,7 @@ Since we limit ourselves to testing only in Calvin we lose some of the understan
 Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
 
 \section{Introduction} \label{sec:design_intro}
-In the case of stream processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, focus is on the case when a producer of some kind produces data which needs to be transformed by a service $A$ before being sent to a consumer. The service $A$ is running within a cluster of some service provider, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.	
+In the case of stream processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, focus is on the case when a producer of some kind produces data which needs to be transformed by a service $S$ before being sent to a consumer. The service $S$ is running within a cluster of some service provider, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.	
 
 Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \autoref{subsub:consensus} to determine whether or not the correct result was received. 
 
@@ -598,7 +598,7 @@ In this paper we use a simple example application in our experiments. The applic
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model.pdf} 
-\caption{An application model where a producer transmits data to a task $A$, which transforms the data, and sends the result to a consumer. $A$ may be seen as a task or service running in a cluster and requiring a certain level of reliability.}\label{fig:app_model}
+\caption{An application model where a producer transmits data to a task $S$, which transforms the data, and sends the result to a consumer. $S$ may be seen as a task or service running in a cluster and requiring a certain level of reliability.}\label{fig:app_model}
 \end{figure}
 
 %TODO
@@ -623,14 +623,14 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
-As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication will be used where each replica receives the same input, and performs the same calculations. \autoref{fig:app_model_replication} shows how the application in \autoref{fig:app_model} looks after replicating task $A$ 4 times.
+As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication will be used where each replica receives the same input, and performs the same calculations. \autoref{fig:app_model_replication} shows how the application in \autoref{fig:app_model} looks after replicating task $S$ 4 times.
 
 In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \autoref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. %TODO do we have to have this? I don't think it really affects our model right?
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model_replication.pdf} 
-\caption{An application model where a task or service $A$ has been replicated 4 times.}\label{fig:app_model_replication}
+\caption{An application model where a task or service $S$ has been replicated 4 times.}\label{fig:app_model_replication}
 \end{figure}
 
 \subsection{Fault model} \label{subsec:design_fault_model}
