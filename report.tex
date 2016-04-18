@@ -503,7 +503,11 @@ Docker containers wrap up a piece of software in a complete file system that con
 %TODO
 The methodology for devising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
 
-To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. We chose to spend time on implementing it in order to gain the possibility of performing experiments on it. Alternative approaches was to only make a pure mathematical model or simulate our model. But making a pure mathematical model is very time-consuming and would have taken longer time than we have in this thesis. Simulating the model would have resulted in that a lot of real-world parameters would not have been considered [GIVE SOME EXAMPLES]. Since we limit ourselves to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see~\autoref{ch:discussion}. 
+To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. A somewhat simplistic reliability model was made, and more time spent on implementation, in order to be able to conduct various kinds of experiments. 
+
+An alternative approach would have been to make a more sophisticated reliability model, which maps better to real-world characteristics of distributed environments. However, while a more sophisticate theoretical model may map better to the real-world, it is impossible to include all parameters affecting the reliability of an application or service running in an distributed environment. Furthermore, with no actual implementation, only simulations could be conducted to verify the model, and even though simulations can take a lot of parameters into account, a lot of real-world parameters would not have been considered[GIVE SOME EXAMPLES]. 
+
+Since we limit ourselves to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see~\autoref{ch:discussion}. 
 
 Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
 
@@ -1250,7 +1254,7 @@ Self-Adapting Reliability in Distributed Software Systems
 \bibitem{schedReplicas}
 Scheduling Fault-Tolerant Distributed Hard Real-Time Tasks Independently of the Replication Strategies
 
-\bibitem{Calvin}
+\bibitem{calvin}
 	Per Persson, Ola Angelsmark,
 	\emph{Calvin - Merging Cloud and IoT},
 	Procedia Computer Science, Volume 52, p. 210–217,
