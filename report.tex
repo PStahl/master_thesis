@@ -625,7 +625,7 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication will be used where each replica receives the same input, and performs the same calculations. \autoref{fig:app_model_replication} shows how the application in \autoref{fig:app_model} looks after replicating task $S$ 4 times.
 
-In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \autoref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. %TODO do we have to have this? I don't think it really affects our model right?
+In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \autoref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. This allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
 
 \begin{figure}[!hbt]
 \centering
