@@ -294,7 +294,7 @@ For distributed applications, the probability of failure increases since it is d
 The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
 \end{definition}
 
-\begin{definition} \label{def:mtbf}
+\begin{definition} \label{def:MTBF}
 The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
 \end{definition}
 
@@ -895,7 +895,7 @@ Each experiment is conducted using two servers, connected with a $1000$ Mb/s lin
 \end{figure}
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
-In this experiment, each runtime was given pseudo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same mtbf, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the mtbf for a node was 10 seconds.
+In this experiment, each runtime was given pseudo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same MTBF, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the MTBF for a node was 10 seconds.
 
 After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
@@ -906,7 +906,7 @@ The experiment ran for 5 minutes, and \autoref{fig:exp_reliability_level} shows 
 
 Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
 
-As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming a mtbf of 10 seconds. As the nodes starts failing, the system learns their actual mtbf, which in the test was 20 seconds.
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming a MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds.
 
 \begin{figure}[!hbt]
 \centering
@@ -942,13 +942,13 @@ Similar to the previous experiment, each runtime was given pseudo-random numbers
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
-The test was considered successful if the number of replicas used decreased over time, as the system learned the actual mtbf for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999.
+The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999.
 
 \subsubsection*{Result}
 %TODO
-The experiment ran for 5 minutes, and ~\autoref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\autoref{fig:exp_opt_replicas_mtbf_30}, ~\autoref{fig:exp_opt_replicas_mtbf_15}, and ~\autoref{fig:exp_opt_replicas_mtbf_75} show the number of replicas per node over time.
+The experiment ran for 5 minutes, and ~\autoref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\autoref{fig:exp_opt_replicas_MTBF_30}, ~\autoref{fig:exp_opt_replicas_MTBF_15}, and ~\autoref{fig:exp_opt_replicas_MTBF_75} show the number of replicas per node over time.
 
-As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only needing two. Furthermore, ~\autoref{fig:exp_opt_replicas_mtbf_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in ~\autoref{fig:exp_opt_replicas_mtbf_30} and ~\autoref{fig:exp_opt_replicas_mtbf_75}.
+As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only needing two. Furthermore, ~\autoref{fig:exp_opt_replicas_MTBF_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in ~\autoref{fig:exp_opt_replicas_MTBF_30} and ~\autoref{fig:exp_opt_replicas_MTBF_75}.
 
 \begin{figure}[!hbt]
 \centering
@@ -958,26 +958,26 @@ As shown in the figures, the number of replicas decreased over time, from three 
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_30.pdf}
-\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_mtbf_30}
+\includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_30.pdf}
+\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_15.pdf}
-\caption{Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_mtbf_15}
+\includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_15.pdf}
+\caption{Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/optimal_replicas/mtbf_75.pdf}
-\caption{Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_mtbf_75}
+\includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_75.pdf}
+\caption{Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
 \end{figure}
 
 
 \subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
 %TODO the mean-time-between-failure does not vary, really... must rephrase this sentence
-In this experiment, the mtbf for the various nodes varied over time, following a $sinus-curve$. The pseudo-random numbers for the nodes followed a normal distribution with mean 25 and standard deviation of 1. However, the time to sleep between failures were calculated by ~\ref{eq:eval_sleep_time}.
+In this experiment, the MTBF for the various nodes varied over time, following a $sinus-curve$. The pseudo-random numbers for the nodes followed a normal distribution with mean 25 and standard deviation of 1. However, the time to sleep between failures were calculated by ~\ref{eq:eval_sleep_time}.
 
 %TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
@@ -1031,7 +1031,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
 
-Finally, since using a \emph{default mtbf} of nodes for which we have not yet experienced failure, our model is obviously limited, as this default value may be incorrect. To use in a real-world situation by a service provider, the reliability model must be extended. To cope with the mtbf, one could use past failure data from their cluster. Furthermore, the model should be extended to also take into account parameters like system load, link failures, etc. 
+Finally, since using a \emph{default MTBF} of nodes for which we have not yet experienced failure, our model is obviously limited, as this default value may be incorrect. To use in a real-world situation by a service provider, the reliability model must be extended. To cope with the MTBF, one could use past failure data from their cluster. Furthermore, the model should be extended to also take into account parameters like system load, link failures, etc. 
 
 % Should we afford losing the most reliable node? According to definition rel = prob that we don't loose all OTHER nodes during a node failure. What if we dont have a node failure? Simulate one by not including the most reliable node in the calculations of rel.
 
