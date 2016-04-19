@@ -859,6 +859,10 @@ As mentioned in \cref{ch:design}, the model was implemented in the IoT applicati
 
 The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\cref{sec:eval_application}.
 
+\subsection{Server specification}
+The servers used in the experiments all have a XXX GHz Intel processor, 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
+
+
 \section{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
 
@@ -890,16 +894,22 @@ The average of the 50 measured times was 483.8 ms. This above the theoretical av
 % corresponds well to the theoretical average of 500 ms. %TODO this experiment is not needed if we set a timeout of 500 ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200 ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
 \subsection{Measurement of replication time} \label{subsec:eval_repl_time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the in- and output queue of values. In this experiment, we incrementally increase the state of a task, by increasing the size of its input and output queue, and measured the time it took to replicate the actor.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports.
 
-Each experiment is conducted using two servers, connected with a 1000 Mb/s link with a latency of less than 0.2 ms. A runtime was started on both servers, and an actor started. The actor was then replicated 10 times and the time each replication took was measured.
+In this experiment, the actor had only one out port and no in port. The state of the actor was incrementally increased by increasing the size of its output queue, and the time it took to replicate the actor to another runtime was measured.
+
+The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while on the other, a laptop was used on which both the two runtimes were started. The laptop was of type XXX. %TODO
+
+After starting the actor on one of the two runtimes, it was replicated to the other one 10 times and the time each replication took was measured. 
 
 \subsubsection*{Result}
-\Cref{fig:replication_time} shows how the replication time vary depending on the state size. The replication time is clearly linear in relation to the size of the state.
+\Cref{fig:replication_time} shows how the replication time vary depending on the state size. As seen in the figure, the replication time is exponential. 
+
+For the laptop, there is a big increase from state size of 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduces the performance. 
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=1.0]{images/results/replication_time.pdf} 
+\includegraphics[scale=0.5]{images/results/replication_time.pdf} 
 \caption{The average replication time as a function of state size.}\label{fig:replication_time}
 \end{figure}
 
