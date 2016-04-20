@@ -859,11 +859,14 @@ As mentioned in \cref{ch:design}, the model was implemented in the IoT applicati
 
 The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\cref{sec:eval_application}.
 
-\subsection{Server specification}
+\subsection{Server specification} \label{sec:server_spec}
 The servers used in the experiments all have a XXX GHz Intel processor, 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
-\subsection{Laptop specification} %TODO place this here?
-The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB RAM. %mention some speed specs?
+\subsection{Laptop specification} \label{sec:laptop_spec}
+ %TODO place this here?
+The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB RAM. 
+%TODO mention SSD speed? maybe of value when talking about swap memory... 
+%mention some speed specs?
 
 \section{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
@@ -900,19 +903,34 @@ The time it takes to replicate a task, depends on the size of the task state, wh
 
 In this experiment, the actor had only one out port and no in port. The state of the actor was incrementally increased by increasing the size of its output queue, and the time it took to replicate the actor to another runtime was measured.
 
-The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while on the other, a laptop was used on which both the two runtimes were started. The laptop was of type Dell Vostro v131. %TODO
+The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and ~\cref{sec:laptop_spec}.
 
 After starting the actor on one of the two runtimes, it was replicated to the other one 10 times and the time each replication took was measured. 
 
 \subsubsection*{Result}
-\Cref{fig:replication_time} shows how the replication time vary depending on the state size. As seen in the figure, the replication time is exponential. 
+\Cref{fig:replication_time} shows how the replication time vary depending on the state size. Replicating an actor consists of getting the state of the actor, sending the state to another node, starting a new actor with that state, and sending the reply. \Cref{fig:replication_time_percentages_server} and ~\cref{fig:replication_time_percentages_laptop} show how much time is spent on each part of the replication when replicating from server to another server, and from laptop to laptop respectively.
 
-For the laptop, there is a big increase from state size of 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduces the performance. 
+As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in ~\cref{fig:replication_time_percentages_laptop}.
+
+As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be ever larger part of the total replication time.
+
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time.pdf} 
 \caption{The average replication time as a function of state size.}\label{fig:replication_time}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time_percentages_server.pdf} 
+\caption{Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from server to another server.}\label{fig:replication_time_percentages_server}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time_percentages_laptop.pdf} 
+\caption{Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from laptop to laptop.}\label{fig:replication_time_percentages_laptop}
 \end{figure}
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
@@ -1052,6 +1070,20 @@ Our primary objective is to ensure a certain level of reliability. By using acti
 Our model is yet to be evaluated on highly unreliable system during extreme load. In this case, due to the unreliability of the system, the number of replicas needed to ensure the desired reliability level will increase. This will further increase the system load, thereby decreasing the reliability of the system even further. This may turn into a vicious circle.
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
+
+The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still gives a reliability of
+\begin{equation*}
+\begin{split}
+R(3600) = e^{3600/31536000}\\
+\\
+R_{T}(3600) = 1 - \prod\limits_{k=1}^2  F_{Res_k}(3600)\\
+= 1 - \prod\limits_{k=1}^2  (1 - R(3600))\\
+= 1 - (1 - e^{3600/31536000})^2\\
+=  0.999999986302961
+\end{split}
+\end{equation*}
+
+This means despite having a large replication time, a high reliability can be achieved by only having two replicas.
 
 Finally, since using a \emph{default MTBF} of nodes for which we have not yet experienced failure, our model is obviously limited, as this default value may be incorrect. To use in a real-world situation by a service provider, the reliability model must be extended. To cope with the MTBF, one could use past failure data from their cluster. Furthermore, the model should be extended to also take into account parameters like system load, link failures, etc. 
 
