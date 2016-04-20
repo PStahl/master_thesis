@@ -765,7 +765,7 @@ The algorithm is shown below: % Om vi ska ha ":" får vi tvinga algoritmen att l
 	\end{algorithmic}
 \end{algorithm}
 
-A small example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, A, B, C and D, and the node C has just failed. When the other nodes (A, B and D) detect the failure they will select the node with the highest ID, in this case node A, and inform it that node C has failed. Node A will then determining which actions to take.
+A small example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, A, B, C and D, and the node C has just failed. When the other nodes (A, B and D) detect the failure they will select the node with the highest ID, in this case node A, and inform it that node C has failed. Node A will then determine which actions to take.
 
 \begin{figure}[!hbt]
 \centering
@@ -1071,7 +1071,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
 
-The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still gives a reliability of
+The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_2} gives a reliability of
 \begin{equation*}
 \begin{split}
 R(3600) = e^{3600/31536000}\\
