@@ -862,6 +862,8 @@ The reason for having a stable runtime was to have the consumer deployed to this
 \subsection{Server specification}
 The servers used in the experiments all have a XXX GHz Intel processor, 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
+\subsection{Laptop specification} %TODO place this here?
+The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB RAM. %mention some speed specs?
 
 \section{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
@@ -898,7 +900,7 @@ The time it takes to replicate a task, depends on the size of the task state, wh
 
 In this experiment, the actor had only one out port and no in port. The state of the actor was incrementally increased by increasing the size of its output queue, and the time it took to replicate the actor to another runtime was measured.
 
-The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while on the other, a laptop was used on which both the two runtimes were started. The laptop was of type XXX. %TODO
+The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while on the other, a laptop was used on which both the two runtimes were started. The laptop was of type Dell Vostro v131. %TODO
 
 After starting the actor on one of the two runtimes, it was replicated to the other one 10 times and the time each replication took was measured. 
 
