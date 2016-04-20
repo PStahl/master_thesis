@@ -749,7 +749,7 @@ In the case of a node failure, one must first determine whether or not any repli
 
 To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfill the required reliability. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
 
-The algorithm is shown below:
+The algorithm is shown below: % Om vi ska ha ":" får vi tvinga algoritmen att ligga här relativt till texten. Går att göra på något sätt, kommer inte ihåg just nu.
 
 \begin{algorithm}\label{alg:node_failure}
 	\caption{Handling a failed node}
@@ -765,12 +765,12 @@ The algorithm is shown below:
 	\end{algorithmic}
 \end{algorithm}
 
-A small example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, 1 to 4, and the other nodes have just detected the failure of node 4. Nodes 1 to 4 will select the node with the highest ID, in this case node 3, which will be responsible for determining which actions to take.
+A small example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, A, B, C and D, and the node C has just failed. When the other nodes (A, B and D) detect the failure they will select the node with the highest ID, in this case node A, and inform it that node C has failed. Node A will then determining which actions to take.
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/handling_node_failure.pdf}
-\caption{4 interconnected nodes after nodes 1 to 3 have detected the failure of node 4.}\label{fig:handling_node_failure}
+\caption{4 interconnected nodes after nodes A, B and D have detected the failure of node C.}\label{fig:handling_node_failure}
 \end{figure}
 
 \subsection{Self-adapting} \label{subsec:design_self_adapting}
