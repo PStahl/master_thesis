@@ -955,7 +955,8 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \caption{Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
 \end{figure}
 
-\subsection{Optimal number of replicas} \label{sec:eval_opt_nbr_replicas}
+\subsection{Optimal number of replicas}
+\subsubsection{Chosing the most reliable} \label{sec:eval_opt_nbr_replicas}
 Similar to the previous experiment, each runtime was given pseudo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}, and all had a standard deviation of 1. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 10. 
 
 \begin{table}[h]
@@ -971,9 +972,9 @@ Similar to the previous experiment, each runtime was given pseudo-random numbers
 	  $kevin_1$ & 15 \\
 	  $kevin_2$ & 15 \\
 	  $mark_1$ & 15 \\
-	  $mark_2$ & 30 \\
-	  $jerry_1$ & 30 \\
-	  $jerry_2$ & 30 \\
+	  $mark_2$ & 40 \\
+	  $jerry_1$ & 40 \\
+	  $jerry_2$ & 40 \\
 	   \hline
 	\end{tabular}
 	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment in ~\cref{sec:eval_opt_nbr_replicas}.}
@@ -1014,6 +1015,53 @@ As shown in the figures, the number of replicas decreased over time, from three 
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_75.pdf}
 \caption{Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
+\end{figure}
+
+\subsubsection{Optimal replicas}
+\label{sec:eval_opt_nbr_replicas_2}
+In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, an experiment was conducted in which five computing nodes were used. Two of these nodes were given a MTBF of 25 seconds, while the other three did not fail. Since those three nodes did not fail, the system used the default MTBF of 10 seconds. Despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas, not only when a node fails. The MTBF for the nodes used in this experiment are shown in \cref{table:exp_nodes_means}.
+
+The required reliability in the experiment was set to 0.999. This results in that as long as the two reliable nodes are available, only two replicas are needed, but if one of them or both are dead, three replicas are needed to reach the required reliability. Finally, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
+
+
+\begin{table}[h]
+	\begin{center}
+	\begin{tabular}{| c  | c |}
+	 \hline
+	 node & MTBF (s)  \\
+	 \hline		
+	  $dave$ & 10 \\
+	  $tim$ & 10 \\
+	  $mark$ & 10 \\
+	  $kevin$ & 25 \\
+	  $jerry$ & 25 \\
+	   \hline
+	\end{tabular}
+	 \caption{Mean-time-between-failures for the five runtimes in the experiment in ~\cref{sec:eval_opt_nbr_replicas_2}.}
+	 \label{table:exp_nodes_means_2}
+	 \end{center}
+ \end{table}
+
+
+\subsubsection*{Result}
+As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 15 seconds, higher than the default value. But before the reliable nodes have failed twice, their mtbf will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/2/total.pdf}
+\caption{Total number of replicas.} \label{fig:exp_opt_replicas_total}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_30.pdf}
+\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_10.pdf}
+\caption{Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
 \end{figure}
 
 
