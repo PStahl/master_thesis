@@ -857,9 +857,31 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, and doing so in an optimal way by choosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In order to evaluate our model, we set up an execution environment consisting of 6 servers with homogeneous hardware components. On five of these servers, two Calvin runtimes were started. These runtimes were periodically killed and restarted, simulating node failures. On the sixth server a single runtime was started, which was not killed.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In order to evaluate our model, we used a cluster consisting of 6 inter-connected servers with homogeneous hardware components. A laptop was also used when measuring replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}.
 
-The reason for having a stable runtime was to have the consumer deployed to this runtime, while the producers were deployed to the failing runtimes. The application if further described in~\cref{sec:eval_application}.
+On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started which were periodically killed and restarted, thereby simulating node failures. On the sixth server a single runtime was started, which was not killed.
+
+The reason for having a stable runtime was to have the producer and consumer deployed to this runtime, while a service actor were deployed to the failing runtimes. The application is further described in~\cref{sec:eval_application}.
+
+\subsection{Simulating node failure} \label{sec:simulating_node_failure}
+As mentioned, the runtimes were periodically killed and restarted to simulate node failures. The time between killing and restarting the runtime varied for the various the experiments and sometimes between the runtimes as well. 
+
+The process is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1.
+
+\begin{algorithm} 
+	\caption{Simulating node failures} \label{alg:simulating_node_failures}
+	\begin{algorithmic}[1]
+	\While {$true$}
+		\State
+		\Call{start runtime}{}
+		\State $t_{s}\gets \mathcal{N} (MTBF,1)$
+		\State
+		\Call{sleep $t_{s}$}{}
+		\State
+		\Call{kill runtime}{}
+	\EndWhile
+	\end{algorithmic}
+\end{algorithm}
 
 \subsection{Server specification} \label{sec:server_spec}
 The servers used in the experiments all have a XXX GHz Intel processor, 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
@@ -870,8 +892,10 @@ The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GH
 %TODO mention SSD speed? maybe of value when talking about swap memory... 
 %mention some speed specs?
 
-\section{Application} \label{sec:eval_application}
-The application used in the experiments is of simplest form, consisting only of one consuming and one producing actor. The producing actors produced integer numbers and sent those to the consuming actor which printed the values to standard out. Since the consuming actor is on a stable server, only the producing ones were to be replicated by the system.
+\subsection{Application} \label{sec:eval_application}
+The application used in the experiments is of simplest form, consisting only of one consuming, one producing actor, and one service actor for which a certain reliability is desired. 
+
+The producing actor produced integer numbers and sent those to the  service actor which simply forwarded them to the consuming actor, which printed the values to standard out. Since both the producing and the consuming actor are on a stable server, only the service actor was to be replicated by the system.
 
 The computational environment and the application is shown in~\cref{fig:evaluation_application}.
 
@@ -886,7 +910,7 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 
 \section{Experiments}
 
-\subsection{Measurement of time t} \label{sec:eval_time_t}
+\subsection{Measurement of time $t$} \label{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
