@@ -857,9 +857,9 @@ When the monitor reports that a node has failed, a ... is executed. First inform
 In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, and doing so in an optimal way by choosing the most reliable nodes and thereby the minimum number of replicas.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In order to evaluate our model, we used a cluster consisting of 6 inter-connected servers with homogeneous hardware components. A laptop was also used when measuring replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In order to evaluate our model, we used a cluster consisting of 6 inter-connected servers with homogeneous hardware components. A laptop was also used when measuring replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The servers will be referred to as \emph{Gru} (stable), \emph{Dave}, \emph{Jerry}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started which were periodically killed and restarted, thereby simulating node failures. On the sixth server a single runtime was started, which was not killed.
+On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started which were periodically killed and restarted, thereby simulating node failures. As described in~\cref{sec:TODO}, our model needs at least two failure times for a given node to calculate its MTBF and thereby its reliability. In the experiments, before two failures has happened, all nodes will use a default value of 10 seconds as MTBF. On the sixth server a single runtime was started, which was not killed.
 
 The reason for having a stable runtime was to have the producer and consumer deployed to this runtime, while a service actor were deployed to the failing runtimes. The application is further described in~\cref{sec:eval_application}.
 
@@ -902,7 +902,7 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/evaluation_application.pdf} 
-\caption{The computational environment used in the experiments. The servers in the cluster has gotten names and in the figure there is one producer replica on Dave, Mark och Jerry. Gru is the stable server which holds the consuming actor.} \label{fig:evaluation_application}
+\caption{The computational environment used in the experiments. In this example, there is a producer and consumer on Gru, and two replicas of the service located on Dave and Mark.} \label{fig:evaluation_application}
 \end{figure}
 
 %REPLICATION TIME:
@@ -969,7 +969,7 @@ After the application was started, the reliability level of the nodes on which r
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
 
 \subsubsection*{Result}
-The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.997, clearly above the desired level of 0.98.
+The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
 
 Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
 
