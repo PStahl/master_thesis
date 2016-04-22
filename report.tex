@@ -1103,13 +1103,7 @@ In this experiment, the MTBF for the various nodes varied over time, following a
 T_{sleep} = t_i + 20 * \sin{(2\*\pi\*T_{elapsed} / 300)}
 \end{equation}
 
-Where $t_i$ are the numbers following a normal distribution with mean 25 and standard deviation of 1, and $T_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, the ~\cref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
-
-\begin{figure}[!hbt]
-\centering
-\includegraphics[scale=0.5]{images/sinus_failure_times.pdf}
-\caption{Time between failures as of~\cref{eq:eval_sleep_time} used in test ~\ref{sec:eval_adaptive_rel_model}.} \label{fig:eval_sleep_time}
-\end{figure}
+Where $t_i$ are the numbers following a normal distribution with mean 25 and standard deviation of 1, and $T_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, \cref{fig:eval_sleep_time} in ~\cref{appendix:figures} shows how the actual time to sleep varies over time.
 
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
 
@@ -1520,6 +1514,13 @@ Scheduling Optimization in Cloud Computing
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time_less_than_40.pdf} 
 \caption{The average replication time as a function of state size.}\label{fig:replication_time_less_than_40}
+\end{figure}
+
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/sinus_failure_times.pdf}
+\caption{Time between failures as of~\cref{eq:eval_sleep_time} used in test ~\ref{sec:eval_adaptive_rel_model}.} \label{fig:eval_sleep_time}
 \end{figure}
 
 \chapter{Code} \label{appendix:code}
