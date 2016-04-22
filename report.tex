@@ -627,7 +627,8 @@ In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used
 
 Like ~\cite{selfAdaptRel}, we assume failures depends on the nodes, not the jobs running on them and the computations they perform.
 
-Unlike the reliability models presented in XXX, we do not consider link failures in our model. However, in our experiments, link failures are indeed possible, but in the case of a link failure a node will be assumed dead, and a new replica created. Therefore, the desired reliability will still be met. %TODO we should have something here about links right? 
+Unlike the reliability models presented in XXX TODO, we do not consider link failures in our model. However, in our experiments, link failures are indeed possible, but in the case of a link failure a node will be assumed dead, and a new replica created. Therefore, the desired reliability will still be met. %TODO we should have something here about links right? 
+
 
 \subsubsection{Failure distribution}
 %TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
@@ -641,7 +642,9 @@ P(k failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
 
 where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and spawn a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}. 
 
-However, when a system first is set up and started, no knowledge about the failure rates of the system is known. Therefore, when the system is set up, we do start with assuming constant failure rates. As time goes and the time of failure for nodes are stored, one will get a more precise value for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
+However, in order to use~\cref{eq:Poisson}, the MTBF of a node must be available. To calculate a node's MTBF at least two failures most have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the MTBF for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice.
+
+As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
