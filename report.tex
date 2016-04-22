@@ -692,6 +692,8 @@ If a node A dies before sending a heartbeat to B, the last received heartbeat fr
 
 In the latter case, node A dies directly after sending a heartbeat, since it will no longer send heartbeats, that one will timeout, and the time to detect it will therefore be 500 ms, which is thus an upper bound of detecting node failures.
 
+It is safe to assume that the probability that a node dies just before sending a heartbeat and just after is the same we get a theoretical average detection time of 400 ms.
+
 %TODO
 """Should we use the upper bound in our model, or the 'average value'???"""
 
@@ -938,7 +940,7 @@ As shown in~\cref{fig:replication_time_percentages_server}, as long as one does 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
 In this experiment, each runtime was given pseudo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 6 runtimes all had the same MTBF, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the MTBF for a node was 10 seconds.
 
-After the application was started, the the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
 
