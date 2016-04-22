@@ -1070,7 +1070,7 @@ The required reliability in the experiment was set to 0.999. This results in tha
 
 
 \subsubsection*{Result}
-As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 15 seconds, higher than the default value. But before the reliable nodes have failed twice, their mtbf will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
+As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 25 seconds, higher than the default value. But before the reliable nodes have failed twice, their mtbf will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
 
 \begin{figure}[!hbt]
 \centering
@@ -1080,8 +1080,8 @@ As mentioned, the default MTBF is 10 seconds when no failure data is known for a
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_30.pdf}
-\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30_2}
+\includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_25.pdf}
+\caption{Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
 \end{figure}
 
 \begin{figure}[!hbt]
