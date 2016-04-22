@@ -348,7 +348,7 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 %The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 
 \subsection{Rollback recovery} \label{subsec:background_rollback}
-Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state ~\cite{surveyFaultParallel}. In contrast to check pointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with check pointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
+Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state ~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
 Job replication is a commonly used fault tolerance technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously ~\cite{faultToleranceGrid}.
@@ -366,7 +366,7 @@ Active replication can also be used in consensus algorithms such as majority vot
 
 \item Semi-Active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
 
-\item Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional check pointing is employed.
+\item Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 \end{itemize}
 
 A replica, whether active, semi-active or passive replication is used, is defined as ~\cite{effTaskReplMobGrid}:
@@ -520,7 +520,7 @@ Furthermore, we assume the replicated tasks/services are deterministic and alway
 
 We also assume the case where all nodes are within the same cluster, connected with high-bandwidth and low-latency links, and all nodes are reachable from every other node. We therefore assume that the time it takes to send a message between two nodes is the same for all nodes.
 
-By the use of these limitations we avoid unnecessary complexity in form of check pointing and consensus. The impact of this will be discussed later in report, \cref{ch:discussion}.
+By the use of these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in report, \cref{ch:discussion}.
 
 %\subsection{Reliability model}
 %\label{sec:limitations_reliability_model}
@@ -1182,7 +1182,7 @@ Another, perhaps better solution would be to replicate the actors with the bigge
 %TODO
 \iffalse
 NOTES:
-Replication impose extra burden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased.(~\cite{adaptiveCheckPointAndRep} combines check pointing and replication)
+Replication impose extra burden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased.(~\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
 \\\\
 Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
 \\\\
