@@ -543,7 +543,7 @@ The above corresponds to the probability of the event “all the replicas and th
 In this section, we describe the system and application models employed in this work.
 
 \subsection{Computational environment} \label{subsec:design_comp_env}
-In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogeneous hardware with high bandwidth low latency redundant links between them.
+In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogeneous hardware with high bandwidth low latency redundant links between them. Due to its heterogeneous properties, nodes can not be assumed to have the same failure rate.
 
 A small example of four interconnected nodes  is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consists of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
 
