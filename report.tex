@@ -866,7 +866,7 @@ The reason for having a stable runtime was to have the producer and consumer dep
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the runtimes were periodically killed and restarted to simulate node failures. The time between killing and restarting the runtime varied for the various the experiments and sometimes between the runtimes as well. 
 
-The process is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1.
+The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node  may during the duration of a test be either lower or higher than the given MTBF.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
