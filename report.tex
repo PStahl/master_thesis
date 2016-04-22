@@ -924,7 +924,7 @@ The average of the 50 measured times was 483.8 ms. This above the theoretical av
 
 % corresponds well to the theoretical average of 500 ms. %TODO this experiment is not needed if we set a timeout of 500 ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200 ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
-\subsection{Measurement of replication time} \label{subsec:eval_repl_time}
+\subsection{Measurement of replication time} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports.
 
 In this experiment, the actor had only one out port and no in port. The state of the actor was incrementally increased by increasing the size of its output queue, and the time it took to replicate the actor to another runtime was measured.
@@ -946,19 +946,19 @@ As shown in~\cref{fig:replication_time_percentages_server}, as long as one does 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time.pdf} 
-\caption{The average replication time as a function of state size.}\label{fig:replication_time}
+\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size.}\label{fig:replication_time}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time_percentages_server.pdf} 
-\caption{Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from server to another server.}\label{fig:replication_time_percentages_server}
+\caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from server to another server.}\label{fig:replication_time_percentages_server}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time_percentages_laptop.pdf} 
-\caption{Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from laptop to laptop.}\label{fig:replication_time_percentages_laptop}
+\caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from laptop to laptop.}\label{fig:replication_time_percentages_laptop}
 \end{figure}
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
@@ -978,7 +978,7 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/reliability.pdf}
-\caption{Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
+\caption{Result for test~\ref{sec:eval_rel_level}. Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
 \end{figure}
 
 \subsection{Optimal number of replicas}
@@ -1003,7 +1003,7 @@ Similar to the previous experiment, each runtime was given pseudo-random numbers
 	  $jerry_2$ & 40 \\
 	   \hline
 	\end{tabular}
-	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment in ~\cref{sec:eval_opt_nbr_replicas}.}
+	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment ~\ref{sec:eval_opt_nbr_replicas}.}
 	 \label{table:exp_nodes_means}
 	 \end{center}
  \end{table}
@@ -1022,25 +1022,25 @@ As shown in the figures, the number of replicas decreased over time, from three 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/total.pdf}
-\caption{Total number of replicas.} \label{fig:exp_opt_replicas_total}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Total number of replicas.} \label{fig:exp_opt_replicas_total}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_30.pdf}
-\caption{Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_15.pdf}
-\caption{Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_75.pdf}
-\caption{Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
 \end{figure}
 
 \subsubsection{Optimal replicas}
@@ -1063,7 +1063,7 @@ The required reliability in the experiment was set to 0.999. This results in tha
 	  $jerry$ & 25 \\
 	   \hline
 	\end{tabular}
-	 \caption{Mean-time-between-failures for the five runtimes in the experiment in ~\cref{sec:eval_opt_nbr_replicas_2}.}
+	 \caption{Mean-time-between-failures for the five runtimes in the experiment ~\ref{sec:eval_opt_nbr_replicas_2}.}
 	 \label{table:exp_nodes_means_2}
 	 \end{center}
  \end{table}
@@ -1075,19 +1075,19 @@ As mentioned, the default MTBF is 10 seconds when no failure data is known for a
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/total.pdf}
-\caption{Total number of replicas.} \label{fig:exp_opt_replicas_total_2}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Total number of replicas.} \label{fig:exp_opt_replicas_total_2}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_25.pdf}
-\caption{Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_10.pdf}
-\caption{Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
+\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
 \end{figure}
 
 
@@ -1105,7 +1105,7 @@ Where $t_i$ are the numbers following a normal distribution with mean 25 and sta
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/sinus_failure_times.pdf}
-\caption{Time between failures as of~\cref{eq:eval_sleep_time}.} \label{fig:eval_sleep_time}
+\caption{Time between failures as of~\cref{eq:eval_sleep_time} used in test ~\ref{sec:eval_adaptive_rel_model}.} \label{fig:eval_sleep_time}
 \end{figure}
 
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
@@ -1116,13 +1116,13 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_replicas.pdf}
-\caption{Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_rel}
+\caption{Result for test ~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_rel}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_node_rels.pdf}
-\caption{Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
+\caption{Result for test ~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
 
 
