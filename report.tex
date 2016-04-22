@@ -896,10 +896,8 @@ The process of killing and restarting is shown in~\cref{alg:simulating_node_fail
 The servers used in the experiments all have a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20GHz and 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
 \subsection{Laptop specification} \label{sec:laptop_spec}
- %TODO place this here?
-The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB RAM. 
+The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
 %TODO mention SSD speed? maybe of value when talking about swap memory... 
-%mention some speed specs?
 
 \subsection{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming, one producing actor, and one service actor for which a certain reliability is desired. 
@@ -947,7 +945,7 @@ After starting the actor on one of the two runtimes, it was replicated to the ot
 
 Replicating an actor consists of getting the state of the actor, sending the state to another node, starting a new actor with that state, and sending the reply. \Cref{fig:replication_time_percentages_server} and ~\cref{fig:replication_time_percentages_laptop} show how much time is spent on each part of the replication when replicating from server to another server, and from laptop to laptop respectively.
 
-As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in ~\cref{fig:replication_time_percentages_laptop}.
+As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in ~\cref{fig:replication_time_percentages_laptop}. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be ever larger part of the total replication time.
 
