@@ -13,6 +13,8 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 
+\crefname{app}{Appendix}{Appendices}
+
 \newtheorem{definition}{Definition}[chapter]
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
@@ -1147,6 +1149,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
 
 The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_2} gives a reliability of
+
 \begin{equation*}
 \begin{split}
 R(3600) = e^{3600/31536000}\\
@@ -1496,7 +1499,7 @@ Scheduling Optimization in Cloud Computing
 \end{thebibliography}
 
 \begin{appendices}
-\chapter{Figures} \label{appendix:figures}
+\chapter{Figures} \label[app]{appendix:figures}
 \Cref{fig:before_node_failure} and \cref{fig:after_node_failure} shows the computational environment of four nodes and one actor between a producer and a consumer before and after a node failure. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name. \cref{fig:replication_flow} shows the communication flow after a node failure.
 
 \begin{figure}[!hbt]
