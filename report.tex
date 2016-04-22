@@ -518,6 +518,8 @@ By assuming fully reliable links between nodes, we limit our model to only consi
 
 Furthermore, we assume the replicated tasks/services are deterministic and always produces the correct result for a given input. This allows us to focus on the reliability of producing a result and not lose any data, instead of the reliability of producing the correct result. As mentioned before this can quite easily be solved by extending the model with consensus such as majority voting. Due to that we don't gain any extra useful information we have chosen to leave this a future work.
 
+We also assume the case where all nodes are within the same cluster, connected with high-bandwidth and low-latency links, and all nodes are reachable from every other node. We therefore assume that the time it takes to send a message between two nodes is the same for all nodes.
+
 By the use of these limitations we avoid unnecessary complexity in form of check pointing and consensus. The impact of this will be discussed later in report, \cref{ch:discussion}.
 
 %\subsection{Reliability model}
@@ -549,7 +551,7 @@ In this paper we assume that all resources are within the same cluster, with low
 
 A small example of four interconnected nodes  is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consists of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
 
-Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{appendix:figures} a system of one replicated actor is shown before and after a node failure.
+Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{appendix:figures} a system of one replicated actor is shown before and after a node failure. Finally, we assume that the time to send a message between two nodes is the same for all nodes.
 
 \begin{figure}[!hbt]
 \centering
@@ -1162,6 +1164,8 @@ R_{T}(3600) = 1 - \prod\limits_{k=1}^2  F_{Res_k}(3600)\\
 \end{equation*}
 
 This means despite having a large replication time, a high reliability can be achieved by only having two replicas.
+
+If our model is to be used in an environment where not all nodes are located within the same cluster, one must take into account that the replication time will be higher when replicating to a node in another cluster than within the same cluster.
 
 Finally, since using a \emph{default MTBF} of nodes for which we have not yet experienced failure, our model is obviously limited, as this default value may be incorrect. To use in a real-world situation by a service provider, the reliability model must be extended. To cope with the MTBF, one could use past failure data from their cluster. Furthermore, the model should be extended to also take into account parameters like system load, link failures, etc. 
 
