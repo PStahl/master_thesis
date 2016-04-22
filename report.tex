@@ -1067,7 +1067,7 @@ As mentioned, the default MTBF is 10 seconds when no failure data is known for a
 
 \subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
 %TODO the mean-time-between-failure does not vary, really... must rephrase this sentence
-In this experiment, the MTBF for the various nodes varied over time, following a $sinus-curve$. The pseudo-random numbers for the nodes followed a normal distribution with mean 25 and standard deviation of 1. However, the time to sleep between failures were calculated by ~\ref{eq:eval_sleep_time}.
+In this experiment, the MTBF for the various nodes varied over time, following a $sinus-curve$. The pseudo-random numbers for the nodes followed a normal distribution with mean 25 and standard deviation of 1. However, the time to sleep between failures were calculated by ~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. The required reliability was set to 0.99999. This value was chosen so that the number of replicas needed would vary between 3 and 5, depending on the current state of the system.
 
 %TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
@@ -1085,7 +1085,7 @@ Where $t_i$ are the numbers following a normal distribution with mean 25 and sta
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
 
 \subsubsection*{Result}
-The test ran for 30 minutes. ~\cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and ~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes vary over time. 
+The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and ~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes vary over time. 
 
 \begin{figure}[!hbt]
 \centering
