@@ -747,9 +747,10 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 	\caption{Greedy scheduling algorithm} \label{alg:scheduling}
 	\begin{algorithmic}[1]
 	\State $n\gets 0$
-	\State $nodes\gets available\ nodes$\Comment{sorted by reliability, the most reliable first}
+	
+	\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
 	\While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
-		\State $node\gets nodes.pop$\Comment{take the node with highest reliability}
+		\State $node\gets nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
 		\State
 		\Call{place replica on node}{$replica$, $node$}
@@ -766,23 +767,26 @@ This algorithm is run by a master node, selected when failure is detected. The s
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
-	\State $current\_nodes\gets current\_replica\_nodes$
-	\Comment{current replica nodes sorted by reliability, least reliable first}
-	\State $least\_reliable\gets current\_nodes.pop$
-	\State $nodes\gets available\ nodes$\Comment{sorted by reliability, highest first}
-	\State $most\_reliable\gets available\_nodes.pop$
-	\While {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
-		\State $replica\gets $\Call{$replica\_at$}{$least\_reliable$}
-		\State
-		\Call{place replica on node}{$replica$, $most\_reliable$}
-		\State
-		\Call{delete replica from node}{$replica$, $least\_reliable$}
+	\Do 
+		\State $current\gets current\_nodes$
+		\Comment{sorted after reliability in ascending order}
 		\State $least\_reliable\gets current\_nodes.pop$
-		\State $current\_nodes\gets highest\_reliable$
-		\State $least\_reliable\gets current\_nodes.pop$
-		\State $available\_nodes\gets least\_reliable$
-		\State $most\_reliable\gets available\_nodes.pop$
-	\EndWhile
+		\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
+		\State $most\_reliable\gets nodes.pop$
+		\State
+		\If {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
+			\State $replica\gets $\Call{$replica\_at$}{$least\_reliable$}
+			\State
+			\Call{replicate to}{$replica$, $most\_reliable$}
+			\State
+			\Call{delete replica from node}{$replica$, $least\_reliable$}
+			\State
+			\State $current\gets most\_reliable$
+			\State $nodes\gets least\_reliable$
+			\State $least\_reliable\gets current.pop$
+			\State $most\_reliable\gets nodes.pop$
+		\EndIf
+	\doWhile {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
 	
 	\end{algorithmic}
 \end{algorithm}
