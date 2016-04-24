@@ -571,14 +571,14 @@ From that a node on which a replica is running fails, until a new replica is cre
 
 In our model, heartbeats are sent to all nodes in the system every 200 ms. Furthermore, a node is considered dead when no heartbeat is received for 500 ms, which is an upper bound to how long it takes to detect a node failure. 
 
-The frequency of the heartbeats, and the timeout time, is configurable and should be set depending on the desired behavior. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the desired reliability. On the other hand, highest frequency means more packages being sent thereby increasing network traffic in the system.
+The frequency of the heartbeats, and the timeout time, is configurable and should be set depending on the desired behavior. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the desired reliability. On the other hand, higher frequency means more packages being sent thereby increasing network traffic in the system.
 
 \subsubsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
 In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications  are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
+In our model, the reliability of the running applications  are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{subsec:design_sched_alg}.
 
-On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore optimize the number of replicas, by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{sec:design_optimization}.
+On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
 
 \subsection{Storage of data} \label{subsec:design_storage}
 All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, that information is lost in case that node fails. Also, if a remote database is used, we introduce a single-point-of-failure, resulting in a system where the reliability is no more than the reliability of the database. 
@@ -635,8 +635,10 @@ In contrast to the case with one \emph{primary} replica and several \emph{second
 \caption{An application model where a task or service $S$ has been replicated 4 times.}\label{fig:app_model_replication}
 \end{figure}
 
+The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
+
 \subsection{Fault model} \label{subsec:design_fault_model}
-In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques ~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
+In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
 
 Like ~\cite{selfAdaptRel}, we assume failures depends on the nodes, not the jobs running on them and the computations they perform.
 
@@ -761,7 +763,7 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 
 This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{subsec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
 
-\subsubsection{Optimization}
+\subsubsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} ensures the required reliability is met with the minimum number of replicas possible. However, as more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
 
 \begin{algorithm} 
@@ -787,7 +789,19 @@ This algorithm is run by a master node, selected when failure is detected. The s
 			\State $most\_reliable\gets nodes.pop$
 		\EndIf
 	\doWhile {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
+	\State
 	
+\Statex\Comment{move replicas to the most reliable nodes}
+	\Do 
+		\State $current\gets current\_nodes$
+		\Comment{sorted after reliability in ascending order}
+		\State $least\_reliable\gets current\_nodes.pop$
+		\If {\Call{reliability}{$current$}\ >\ required}
+			\State $replica\gets $\Call{$replica\_at$}{$least\_reliable$}
+			\State
+			\Call{delete replica from node}{$replica$, $least\_reliable$}
+		\EndIf
+	\doWhile {\Call{reliability}{$current$}\ >\ required}
 	\end{algorithmic}
 \end{algorithm}
 
@@ -864,6 +878,9 @@ The state of an actor is needed when replicating an actor. In Calvin, the state 
 
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between runtimes and actors. Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
+
+\subsubsection{Replication} \label{subsec:calvin_replication}
+The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, and sending it to the runtimes in which the new replica is to be created. A new actor of the same type is then created using the received state, and lastly its in- and out-port connections are set up.
 
 \subsection{Our contributions} \label{subsec:design_contributions} % ish?
 Here follows a small description of the most important parts of our implementation.
