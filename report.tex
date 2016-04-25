@@ -763,6 +763,10 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 
 This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{subsec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
 
+\subsubsection{Replaceable reliability model}
+\Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion. When sorting the nodes, one can easily take other parameters into account, such as the load of the nodes.
+%TODO
+
 \subsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} ensures the required reliability is met with the minimum number of replicas possible. However, as more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
 
