@@ -955,7 +955,7 @@ Besides storing the connected nodes usages the resource manager stores informati
 
 
 \subsubsection{Heartbeat Actor}
-The hearbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when its started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
+The heartbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when its started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
 
 Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
@@ -999,7 +999,7 @@ The process of killing and restarting is shown in~\cref{alg:simulating_node_fail
 \end{algorithm}
 
 \subsection{Server specification} \label{sec:server_spec}
-The servers used in the experiments all have a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20GHz and 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
+The servers used in the experiments all have a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
 \subsection{Laptop specification} \label{sec:laptop_spec}
 The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
@@ -1183,7 +1183,7 @@ The required reliability in the experiment was set to 0.999. This results in tha
 
 
 \subsubsection*{Result}
-As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 25 seconds, higher than the default value. But before the reliable nodes have failed twice, their mtbf will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
+As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 25 seconds, higher than the default value. But before the reliable nodes have failed twice, their MTBF will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
 
 \begin{figure}[!hbt]
 \centering
