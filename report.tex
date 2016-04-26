@@ -784,7 +784,7 @@ Furthermore, getting the available nodes in a sorted list is also an external fu
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
-	\Require{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $\lambda$ is the required reliability}
 	\Statex
 	\Procedure{Move to most reliable nodes}{}
 	\Do
@@ -817,7 +817,7 @@ Furthermore, getting the available nodes in a sorted list is also an external fu
 			\State
 			\Call{delete replica from node}{$replica$, $least\_reliable$}
 		\EndIf
-	\doWhile {\Call{reliability}{$current$}\ >\ required}
+	\doWhile {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
 	\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
