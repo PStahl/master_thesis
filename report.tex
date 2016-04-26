@@ -1215,6 +1215,26 @@ T_{sleep} = t_i + 20 * \sin{(2\*\pi\*T_{elapsed} / 300)}
 
 Where $t_i$ are the numbers following a normal distribution with mean 25 and standard deviation of 1, and $T_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, \cref{fig:eval_sleep_time} in ~\cref{appendix:figures} shows how the actual time to sleep varies over time.
 
+The process of killing nodes therefore differed from~\cref{alg:simulating_node_failures}. How nodes were killed and restarted in this experiment is shown in~\cref{alg:simulating_node_failures_sinus}.
+
+\begin{algorithm} 
+	\caption{Simulating node failures} \label{alg:simulating_node_failures_sinus}
+	\begin{algorithmic}[1]
+	\State $T_{start}\gets$ current time
+	\While {$true$}
+		\State
+		\Call{start runtime}{}
+		\State $T_{now}\gets$ current time
+		\State $T_{elapsed}\gets T_{start}-T_{now}$
+		\State {$t_{s}\gets \mathcal{N} (MTBF,1) + 20 *  \sin{(2\*\pi\*T_{elapsed} / 300)}$}
+		\State
+		\Call{sleep $t_{s}$}{}
+		\State
+		\Call{kill runtime}{}
+	\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
 
 \subsubsection*{Result}
