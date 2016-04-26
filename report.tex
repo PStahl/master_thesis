@@ -718,7 +718,7 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 \begin{algorithm} 
 	\caption{Greedy scheduling algorithm} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\State $n\gets 0$
+	\State $n\gets current\_replicas$
 	
 	\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
 	\While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
@@ -738,16 +738,15 @@ This algorithm is run by a master node, selected when failure is detected. The s
 %TODO We actaully take the load into account now
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} ensures the required reliability is met with the minimum number of replicas possible. However, as more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
 
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
 	\Do 
-		\State $current\gets current\_nodes$
-		\Comment{sorted after reliability in ascending order}
-		\State $least\_reliable\gets current\_nodes.pop$
+		\State $current\gets current\_nodes$\Comment{sorted after reliability in ascending order}
 		\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
+		\State $least\_reliable\gets current\_nodes.pop$
 		\State $most\_reliable\gets nodes.pop$
 		\State
 		\If {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
@@ -765,7 +764,6 @@ This algorithm is run by a master node, selected when failure is detected. The s
 	\doWhile {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
 	\State
 	
-\Statex\Comment{move replicas to the most reliable nodes}
 	\Do 
 		\State $current\gets current\_nodes$
 		\Comment{sorted after reliability in ascending order}
@@ -778,6 +776,10 @@ This algorithm is run by a master node, selected when failure is detected. The s
 	\doWhile {\Call{reliability}{$current$}\ >\ required}
 	\end{algorithmic}
 \end{algorithm}
+
+The first part of~\cref{alg:optimization} make sure the most reliable nodes are used, by moving the replica on the least reliable node to the most reliable node available as long as more reliable nodes are available. The second part make sure no unnecessary replica is used, by deleting the replica on the least reliable node as long as the required reliability is still met.
+
+\Cref{alg:optimization} make sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 does not increase the overall reliability very much, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
 \section{Monitoring} \label{subsec:design_monitoring}
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
