@@ -1312,7 +1312,7 @@ For measuring reliability more accurate, more factors must be included (not only
 \begin{equation} \label{eq:overall_reliability}
 R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
 \end{equation}
-where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (the device executing the program), hardware, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). 
+where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (or the device executing the program), various hardware components, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). 
 
 By adding more parameters, the assumption that failures are independent will likely no longer hold. For example, if two nodes are in the same rack, and the rack's switch fails, both nodes will lose their connectivity to the rest of the cluster. The reliability of a given node will therefore also depend on which nodes currently hold a replica.
 
