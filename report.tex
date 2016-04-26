@@ -908,22 +908,21 @@ Besides storing the connected nodes usages the resource manager stores informati
 
 
 \subsubsection{Heartbeat Actor}
-As each node periodically sends updates to the other nodes, it could be used as a heartbeat system. However, the messages and sent using TCP, which involved a initial handshake to setup the communication channel. For a heartbeat system, this is unnecessary overhead. Fort this reason, every runtime also starts a heartbeat actor, which periodically sends heartbeats in form of UDP messages to the other nodes. It also listens on a port and registers incoming heartbeats.
+The hearbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when its started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
 
-For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the node to which the heartbeat was sent is assumed dead, and when a heartbeat is received, all timeouts related to that node is canceled.
+Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
+
+For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the runtime to which the heartbeat was sent is assumed dead, and when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
 
 \subsubsection{Application monitor}
+%TODO what is the runtime dies? Should be change to handling actors on each runtime? And for a given replica, find all replicas, and chose the node with the highest ID?
 Each runtime also periodically monitors the applications deployed to it. We have also added an application monitor on each node that once every five seconds checks the current reliability for all actors in the applications started on the node. 
 
 % Mention any time at all? Five seconds??
 If the current reliability is not achieved more replicas is created and if the reliability is unnecessary high replicas are deleted.
 
-\subsubsection{Failed node mechanism}
-When the monitor reports that a node has failed, a ... is executed. First information about all actors that were running on the failed node are fetched from storage, the actors marked for achieving a certain reliability is replicated to new nodes until the required level of reliability is reached. 
-
-
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, a set of experiments was conducted. The goal of the experiments were to show that our model dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, and doing so in an optimal way by choosing the most reliable nodes and thereby the minimum number of replicas.
+In order to validate our model, a set of experiments was conducted. The goal of the experiments were to show mainly three properties our model has. First, that it dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, by dynamically creating new replicas when old ones are lost. Second, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. And finally, that it adapts to changing properties of the system.
 
 \section{Computational environment} \label{sec:eval_comp_env}
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru} (stable), \emph{Dave}, \emph{Jerry}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
