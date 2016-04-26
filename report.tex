@@ -13,13 +13,25 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 
+
 \crefname{app}{Appendix}{Appendices}
+\crefname{procedure}{Algorithm}{Procedure}
+
 
 \newtheorem{definition}{Definition}[chapter]
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
 
-%\geometry{showframe}
+\renewcommand{\algorithmicrequire}{\textbf{Precondition:}}
+\renewcommand{\algorithmicensure}{\textbf{Input:}}
+
+\floatstyle{ruled}
+\newfloat{function}{htbp}{lok}
+\floatname{function}{Function}
+
+\crefname{function}{function}{functions}
+\Crefname{function}{Function}{Functions}
+
 
 \algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
 
@@ -715,27 +727,56 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 
 %First we find which nodes that are available for placing a replica on. Secondly we filter the nodes with a load lower than a preferred level. If no preferred node is available we choose an unpreferred one.
 
-\begin{algorithm} 
-	\caption{Greedy scheduling algorithm} \label{alg:scheduling}
+\begin{algorithm}[H]
+	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\State $n\gets current\_replicas$
-	
-	\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
-	\While {$\lambda \geq \prod\limits_{k=1}^n  R_{Res_k}(t)$}
+	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $\lambda$ is the reliability to fulfill}
+	\Statex
+	\Procedure{Greedy scheduling algorithm}{}
+	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
+	\While {$\lambda \geq$ \Call{reliability}{$current\_nodes$}}
 		\State $node\gets nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
 		\State
 		\Call{place replica on node}{$replica$, $node$}
-		\State $n\gets n + 1$
+		\State $current\_nodes\gets node$
 	\EndWhile
+	\EndProcedure
 	\end{algorithmic}
-\end{algorithm}
+\end{algorithm} 
+
+\begin{function} 
+	\caption{Getting available nodes in an ordered list with preferred node first} \label{func:get_available_nodes}
+	\begin{algorithmic}[1]
+	\Require{$connected\_nodes$ is a list containing all alive nodes in the system}
+	\Ensure{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Statex
+	\Function{get available nodes}{$current\_nodes$}
+	    \State $nodes\gets connected\_nodes \setminus current\_nodes$
+	    \State $nodes.sort$\Comment{sort after reliability in descending order}
+	    \State \Return $nodes$
+	\EndFunction
+	\end{algorithmic}
+\end{function}
+
+\begin{function} 
+	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
+	\begin{algorithmic}[1]
+	\Ensure{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Statex
+	\Function{reliability}{$current\_nodes$}
+		\State $n\gets current\_nodes.length$
+		\State return $ \prod\limits_{k=1}^n  R_{current\_nodes[k]}(t)$
+	\EndFunction
+	\end{algorithmic}
+\end{function}
 
 This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{subsec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
 
 \subsubsection{Replaceable reliability model}
-\Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion. When sorting the nodes, one can easily take other parameters into account, such as the load of the nodes.
-%TODO We actaully take the load into account now
+\Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
+
+Furthermore, getting the available nodes in a sorted list is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load if above a given threshold.
 
 \subsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
@@ -743,37 +784,41 @@ This algorithm is run by a master node, selected when failure is detected. The s
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
-	\Do 
-		\State $current\gets current\_nodes$\Comment{sorted after reliability in ascending order}
-		\State $nodes\gets available\ nodes$\Comment{sorted after reliability in descending order}
-		\State $least\_reliable\gets current\_nodes.pop$
+	\Require{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Statex
+	\Procedure{Move to most reliable nodes}{}
+	\Do
+		\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
 		\State $most\_reliable\gets nodes.pop$
+		\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
+		\State $least\_reliable\gets current\_nodes.pop$
 		\State
-		\If {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
-			\State $replica\gets $\Call{$replica\_at$}{$least\_reliable$}
+		\If {$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
+			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
 			\Call{replicate to}{$replica$, $most\_reliable$}
 			\State
 			\Call{delete replica from node}{$replica$, $least\_reliable$}
 			\State
-			\State $current\gets most\_reliable$
+			\State $current\_nodes\gets most\_reliable$
 			\State $nodes\gets least\_reliable$
 			\State $least\_reliable\gets current.pop$
 			\State $most\_reliable\gets nodes.pop$
 		\EndIf
-	\doWhile {\Call{reliability}{$most\_reliable$}$\ >\ $\Call{reliability}{$least\_reliable$}}
+	\doWhile {$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
+	\EndProcedure
 	\State
 	
+	\Procedure{Delete unnecessary replicas}{}
 	\Do 
-		\State $current\gets current\_nodes$
-		\Comment{sorted after reliability in ascending order}
 		\State $least\_reliable\gets current\_nodes.pop$
-		\If {\Call{reliability}{$current$}\ >\ required}
-			\State $replica\gets $\Call{$replica\_at$}{$least\_reliable$}
+		\If {\Call{reliability}{$current\_nodes$}\ >\ required}
+			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
 			\Call{delete replica from node}{$replica$, $least\_reliable$}
 		\EndIf
 	\doWhile {\Call{reliability}{$current$}\ >\ required}
+	\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
