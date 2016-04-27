@@ -658,7 +658,6 @@ In our case \emph{k} will always equal zero since we are interesting in knowing 
 P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
 
-
 However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available. To calculate a node's MTBF at least two failures most have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the MTBF for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice.
 
 As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
@@ -789,7 +788,7 @@ This algorithm is run by a master node, selected when failure is detected. The s
 
 Furthermore, determining which nodes to prefer when selecting where to place new replicas is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load if above a given threshold.
 
-When getting available nodes, sorted by with the preferred nodes first, It is important to consider the current nodes. Since we consider only node failures, and assume statistically independent failures, it is important not to place two replicas on the same node. But, it is also important is one were to take more parameters into account. For example, one may not want to have several replicas in the same rack, as they would all fail if the rack's switch fails.
+When getting available nodes, sorted by with the preferred nodes first, it is important to consider the current nodes. Since we consider only node failures, and assume statistically independent failures, it is important not to place two replicas on the same node. But, it is also important if one were to take more parameters into account. For example, one may not want to have several replicas in the same rack, as they would all fail if the rack's switch fails.
 
 \subsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
