@@ -1262,7 +1262,7 @@ The test was considered successful if, despite being one of the more reliable no
 \subsubsection*{Result}
 The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the CPU usage for the various nodes. \Cref{fig:eval_replaceable_model_loaded} and \cref{fig:eval_replaceable_model_unloaded} show the number of replicas for \emph{Kevin} and the other nodes during the test.
 
-\Cref{fig:eval_replaceable_model_loaded} clearly shows no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent.
+\Cref{fig:eval_replaceable_model_loaded} clearly shows no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent. This means our model is general and key components such as calculating the reliability of a node as well as sorting the available nodes may be replaced. 
 
 \begin{figure}[!hbt]
 \centering
@@ -1273,7 +1273,7 @@ The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the C
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/loads/loaded.pdf}
-\caption{Result for test ~\ref{sec:eval_replaceable_model}. The number of replicas over time for node \emph{Kevin}} \label{fig:eval_replaceable_model_loaded}
+\caption{Result for test ~\ref{sec:eval_replaceable_model}. The number of replicas over time for node \emph{Kevin}.} \label{fig:eval_replaceable_model_loaded}
 \end{figure}
 
 \begin{figure}[!hbt]
