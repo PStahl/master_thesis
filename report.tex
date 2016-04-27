@@ -776,7 +776,9 @@ This algorithm is run by a master node, selected when failure is detected. The s
 \subsubsection{Replaceable reliability model}
 \Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
 
-Furthermore, getting the available nodes in a sorted list is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load if above a given threshold.
+Furthermore, determining which nodes to prefer when selecting where to place new replicas is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load if above a given threshold.
+
+When getting available nodes, sorted by with the preferred nodes first, It is important to consider the current nodes. Since we consider only node failures, and assume statistically independent failures, it is important not to place two replicas on the same node. But, it is also important is one were to take more parameters into account. For example, one may not want to have several replicas in the same rack, as they would all fail if the rack's switch fails.
 
 \subsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, the following optimization algorithm is run as part of the application monitoring run every 5 seconds, described in ~\cref{subsec:monitoring_system_rel}.
