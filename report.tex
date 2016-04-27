@@ -1252,6 +1252,35 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \caption{Result for test ~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
 
+\subsection{Replaceable reliability model and node selection} \label{sec:eval_replaceable_model}
+Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, a test was conducted in which the system avoids placing replicas on nodes with a CPU usage above 15 percent. 
+
+In this experiment, five nodes were used. Three of these nodes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a MTBF of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a MTBF of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
+
+The test was considered successful if, despite being one of the more reliable nodes, the system avoided to place replicas on \emph{Kevin}, during the time its load was above the threshold of 15 percent.
+
+\subsubsection*{Result}
+The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the CPU usage for the various nodes. \Cref{fig:eval_replaceable_model_loaded} and \cref{fig:eval_replaceable_model_unloaded} show the number of replicas for \emph{Kevin} and the other nodes during the test.
+
+\Cref{fig:eval_replaceable_model_loaded} clearly shows no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/loads/usages.pdf}
+\caption{CPU usages in percent for the nodes used in test~\ref{sec:eval_replaceable_model}.} \label{fig:eval_replaceable_model_usages}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/loads/loaded.pdf}
+\caption{Result for test ~\ref{sec:eval_replaceable_model}. The number of replicas over time for node \emph{Kevin}} \label{fig:eval_replaceable_model_loaded}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/loads/unloaded.pdf}
+\caption{Result for test ~\ref{sec:eval_replaceable_model}. The number of replicas per node for \emph{Tim}, \emph{Mark}, \emph{Jerry}, and \emph{Dave}.} \label{fig:eval_replaceable_model_unloaded}
+\end{figure}
 
 \chapter{Discussion} \label{ch:discussion}
 %TODO
