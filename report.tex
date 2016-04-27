@@ -705,6 +705,8 @@ where $T_f$ is the time to detect that a node has failed, and $T_R$ is the time 
 \subsubsection{Node failure detection time} \label{sec:node_failure_detection_time}
 The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are periodically sent to all nodes in the system. If no heartbeat is received from node within a given time, it is assumed dead. The heartbeat system in our model is further described in~\cref{subsec:heartbeats}.
 
+%TODO .... we assume very low latency and thereby neglectable time to send the heartbeat.... otherwise it affects the time to detect node failure
+
 \subsubsection{Replication request time} \label{sec:replication_time}
 The time it takes to ask another node to replicate its replica to another node, until the new replica is up and running and a response is received, consists of the time to send a replication request to a node holding a replica, for that node to replicate to another node and send a reply.
 
