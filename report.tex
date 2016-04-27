@@ -812,7 +812,7 @@ Furthermore, getting the available nodes in a sorted list is also an external fu
 	\Procedure{Delete unnecessary replicas}{}
 	\Do 
 		\State $least\_reliable\gets current\_nodes.pop$
-		\If {\Call{reliability}{$current\_nodes$}\ >\ required}
+		\If {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
 			\Call{delete replica from node}{$replica$, $least\_reliable$}
