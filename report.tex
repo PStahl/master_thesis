@@ -1719,6 +1719,18 @@ Scheduling Optimization in Cloud Computing
 \caption{Time between failures as of~\cref{eq:eval_sleep_time} used in test ~\ref{sec:eval_adaptive_rel_model}.} \label[app]{fig:eval_sleep_time}
 \end{figure}
 
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/heartbeats_worst_case.pdf}
+\caption{Worst case scenario for detecting a failed node. In this example, node A fails directly after sending the heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 500 ms.} \label{fig:heartbeats_worst_case}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/heartbeats_best_case.pdf}
+\caption{Best case scenario for detecting a failed node. In this example, node A fails just before sending the third heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 300 ms.} \label{fig:heartbeats_worst_case}
+\end{figure}
+
 \chapter{Code} \label{appendix:code}
 
 \end{appendices}
