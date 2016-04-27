@@ -643,12 +643,23 @@ We assume failures follow a Poisson process, as this seems to be widely accepted
 The Poisson distribution is defined as follows:
 
 \begin{equation} \label{eq:Poisson}
-P(k failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
+P(k\ failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
 \end{equation}
 
-where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and spawn a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}. 
+where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and spawn a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. \Cref{eq:Poisson} can therefore be re-written as
 
-However, in order to use~\cref{eq:Poisson}, the MTBF of a node must be available. To calculate a node's MTBF at least two failures most have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the MTBF for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice.
+\begin{equation} \label{eq:Poisson_during_time_t}
+P(k\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^k \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{k!}
+\end{equation}
+
+In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}, resulting in
+
+\begin{equation} \label{eq:Poisson_no_failures}
+P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
+\end{equation}
+
+
+However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available. To calculate a node's MTBF at least two failures most have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the MTBF for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice.
 
 As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
 
