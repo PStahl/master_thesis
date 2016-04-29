@@ -521,12 +521,12 @@ Choosing streaming services with deterministic processing\footnote{A determinist
 
 Furthermore, long running applications or services, such as streaming applications, allows us to focus on ensuring a desired reliabity even in the case of failures. Therefore, in contrast to the various scheduling algorithms in ~\cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}~\cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas.
 
-Unlike ~\cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint}, we propose a fully dynamic model which monitors the system with its running applications and services, and create new replicas in order to ensure that the desired reliability is met. Determining the number of replicas needed only when deploying and application or service may suffer if the system is in a reliable state at the time, but later becomes more unreliable. As mentioned in~\cref{subsec:background_failure_distribution}, the reliability of the resources vary over time, why one must periodically monitor the system and vary the number of replicas over time. In our model, this is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt the reliability model as the properties of the system changes.
+Unlike ~\cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint}, we propose a fully dynamic model which monitors the system with its running applications and services, and create new replicas in order to ensure that the desired reliability is met. Determining the number of replicas needed only when deploying an application or service may suffer if the system is in a reliable state at the time, but later becomes more unreliable. As mentioned in~\cref{subsec:background_failure_distribution}, the reliability of the resources vary over time, why one must periodically monitor the system and vary the number of replicas over time. In our model, this is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt the reliability model as the properties of the system changes.
 
-The rest of this chapter is composed as follows, in \cref{sec:design_limitations} we go through what limitations we have done. \Cref{sec:design_system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In~\cref{sec:design_reliability_model} we present our reliability model, which is our main contribution with this paper. We start by giving diverse definitions and a scheduling algorithm and then go through our self-adapting model. Last in this chapter, \cref{sec:design_implementation} we briefly describe how Calvin works and present the main parts of the implementation of our model.
+The rest of this chapter is composed as follows, in \cref{sec:design_limitations} we go through what limitations we have done. \Cref{sec:design_system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In~\cref{sec:design_reliability_model} - \cref{sec:design_self_adapting} we present our main contributions with this paper, we present a reliability model, a scheduling algorithm and go through how our model is self-adapting. Last in this chapter, \cref{sec:design_implementation} we briefly describe how Calvin works and present the main parts of our implementation of the model.
 
 \section{Limitations} \label{sec:design_limitations}
-By assuming fully reliable links between nodes, we limit our model to only consider node failures. However, the reliability model used in this thesis could easily be extended to consider more parameters, or be replaced by another reliability model, and the scheduling algorithm presented in~\cref{subsec:design_sched_alg} is independent of the reliability model used. Also, we do not distinguish between different kinds of failures, hence the reason for why a node failed is not important in our model, but could be taken into account in a more sophisticated reliability model.
+By assuming fully reliable links between nodes, we limit our model to only consider node failures. However, the reliability model used in this thesis could easily be extended to consider more parameters, or be replaced by another reliability model, and the scheduling algorithm presented in~\cref{sec:design_sched_alg} is independent of the reliability model used. Also, we do not distinguish between different kinds of failures, hence the reason for why a node failed is not important in our model, but could be taken into account in a more sophisticated reliability model.
 
 Furthermore, we assume the replicated tasks/services are deterministic and always produces the correct result for a given input. This allows us to focus on the reliability of producing a result and not lose any data, instead of the reliability of producing the correct result. As mentioned before this can quite easily be solved by extending the model with consensus such as majority voting. Due to that we don't gain any extra useful information we have chosen to leave this a future work.
 
@@ -734,7 +734,7 @@ The time for the actual replication consists of the time to get the state of the
 T_{r} = T_{get\ state} + T_{transmit\ state} + T_{setup\ new} + T_{response}
 \end{equation} 
 
-\section{Scheduling algorithm} \label{subsec:design_sched_alg}
+\section{Scheduling algorithm} \label{sec:design_sched_alg}
 A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGrid}, which fulfills \cref{eq:desired_rel} is shown below:
 
 %First we find which nodes that are available for placing a replica on. Secondly we filter the nodes with a load lower than a preferred level. If no preferred node is available we choose an unpreferred one.
@@ -783,7 +783,7 @@ A simple greedy scheduling, similar to one presented in ~\cite{effTaskReplMobGri
 	\end{algorithmic}
 \end{function}
 
-This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{subsec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
+This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{sec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
 
 \subsubsection{Replaceable reliability model}
 \Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
@@ -840,7 +840,7 @@ The first part of~\cref{alg:optimization} make sure the most reliable nodes are 
 
 \Cref{alg:optimization} make sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 does not increase the overall reliability very much, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
-\section{Monitoring} \label{subsec:design_monitoring}
+\section{Monitoring} \label{sec:design_monitoring}
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
@@ -866,13 +866,13 @@ The frequency of the heartbeats, and the timeout time, is configurable and shoul
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
 In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications  are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{subsec:design_sched_alg}.
+In our model, the reliability of the running applications  are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
 
 On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
 
-\section{Handling node failure} \label{subsec:design_handling_failure}
+\section{Handling node failure} \label{sec:design_handling_failure}
 %TODO not sure where to put this section
-In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{subsec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
+In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{sec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
 
 To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfill the required reliability. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
 
@@ -900,7 +900,7 @@ A small example is presented in~\cref{fig:handling_node_failure}. In the situati
 \caption{4 interconnected nodes after nodes A, B and D have detected the failure of node C.}\label{fig:handling_node_failure}
 \end{figure}
 
-\section{Self-adapting} \label{subsec:design_self_adapting}
+\section{Self-adapting} \label{sec:design_self_adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour ~\cite{imprRelAdaptRL}.
 
 To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
@@ -1045,7 +1045,7 @@ As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
-As described in~\cref{subsec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within 500 ms, it is assumed dead. 
+As described in~\cref{sec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within 500 ms, it is assumed dead. 
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
 
