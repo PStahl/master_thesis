@@ -124,9 +124,9 @@ An adaptive approach, which adapts to changes in the execution environment is pr
 \section{Our contributions} \label{sec:introduction_contributions}
 To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications or services. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed ones.
 
-We propose a framework which ensures an user determined level of reliability by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Furthermore, the system is continuously monitored in order to adapt the number of replicas as the state of the system changes.
+We propose a framework which ensures an user determined level of reliability by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Finally, the system is periodically monitored in order to adapt to changing system properties.
 
-The framework is not limited to a specific type of distributed environment, and its key concepts may be used in both grid and cloud systems.
+The framework is not limited to a specific type of distributed environment, not the reliability model used. The reliability model and scheduling algorithm is easily replaced to consider more parameters, or to include load-balancing.
 
 %TODO
 %Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
