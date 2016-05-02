@@ -136,13 +136,13 @@ Our model is implemented by extending the actor-based application environment \e
 The report is structured as follows: in \cref{ch:background} all necessary background theory is provided, in \cref{ch:design} we present our model and contribution in more detail, \cref{ch:evaluation} aims at evaluating our solution while \cref{ch:future_work} presents future work. \Cref{ch:conclusions} concludes the report. 
 
 \section{Goal} \label{sec:introduction_goals}
-The goal of this thesis is to devise a method for dynamically ensuring a certain level of reliability for distributed applications or services. Reliability will be achieved through replication of tasks.
+The goal of this thesis is to devise a method for dynamically ensuring a certain level of reliability for distributed applications or services. Reliability will be achieved by replicating tasks.
 
 First, a reliability model will be designed, describing the reliability for an application running in a distributed environment.
 
-Secondly, a framework will be designed which will automatically detect node failures and based on the reliability model spawns enough replicas to reach the desired reliability level above.
+Secondly, a framework will be designed which will automatically detect node failures and based on the reliability model spawn enough replicas to reach the desired reliability level.
 
-Lastly, the system will by periodically monitored in order to adapt the reliability model and the replicas needed as the properties of the system varies over time.
+Lastly, the system and its running applications will be periodically monitored in order to adapt the resources' reliability and the number of replicas needed as the properties of the system varies over time.
 
 The model will be implemented and tested using the IoT application framework \emph{Calvin}.
 
