@@ -110,14 +110,14 @@ Some previous attempts at designing fault-tolerant systems by the use of replica
 A quite old but still relevant work is found in~\cite{dynAdaptRepl} where they present a framework for dynamic replication with an adaptive control in an multi-agent system. They introduce the software architecture which can act as support for building reliable multi-agent systems. Since the available resources often are limited they say that it isn't feasible to replicate all components. Therefore they use a criticality for each agent which is allowed to evolve during runtime. The proposed solution allows for dynamically adapt the number of replicas and the replication strategy itself (passive/active). The number of replicas is partly based on the agents critically and a predefined minimum number of replicas. From CPU usage time and communication activity an agent activity is calculated which is used in calculating the agents critically. One restriction they do in their fault model is that processes can only fail by permanent crashes. %TODO Do they meet a desrided level of reliablity?
 
 Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication is presented in~\cite{replicatingAgents} \cite{adaptiveMASReplication} \cite{adaptiveAgentReplication}. While being adaptive to system state, the solution presented in~\cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in~\cite{adaptiveMASReplication}, where a decentralized solution is proposed, where the number of replicas and their placement depends on the system state. %TODO need to read \cite{adaptiveMASReplication} again...
-The solution proposed in~\cite{adaptiveAgentReplication} involves distributed monitoring system...  %TODO need to read this again...
+The solution proposed in~\cite{adaptiveAgentReplication} involves distributed monitoring system... %TODO need to read this again...
 
 A dynamic and adaptive algorithm, which dynamically varies the number of replicas depending on system load is presented in~\cite{adaptiveCheckPointAndRep}. The proposed algorithm does not however ensure a certain reliability, instead it reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of system decreases during higher load~\cite{studyOfFailures} \cite{studyOfFailures} \cite{implicationsOfFailures}, one should increase the number of replicas to keep the desired level of reliability.
 
 A fault-tolerant scheduling technique incorporating a replication scheme is presented in~\cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
 The techniques used in~\cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices} are more dynamic and adaptive to the dynamic behavior of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
-%TODO  (above sentence) However?
+%TODO (above sentence) However?
 An adaptive approach, which adapts to changes in the execution environment is presented in~\cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume a task's profile, including execution time, is available.
 
 
@@ -233,7 +233,7 @@ Since the Byzantine model is very broad and complicated and the fail-stop model 
 The crash failure model is quite alike the fail-stop model with the difference that the other nodes do not automatically detect that a node has failed~\cite{faultTolerantFundamentals} \cite{adaptiveAgentReplication}.
 
 \subsection{Failure distribution} \label{subsec:background_failure_distribution}
-Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions are stated in \cref{def:failure_assumptions} \cite{relModelDistSimSystem} \cite{relModelAnalysis}  \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
+Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions are stated in \cref{def:failure_assumptions} \cite{relModelDistSimSystem} \cite{relModelAnalysis} \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
 
 \begin{definition} \label{def:failure_assumptions}
 Common assumptions when modeling failures are:
@@ -328,7 +328,7 @@ System reliability: Due to independence of node and path failures, system reliab
 the reliability model of the sub-distributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a common assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
 There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. \cite{hierarchicalRelModeling}
 \\\\
-Reliability evaluation of the hyper-cubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hyper-cube reliability assuming that the system works as long as there is no disconnected working node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen.  [ A unified task-based dependability model for hyper-cube computers]
+Reliability evaluation of the hyper-cubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hyper-cube reliability assuming that the system works as long as there is no disconnected working node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen. [ A unified task-based dependability model for hyper-cube computers]
 \\\\
 (the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{relAnalysisFRA}
 \\\\
@@ -414,7 +414,7 @@ The load balancing algorithms can be divided into three categorize based on the 
 
 Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
-A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load  balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
+A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
 
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks~\cite{perfAnalysisLoadCloud}.
 \fi
@@ -475,7 +475,7 @@ Statistical monitors which track auxiliary system attributes such as load, throu
 Diagnostic tools such as file system and memory checkers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
 
 COPIED:
-Globus [9] provides a heartbeat service to monitor running processes to detect faults  \cite{effTaskReplMobGrid}
+Globus [9] provides a heartbeat service to monitor running processes to detect faults \cite{effTaskReplMobGrid}
 
 COPIED
 Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completelyconnected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
@@ -498,7 +498,7 @@ What makes virtualization so important for the cloud is that it decouples the so
 
 %COPIED
 Docker (Most popular container)
-Docker containers wrap up a piece of software in a complete file system that contains everything it needs to run:  code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
+Docker containers wrap up a piece of software in a complete file system that contains everything it needs to run: code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
 \fi
 
 \chapter{Design of a dynamic fault-tolerant system} \label{ch:design}
@@ -521,7 +521,7 @@ Choosing streaming services with deterministic processing\footnote{A determinist
 
 Furthermore, long running applications or services, such as streaming applications, allows us to focus on ensuring a desired reliabity even in the case of failures. Therefore, in contrast to the various scheduling algorithms in~\cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}~\cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas.
 
-Unlike~\cite{designFaultTolerantSched}  \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint}, we propose a fully dynamic model which monitors the system with its running applications and services, and create new replicas in order to ensure that the desired reliability is met. Determining the number of replicas needed only when deploying an application or service may suffer if the system is in a reliable state at the time, but later becomes more unreliable. As mentioned in~\cref{subsec:background_failure_distribution}, the reliability of the resources vary over time, why one must periodically monitor the system and vary the number of replicas over time. In our model, this is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt the reliability model as the properties of the system changes.
+Unlike~\cite{designFaultTolerantSched} \cite{evalReplicationSched} \cite{taskSchedulingReplication} \cite{effTaskReplMobGrid} \cite{relGridServicePredConstraint}, we propose a fully dynamic model which monitors the system with its running applications and services, and create new replicas in order to ensure that the desired reliability is met. Determining the number of replicas needed only when deploying an application or service may suffer if the system is in a reliable state at the time, but later becomes more unreliable. As mentioned in~\cref{subsec:background_failure_distribution}, the reliability of the resources vary over time, why one must periodically monitor the system and vary the number of replicas over time. In our model, this is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt the reliability model as the properties of the system changes.
 
 The rest of this chapter is composed as follows, in \cref{sec:design_limitations} we go through what limitations we have done. \Cref{sec:design_system_model} gives a description of the system model we have used, e.g. in which computational environment we test our model, how we model the faults and their distribution and what kind of applications we use. In~\cref{sec:design_reliability_model} - \cref{sec:design_self_adapting} we present our main contributions with this paper, we present a reliability model, a scheduling algorithm and go through how our model is self-adapting. Last in this chapter, \cref{sec:design_implementation} we briefly describe how Calvin works and present the main parts of our implementation of the model.
 
@@ -552,7 +552,7 @@ A lot of researchers are of the view that service providers must provide some ot
 Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is:
 0 mi Y
 Pfi =Pfi· Pfik. (2) k=1
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure.  \cite{effTaskReplMobGrid}
+The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. \cite{effTaskReplMobGrid}
 \fi
 
 \section{System model} \label{sec:design_system_model}
@@ -561,7 +561,7 @@ In this section, we describe the system and application models employed in this 
 \subsection{Computational environment} \label{subsec:design_comp_env}
 In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogeneous hardware with high bandwidth low latency redundant links between them. Due to its heterogeneous properties, nodes can not be assumed to have the same failure rate.
 
-A small example of four interconnected nodes  is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consists of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
+A small example of four interconnected nodes is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consists of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
 
 Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{appendix:figures} a system of one replicated actor is shown before and after a node failure. Finally, we assume that the time to send a message between two nodes is the same for all nodes.
 
@@ -607,11 +607,11 @@ COMMENT: we should have some real examples of applications which would benefit f
 COPIED:
 “Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
 \\\\
-COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “  \cite{studyOfFailures}
+COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “ \cite{studyOfFailures}
 \\\\
-COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “  \cite{implicationsOfFailures}. 
+COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “ \cite{implicationsOfFailures}. 
 \\\\
-COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency"  \cite{surveyFaultParallel}.
+COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency" \cite{surveyFaultParallel}.
 
 \fi
 
@@ -670,7 +670,7 @@ Here we present our main contribution, the self-adapting reliability model. But 
 Using replication of a task, and reliability defined as in \cref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
-R_{T}(t) =  1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
 \end{equation}
 
 where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. \Cref{eq:task_reliability} corresponds to \cref{def:task_replica_reliability}, i.e. at least one replica is always running.
@@ -678,7 +678,7 @@ where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. 
 Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{Res_k}(t)
 \end{equation}
 
 where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
@@ -686,7 +686,7 @@ where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions o
 Given a time $t$, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
-\lambda \leq 1 - \prod\limits_{k=1}^m  F_{Res_k}(t)
+\lambda \leq 1 - \prod\limits_{k=1}^m F_{Res_k}(t)
 \end{equation}
 
 which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
@@ -778,7 +778,7 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 	\Statex
 	\Function{reliability}{$current\_nodes$}
 		\State $n\gets current\_nodes.length$
-		\State return $ \prod\limits_{k=1}^n  R_{current\_nodes[k]}(t)$
+		\State return $ \prod\limits_{k=1}^n R_{current\_nodes[k]}(t)$
 	\EndFunction
 	\end{algorithmic}
 \end{function}
@@ -866,7 +866,7 @@ The frequency of the heartbeats, and the timeout time, is configurable and shoul
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
 In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications  are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
+In our model, the reliability of the running applications are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
 
 On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
 
@@ -1025,7 +1025,7 @@ The average replication time $t$ in all experiments was 530 ms, where 500 of the
 \subsection{Application} \label{sec:eval_application}
 The application used in the experiments is of simplest form, consisting only of one consuming, one producing actor, and one service actor for which a certain reliability is desired. 
 
-The producing actor produced integer numbers and sent those to the  service actor which simply forwarded them to the consuming actor, which printed the values to standard out. Since both the producing and the consuming actor are on a stable server, only the service actor was to be replicated by the system.
+The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. Since both the producing and the consuming actor are on a stable server, only the service actor was to be replicated by the system.
 
 The computational environment and the application is shown in~\cref{fig:evaluation_application}.
 
@@ -1117,9 +1117,9 @@ Similar to the previous experiment, each runtime was given pseudo-random numbers
 
 \begin{table}[h]
 	\begin{center}
-	\begin{tabular}{| c  | c |}
+	\begin{tabular}{| c | c |}
 	 \hline
-	 node & MTBF (s)  \\
+	 node & MTBF (s) \\
 	 \hline		
 	  $dave_1$ & 7.5 \\
 	  $dave_2$ & 7.5 \\
@@ -1182,9 +1182,9 @@ The required reliability in the experiment was set to 0.999. This results in tha
 
 \begin{table}[h]
 	\begin{center}
-	\begin{tabular}{| c  | c |}
+	\begin{tabular}{| c | c |}
 	 \hline
-	 node & MTBF (s)  \\
+	 node & MTBF (s) \\
 	 \hline		
 	  $dave$ & 10 \\
 	  $tim$ & 10 \\
@@ -1243,7 +1243,7 @@ The process of killing nodes therefore differed from~\cref{alg:simulating_node_f
 		\Call{start runtime}{}
 		\State $T_{now}\gets$ current time
 		\State $T_{elapsed}\gets T_{start}-T_{now}$
-		\State {$t_{s}\gets \mathcal{N} (MTBF,1) + 20 *  \sin{(2\*\pi\*T_{elapsed} / 300)}$}
+		\State {$t_{s}\gets \mathcal{N} (MTBF,1) + 20 * \sin{(2\*\pi\*T_{elapsed} / 300)}$}
 		\State
 		\Call{sleep $t_{s}$}{}
 		\State
@@ -1328,10 +1328,10 @@ The reliability is dependent on the replication time, which depends on the state
 \begin{split}
 R(3600) = e^{3600/31536000}\\
 \\
-R_{T}(3600) = 1 - \prod\limits_{k=1}^2  F_{Res_k}(3600)\\
-= 1 - \prod\limits_{k=1}^2  (1 - R(3600))\\
+R_{T}(3600) = 1 - \prod\limits_{k=1}^2 F_{Res_k}(3600)\\
+= 1 - \prod\limits_{k=1}^2 (1 - R(3600))\\
 = 1 - (1 - e^{3600/31536000})^2\\
-=  0.999999986302961
+= 0.999999986302961
 \end{split}
 \end{equation*}
 
@@ -1398,7 +1398,7 @@ In the simplest case, when all nodes have the same MTBF this could be achieved b
 \bibitem{taskAllocation}
 	Sol M. Shatz, Jia-Ping Wang and Masanori Goto,
 	\emph{Task Allocation for Maximizing Reliability of Distributed Computer Systems},
-	Computers, IEEE Transactions on, Volume 41  Issue 9,
+	Computers, IEEE Transactions on, Volume 41 Issue 9,
 	Sep 1992
 	
 \bibitem{surveyReliabilityDistr}
@@ -1499,7 +1499,7 @@ In the simplest case, when all nodes have the same MTBF this could be achieved b
 \bibitem{relModelAnalysis}
 	C. S. Raghavendra, S. V. Makam,
 	\emph{Reliability Modeling and Analysis of Computer Networks},
-	IEEE Transactions on Reliability  Vol. 35,  Issue. 2,
+	IEEE Transactions on Reliability Vol. 35, Issue. 2,
 	June 1986
 
 \bibitem{cloudServiceRel}
@@ -1522,7 +1522,7 @@ In the simplest case, when all nodes have the same MTBF this could be achieved b
 \bibitem{studyOfFailures}
 	B. Schroeder, G. Gibson,
 	\emph{A large-scale study of failures in high-performance computing systems},
-	IEEE Transactions on Dependable and Secure Computing (Volume:7,  Issue: 4),
+	IEEE Transactions on Dependable and Secure Computing (Volume:7, Issue: 4),
 	November 2010
 
 \bibitem{implicationsOfFailures}
@@ -1760,7 +1760,7 @@ Use A4 paper, with the text margins given in Table \ref{tab:margins}.
 \hline
 \textbf{margin} & \textbf{space} \\
 \hline 
-top &  3.0cm\\ 
+top & 3.0cm\\ 
 
 bottom & 3.0cm \\ 
  
@@ -1780,17 +1780,17 @@ The fonts to use for the reports are \textbf{TeX Gyre Termes} (a \textbf{Times N
 
  \begin{tabular}{ l c c c}
 \hline 
-\textbf{Element} & \textbf{Face} & \textbf{Size}  & \textbf{\LaTeX size}  \\ 
+\textbf{Element} & \textbf{Face} & \textbf{Size} & \textbf{\LaTeX size} \\ 
 \hline 
 {\huge \textbf{Ch. label}} & {\huge \textbf{serif, bold}} & \thefontsize\huge & \verb+\huge+ \\ 
 {\Huge \textbf{Chapter}} & {\Huge \textbf{serif, bold}} & \thefontsize\Huge & \verb+\Huge+ \\ 
-{\LARGE \textsf{\textbf{Section}}} & {\Large \textsf{\textbf{sans-serif, bold}}} & \thefontsize\LARGE &  \verb+\LARGE+  \\ 
+{\LARGE \textsf{\textbf{Section}}} & {\Large \textsf{\textbf{sans-serif, bold}}} & \thefontsize\LARGE & \verb+\LARGE+ \\ 
 {\Large \textsf{\textbf{Subsection}}} & {\Large \textsf{\textbf{sans-serif, bold}}} & \thefontsize\Large & \verb+\Large+ \\ 
-{\large \textsf{\textbf{Subsubsection}}} & {\Large \textsf{\textbf{sans-serif, bold}}} & \thefontsize\large &  \verb+\large+ \\ 
+{\large \textsf{\textbf{Subsubsection}}} & {\Large \textsf{\textbf{sans-serif, bold}}} & \thefontsize\large & \verb+\large+ \\ 
 Body & serif & \thefontsize\normalsize & {\footnotesize \verb+\normalsize+} \\
-%{\footnotesize Footnote} & serif  & \thefontsize\footnotesize & {\footnotesize \verb+\footnotesize+} \\
-{\footnotesize \textsc{Header}} & {\footnotesize \textsc{serif, SmallCaps}} & \thefontsize\footnotesize &  \\
-Footer (page numbers) & serif, regular & \thefontsize\normalsize &  \\
+%{\footnotesize Footnote} & serif & \thefontsize\footnotesize & {\footnotesize \verb+\footnotesize+} \\
+{\footnotesize \textsc{Header}} & {\footnotesize \textsc{serif, SmallCaps}} & \thefontsize\footnotesize & \\
+Footer (page numbers) & serif, regular & \thefontsize\normalsize & \\
 \hline
 \textbf{Figure label} & \textbf{serif, bold} & \thefontsize\normalsize & \\
 Figure caption & serif, regular & \thefontsize\normalsize & \\
@@ -1870,7 +1870,7 @@ However, note that your examiner (and supervisors) are not there to provide you 
 \end{description}
 
 \section{Style Elements}
-Next, we will just give some rough guidelines for good style in a report written in English. Your supervisor and examiner as well as the aforementioned \textbf{Studieverkstad} might have a different  take on these, so we recommend you follow their advice whenever in doubt. If you want a reference to a short style guide, have a look at \cite{shortstyleguide}.
+Next, we will just give some rough guidelines for good style in a report written in English. Your supervisor and examiner as well as the aforementioned \textbf{Studieverkstad} might have a different take on these, so we recommend you follow their advice whenever in doubt. If you want a reference to a short style guide, have a look at \cite{shortstyleguide}.
 
 \subsubsection{Widows and Orphans}
 
@@ -1878,7 +1878,7 @@ Avoid \textit{widows} and \textit{orphans}, namely words or short lines at the b
 
 \subsubsection{Footnotes}
 
-We strongly recommend you avoid footnotes. To quote from \cite{OGSW}, \textit{Footnotes are frequently misused by containing information which should either be placed in the text or excluded altogether. They should be avoided as a general rule and are acceptable only in exceptional cases when incorporation of their content in the text  [is] not possible.} 
+We strongly recommend you avoid footnotes. To quote from \cite{OGSW}, \textit{Footnotes are frequently misused by containing information which should either be placed in the text or excluded altogether. They should be avoided as a general rule and are acceptable only in exceptional cases when incorporation of their content in the text [is] not possible.} 
 
 \subsubsection{Active vs. Passive Voice}
 
@@ -1897,7 +1897,7 @@ A common problem of native Swedish speakers is getting the subject-predicate (ve
 \item[incorrect] These words forms a sentence.
 \item[correct] These words form a sentence.
 \end{description}
-\noindent In more complex sentences, getting the agreement right is trickier. A brief guide is given in  the \textit{20 Rules of Subject Verb Agreement} \cite{subjectverb}.
+\noindent In more complex sentences, getting the agreement right is trickier. A brief guide is given in the \textit{20 Rules of Subject Verb Agreement} \cite{subjectverb}.
 
 \chapter{Structure}
 It is a good idea to discuss the structure of the report with your supervisor rather early in your writing. Given next is a generic structure that is a starting point, but by no means the absolute standard. Your supervisor should provide a better structure for the specific field you are writing your thesis in. Note also that the naming of the chapters is not compulsory, but may be a helpful guideline.
@@ -1918,12 +1918,12 @@ It is a good idea to discuss the structure of the report with your supervisor ra
 \item[Evaluation] is the part where you present the finds. Depending on the area this part contains a subset or all of the following: 
 \begin{itemize}
 \item \textbf{Experimental Setup} should describe the details of the method used to evaluate your solution(s)/approach. Sometimes this is already addressed in the \textbf{Method}, sometimes this part replaces \textbf{Method}.
-\item \textbf{Results} contains the data (as tables, graphs) obtained via experiments  (benchmarking, polls, interviews).
+\item \textbf{Results} contains the data (as tables, graphs) obtained via experiments (benchmarking, polls, interviews).
 \item \textbf{Discussion} allows for a longer discussion and interpretation of the results from the evaluation, including extrapolations and/or expected impact. This might also be a good place to describe your positive and negative experiences related to the work you carried out.
 \end{itemize} 
 Occasionally these sections are intermingled, if this allows for a better presentation of your work. However, try to distinguish between measurements or hard data (results) and extrapolations, interpretations, or speculations (discussion).
 \item[Conclusions] should summarize your findings and possible improvements or recommendations.
-\item[Bibliography] is a must in a scientific report. {\LaTeX} and \texttt{bibtex} offer great support for  handling references and automatically generating bibliographies.
+\item[Bibliography] is a must in a scientific report. {\LaTeX} and \texttt{bibtex} offer great support for handling references and automatically generating bibliographies.
 \item[Appendices] should contain lengthy details of the experimental setup, mathematical proofs, code download information, and shorter code snippets. Avoid longer code listings. Source code should rather be made available for download on a website or on-line repository of your choosing.
 
 \end{description}
