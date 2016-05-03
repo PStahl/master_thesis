@@ -656,7 +656,7 @@ As time goes and nodes fail, the time of failure for nodes are stored, the syste
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
-Here we present our main contribution, the self-adapting reliability model. But first we state some definitions of reliability.
+In this section the reliability model used in our experiments is presented. The framework and scheduling algorithm presented in~\cref{sec:design_sched_alg} is not dependent on the reliability model used.
 
 \subsection{Definitions} \label{subsec:design_definitions}
 In this paper, we use the following definitions of reliability:
@@ -686,7 +686,7 @@ where $F_{k}(t)$ is the probability that replica $k$ fails during time $t$. \Cre
 Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{Res_k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
 \end{equation}
 
 where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
@@ -694,7 +694,7 @@ where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions o
 Given a time $t$, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
-\lambda \leq 1 - \prod\limits_{k=1}^m F_{Res_k}(t)
+\lambda \leq 1 - \prod\limits_{k=1}^m F_{k}(t)
 \end{equation}
 
 which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
@@ -1340,7 +1340,7 @@ The reliability is dependent on the replication time, which depends on the state
 \begin{split}
 R(3600) = e^{3600/31536000}\\
 \\
-R_{T}(3600) = 1 - \prod\limits_{k=1}^2 F_{Res_k}(3600)\\
+R_{T}(3600) = 1 - \prod\limits_{k=1}^2 F_{k}(3600)\\
 = 1 - \prod\limits_{k=1}^2 (1 - R(3600))\\
 = 1 - (1 - e^{3600/31536000})^2\\
 = 0.999999986302961
