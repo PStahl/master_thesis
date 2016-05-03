@@ -700,13 +700,13 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 The scheduling problem to fulfill a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $\lambda$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
-The time $t$ used in \cref{eq:desired_rel} consists of the time it takes from that a failure happened, until a new replica is operational. $t$ can therefore be expressed as 
+The time $t$ used in \cref{eq:desired_rel} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
 	t = T_f + T_R
 \end{equation}
 
-where $T_f$ is the time to detect that a node has failed, and $T_R$ is the time of a replication request. A replication request is a request from a node A to a node B, having a replica $S_n$, to replicate $S_n$ to a node C. If A does not itself already have a replica, C and A may be the same node.
+where $T_f$ is the time to detect that a node has failed, and $T_R$ is the time it takes to create a new replica. A new replica is created by sending a replication request to a node currently holding a replica, including a third node on which the new replica is to be created. The replication request is further described in~\cref{sec:replication_time}.
 
 \subsubsection{Node failure detection time} \label{sec:node_failure_detection_time}
 The time to detect a failed node depends on the frequency of the heartbeats. In our model, heartbeats are periodically sent to all nodes in the system. If no heartbeat is received from node within a given time, it is assumed dead. The heartbeat system in our model is further described in~\cref{subsec:heartbeats}.
@@ -714,12 +714,14 @@ The time to detect a failed node depends on the frequency of the heartbeats. In 
 %TODO .... we assume very low latency and thereby negligible time to send the heartbeat.... otherwise it affects the time to detect node failure
 
 \subsubsection{Replication request time} \label{sec:replication_time}
-The time it takes to ask another node to replicate its replica to another node, until the new replica is up and running and a response is received, consists of the time to send a replication request to a node holding a replica, for that node to replicate to another node and send a reply.
+The time it takes to ask another node to replicate its replica to a third node, until the new replica is up and running and a response is received, consists of the time to send a replication request to a node holding a replica, and the time it takes for that node to replicate to the third node and to send a reply.
 
-One must also find out on which nodes current replicas are running, to know which node to send the request to. Also, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request.
+First, one must find out on which nodes current replicas are running, to know which node to send the request to. Secondly, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request.
 
+%TODO unnecessary paragraph? Include reference to picture in previous paragraph?
 In order words, one must find on which nodes replicas are currently running, and asking one of those nodes to replicate its replica to a node that do not already hold a replica. The receiving node will then replicate its replica to the other node, and send a reply. The process is shown in~\cref{fig:replication_request}.
 
+%TODO change "Actor a" to "replica_a" or something because we haven't started talking about actors yet...
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replication_request.pdf}
