@@ -574,16 +574,16 @@ When storing data using DHT, the data is first stored locally and later flushed,
 \subsection{Application model} \label{subsec:design_app_model}
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is particularly of value for long running applications and services running in dynamic environments, and where a certain level of reliability must be met. Long running applications are particularly vulnerable to failure because they usually require many resources and usually must produce precise results~\cite{relGridSystems}.
 
-In this paper we use a simple example application in our experiments. The application can be modelled as shown in~\cref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. No assumptions are made about the execution time of the application. However, our model is particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures~\cite{imprRelAdaptRL}.
+In this paper we use a simple example application in our experiments. The application can be modelled as shown in~\cref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. In contrast to ~\cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{schedReplicas}, no assumptions are made about the execution time of the application. While our model is general, it's particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures~\cite{imprRelAdaptRL}.
 
 %TODO actually... in the tests, there is no "A", but instead the producer is replicated... should update the tests to say we have this situations.
-
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model.pdf} 
 \caption{An application model where a producer transmits data to a task $S$, which transforms the data, and sends the result to a consumer. $S$ may be seen as a task or service running in a cluster and requiring a certain level of reliability.}\label{fig:app_model}
 \end{figure}
 
+\iffalse
 %TODO
 COMMENT: we should have some real examples of applications which would benefit from using our framework. ?
 \begin{itemize}
@@ -591,6 +591,7 @@ COMMENT: we should have some real examples of applications which would benefit f
 \item video trans-coding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
 \item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
+\fi
 
 \iffalse
 
@@ -606,8 +607,6 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
-%TODO mention that we focus on System related failures (hardware failures).
-%TODO referr back to commonly made assumptions, fully reliable network, etc.
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times.
 
 In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. We do not count for whether or not the correct result is received at the consumer, but our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
@@ -621,18 +620,17 @@ In contrast to the case with one \emph{primary} replica and several \emph{second
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
 \subsection{Fault model} \label{subsec:design_fault_model}
-In this paper, we adapt the \emph{fail-stop} fault model, which is commonly used when presenting fault-tolerance techniques~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure. 
+%TODO mention that we focus on System related failures (hardware failures).
+%TODO referr back to commonly made assumptions, fully reliable network, etc.
+In this paper, we adapt the \emph{fail-stop} fault model, which is described in~\cref{subsub:background_fail_stop} and commonly used when presenting fault-tolerance techniques~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure, only that it stopped functioning.
 
-Like~\cite{selfAdaptRel}, we assume failures depends on the nodes, not the jobs running on them and the computations they perform.
-
-Unlike the reliability models presented in XXX TODO, we do not consider link failures in our model. However, in our experiments, link failures are indeed possible, but in the case of a link failure a node will be assumed dead, and a new replica created. Therefore, the desired reliability will still be met. %TODO we should have something here about links right? 
+Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication}, \cite{taskAllocationSwarm} and \cite{relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible, but in the case of a link failure a node will stop sending heartbeats and replies, and will be assumed dead, and a new replica created. Therefore, the desired reliability will still be met. 
+%TODO we should have something here about links right? 
 
 
 \subsubsection{Failure distribution}
 %TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
-We assume failures follow a Poisson process, as this seems to be widely accepted in the research community. However, while most assumes constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates.
-
-The Poisson distribution is defined as follows:
+We assume failures follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution is defined as follows:
 
 \begin{equation} \label{eq:Poisson}
 P(k\ failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
@@ -650,9 +648,11 @@ In our case \emph{k} will always equal zero since we are interesting in knowing 
 P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
 
-However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available. To calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice.
+While most models using the Poisson process to model reliability assume constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates. This is accomplished by using the time of the latest three failures to determine the MTBF as of~\cref{def:MTBF}. 
 
-As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
+However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{ch:evaluation}.
+
+As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
