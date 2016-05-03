@@ -451,7 +451,7 @@ Taking many factors in account when scheduling tasks results in a big overhead i
 \section{Monitoring} \label{sec:background_monitoring}
 Monitoring is common in distributed system for detecting when resources fail. The most common technique is based on heartbeats, where light-weight messages are sent, usually using UDP, between resources, informing each other that they are still operational. The heartbeats are periodically sent with a certain frequency. If a resource stops receiving heartbeats from another resource, it is assumed to have died. Another similar technique is to send a message and wait for a reply, and if no reply is received within a certain time, the resource is assumed to be dead~\cite{probabilistic_recovery}.
 
-Monitoring is an important part of dynamic fault-tolerant techniques which adapts to changing system behavior. 
+Monitoring is also an important part of dynamic fault-tolerant techniques which adapts to changing system behavior. Depending on which parameters is taken into account when determining resource reliability, or used in scheduling algorithms, the system resources must be monitored and various information must be shared. Resource information such as current load of the resource can be shared using either a pull or push strategy. If using a centralized storage, a pull strategy involved the storage requesting information from the resources, while a push strategy involves the resources sending the information to the storage without it being requested.
 
 \iffalse
 COPIED:
