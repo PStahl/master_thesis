@@ -850,6 +850,7 @@ The first part of~\cref{alg:optimization} make sure the most reliable nodes are 
 \Cref{alg:optimization} make sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 does not increase the overall reliability very much, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
 \section{Monitoring} \label{sec:design_monitoring}
+%TODO push pull strategy
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
@@ -873,6 +874,7 @@ It is safe to assume that the probability that a node dies just before sending a
 The frequency of the heartbeats, and the timeout time, is configurable and should be set depending on the desired behavior. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the desired reliability. On the other hand, higher frequency means more packages being sent thereby increasing network traffic in the system.
 
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
+%TODO push pull strategy?
 In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
 In our model, the reliability of the running applications are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
