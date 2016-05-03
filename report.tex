@@ -258,7 +258,7 @@ Statistically independent failures is also not very likely to reflect the real d
 
 Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system~\cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, \cite{studyOfFailures} and \cite{implicationsOfFailures} also show that failures are more likely to occur during daytime than at night, which may be a consequence of the system load being higher during daytime. Finally, components which have failed in the past are more likely to fail again~\cite{implicationsOfFailures}.
 
-While a Poisson process is commonly used to describe failures,~\cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models~\cite{experimentalFailureAssessment}.
+While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} shows that failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models~\cite{experimentalFailureAssessment}.
 
 \section{Reliability} \label{sec:background_reliability}
 \subsection{Reliability definition} \label{subsec:background_reliability_definition}
@@ -278,7 +278,7 @@ Reliability in the context of software applications can have several meanings, e
 \fi
 
 \subsection{Modelling reliability} \label{subsec:background_modelling_rel}
-Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
+Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
 
 For distributed applications, the probability of failure increases since it is dependent on more components~\cite{relModelDistSimSystem}. Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components~\cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects~\cite{effTaskReplMobGrid}.
 
@@ -293,10 +293,10 @@ The Mean-Time-Between-Failure for a component is the average time between succes
 The MTBF can be calculated as
 
 \begin{equation} \label{eq:MTBF}
-MTBF = (total\ time) / (number\ of\ failures)
+MTBF = \frac{total\ time}{number\ of\ failures}
 \end{equation}
 
-From \cref{eq:MTBF}, a reliability function for a component can be expressed as 
+Assuming failures follow a Poisson process, and using \cref{eq:MTBF}, the reliability for a component can be expressed as 
 \begin{equation} \label{eq:resource_reliability}
 R(t) = e^{-t/MTBF}
 \end{equation}
