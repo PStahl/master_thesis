@@ -564,7 +564,7 @@ Since all nodes are interconnected we have redundant paths which results in that
 \end{figure}
 
 \subsection{Storage of data} \label{subsec:design_storage}
-All information, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, that information is lost in case that node fails. Also, if a remote database is used, we introduce a single-point-of-failure, resulting in a system where the reliability is no more than the reliability of the database. 
+All information collected, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, that information is lost in case that node fails. Also, if a remote database is used, a single-point-of-failure is introduced, resulting in a system where the reliability is no more than the reliability of the database. 
 
 Instead, to achieve a redundant storage in our model, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. More specifially, the DHT implementation used is Kademlia, and we refer to~\cite{kademlia} for further info about DHT and Kademlia. The reason for chosing this approach is a result of Calvin, the framework in the model was implemented and evaluated, already used Kademlia. Calvin is further described in~\cref{subsec:design_calvin}.
 
@@ -853,6 +853,8 @@ The first part of~\cref{alg:optimization} make sure the most reliable nodes are 
 \section{Monitoring} \label{sec:design_monitoring}
 %TODO push pull strategy
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
+
+The sharing of resource information is done using a push strategy, as described in~\cref{sec:background_monitoring}. Resources are periodically sent to all other nodes in the system in a multicast fashion.
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
 The ability to detect node failures is crucial for knowing when a new replica is needed in order to keep the desired reliability. Furthermore, since the reliability model presented in~\cref{sec:design_reliability_model} is based on a \emph{mean-time-between-failures} for the nodes in the system, it is based on the assumption that node failures is detectable. 
