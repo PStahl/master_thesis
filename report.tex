@@ -203,14 +203,17 @@ In distributed environments, especially with heterogeneous commodity hardware, s
 	\item Network related.
 \end{itemize}
 
+In~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems was studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 percent depending on hardware type, while 10 to 20 percent of the failures were software failures.
+
+\iffalse
+%TODO not important?
 The possible errors in a Grid environment can be divided into the following three categorize~\cite{effTaskReplMobGrid}:
 \begin{itemize}
 	\item Crash failure - When a correctly working server comes to a halt.
 	\item Omission failure - When a server fails to respond to incoming requests and to send messages
 	\item Timing failure - When a server responds correctly but beyond the specified time interval
 \end{itemize}
-
-In~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems is studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 \% depending on hardware type, while 10 - 20 \% of the failures were software failures.
+\fi
 
 \subsection{Fault models} \label{subsec:background_fault_models}
 When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model~\cite{faultTolerantFundamentals}.
