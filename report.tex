@@ -742,7 +742,9 @@ The time for the actual replication consists of the time to get the state of the
 T_{r} = T_{get\ state} + T_{transmit\ state} + T_{setup\ new} + T_{response}
 \end{equation} 
 
-In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type.
+In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Finally, the time used in the reliability model is the average of all measured times $T_{R}$.
+
+%TODO use average or maximum?
 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
 A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid}, which fulfills \cref{eq:desired_rel} is shown below:
