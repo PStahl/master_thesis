@@ -7,6 +7,7 @@
 \usepackage{amsthm}
 %\usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{microtype}
 \usepackage{algorithm, algorithmicx}
 \usepackage{algpseudocode}
 \usepackage[titletoc, header, page]{appendix}
@@ -348,42 +349,39 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 %The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 
 \subsection{Rollback recovery} \label{subsec:background_rollback}
-Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can however be used in combination with checkpointing in order to decrease recovery time, not needing to replay all actions, but only those from the latest checkpoint.
+Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
-Job replication is a commonly used fault tolerance technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}.
+Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}.
 
-Using replication, several identification processes are scheduled on different resources and simultaneously perform the same computations~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure~\cite{faultToleranceGrid}.
+Using replication, several identical processes are scheduled on different resources and simultaneously perform the same computations~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure~\cite{faultToleranceGrid}.
 
-Replication also minimizes the risk of failures affecting the execution time of jobs, since it avoids recomputation typically necessary when using checkpoint/restart techniques~\cite{designFaultTolerantSched}.
+Replication also minimizes the risk of failures affecting the execution time of jobs, since it avoids re-computation typically necessary when using checkpoint/restart techniques~\cite{designFaultTolerantSched}.
 
-There are three different strategies for replicating a task: \emph{Active}, \emph{Semi-active} and \emph{Passive}.
-\begin{itemize}
-
-\item In active replication, one or several replicas are run on a other machine and receive an exact copy of the primary nodes input. From the input they perform the same calculations as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that all calculations are ran twice, thus a waste of computational capacity. 
-
-Active replication can also be used in consensus algorithms such as majority voting or k-modular redundancy, where one need to determine the correct output~\cite{surveyFaultParallel}. In this case, there is no primary and backup replicas, instead every replica acts as a primary.
-
-\item Semi-Active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
-
-\item Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
-\end{itemize}
-
-A replica, whether active, semi-active or passive replication is used, is defined as~\cite{effTaskReplMobGrid}:
+There are three different strategies for replicating a task: \emph{active}, \emph{semi-active} and \emph{passive}. A replica, whether active, semi-active or passive replication is used, is defined as~\cite{effTaskReplMobGrid}:
 \begin{definition} \label{def:replica}
 The term replica or task replica is used to denote an identical copy of the original task
 \end{definition}
 
-While replication increases the system load, is may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
+\subsubsection{Active replication} \label{subsec:active_replication}
+In active replication, one or several replicas are run on other machines and receive an exact copy of the primary nodes input. They all perform the the same computations on the input, as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that when using $n$ replicas, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, is may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
 
-\subsubsection*{Consensus} \label{subsub:consensus}
-Replication is usually used with some form of consensus algorithm. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and afterwards they agree on which result is considered correct. These algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
+Active replication can also be used in consensus algorithms such as majority voting or k-modular redundancy, where one need to determine the correct output~\cite{surveyFaultParallel}. In this case, there is no primary and backup replicas, instead every replica acts as a primary.
 
-Based on achieving consensus two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas are executed simultaneously and afterwards they vote for which result is correct. The result with the highest number of votes are considered correct and consensus is reached.
+\subsubsection{Semi-active replication} \label{subsec:semi_active_replication}
+Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
 
-In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in {3,5,7...}$ replicas is executed, progressive redundancy only executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
+\subsubsection{Passive replication} \label{subsec:passive_replication}
+Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 
-Furthermore~\cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
+\subsection{Consensus} \label{sub:consensus}
+Replication is usually used with some form of consensus algorithm. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and the receiver of their results determine which result is considered correct. These algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
+
+Based on achieving consensus two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas run simultaneously and afterwards a voting phase take place to determine which result is correct. The result with the highest number of votes is considered correct and consensus is reached.
+
+In progressive redundancy on the other hand the number of replicas needed is minimized. Assume that with traditional redundancy $k \in \{3,5,7...\}$ replicas is executed, progressive redundancy only needs $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result, an additional number of replicas is executed until enough replicas has return the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
+
+Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focus is more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 %TODO ref to \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices}?
 
@@ -508,7 +506,7 @@ Since a lot of test were already written to the Calvin system a test-driven deve
 \section{Introduction} \label{sec:design_intro}
 In the case of stream processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, focus is on the case when a producer of some kind produces data which needs to be transformed by a service $S$ before being sent to a consumer. The service $S$ is running within a cluster of some service provider, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.	
 
-Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \cref{subsub:consensus} to determine whether or not the correct result was received. 
+Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. However, since using active replication the consumer will receive a result from each replica and our model could therefore easily be extended with consensus algorithms such as those presented in \cref{sub:consensus} to determine whether or not the correct result was received. 
 
 Furthermore, long running applications or services, such as streaming applications, allows us to focus on ensuring a desired reliabity even in the case of failures. Therefore, in contrast to the various scheduling algorithms in~\cite{algoOptTimeMaxRel} \cite{optTaskAllocationForMaxRel} \cite{taskAllocation} \cite{taskAllocationSwarm} \cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime}~\cite{schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas.
 
