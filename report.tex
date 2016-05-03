@@ -683,13 +683,13 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^n F_{k}(t)
 
 where $F_{k}(t)$ is the probability that replica $k$ fails during time $t$. \Cref{eq:task_reliability} corresponds to \cref{def:task_replica_reliability}, i.e. at least one replica is always operational.
 
-Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
+Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Furthermore, since limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
 
 \begin{equation} \label{eq:task_reliability_2}
 R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
 \end{equation}
 
-where $F_{Res_1}(t) \cdots F_{Res_m}(t)$ are the failure probability functions of the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
+where $F_1$ \dots $F_m$ are the failure probability for the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes.
 
 Given a time $t$, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
 
