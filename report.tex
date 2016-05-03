@@ -429,19 +429,19 @@ We will briefly mention some dynamic load balancing algorithms: % skip static lo
 \fi
 
 \section{Task scheduling} \label{sec:background_task_sched}
-Task scheduling is the process of mapping tasks to available resource. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
+Task scheduling is the process of mapping tasks to available resources. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
 
 \begin{enumerate}
 	\item Collect the available resources
-	\item Based on task requirements and resource parameters choose resources to schedule the task on
+	\item Based on task requirements and resource parameters select resources to schedule the task on
 	\item Send the task to the selected resources
 \end{enumerate}
 
-Based on which requirements and parameters are considered in step 2 above a task scheduling algorithm can achieve different goals. They can aim at maximizing the total reliability, minimizing the overall system load or meeting all the tasks deadlines \cite{schedulingSurvey}. 
+Based on which requirements and parameters are considered in step 2 above, a task scheduling algorithm can achieve different goals. They can aim at maximizing the total reliability, minimizing the overall system load or meeting all the tasks deadlines \cite{schedulingSurvey}. 
 
-Task scheduling algorithms can be divided into static and dynamic algorithms depending on if the scheduling mapping is based on pre-defined parameters or if the parameters might change during runtime~\cite{schedReplicas}.
+Task scheduling algorithms can be divided into static and dynamic algorithms depending on whether or not the scheduling mapping is based on pre-defined parameters or if the parameters might change during runtime~\cite{schedReplicas}.
 
-Many studies have been recently done to improve reliability by proper task allocation in distributed systems, but they have only considered some system constraints such as processing load, memory capacity, and communication rate~\cite{optTaskAllocationForMaxRel}. In fact finding an optimal solution and maximizing the overall system reliability at the same time is a NP-hard problem~\cite{optTaskAllocationForMaxRel} \cite{taskAllocationSwarm} \cite{schedulingSurvey}.
+Many studies have been done aiming at improving reliability by proper task allocation in distributed systems by various scheduling algorithms, but they have only considered some system constraints such as processing load, memory capacity, and communication rate~\cite{optTaskAllocationForMaxRel}. In fact finding an optimal solution and maximizing the overall system reliability at the same time is a NP-hard problem~\cite{optTaskAllocationForMaxRel} \cite{taskAllocationSwarm} \cite{schedulingSurvey}.
 
 Taking many factors in account when scheduling tasks results in a big overhead in the cloud, thus decreasing performance. 
 
@@ -449,7 +449,9 @@ Taking many factors in account when scheduling tasks results in a big overhead i
 %The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
 
 \section{Monitoring} \label{sec:background_monitoring}
-Monitoring is common in distributed system for detecting when resources fail. The most common technique is based on heartbeats, i.e. the resources send "I'm still alive"-messages with a certain pulse to each other and if a resource stops receiving heartbeats from a resource it is assumed to have died. Another technique is to send a test message and wait for a reply and after a certain timeout assume that the resource has died \cite{probabilistic_recovery}.
+Monitoring is common in distributed system for detecting when resources fail. The most common technique is based on heartbeats, where light-weight messages are sent, usually using UDP, between resources, informing each other that they are still operational. The heartbeats are periodically sent with a certain frequency. If a resource stops receiving heartbeats from another resource, it is assumed to have died. Another similar technique is to send a message and wait for a reply, and if no reply is received within a certain time, the resource is assumed to be dead~\cite{probabilistic_recovery}.
+
+Monitoring is an important part of dynamic fault-tolerant techniques which adapts to changing system behavior. 
 
 \iffalse
 COPIED:
