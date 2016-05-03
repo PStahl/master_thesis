@@ -618,6 +618,7 @@ COPIED: "The end result is that long-running, distributed applications are inter
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
 %TODO mention that we focus on System related failures (hardware failures).
+%TODO referr back to commonly made assumptions, fully reliable network, etc.
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times.
 
 In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. We do not count for whether or not the correct result is received at the consumer, but our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
