@@ -492,18 +492,17 @@ Docker containers wrap up a piece of software in a complete file system that con
 \fi
 
 \chapter{Design of a dynamic fault-tolerant system} \label{ch:design}
-%TODO describe section?
-% ... among the various fault-tolerant techniques, our model focus on fault tolerance. Failures are assumed to happen, and appropriate actions should be taken when they happen. Proactive technique.
+In this section, the key components of our fault-tolerant framework is described. Of the various fault-tolerant techniques described in~\ref{sec:background_fault_tol_tech}, our model focus on fault-tolerance, using proactive techniques.
 
 \section{Methodology} \label{sec:design_methodology}
 %TODO
 The methodology for devising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
 
-To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. A somewhat simplistic reliability model was made, and more time spent on implementation, in order to be able to conduct various kinds of experiments. 
+To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. A somewhat simplistic reliability model was made, and more time spent on implementation, in order to be able to conduct various kinds of experiments. However, the model is not dependent on the reliability, and it could easily be replaced.
 
-An alternative approach would have been to make a more sophisticated reliability model, which maps better to real-world characteristics of distributed environments. However, while a more sophisticate theoretical model may map better to the real-world, it is impossible to include all parameters affecting the reliability of an application or service running in an distributed environment. Furthermore, with no actual implementation, only simulations could be conducted to verify the model, and even though simulations can take a lot of parameters into account, it would have to be based on failure data, which is usually collected from in-house testing, and thus cannot be compared with failures that can occur in an actual operational environment~\cite{surveyReliabilityDistr}.
+An alternative approach would have been to make a more sophisticated reliability model which maps better to real-world characteristics of distributed environments. However, while a more sophisticated theoretical model may map better to the real-world, it is impossible to include all parameters affecting the reliability of an application or service running in an distributed environment. Furthermore, the lack of an actual implementation would have resulted in only simulations could be conducted to verify the model. While simulations can take a lot of parameters into account, they have have to be based on failure data, which is usually collected from in-house testing, and thus cannot be compared with failures that can occur in an actual operational environments~\cite{surveyReliabilityDistr}.
 
-Since we limit ourselves to testing only in Calvin we lose some of the understanding of the results but we still believe that it can give a good first interpretation of the possibilities, see~\cref{ch:discussion}. 
+Since limiting ourselves to testing using Calvin, some understanding of the results may be lost, but we believe that the results can still give a good first interpretation of the possibilities, see~\cref{ch:discussion}. 
 
 Since a lot of test were already written to the Calvin system a test-driven development of our code came natural.
 
