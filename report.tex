@@ -261,33 +261,21 @@ Other factors affect the likelihood of resource failures as well. Several work h
 While a Poisson process is commonly used to describe failures,~\cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models~\cite{experimentalFailureAssessment}.
 
 \section{Reliability} \label{sec:background_reliability}
-Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully~\cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar definition of reliability, usually used for applications in distributed environments, is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time~\cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result~\cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. This definition is usually used together with the Byzantine fault model. 
+\subsection{Reliability definition} \label{subsec:background_reliability_definition}
+Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully~\cite{taskAllocation} \cite{relModelDistSimSystem} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{generalAlgoRelEval} \cite{realTimeRelAnalysis} \cite{selfAdaptRel} \cite{perfRelNonMarkovian}. A similar definition of reliability, usually used for applications in distributed environments, is the probability of a software application, running in a certain environment, to perform its intended functions for a specified period of time~\cite{surveyReliabilityDistr} \cite{surveyRelPrediction} \cite{relDistApplications}, and is common for application with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result~\cite{surveyRelPrediction} \cite{relAndPerfGridServices} \cite{relGridServicePredConstraint} \cite{relModelWebServices} \cite{selfAdaptRel}. The latter is usually used together with the Byzantine fault model. 
 
+\iffalse
 %Onödig definition??
 \cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
 \begin{itemize}
-\item Perform well in specified time t without undergoing halting state
+\item Perform well in specified time $t$ without undergoing halting state
 \item Perform exactly the way it is designed
 \item Resist various failures and recover in case of any failure that occurs during system execution without proceeding any incorrect result.
 \item Successfully run software operation or its intended functions for a specified period of time in a specified environment.
 \item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
 \item Have the ability to run correctly even after scaling is done with reference to some aspects.
 \end{itemize}
-
-In this paper, we use the following definitions of reliability:
-\begin{definition} \label{def:single_task_reliability}
-The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
-\end{definition}
-
-For multi-task applications, where the tasks use more than one resource, reliability is defined as
-\begin{definition} \label{def:multi_task_reliability}
-The reliability of a multi-task process is the probability that the tasks being executed within a given time without experiencing any type of failure (internal or external) during the time of execution.
-\end{definition}
-
-Finally, for long running applications or services, where a replication scheme is used, the reliability can be defined as \cite{effTaskReplMobGrid}
-\begin{definition} \label{def:task_replica_reliability}
-The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always running. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
-\end{definition}
+\fi
 
 \subsection{Modelling reliability} \label{subsec:background_modelling_rel}
 Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. \cite{factorsAffectingRel} lists 32 factors affecting the reliability of software, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel} \cite{hierarchicalRelModeling}.
@@ -670,13 +658,29 @@ As time goes and nodes fail, the time of failure for nodes are stored, the syste
 Here we present our main contribution, the self-adapting reliability model. But first we state some definitions of reliability.
 
 \subsection{Definitions} \label{subsec:design_definitions}
+In this paper, we use the following definitions of reliability:
+\begin{definition} \label{def:single_task_reliability}
+The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
+\end{definition}
+
+For multi-task applications, where the tasks use more than one resource, reliability is defined as
+\begin{definition} \label{def:multi_task_reliability}
+The reliability of a multi-task process is the probability that the tasks being executed within a given time without experiencing any type of failure (internal or external) during the time of execution.
+\end{definition}
+
+Finally, for long running applications or services, where a replication scheme is used, the reliability can be defined as \cite{effTaskReplMobGrid}
+\begin{definition} \label{def:task_replica_reliability}
+The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always operational. This can be expressed as the probability that not all replicas fail during the time from that an actor dies until a new replica is up and running.
+\end{definition}
+
+\subsection{Expressing reliability}\label{subsec:design_reliability}
 Using replication of a task, and reliability defined as in \cref{def:task_replica_reliability}, the probability that a task $T$ with $n$ replicas is successful during a time $t$, corresponding to at least one replica survives, i.e. not all fail, can be expressed as 
 
 \begin{equation} \label{eq:task_reliability}
-R_{T}(t) = 1 - \prod\limits_{k=1}^n F_{Rep_k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^n F_{k}(t)
 \end{equation}
 
-where $F_{Rep_k}(t)$ is the probability that replica $k$ fails during time $t$. \Cref{eq:task_reliability} corresponds to \cref{def:task_replica_reliability}, i.e. at least one replica is always running.
+where $F_{k}(t)$ is the probability that replica $k$ fails during time $t$. \Cref{eq:task_reliability} corresponds to \cref{def:task_replica_reliability}, i.e. at least one replica is always operational.
 
 Since we assume tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
 
