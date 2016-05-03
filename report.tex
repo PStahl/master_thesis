@@ -216,10 +216,12 @@ The possible errors in a Grid environment can be divided into the following thre
 \fi
 
 \subsection{Fault models} \label{subsec:background_fault_models}
-When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model~\cite{faultTolerantFundamentals}.
+When studying the reliability of distributed systems or reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then proved with respect to this fault model~\cite{faultTolerantFundamentals}. In the fault models described in this section, a computational resource is referred to as a node.
 
 \subsubsection{Byzantine Faults} \label{subsub:background_byzantine}
-The Byzantine fault model allows nodes to continue interaction after failure. Correctly working nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes has failed. The systems behaviour can be inconsistent and arbitrary~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
+The Byzantine fault model allows nodes to continue interaction after failure. Correctly functioning nodes cannot automatically detect if a failure has occurred and even if it was known that a failure has occurred they cannot detect which nodes have failed. 
+
+Furthermore, the systems behaviour can be inconsistent and arbitrary~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all or it can try to send an incorrect result. All Byzantine nodes might send the same incorrect result making it hard to identify malicious nodes~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, therefore it is very difficult to analyze.
 
 % COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
@@ -230,12 +232,12 @@ The fail-stop model, also called the crash-stop model, is in comparison to the B
 %COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
 \subsubsection{Fail-stutter faults}
-Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but it also allows for performance fault, such as unexpectedly low performance of a node~\cite{surveyFaultParallel}.
+Since the Byzantine model is very broad and complicated and the fail-stop model doesn't represent enough real-world failures, a third middle ground model has been developed. It is an extension of the fail-stop model but differ in that it also allows for performance fault, such as unexpectedly low performance of a node~\cite{surveyFaultParallel}.
 % fail-stutter modellen är knappt använd...
 
 \subsubsection{Crash-failure model}
 %TODO Källa
-The crash failure model is quite alike the fail-stop model with the difference that the other nodes do not automatically detect that a node has failed~\cite{faultTolerantFundamentals} \cite{adaptiveAgentReplication}.
+The crash failure model is quite alike the fail-stop model with the difference that nodes do not automatically detect the failure of a node~\cite{faultTolerantFundamentals} \cite{adaptiveAgentReplication}.
 
 \subsection{Failure distribution} \label{subsec:background_failure_distribution}
 Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions are stated in \cref{def:failure_assumptions} \cite{relModelDistSimSystem} \cite{relModelAnalysis} \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
@@ -621,6 +623,7 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
+%TODO mention that we focus on System related failures (hardware failures).
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times.
 
 In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. We do not count for whether or not the correct result is received at the consumer, but our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
