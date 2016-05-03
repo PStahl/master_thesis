@@ -239,18 +239,13 @@ Since the Byzantine model is very broad and complicated and the fail-stop model 
 The crash failure model is quite alike the fail-stop model with the difference that nodes do not automatically detect the failure of a node~\cite{faultTolerantFundamentals} \cite{adaptiveAgentReplication}.
 
 \subsection{Failure distribution} \label{subsec:background_failure_distribution}
-Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Common assumptions are stated in \cref{def:failure_assumptions} \cite{relModelDistSimSystem} \cite{relModelAnalysis} \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
-
-\begin{definition} \label{def:failure_assumptions}
-Common assumptions when modeling failures are:
+Models describing the nature of failures in distributed computing environments, are usually based on certain assumptions, and are usually only valid under those assumptions. Commonly made assumptions about failures are \cite{relModelDistSimSystem} \cite{relModelAnalysis} \cite{cloudServiceRel} \cite{studyServiceRel} \cite{hierarchicalRelModeling} \cite{selfAdaptRel}:
 \begin{itemize}
 	\item Each component in the system has only two states: operational or failed
 	\item Failures of components are statistically independent
-	\item The network topology is cycle free
 	\item Components have a constant failure rate, i.e. the failure of a component follows a Poisson process
 	\item Fully reliable network
 \end{itemize}
-\end{definition}
 
 For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS)~\cite{relAndPerfGridServices} \cite{relGridServicePredConstraint}, which is an non-negligible-able assumption since the RMS in this case in fact is a single point of failure.
 
@@ -261,7 +256,7 @@ Constant failure rates are not likely to model the actual failure scenario of a 
 
 Statistically independent failures is also not very likely to reflect the real dynamic behaviour of distributed systems~\cite{surveyReliabilityDistr} \cite{cloudServiceRel}. Faults may propagate throughout the system, thereby affecting other components as well~\cite{relGridSystems}. In grid environments, a sub-system may consist of resources using a common gateway to communicate with the rest of the system. In such a scenario, the resources do not use independent links~\cite{optResourceAllMaxPerformance}. As failures are likely to be correlated~\cite{perfImplPerCheckPoint}, the probability of failure increases with the number of components on which the job is running.
 
-Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system~\cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, studies show that failures are more likely to occur during daytime than at night~\cite{implicationsOfFailures} \cite{studyOfFailures}. Finally, components which have failed in the past are more likely to fail again~\cite{implicationsOfFailures}.
+Other factors affect the likelihood of resource failures as well. Several work has concluded a relationship between failure rate and the load of the system~\cite{studyOfFailures} \cite{implicationsOfFailures}. Furthermore, \cite{studyOfFailures} and \cite{implicationsOfFailures} also show that failures are more likely to occur during daytime than at night, which may be a consequence of the system load being higher during daytime. Finally, components which have failed in the past are more likely to fail again~\cite{implicationsOfFailures}.
 
 While a Poisson process is commonly used to describe failures,~\cite{studyOfFailures} showed failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonable useful in mathematical models~\cite{experimentalFailureAssessment}.
 
