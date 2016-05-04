@@ -341,7 +341,7 @@ Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback r
 
 % Checkpointing, job migration, voting etc
 \subsection{Checkpoint/Restart} \label{subsec:background_checkpoint}
-Fault tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of fault tolerance~\cite{surveyFaultParallel}.
+Fault tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of reactive fault tolerance techniques~\cite{surveyFaultParallel}.
 
 Checkpointing is a fault tolerance technique which periodically saves the state of a computation to a persistent storage~\cite{relGridSystems, surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
@@ -352,7 +352,7 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
-Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}.
+Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique.
 
 Using replication, several identical processes are scheduled on different resources and simultaneously perform the same computations~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure~\cite{faultToleranceGrid}.
 
@@ -364,9 +364,7 @@ The term replica or task replica is used to denote an identical copy of the orig
 \end{definition}
 
 \subsubsection{Active replication} \label{subsec:active_replication}
-In active replication, one or several replicas are run on other machines and receive an exact copy of the primary nodes input. They all perform the the same computations on the input, as if they were the primary node. The primary node is monitored for incorrect behaviour and in event that the primary node fails or behaves in an unexpected way, one of the replicas will promote itself as the primary node~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the two nodes receives exactly the same input. Since the replica already is in an identical state as the primary node the transition will take negligible amount of time. A drawback with active replication is that when using $n$ replicas, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, is may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
-
-Active replication can also be used in consensus algorithms such as majority voting or k-modular redundancy, where one need to determine the correct output~\cite{surveyFaultParallel}. In this case, there is no primary and backup replicas, instead every replica acts as a primary.
+In active replication, there is one primary task and one or several replicas running on other machines. All replicas receive an exact copy of the primary tasks input. They all perform the same computations on the input, as if they were the primary task. The primary task is monitored for incorrect behaviour and in event that the primary task fails or behaves in an unexpected way, one of the replicas will promote itself as the primary task~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the primary task and the replica receives exactly the same input. Since the replica already is in an identical state as the primary task the transition will take negligible amount of time. A drawback with active replication is that when replicating $n-1$ times, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, is may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
 
 \subsubsection{Semi-active replication} \label{subsec:semi_active_replication}
 Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
@@ -375,7 +373,7 @@ Semi-active replication is very similar to active replication but with the diffe
 Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that has a minimal internal state, unless additional checkpointing is employed.
 
 \subsubsection{Consensus} \label{subsub:consensus}
-Replication is usually used with some form of consensus algorithm. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and the receiver of their results determine which result is considered correct. These algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
+In active and semi-active several outputs are being produces. In order to determine which is the correct output some form of consensus algorithm is usually deployed. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and the receiver of their results determine which result is considered correct. These algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
 
 Based on achieving consensus two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas run simultaneously and afterwards a voting phase take place to determine which result is correct. The result with the highest number of votes is considered correct and consensus is reached.
 
@@ -385,9 +383,9 @@ Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy a
 
 %TODO ref to \cite{selfAdaptRel} \cite{dynAdaptRepl} \cite{relModelWebServices}?
 
-\iffalse
 %Delete? We don't use load balancing at all
-\section{Load balancing} \label{sec:background_load_balancing}
+%TODO Load balancing is a proactive fault tolerence technique, short mention?
+\subsection{Load balancing} \label{sec:background_load_balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under loaded nodes and thus improving the overall performance. Load balancing techniques for a distributed environment must take two tasks into account, one part is the resource allocation and the other is the task scheduling. 
 %Efficient load balancing will ensure that resources are easily available on demand and efficiently utilized under condition of high/low load, that energy is saved at low load and that the cost of resources is reduced \cite{compStudyLoadAndCloud}.
 
@@ -400,6 +398,7 @@ The load balancing algorithms can be divided into three categorize based on the 
 
 Load balancing is often divided into two categorize, namely static and dynamic algorithms. The difference is that the dynamic algorithm takes into account the nodes previous states and performance whilst the static doesn't. The static load balancing simply looks at things like processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
+\iffalse %Shorten?
 A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
 
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks~\cite{perfAnalysisLoadCloud}.
