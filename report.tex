@@ -127,14 +127,14 @@ To our knowledge, no previous attempt has been made which in a fully dynamic man
 
 We propose a framework which ensures an user determined level of reliability by the use of replication. Furthermore, the method ensures a minimized use of resource by not using more replicas than needed. This is achieved by scheduling replicas to the most reliable resources first and foremost. Finally, the system is periodically monitored in order to adapt to changing system properties.
 
-The framework is not limited to a specific type of distributed environment, not the reliability model used. The reliability model and scheduling algorithm is easily replaced to consider more parameters, or to include load-balancing.
+The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and scheduling algorithm is easily replaced to consider more parameters, or to include load-balancing.
 
 %TODO
 %Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
 
 Our model is implemented by extending the actor-based application environment \emph{Calvin} \cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for IoT applications, it suites our purpose well. The model is evaluated by running a set of experiments in a small cluster. %TODO
 
-The report is structured as follows: in \cref{ch:background} all necessary background theory is provided, in \cref{ch:design} we present our model and contribution in more detail, \cref{ch:evaluation} aims at evaluating our solution while \cref{ch:future_work} presents future work. \Cref{ch:conclusions} concludes the report. 
+The report is structured as follows: in \cref{ch:background} all necessary background theory is provided, in \cref{ch:design} we present our model and contribution in more detail, \cref{ch:evaluation} presents an evaluation of our solution and in \cref{ch:discussion} the solution is discussed. \Cref{ch:future_work} presents future work and \cref{ch:conclusions} concludes the report. 
 
 \section{Goal} \label{sec:introduction_goals}
 The goal of this thesis is to devise a method for dynamically ensuring a certain level of reliability for distributed applications or services. Reliability will be achieved by replicating tasks.
