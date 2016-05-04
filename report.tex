@@ -248,7 +248,7 @@ Models describing the nature of failures in distributed computing environments, 
 	\item Fully reliable network
 \end{itemize}
 
-For reliability modelling for the grid, it is common to also assume a fully reliable Resource Management System (RMS)~\cite{relAndPerfGridServices, relGridServicePredConstraint}, which is an non-negligible-able assumption since the RMS in this case in fact is a single point of failure.
+When modelling reliability for grid systems, it is common to also assume a fully reliable Resource Management System (RMS)~\cite{relAndPerfGridServices, relGridServicePredConstraint}, which is a non-negligible assumption since the RMS in this case in fact is a single point of failure.
 
 %TODO definera "failures", vilka brukar inkluderas?
 %When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate~\cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate~\cite{algoMaxRelEndToEndConstraint}. %we use Poisson and have a non-constant failure rate?
@@ -279,7 +279,7 @@ Reliability in the context of software applications can have several meanings, e
 \fi
 
 \subsection{Modelling reliability} \label{subsec:background_modelling_rel}
-Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors if unfeasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
+Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors is infeasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
 
 For distributed applications, the probability of failure increases since it is dependent on more components~\cite{relModelDistSimSystem}. Most models used to model the reliability of a system is based on the mean time to failure, or the mean time between failures, of components~\cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects~\cite{effTaskReplMobGrid}.
 
