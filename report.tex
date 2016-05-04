@@ -178,7 +178,7 @@ A cloud has been described as the next generation of grids and clusters. While i
 \subsubsection{Heterogeneous distributed computing systems}
 Heterogeneous Distributed Computing Systems, HDCS, is a system of numerous high-performance machines connected in a high-speed network. Therefore high-speed processing of heavy applications is possible~\cite{algoMinExTime}. %TODO add info
 
-The majority of distributed service systems can be viewed as CHDS, (Centralized Heterogeneous Distributed System). A CHDS consists of heterogeneous sub-systems which a managed by a centralized control center. The sub-systems have various operating platforms and are connected in diverse topological networks~\cite{studyServiceRel}.
+The majority of distributed service systems can be viewed as CHDS, (Centralized Heterogeneous Distributed System). A CHDS consists of heterogeneous sub-systems which are managed by a centralized control center. The sub-systems have various operating platforms and are connected in diverse topological networks~\cite{studyServiceRel}.
 
 %COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
 
@@ -187,14 +187,13 @@ A distributed computing environment can be either static or dynamic.
 
 In a static environment usually only homogenous resources are installed~\cite{compStudyLoadAndCloud}. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during run time is not taken into account which makes environment easy to simulate but not well suited for heterogeneous resources. Once the system has been put into place, resources are neither added nor removed from the system.
 
-In a dynamic environment usually heterogeneous resources are installed~\cite{compStudyLoadAndCloud}. In this scenario prior knowledge isn't enough since the requirements of the user can change during run time. Therefore run time statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to run time changes in load. Once the system has been put into place, resources can be dynamically added or removed.
+In a dynamic environment usually heterogeneous resources are installed~\cite{compStudyLoadAndCloud}. In this scenario prior knowledge isn't enough since the requirements of the user can change during runtime. Therefore runtime statistics is collected and taken into account. The dynamic environment is difficult to simulate but there are algorithms which easily adopt to runtime changes in load. Once the system has been put into place, resources can be dynamically added or removed.
 
 
 \section{Faults in distributed environments} \label{sec:background_faults_distr_env}
 In a distributed environment a larger number of faults can occur due to its complexity. Therefore, when modeling faults and reliability in such environments, a fault model is usually employed, describing what kind of faults are being considered.
 
 \subsection{Types of Faults} \label{subsec:background_types_of_faults}
-%TODO Perhaps research more which definition is the most usual. Per Runesson, head of Computer Science at LTH uses a different definition
 A fault is usually used to describe a defect at the lowest level of abstraction~\cite{faultTolerantFundamentals}. A fault may cause an error which in turn may lead to a failure, which is when a system has not behaved according to its specification.
 
 In distributed environments, especially with heterogeneous commodity hardware, several types of failures can take place, which may affect the running applications in the environment. These failure include, but are not limited to, overflow failure, timeout failure, resource missing failure, network failure, hardware failure, software failure, and database failure~\cite{cloudServiceRel}. Failures are usually considered to be either~\cite{evalOfGridRel}:
