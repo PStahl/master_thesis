@@ -854,6 +854,10 @@ The second part make sure no unnecessary replica is used, by deleting the replic
 
 \Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
+
+%TODO
+The node receiving the replication request can also die before the replication is done, after which a new node is selected. Theoretically, this could happen until there is no more alive nodes holding a replica. One could argue that this should be taken into account in the reliability model. When the sending node does not receive a reply within a certain time, (e.g. set to twice the replication time), the request is assumed to have failed and the request is sent to another node. When this happens, the total time $R_{xxx}$ will be relatively high, as time was wasted sending the request to the first node. Instead of including this in the reliability model, a log-logistic distribution if fitted to the previous registered times. From this distribution, the 95th percentile value is used. For 95 percent of the cases, the time $R_{xxx}$ will actually be lower than this value.
+
 \section{Monitoring} \label{sec:design_monitoring}
 %TODO push pull strategy
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
