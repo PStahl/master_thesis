@@ -404,29 +404,6 @@ A dynamic load balancing can work in two ways, either distributed or non-distrib
 In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks~\cite{perfAnalysisLoadCloud}.
 \fi
 
-\iffalse
-We will briefly mention some dynamic load balancing algorithms: % skip static load balancing algorithms or not?
-
-\begin{itemize}
-\item Central Queue Algorithm A non-distributed algorithm where the central manager maintains a cyclic FIFO-queue. Whenever a new activity arrives the manager inserts it into the queue and whenever a new request arrives it simply picks the first activity in the queue. 
-
-\item Local Queue Algorithm When a new task is created on the main host it will be allocated on under-loaded nodes. Afterwards all new tasks are allocated locally since ... \cite{perfAnalysisLoadCloud}. The algorithm is receiver initiated since when a node is under-loaded it randomly sends requests to remote load managers
-
-\item Ant Colony Optimization Algorithm As the name implies this algorithm is inspired by the behavior of real ants to find a optimal solution. Whenever an ant find food it moves back to the colony while leaving "markers", i.e. laying pheromone on the way. When more ants find the same place the path the pheromone will become denser. 
-%Förtydliga om det ska ingå i rapporten.
-
-\item Honey Bee Foraging Algorithm This algorithm is quite similar to the Ant Colony Optimization algorithm. When bees find food they return to the bee's colony and use special dance movements for informing the other bees of how much food there is and where it's located. When the forager bees find more food a more energetic dance takes place. This phenomenon can be applied to servers, when an overloaded server receives a request it redirects it to other under loaded servers.
-
-% De fyra ovan är från \cite{perfAnalysisLoadCloud}
-
-% Static algorithms: (?)
-\item Bidding An overloaded node request bids from other nodes. The node with the best bid (i.e. lowest load) wins the job.
-\item Max-Min 
-\item Min-Min 
-\end{itemize}
-
-\fi
-
 \section{Task scheduling} \label{sec:background_task_sched}
 Task scheduling is the process of mapping tasks to available resources. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
 
