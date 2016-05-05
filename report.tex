@@ -748,7 +748,7 @@ Furthermore, the node to which the replication request is sent may die before th
 
 This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. And when this happens, the time $T_R$, will be relatively high, as time was wasted sending the request to the first node. 
 
-Instead of including this in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used, meaning for 95 percent of the cases, the time $T_R$ will actually be lower than this value. The reason for choosing log-logistic distribution is mentioned in~\cref{evaluation:rep_time_distribution}. %TODO add to evaluation
+Instead of including this in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used, meaning for 95 percent of the cases, the time $T_R$ will actually be lower than this value. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}. %TODO add to evaluation
 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
 A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid}, which fulfills \cref{eq:desired_rel} is shown below:
@@ -1028,8 +1028,30 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 
 \section{Experiments}
 
-\subsection{Measurement of time $t$} \label{sec:eval_time_t}
-As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica dies, until a new replica is up and running, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica.
+\subsection{Measurement of time $T_R$} \label{sec:eval_time_t}
+As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
+
+The time for detecting that a node has died, $T_f$, in~\cref{eq:rep_time} is static and set to the upper bound as described in~\cref{sec:node_failure_detection_time}.
+
+While $T_f$ is static, the time for the replication request, $T_R$, varies. In order to find the best distribution for the times $T_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
+
+Two Calvin runtimes were started on each of the non-stable servers, each with a MTBF of 10 seconds, and the required reliability was set to 0.99999.
+
+\subsubsection*{Result}
+The experiment ran for XXX minutes, and YYY times were registered.
+
+The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}.
+
+Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
+
+\Cref{figure:distribution_results} shows the four best fitted distributions, with log-logistic being the best.
+
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/distribution_results.pdf} 
+\caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data.}\label{fig:distribution_results}
+\end{figure} 
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
