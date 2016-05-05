@@ -928,6 +928,8 @@ Calvin uses the Kademlia implementation of a DHT. This enables that any data sto
 \subsubsection{Actor model}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their out-ports to other actors in-ports. The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
+%TODO mention that the actors preform deterministically calculations and therefore suits our application model of stream processing
+
 The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues is the major part of the message size.
 
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
