@@ -745,6 +745,7 @@ T_{r} = T_{get\ state} + T_{transmit\ state} + T_{setup\ new} + T_{response}
 In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Also, each time $T_R$ is stored.
 
 Furthermore, the node to which the replication request is sent may die before the replication is finished. The sender of the request assumed the receiving node has died if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. This is further described in~\cref{sec:design_handling_failure}. 
+%TODO also the node we're sending the lost node request to may fail!
 
 This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. And when this happens, the time $T_R$, will be relatively high, as time was wasted sending the request to the first node. 
 
