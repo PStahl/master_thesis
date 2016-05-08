@@ -838,11 +838,12 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 	\State
 	
 	\Procedure{Delete unnecessary replicas}{}
+	\State $least\_reliable\gets current\_nodes.pop$
 	\While {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
-		\State $least\_reliable\gets current\_nodes.pop$
 		\State $replica\gets $\Call{replica at}{$least\_reliable$}
 		\State
 		\Call{delete replica from node}{$replica$, $least\_reliable$}
+		\State $least\_reliable\gets current\_nodes.pop$
 	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
