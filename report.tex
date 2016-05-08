@@ -820,8 +820,8 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 	\Procedure{Move to most reliable nodes}{}
 	\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
 	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
-	\State $most\_reliable\gets nodes.pop$
 	\State $least\_reliable\gets current\_nodes.pop$
+	\State $most\_reliable\gets nodes.pop$
 	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
@@ -831,7 +831,7 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 			\State
 			\State $current\_nodes\gets most\_reliable$
 			\State $nodes\gets least\_reliable$
-			\State $least\_reliable\gets current.pop$
+			\State $least\_reliable\gets current\_nodes.pop$
 			\State $most\_reliable\gets nodes.pop$
 	\EndWhile
 	\EndProcedure
