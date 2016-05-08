@@ -818,13 +818,11 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $\lambda$ is the required reliability}
 	\Statex
 	\Procedure{Move to most reliable nodes}{}
-	\Do
-		\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
-		\State $most\_reliable\gets nodes.pop$
-		\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
-		\State $least\_reliable\gets current\_nodes.pop$
-		\State
-		\If {$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
+	\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
+	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
+	\State $most\_reliable\gets nodes.pop$
+	\State $least\_reliable\gets current\_nodes.pop$
+	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
 			\Call{replicate to}{$replica$, $most\_reliable$}
@@ -835,20 +833,17 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 			\State $nodes\gets least\_reliable$
 			\State $least\_reliable\gets current.pop$
 			\State $most\_reliable\gets nodes.pop$
-		\EndIf
-	\doWhile {$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
+	\EndWhile
 	\EndProcedure
 	\State
 	
 	\Procedure{Delete unnecessary replicas}{}
-	\Do 
+	\While {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
 		\State $least\_reliable\gets current\_nodes.pop$
-		\If {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
-			\State $replica\gets $\Call{replica at}{$least\_reliable$}
-			\State
-			\Call{delete replica from node}{$replica$, $least\_reliable$}
-		\EndIf
-	\doWhile {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
+		\State $replica\gets $\Call{replica at}{$least\_reliable$}
+		\State
+		\Call{delete replica from node}{$replica$, $least\_reliable$}
+	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
