@@ -1358,6 +1358,9 @@ Finally, since using a \emph{default MTBF} of nodes for which we have not yet ex
 %Mention that since we always place the replicas on the most reliable nodes our model uses the least amount of resources and are therefore energy efficient. Assume we have 100 actors that all need to be replicated. Then we use at most max(nbr_of replicas) nodes (asuming that we dont cross the max preferred level). 
 
 \chapter{Future Work} \label{ch:future_work}
+%TODO  move this paragraph
+Since periodically monitoring the reliability, some machine learning technique would be beneficial. Instead of acting first when the reliability is below the desired value, one could predict when the reliability is about to decrease and take preventative measures.
+
 To the best of our knowledge our model is the first of it's kind, due to its fully dynamic behavior. Therefore we had to limit our scope a lot and considering these limitations there is a lot of possible future work. Our model could be extended by considering more types of failures, e.g. link failure and soft failures (e.g. an actor dies but not the node or the actor produce an incorrect result). A consensus algorithm should be implemented in order to hamper the risk of using incorrect results. Link failures could, for instance be detected if the node responsible for replicating actors after a node failure awaits request from several nodes. If it only receives one node fail request among ten nodes its safe to assume that the node is still alive and the link to the requesting node has failed.
 
 There are a lot of different kinds of failures which could be taken into account, see \cref{subsec:future_extended_model} for an extended reliability model.
