@@ -984,6 +984,9 @@ As mentioned, the runtimes were periodically killed and restarted to simulate no
 
 The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF.
 
+%TODO text needs work
+Since the actual time slept before killing and restarting the runtime is picked from a normal distribution, the actual MTBF may not be the assigned MTBF. The reason for using values form a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes were given the same MTBF and slept exactly that time, they would all die at the same time if they were started at the same time. Furthermore, if one waited a small time between starting each runtime, two runtimes would never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
 	\begin{algorithmic}[1]
