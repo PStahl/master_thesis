@@ -1062,13 +1062,19 @@ The average of the 50 measured times was 483.8 ms. This above the theoretical av
 % corresponds well to the theoretical average of 500 ms. %TODO this experiment is not needed if we set a timeout of 500 ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200 ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
 
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has.
 
-In this experiment, the actor had only one out port and no in port. The state of the actor was incrementally increased by increasing the size of its output queue, and the time it took to replicate the actor to another runtime was measured.
+In the following two experiments, the actor had only one out port and no in port. The state of the actor was in the first experiment incrementally increased by increasing the size of a local variable, while in the other it was increased by increasing the size of its output queue. The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply.
 
-The experiment was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}.
+Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}.
 
 After starting the actor on one of the two runtimes, it was replicated to the other one 10 times and the time each replication took was measured. 
+
+\subsubsection{Increasing variable size}
+In this experiment, the state size of the actor to replicate was increased by increasing the size of one of the actor's variables.
+
+\subsubsection{Increasing queue size}
+In this experiment, the state size of the actor to replicate was increased by increasing the size of the queue of the actor's out-port.
 
 \subsubsection*{Result}
 \Cref{fig:replication_time} shows how the replication time vary depending on the state size. \Cref{fig:replication_time_less_than_40} show replication time for messages of size less than 40 MB. 
