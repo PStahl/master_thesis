@@ -973,22 +973,17 @@ Each runtime also periodically monitors the applications deployed to it. We have
 If the current reliability is not achieved more replicas is created and if the reliability is unnecessary high replicas are deleted.
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, a set of experiments was conducted. The goal of the experiments were to show mainly three properties our model has. First, that it dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, by dynamically creating new replicas when old ones are lost. Second, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. And finally, that it adapts to changing properties of the system.
+In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. First, that it dynamically ensures the desired level of reliability is met, despite the event of node failures and changing properties of the system, by dynamically creating new replicas when old ones are lost. Second, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Finally, that it adapts to changing properties of the system.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru} (stable), \emph{Dave}, \emph{Jerry}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
+In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Jerry}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started and periodically killed and restarted, thereby simulating node failures. As described in~\cref{sec:TODO HERE}, our model needs at least two failure times for a given node to calculate its MTBF and thereby its reliability. In the experiments, before two failures has happened, all nodes will use a default value of 10 seconds as MTBF. On the sixth server a single runtime was started, which was not killed.
-
-The reason for having a stable runtime was to have the producer and consumer deployed to this runtime, while a service actor were deployed to the failing runtimes. The application is further described in~\cref{sec:eval_application}.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
-As mentioned, the runtimes were periodically killed and restarted to simulate node failures. The time between starting and killing the runtimes varied for the experiments and in some cases even between the runtimes as well.
+As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates. As described in~\cref{sec:TODO HERE}, our model needs at least two failure times for a given node to calculate its MTBF and thereby its reliability. In the experiments, before two failures has happened, all nodes used a default value of 10 seconds as MTBF.
 
-The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF.
-
-%TODO text needs work
-Since the actual time slept before killing and restarting the runtime is picked from a normal distribution, the actual MTBF may not be the assigned MTBF. The reason for using values form a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes were given the same MTBF and slept exactly that time, they would all die at the same time if they were started at the same time. Furthermore, if one waited a small time between starting each runtime, two runtimes would never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes were given the same MTBF and slept exactly that time, they would all have died at the same time, given that they were started at the same time. Furthermore, if one waited some time between starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
@@ -1006,16 +1001,16 @@ Since the actual time slept before killing and restarting the runtime is picked 
 \end{algorithm}
 
 \subsection{Server specification} \label{sec:server_spec}
-The servers used in the experiments all have a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they are all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
+The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they were all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
 \subsection{Laptop specification} \label{sec:laptop_spec}
-The laptop used in the experiments is a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
+The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
 %TODO mention SSD speed? maybe of value when talking about swap memory... 
 
-\subsection{Application} \label{sec:eval_application}
-The application used in the experiments is of simplest form, consisting only of one consuming, one producing actor, and one service actor for which a certain reliability is desired. 
+\section{Application used in experiments} \label{sec:eval_application}
+The Calvin application used in the experiments is of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. Since both the producing and the consuming actor are on a stable server, only the service actor was to be replicated by the system.
+A predefined level of reliability was required for only the service actor, and was therefore the one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was never deployed to the stable runtime.
 
 The computational environment and the application is shown in~\cref{fig:evaluation_application}.
 
