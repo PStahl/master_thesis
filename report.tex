@@ -475,9 +475,11 @@ In this chapter, the key components of our fault-tolerant framework is described
 
 \section{Methodology} \label{sec:design_methodology}
 %TODO
+Having a fault tolerant framework or model includes being able to express the reliability of resources and applications using those resources, as well as being able to detect failures. 
+
 The methodology for devising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
 
-To validate our model and show its usefulness, it was implemented in Ericsson's actor-based application environment Calvin \cite{calvin}. A somewhat simplistic reliability model was made, and more time spent on implementation, in order to be able to conduct various kinds of experiments. However, our model is not dependent on the reliability model, and it could easily be replaced.
+To validate our model and show its usefulness, we implemented it using Ericsson's actor-based application environment Calvin \cite{calvin}. A somewhat simplistic reliability model was made, and more time spent on the other parts of the model, as well as implementing them. This allowed us to conduct various kinds of experiments. In addition, our model is not dependent on the reliability model used, and it could easily be replaced.
 
 An alternative approach would have been to make a more sophisticated reliability model which maps better to real-world characteristics of distributed environments. However, while a more sophisticated theoretical model may map better to the real-world, it is impossible to include all parameters affecting the reliability of an application or service running in an distributed environment. Furthermore, the lack of an actual implementation would have resulted in only simulations could be conducted to verify the model. While simulations can take a lot of parameters into account, they have to be based on failure data, which is usually collected from in-house testing, and thus cannot be compared with failures that can occur in an actual operational environments~\cite{surveyReliabilityDistr}.
 
