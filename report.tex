@@ -646,10 +646,12 @@ In our model, heartbeats are sent to all nodes in the system every 200 ms. Furth
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
 In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications are monitored every 5 seconds. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
+In our model, the reliability of the running applications are monitored periodically. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
 
 On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
-w
+
+In the experiments, applications were monitored every five seconds.
+
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
@@ -813,7 +815,7 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 	\end{algorithmic}
 \end{function}
 
-This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{sec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
+This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{sec:design_handling_failure}. The algorithm is also run periodically as described in~\cref{subsec:monitoring_system_rel}.
 
 \subsubsection{Replaceable reliability model}
 %TODO is this more suitable in discussion perhaps?
@@ -824,7 +826,7 @@ Furthermore, determining which nodes to prefer when selecting where to place new
 When getting available nodes, sorted by reliability with the preferred nodes first, it is important to consider the current nodes. Since only considering node failures, and assuming statistically independent failures, it is important not to place two replicas on the same node. In addition, this is also important if one were to take more parameters into account. For example, one may not want to have several replicas in the same rack, as they would all fail if the rack's switch fails.
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is run as part of the application monitoring run every 5 seconds, described in~\cref{subsec:monitoring_system_rel}.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}.
 
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
@@ -907,8 +909,10 @@ When monitoring the system, all parameters used in the reliability model must be
 
 
 % TODO machine learning section?
-TODO: If we have time:
+\iffalse
+TODO: If we have time: - we didn't :) Move this to discussion?
 Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day~\cite{implicationsOfFailures, studyOfFailures}.
+\fi
 
 \iffalse
 COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
