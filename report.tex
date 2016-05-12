@@ -1315,7 +1315,7 @@ The experiment was considered successful if the nodes used at any time were kept
 \subsubsection*{Result}
 %TODO
 
-\subsection{Replaceable reliability model and node selection} \label{sec:eval_replaceable_model}
+\subsection{Considering nodes' load} \label{sec:eval_replaceable_model}
 Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, a test was conducted in which the system avoids placing replicas on nodes with a CPU usage above 15 percent. 
 
 In this experiment, five nodes were used. Three of these nodes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a MTBF of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a MTBF of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
