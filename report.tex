@@ -1166,7 +1166,7 @@ In this experiment, the MTBF for the various runtimes varied. The mean values gi
 	  $jerry_2$ & 40 \\
 	   \hline
 	\end{tabular}
-	 \caption{Mean-time-between-failures for the eight non-stable runtimes in the experiment~\ref{sec:eval_opt_nbr_replicas}.}
+	 \caption{Mean-time-between-failures for the eight unstable runtimes in the experiment~\ref{sec:eval_opt_nbr_replicas}.}
 	 \label{table:exp_nodes_means}
 	 \end{center}
  \end{table}
@@ -1305,6 +1305,14 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \end{figure}
 
 \subsection{Energy efficient for many applications}
+%TODO 5 applications and 3 replicas or tvartom?
+In this experiment, 3 applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
+
+Two runtimes were started on each server. The MTBF of the runtimes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
+
+The experiment was considered successful if the nodes used at any time were kept to a minimum. Theoretically, when the MTBF for the runtimes is known, only XXX nodes would be required. %TODO
+
+\subsubsection*{Result}
 %TODO
 
 \subsection{Replaceable reliability model and node selection} \label{sec:eval_replaceable_model}
