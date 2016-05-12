@@ -1008,9 +1008,9 @@ The laptop used in the experiment where the replication time was measured, was a
 %TODO mention SSD speed? maybe of value when talking about swap memory... 
 
 \section{Application used in experiments} \label{sec:eval_application}
-The Calvin application used in the experiments is of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
+The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-A predefined level of reliability was required for only the service actor, and was therefore the one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was never deployed to the stable runtime.
+A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes.
 
 The computational environment and the application is shown in~\cref{fig:evaluation_application}.
 
@@ -1064,11 +1064,11 @@ The average of the 50 measured times was 483.8 ms. This above the theoretical av
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has.
 
-In the following two experiments, the actor had only one out port and no in port. The state of the actor was in the first experiment incrementally increased by increasing the size of a local variable, while in the other it was increased by increasing the size of its output queue. The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply. The state of the actor is only one part of the total replication message. The other part is static, and its size during the experiment was 349 bytes.
+In the following two experiments, the actor had only one out-port and no in-port. In the first experiment, the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply. The state of the actor is only one part of the total replication message. The other part is static, and its size during the experiment was 349 bytes.
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}.
 
-After starting the actor on one of the two runtimes, it was replicated to the other one 10 times and the time each replication took was measured. 
+For the various state sizes, an actor was started on one of the two runtimes and replicated to the other runtime 10 times.
 
 \subsubsection{Increasing variable size}
 In this experiment, the state size of the actor to replicate was increased by increasing the size of one of the actor's variables.
@@ -1077,10 +1077,11 @@ In this experiment, the state size of the actor to replicate was increased by in
 In this experiment, the state size of the actor to replicate was increased by increasing the size of the queue of the actor's out-port.
 
 \subsubsection*{Result}
-\Cref{fig:replication_time} shows how the replication time vary depending on the state size. \Cref{fig:replication_time_less_than_40} show replication time for messages of size less than 40 MB. 
+\Cref{fig:replication_time} shows how the total replication time vary depending on the state size. \Cref{fig:replication_time_less_than_40} show replication time for messages of size less than 40 MB. 
 
-Replicating an actor consists of getting the state of the actor, sending the state to another node, starting a new actor with that state, and sending the reply. \Cref{fig:replication_time_percentages_server} and~\cref{fig:replication_time_percentages_laptop} show how much time is spent on each part of the replication when replicating from server to another server, and from laptop to laptop respectively.
+\Cref{fig:replication_time_percentages_server} and~\cref{fig:replication_time_percentages_laptop} show how much time each part of the replication took when replicating from server to another server, and from laptop to laptop respectively.
 
+%TODO update after new test.
 As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in~\cref{fig:replication_time_percentages_laptop}. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be ever larger part of the total replication time.
