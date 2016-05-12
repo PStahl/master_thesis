@@ -901,13 +901,10 @@ A small example is presented in~\cref{fig:handling_node_failure}. In the situati
 \section{Self-adapting} \label{sec:design_self_adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour~\cite{imprRelAdaptRL}.
 
-To ensure a certain level of reliability, the framework must ensure both that the current state of the system is taken into account when calculating the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased is the reliability of a running job decreases below the desired level, or, the number of replicas must be decreased in order not to waste resources.
+To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased if the reliability of a running job decreases below the desired level, or, the number of replicas must if possible be decreased in order not to waste resources.
 
-When monitoring the system, one must monitor all parameters affecting the reliability. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica.
+When monitoring the system, all parameters used in the reliability model must be monitored. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica. Therefore, all nodes' failure times, and the time to create new replicas are registered. The time to detect failure is as mentioned in~\cref{sec:node_failure_detection_time} static.
 
-The replication time is stored per task type. Since the state of different types of tasks vary, and thereby the size of the states, the time to send the state from one node to another will also vary. 
-
-%TODO example that the number of replicas vary for various tasks depending on their T_R?
 
 % TODO machine learning section?
 TODO: If we have time:
