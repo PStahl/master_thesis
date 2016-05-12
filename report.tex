@@ -745,13 +745,13 @@ The time $T_r$ is the time it takes to replicate a task, and consists of the tim
 T_{r} = T_{get\ state} + T_{transmit\ state} + T_{setup\ new} + T_{response}
 \end{equation} 
 
-In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $T_R$. \Cref{table:replicas_with_varying_tr} shows the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
+In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $T_R$. \Cref{fig:replicas_depending_on_t} shows the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
 
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replicas_depending_on_t.pdf}
-\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time \emph{t}.}\label{fig:replication_request}
+\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time \emph{t}.}\label{fig:replicas_depending_on_t}
 \end{figure}
 
 
