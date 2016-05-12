@@ -627,7 +627,7 @@ P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^
 
 While most models using the Poisson process to model reliability assume constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates. This is accomplished by using the time of the latest three failures to determine the MTBF as of~\cref{def:MTBF}. 
 
-However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{ch:evaluation}.
+However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{subsec:eval_default_values}.
 
 As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
 
@@ -745,14 +745,25 @@ The time $T_r$ is the time it takes to replicate a task, and consists of the tim
 T_{r} = T_{get\ state} + T_{transmit\ state} + T_{setup\ new} + T_{response}
 \end{equation} 
 
-In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Also, each time $T_R$ is stored.
+In our model, the time $T_{R}$ is measured and stored every time a replication takes place. Since $T_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $T_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $T_R$. \Cref{table:replicas_with_varying_tr} shows the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
 
-Furthermore, the node to which the replication request is sent may die before the replication is finished. The sender of the request assumed the receiving node has died if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. This is further described in~\cref{sec:design_handling_failure}. 
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/replicas_depending_on_t.pdf}
+\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time \emph{t}.}\label{fig:replication_request}
+\end{figure}
+
+
+Other factors affect the time $T_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumed the receiving node has died if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. This is further described in~\cref{sec:design_handling_failure}. 
 %TODO also the node we're sending the lost node request to may fail!
 
 This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. And when this happens, the time $T_R$, will be relatively high, as time was wasted sending the request to the first node. 
 
-Instead of including this in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used, meaning for 95 percent of the cases, the time $T_R$ will actually be lower than this value. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}. %TODO add to evaluation
+Also the node being selected to run~\cref{alg:scheduling}, described below, may die, in case a new node is selected. This process is further described in~\cref{sec:design_handling_failure}.
+
+Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used, meaning for 95 percent of the cases, the time $T_R$ will actually be lower than this value. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}. %TODO add to evaluation
+
 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
 A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid}, which fulfills \cref{eq:desired_rel} is shown below:
@@ -1023,7 +1034,7 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 \caption{The computational environment used in the experiments. In this example, there is a producer and consumer on Gru, and two replicas of the service located on Dave and Mark.} \label{fig:evaluation_application}
 \end{figure}
 
-\section{Default values used in tests}
+\section{Default values used in tests} \label{subsec:eval_default_values}
 The reliability model is based on a node's MTBF and the time $T_R$. In order to determine the MTBF for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. In all experiments, the default MTBF was 10 seconds.
 
 In addition to the MTBF, a default value for $T_R$ must be used before any such times have been registered. The default value used in the tests was 2 seconds.
