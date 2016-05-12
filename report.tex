@@ -474,7 +474,7 @@ Docker containers wrap up a piece of software in a complete file system that con
 In this chapter, the key components of our fault-tolerant framework is described. Of the various fault-tolerant techniques described in~\ref{sec:background_fault_tol_tech}, our model focus on fault-tolerance, using proactive techniques.
 
 \section{Methodology} \label{sec:design_methodology}
-%TODO
+%TODO needs work
 Having a fault tolerant framework or model includes being able to express the reliability of resources and applications using those resources, as well as being able to detect failures. 
 
 The methodology for devising our model is mainly literature study as well as meetings and discussions with both our supervisor but also with colleges at MAPCI.
@@ -557,7 +557,6 @@ The fault-tolerant framework presented in this paper is general and may be used 
 
 In this paper we use a simple example application in our experiments. The application can be modelled as shown in~\cref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. In contrast to ~\cite{algoOptTimeMaxRel, optTaskAllocationForMaxRel, taskAllocation, taskAllocationSwarm, algoMaxRelEndToEndConstraint, algoMinExTime, schedReplicas}, no assumptions are made about the execution time of the application. While our model is general, it's particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures~\cite{imprRelAdaptRL}.
 
-%TODO actually... in the tests, there is no "A", but instead the producer is replicated... should update the tests to say we have this situations.
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/app_model.pdf} 
@@ -565,7 +564,6 @@ In this paper we use a simple example application in our experiments. The applic
 \end{figure}
 
 \iffalse
-%TODO
 COMMENT: we should have some real examples of applications which would benefit from using our framework. ?
 \begin{itemize}
 \item telephone system?
@@ -603,14 +601,11 @@ After replicating, the various replicas are likely to be un-synced. But, since a
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
 \subsection{Fault model} \label{subsec:design_fault_model}
-%TODO mention that we focus on System related failures (hardware failures).
-%TODO referr back to commonly made assumptions, fully reliable network, etc.
 In this paper, we adapt the \emph{fail-stop} fault model, which is described in~\cref{subsub:background_fail_stop} and commonly used when presenting fault-tolerance techniques~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure, only that it stopped functioning.
 
 Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication, taskAllocationSwarm, relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible, but in the case of a link failure a node will stop sending heartbeats and replies, and will be assumed dead, and a new replica created. Therefore, the desired reliability will still be met. 
 
 \subsubsection{Failure distribution}
-%TODO do we want to assume Poisson process with constant failure rates? Maybe we should start with this and then later on use a more sophisticated model which for example takes the time a day into acocunt...
 A commonly used assumption adapted in this paper is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution is defined as follows:
 
 \begin{equation} \label{eq:Poisson}
@@ -637,7 +632,6 @@ As time goes and nodes fail, the time of failure for nodes are stored, the syste
 
 
 \section{Monitoring} \label{sec:design_monitoring}
-%TODO push pull strategy
 Monitoring the system is crucial to achieve an entirely dynamic system, both in which certain reliability is dynamically ensured, but also to not use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
 
 The sharing of resource information is done using a push strategy, as described in~\cref{sec:background_monitoring}. Resources are periodically sent to all other nodes in the system in a multicast fashion, and a heartbeat system is used to detect node failures.
@@ -876,7 +870,6 @@ The second part make sure no unnecessary replica is used, by deleting the replic
 \Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
 \section{Handling node failure} \label{sec:design_handling_failure}
-%TODO not sure where to put this section
 In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{sec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
 
 To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfill the required reliability. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
