@@ -1033,9 +1033,7 @@ In addition to the MTBF, a default value for $T_R$ must be used before any such 
 \subsection{Measurement of time $T_R$} \label{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
-The time for detecting that a node has died, $T_f$, in~\cref{eq:rep_time} is static and set to the upper bound as described in~\cref{sec:node_failure_detection_time}.
-
-While $T_f$ is static, the time for the replication request, $T_R$, varies. In order to find the best distribution for the times $T_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
+The time for detecting that a node has died, $T_f$, in~\cref{eq:rep_time} is static and set to the upper bound of 500 ms as described in~\cref{sec:node_failure_detection_time}. While $T_f$ is static, the time for the replication request, $T_R$, varies. In order to find the best distribution for the times $T_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
 
 Two Calvin runtimes were started on each of the non-stable servers, each with a MTBF of 10 seconds, and the required reliability was set to 0.99999.
 
@@ -1059,7 +1057,7 @@ Matlab was used to determine which distribution best fitted the data, and the Ba
 % Is this needed really?
 As described in~\cref{sec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within 500 ms, it is assumed dead. 
 
-In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when it detected the loss of connectivity to the killed node. The failing node was killed and restarted 50 times.
+In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node as assumed dead, which was 500 ms after the last received heartbeat as described in~\cref{subsec:heartbeats}. The failing node was killed and restarted 50 times.
 
 \subsubsection*{Result}
 The average of the 50 measured times was 483.8 ms. This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms.
@@ -1289,6 +1287,9 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \includegraphics[scale=0.5]{images/results/self_adaptive_node_rels.pdf}
 \caption{Result for test~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
+
+\subsection{Energy efficient for many applications}
+%TODO
 
 \subsection{Replaceable reliability model and node selection} \label{sec:eval_replaceable_model}
 Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, a test was conducted in which the system avoids placing replicas on nodes with a CPU usage above 15 percent. 
