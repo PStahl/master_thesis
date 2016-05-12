@@ -934,11 +934,15 @@ Calvin is an actor-based application environment for leight-weight IoT applicati
 Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially.
 
 \subsubsection{Actor model}
-An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data on their out-ports to other actors in-ports. The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
+An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
 
-%TODO mention that the actors preform deterministically calculations and therefore suits our application model of stream processing
+Multiple actors may send data to another actors in-port, and an actor's out-port may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process.
+
+The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
 The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues is the major part of the message size.
+
+The actor model corresponds well to the kind of applications and tasks described in~\cref{design:application}, as they perform deterministic calculations.
 
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between actors both within the same runtime and between different runtimes.
