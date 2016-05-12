@@ -822,6 +822,7 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{sec:design_handling_failure}. The algorithm is also run every 5 seconds, as described in~\cref{subsec:monitoring_system_rel}.
 
 \subsubsection{Replaceable reliability model}
+%TODO is this more suitable in discussion perhaps?
 \Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
 
 Furthermore, determining which nodes to prefer when selecting where to place new replicas is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load if above a given threshold.
