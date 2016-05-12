@@ -598,6 +598,8 @@ In contrast to the case with one \emph{primary} replica and several \emph{second
 \caption{An application model where a task or service $S$ has been replicated 4 times.}\label{fig:app_model_replication}
 \end{figure}
 
+After replicating, the various replicas are likely to be un-synced. But, since assuming only deterministic calculations is done by the tasks replicated, they will still produce the same result, even if not synced.
+
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
 \subsection{Fault model} \label{subsec:design_fault_model}
