@@ -981,7 +981,7 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
-As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates. Since a node must have failed at least twice in order to calculate its MTBF and thereby its reliability, a default value of 10 seconds was used in the experiments before two or more failure times had been registered.
+As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
 The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes were given the same MTBF and slept exactly that time, they would all have died at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
@@ -1000,10 +1000,11 @@ The process of killing and restarting is shown in~\cref{alg:simulating_node_fail
 	\end{algorithmic}
 \end{algorithm}
 
-\subsection{Server specification} \label{sec:server_spec}
+\subsection{Node specification}
+\subsubsection{Server specification} \label{sec:server_spec}
 The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they were all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
 
-\subsection{Laptop specification} \label{sec:laptop_spec}
+\subsubsection{Laptop specification} \label{sec:laptop_spec}
 The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
 %TODO mention SSD speed? maybe of value when talking about swap memory... 
 
@@ -1020,8 +1021,10 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 \caption{The computational environment used in the experiments. In this example, there is a producer and consumer on Gru, and two replicas of the service located on Dave and Mark.} \label{fig:evaluation_application}
 \end{figure}
 
-%REPLICATION TIME:
-%An average of the last "self.history" (default is 5) times. We consider these values to be most relevant. 
+\section{Default values used in tests}
+The reliability model is based on a node's MTBF and the time $T_R$. In order to determine the MTBF for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. In all experiments, the default MTBF was 10 seconds.
+
+In addition to the MTBF, a default value for $T_R$ must be used before any such times have been registered. The default value used in the tests was 2 seconds.
 
 \section{Experiments}
 
