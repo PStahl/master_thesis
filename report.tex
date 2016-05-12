@@ -736,7 +736,7 @@ Where $T_{query\ storage}$ is the time it takes to find out which nodes currentl
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replication_request.pdf}
-\caption{The process of node A asking node B to replicate its actor a to node C, and receiving a response containing the id of the new actor.}\label{fig:replication_request}
+\caption{The process of node A asking node B to replicate its replica a1 to node C, and receiving a response.}\label{fig:replication_request}
 \end{figure}
 
 The time $T_r$ is the time it takes to replicate a task, and consists of the time to get the state of the task, transmit it to the other node, and create a new identical replica using that state, and send the response. 
