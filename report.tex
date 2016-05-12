@@ -1300,11 +1300,12 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 
 \subsection{Energy efficient for many applications}
 %TODO 5 applications and 3 replicas or tvartom?
-In this experiment, 3 applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
+In this experiment, 5 applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
 
 Two runtimes were started on each server. The MTBF of the runtimes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
 
-The experiment was considered successful if the nodes used at any time were kept to a minimum. Theoretically, when the MTBF for the runtimes is known, only XXX nodes would be required. %TODO
+%TODO this section needs work.
+When the MTBF for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the MTBF is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the MTBF is known.
 
 \subsubsection*{Result}
 %TODO
