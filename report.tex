@@ -895,7 +895,9 @@ To ensure a certain level of reliability, the framework must ensure both that th
 
 When monitoring the system, one must monitor all parameters affecting the reliability. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica.
 
-The replication time is stored per actor type. Since the state of different types of actors vary, and thereby the size of the states, the time to send the state from one node to another will also vary. 
+The replication time is stored per task type. Since the state of different types of tasks vary, and thereby the size of the states, the time to send the state from one node to another will also vary. 
+
+%TODO example that the number of replicas vary for various tasks depending on their T_R?
 
 % TODO machine learning section?
 TODO: If we have time:
