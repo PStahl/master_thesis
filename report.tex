@@ -1106,20 +1106,19 @@ As shown in~\cref{fig:replication_time_percentages_server}, as long as one does 
 \end{figure}
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
-In this experiment, each runtime was given pseudo-random numbers according to a normal distribution with mean of 20 and a standard deviation of 1, i.e. the 5 runtimes all had the same MTBF, 20 seconds. Since nothing is known about failure times when the system first was started, it was assumed the MTBF for a node was 10 seconds.
+In this experiment, each runtime was given a MTBF of 20 seconds.
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
 
-The test was considered successful if the average reliability level during the duration of the test exceeded 0.98.
+The test was considered successful if the average reliability level during the duration of the test exceeded 0.98. %TODO this is actually weird since we do not guarantee the average level is above XXX
 
 \subsubsection*{Result}
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
 
-Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
 
-As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming a MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds.
-
+%TODO this needs to be updated? Not the latest?
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/reliability.pdf}
@@ -1128,7 +1127,7 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 
 \subsection{Optimal number of replicas}
 \subsubsection{Chosing the most reliable} \label{sec:eval_opt_nbr_replicas}
-Similar to the previous experiment, each runtime was given pseudo-random numbers according to a normal distribution. However, in this experiment, the mean value varied among the runtimes. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}, and all had a standard deviation of 1. Since nothing is known about the nodes when the test starts, it was assumed the mean-time-between-failure were 10. 
+In this experiment, the MTBF for the various runtimes varied. The mean values given to the different runtimes are presented in \cref{table:exp_nodes_means}. 
 
 \begin{table}[h]
 	\begin{center}
@@ -1156,7 +1155,7 @@ Similar to the previous experiment, each runtime was given pseudo-random numbers
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
 
-The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999.
+The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999. %TODO also weird since we do not guarantee the average is above the required.
 
 \subsubsection*{Result}
 %TODO include info about replication time
