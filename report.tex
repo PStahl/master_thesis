@@ -950,7 +950,9 @@ The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runti
 Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
 
 \subsubsection{Replication} \label{subsec:calvin_replication}
-The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, and sending it to the runtimes in which the new replica is to be created. A new actor of the same type is then created using the received state, and lastly its in- and out-port connections are set up.
+The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serialize it, send it to the runtime in which the new replica is to be created. The receiving runtime must de-serialize the state and use it to create the replica and setup its port connections.
+
+Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{subsec:repl_time_queue}.
 
 \subsection{Our contributions} \label{subsec:design_contributions} % ish?
 Here follows a small description of the most important parts of our implementation.
@@ -1084,10 +1086,10 @@ Both experiments was conducted in two settings. In one, two servers were used wi
 
 For the various state sizes, an actor was started on one of the two runtimes and replicated to the other runtime 10 times.
 
-\subsubsection{Increasing variable size}
+\subsubsection{Increasing variable size} \label{subsec:repl_time_variable}
 In this experiment, the state size of the actor to replicate was increased by increasing the size of one of the actor's variables.
 
-\subsubsection{Increasing queue size}
+\subsubsection{Increasing queue size} \label{subsec:repl_time_queue}
 In this experiment, the state size of the actor to replicate was increased by increasing the size of the queue of the actor's out-port.
 
 \subsubsection*{Result}
