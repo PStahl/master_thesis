@@ -770,30 +770,35 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 \begin{algorithm}[H]
 	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $R_{req}$ is the reliability to fulfill}
+	\Require{$R_{req}$ is the reliability to fulfill}
 	\Statex
 	\Procedure{Greedy scheduling algorithm}{}
-	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
-	\While {\Call{reliability}{$current\_nodes$} $\leq R_{req}$}
+	\State $current\ nodes\gets$ current nodes
+	\State $operational\ nodes\gets $ operational nodes
+	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
+	\State
+	\Call{sort}{$available\ nodes$}
+	\While {\Call{reliability}{$current\ nodes$} $\leq R_{req}$}
 		\State $node\gets nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
 		\State
 		\Call{place replica on node}{$replica$, $node$}
-		\State $current\_nodes\gets node$
+		\State $current\ nodes\gets node$
 	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
 \end{algorithm} 
 
 \begin{function} 
-	\caption{Getting available nodes in an ordered list with preferred node first} \label{func:get_available_nodes}
+	\caption{Sorts the given nodes in order of preference} \label{func:sort}
+	Returns the given nodes in sorted order, with the most preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters.
 	\begin{algorithmic}[1]
-	\Require{$connected\_nodes$ is a list containing all alive nodes in the system}
-	\Ensure{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Ensure{$nodes$ is the list to sort}
 	\Statex
-	\Function{get available nodes}{$current\_nodes$}
-	    \State $nodes\gets connected\_nodes \setminus current\_nodes$
-	    \State $nodes.sort$\Comment{sort after reliability in descending order}
+	\Function{sort}{$nodes$}
+		\Statex\Comment{Add here to consider other parameters, such as nodes' loads, when sorting}
+		\State
+	    \Call{sort after reliability}{$nodes$}
 	    \State \Return $nodes$
 	\EndFunction
 	\end{algorithmic}
@@ -802,11 +807,11 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 \begin{function} 
 	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
 	\begin{algorithmic}[1]
-	\Ensure{$current\_nodes$ is a list of nodes currently holding a replica}
+	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica}
 	\Statex
-	\Function{reliability}{$current\_nodes$}
-		\State $n\gets current\_nodes.length$
-		\State return $ \prod\limits_{k=1}^n R_{current\_nodes[k]}(t)$
+	\Function{reliability}{$current\ nodes$}
+		\State $n\gets current\ nodes.length$
+		\State return $ \prod\limits_{k=1}^n R_{current\ nodes[k]}(t)$
 	\EndFunction
 	\end{algorithmic}
 \end{function}
@@ -819,13 +824,16 @@ This algorithm is run by a master node, selected when failure is detected. The s
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
-	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $R_{req}$ is the required reliability}
-	\Statex
 	\Procedure{Move to most reliable nodes}{}
-	\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
-	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
-	\State $least\_reliable\gets current\_nodes.pop$
-	\State $most\_reliable\gets nodes.pop$
+	\State $current\ nodes\gets $ current nodes
+	\State $operational\ nodes\gets $ operational nodes
+	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
+	\State
+	\Call{sort}{$available\ nodes$}
+	\State
+	\Call{sort}{$current\ nodes$}
+	\State $least\_reliable\gets current\ nodes.pop$
+	\State $most\_reliable\gets available\ nodes.pop$
 	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
@@ -833,21 +841,21 @@ This algorithm is run by a master node, selected when failure is detected. The s
 			\State
 			\Call{delete replica from node}{$replica$, $least\_reliable$}
 			\State
-			\State $current\_nodes\gets most\_reliable$
-			\State $nodes\gets least\_reliable$
-			\State $least\_reliable\gets current\_nodes.pop$
-			\State $most\_reliable\gets nodes.pop$
+			\State $current\ nodes\gets most\_reliable$
+			\State $available\ nodes\gets least\_reliable$
+			\State $least\_reliable\gets current\ nodes.pop$
+			\State $most\_reliable\gets available\ nodes.pop$
 	\EndWhile
 	\EndProcedure
 	\State
 	
 	\Procedure{Delete unnecessary replicas}{}
-	\State $least\_reliable\gets current\_nodes.pop$
-	\While {\Call{reliability}{$current\_nodes$}\ >\ $R_{req}$}
+	\State $least\_reliable\gets current\ nodes.pop$
+	\While {\Call{reliability}{$current\ nodes$}\ $\geq R_{req}$}
 		\State $replica\gets $\Call{replica at}{$least\_reliable$}
 		\State
 		\Call{delete replica from node}{$replica$, $least\_reliable$}
-		\State $least\_reliable\gets current\_nodes.pop$
+		\State $least\_reliable\gets current\ nodes.pop$
 	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
@@ -869,9 +877,11 @@ The algorithm is shown below: % Om vi ska ha ":" får vi tvinga algoritmen att l
 \begin{algorithm}\label{alg:node_failure}
 	\caption{Handling a failed node}
 	\begin{algorithmic}[1]
-	\State $nodes\gets live\ nodes$\Comment{Alive nodes sorted by ID}
+	\State $operational\ nodes\gets $ operational nodes
+	\State
+	\Call{sort after ID}{$operational\ nodes$}
 	\Do
-		\State $node\gets nodes.pop$\Comment{take the node with highest id}
+		\State $node\gets operational\ nodes.pop$
 		\State
 		\Call{lost node request}{$node$}
 		\State {wait for reply}
