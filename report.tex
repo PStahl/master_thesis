@@ -1047,7 +1047,7 @@ The time for detecting that a node has died, $T_f$, in~\cref{eq:rep_time} is sta
 
 Two Calvin runtimes were started on each of the non-stable servers, each with a MTBF of 10 seconds, and the required reliability was set to 0.99999.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 The experiment ran for XXX minutes, and YYY times were registered.
 
 The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}.
@@ -1069,7 +1069,7 @@ As described in~\cref{sec:design_monitoring}, heartbeats are used to decide whet
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which was 500 ms after the last received heartbeat as described in~\cref{subsec:heartbeats}. The failing node was killed and restarted 50 times.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 The average of the 50 measured times was 483.8 ms. This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms. 
 %TODO Calculate a confidence interval
 % klockorna måsta vara synkade..
