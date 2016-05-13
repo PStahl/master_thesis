@@ -994,7 +994,7 @@ In order to validate our model, we conducted a set of experiments. The goal of t
 \section{Computational environment} \label{sec:eval_comp_env}
 In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
@@ -1301,7 +1301,7 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \caption{Result for test~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
 
-\subsection{Energy efficient for many applications}
+\subsection{Energy efficient for many applications} \label{sec:eval_energy_efficient}
 %TODO 5 applications and 3 replicas or tvartom?
 In this experiment, 5 applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
 
@@ -1311,7 +1311,33 @@ Two runtimes were started on each server. The MTBF of the runtimes were the same
 When the MTBF for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the MTBF is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the MTBF is known.
 
 \subsubsection*{Result}
-%TODO
+The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used at any time. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time.
+
+\Cref{fig:eval_energy_efficient_mtbf_40}, \cref{fig:eval_energy_efficient_mtbf_15}, and \cref{fig:eval_energy_efficient_mtbf_75} show the number of actors running at the various nodes. Since the model does not place two replicas of the same task on the same node, the nodes had at most 5 actors, one replica per application, at any time.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/energy_efficient/total.pdf}
+\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of nodes used.} \label{fig:eval_energy_efficient_total}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_40.pdf}
+\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_15.pdf}
+\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
+\end{figure}
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_75.pdf}
+\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
+\end{figure}
 
 \subsection{Considering nodes' load} \label{sec:eval_replaceable_model}
 Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, a test was conducted in which the system avoids placing replicas on nodes with a CPU usage above 15 percent. 
