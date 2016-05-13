@@ -363,7 +363,7 @@ The term replica or task replica is used to denote an identical copy of the orig
 \end{definition}
 
 \subsubsection{Active replication} \label{subsec:active_replication}
-In active replication, there is one primary task and one or several replicas running on other machines. All replicas receive an exact copy of the primary tasks input. They all perform the same computations on the input, as if they were the primary task. The primary task is monitored for incorrect behaviour and in event that the primary task fails or behaves in an unexpected way, one of the replicas will promote itself as the primary task~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the primary task and the replica receives exactly the same input. Since the replica already is in an identical state as the primary task the transition will take negligible amount of time. A drawback with active replication is that when replicating $n-1$ times, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, is may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
+In active replication, there is one primary task and one or several replicas running on other machines. All replicas receive an exact copy of the primary tasks input. They all perform the same computations on the input, as if they were the primary task. The primary task is monitored for incorrect behaviour and in event that the primary task fails or behaves in an unexpected way, one of the replicas will promote itself as the primary task~\cite{surveyFaultParallel}. This type of replication is feasible only if by assumption that the primary task and the replica receives exactly the same input. Since the replica already is in an identical state as the primary task the transition will take negligible amount of time. A drawback with active replication is that when replicating $n-1$ times, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, it may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
 
 \subsubsection{Semi-active replication} \label{subsec:semi_active_replication}
 Semi-active replication is very similar to active replication but with the difference that decisions common for all replicas are taken by one site.
@@ -1104,7 +1104,7 @@ In this experiment, the state size of the actor to replicate was increased by in
 	   \hline
 	\end{tabular}
 	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of one of the actor's variables.}
-	 \label{table:exp_nodes_means}
+	 \label{table:rep_mean_deviation}
 	 \end{center}
  \end{table}
 
