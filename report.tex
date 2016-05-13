@@ -1088,11 +1088,9 @@ For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 ti
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-%TODO
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating from server to server and laptop to laptop respectively. As shown, the time two replicate when increasing the state size by increasing the size of the port's queue was higher than when increasing the size of one of the actor's variables. This is due to the extra time needed to create the actor. 
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating from server to server and from laptop to laptop respectively. As shown, the replication time was higher when the increasing the queue size than  when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
 
-%TODO update after new test.
-As seen in the figures, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from XXX MB to XXX MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
+As seen in the figures, the replication time is exponential. When replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. The increase in time is very big when increasing the queue size but not when increasing the variable size. This is probably due to the memory needed when decoding the queue when creating the new actor.
 
 \begin{figure}[hbt!]
 \centering
@@ -1107,16 +1105,14 @@ As seen in the figures, the replication time is exponential. For the laptop, the
 \end{figure}
 
 \subsubsection*{Results - replication time parts}
-\Cref{fig:replication_time_parts_server_variable}, \cref{fig:replication_time_parts_server_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size than when increasing the variable size. This is due to the extra processing done in Calvin when setting up the actor's ports when creating the new actor. Furthermore, when increasing the size of the state, significantly more time is spent on transmitting the state to the other node. 
+\Cref{fig:replication_time_parts_server_variable}, \cref{fig:replication_time_parts_server_queue} show how much of the total replication time is spent on the various parts of the replication process when increasing the variable size and queue size respectively, and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size rather than the variable size. This is due to the time spent on decoding the queue's values as described above.
+
+Furthermore, significantly more time is spent on transmitting the state to the other node for large state sizes. Hence for large state sizes, the replication time depends on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound.
 
 %TODO needs work.
-\Cref{fig:replication_time_parts_laptop_variable}, \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively and when replicating between the two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. Also, when increasing the state size, transmitting the state to the other runtime takes a larger part of the total time, but only until the process run out of memory, as described above. In the experiment, this happened when the size reached 200 and above. When this happens, the process needs to use the system's swap memory when creating the new actor, why there is a huge increase in time to create the new actor when the state size is above 100 MB.
+\Cref{fig:replication_time_parts_laptop_variable}, \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication is done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size.
 
-%TODO
-A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
-
-%TODO
-As shown in~\cref{fig:replication_time_parts_server_queue}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be even larger part of the total replication time.
+ Furthermore, the time spent on transmitting the state increases when increasing the state size. However, when the state size is above 100 MB (when increasing the queue size), more time is spent on creating the actor, which is due to running out of memory as described before. In the experiment, this happened when the size was 200 MB or more. When this happens, the process needs to use the system's swap memory when creating the new actor. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 \begin{figure}[hbt!]
 \centering
