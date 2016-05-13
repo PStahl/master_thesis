@@ -953,7 +953,7 @@ Each runtime has a \emph(storage), all the information stored in storage is firs
 \subsubsection{Replication} \label{subsec:calvin_replication}
 The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serialize it, send it to the runtime in which the new replica is to be created. The receiving runtime must de-serialize the state and use it to create the replica and setup its port connections.
 
-Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{subsec:repl_time_queue}.
+Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
 
 \subsection{Our contributions to Calvin} \label{subsec:design_contributions} % ish?
 Here follows a small description of the most important parts of our changes and new features in Calvin.
@@ -1077,86 +1077,109 @@ The average of the 50 measured times was 483.8 ms. This above the theoretical av
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has.
 
-In the following two experiments, the actor had only one out-port and no in-port. In the first experiment, the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply. The state of the actor is only one part of the total replication message. The other part is static, and its size during the experiment was 349 bytes.
+In the following experiments, two runtimes were used, either on the same laptop or on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is static, and its size during the experiment was 349 bytes.
 
-Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}.
+The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply.
 
-For the various state sizes, an actor was started on one of the two runtimes and replicated to the other runtime 10 times. For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
+Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}. For each state size, the actor was replicated 10 times and the times measured.
 
-\subsubsection{Increasing variable size} \label{subsec:repl_time_variable}
-In this experiment, the state size of the actor to replicate was increased by increasing the size of one of the actor's variables.
+For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
 
-\subsubsection*{Result}
+The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
+
+\subsubsection*{Results - total replication time}
 %TODO
-  
- \begin{table}[h!]
-	\begin{center}
-	\begin{tabular}{| c | c | c | c | c |}
-	 \hline
-	 X & state size (MB) & average (s) & STD & STD (\%) \\
-	 \hline		%TODO values
-	  server & 1 & 0.041 & 0.001 & 2.442 \\
-	  server & 50 &  5.523 &  0.056 & 1.012\\
-	  server & 100 &  20.177 & 0.385 & 1.908 \\
-	  laptop & 1 & \\
-	  laptop & 50 & \\
-	  laptop & 100 & \\
-	   \hline
-	\end{tabular}
-	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of one of the actor's variables.}
-	 \label{table:rep_mean_deviation_variable}
-	 \end{center}
- \end{table}
-
-\subsubsection{Increasing queue size} \label{subsec:repl_time_queue}
-In this experiment, the state size of the actor to replicate was increased by increasing the size of the queue of the actor's out-port.
-
-\subsubsection*{Result}
-\Cref{fig:replication_time} shows how the total replication time vary depending on the state size. \Cref{fig:replication_time_less_than_40} show replication time for messages of size less than 40 MB. 
-
-\Cref{fig:replication_time_percentages_server} and~\cref{fig:replication_time_percentages_laptop} show how much time each part of the replication took when replicating from server to another server, and from laptop to laptop respectively.
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating from server to server and laptop to laptop respectively. As shown, the time two replicate when increasing the state size by increasing the size of the port's queue was higher than when increasing the size of one of the actor's variables. This is due to the extra time needed to create the actor. 
 
 %TODO update after new test.
-As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in~\cref{fig:replication_time_percentages_laptop}. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
+As seen in the figures, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from XXX MB to XXX MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
 
-As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be even larger part of the total replication time.
-
-
-\begin{figure}[hbt]
+\begin{figure}[hbt!]
 \centering
-\includegraphics[scale=0.5]{images/results/replication_time.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size.}\label{fig:replication_time}
-\end{figure}
-
-\begin{figure}[hbt]
-\centering
-\includegraphics[scale=0.5]{images/results/replication_time_percentages_server.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from server to another server.}\label{fig:replication_time_percentages_server}
+\includegraphics[scale=0.5]{images/results/replication_time/server.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of one of the actor's variables.} \label{fig:replication_time_server}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
-\includegraphics[scale=0.5]{images/results/replication_time_percentages_laptop.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from laptop to laptop.}\label{fig:replication_time_percentages_laptop}
+\includegraphics[scale=0.5]{images/results/replication_time/laptop.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of the actor's port queue.} \label{fig:replication_time_laptop}
 \end{figure}
 
+\subsubsection*{Results - replication time parts}
+\Cref{fig:replication_time_parts_server_variable}, \cref{fig:replication_time_parts_server_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size than when increasing the variable size. This is due to the extra processing done in Calvin when setting up the actor's ports when creating the new actor. Furthermore, when increasing the size of the state, significantly more time is spent on transmitting the state to the other node. 
+
+%TODO needs work.
+\Cref{fig:replication_time_parts_laptop_variable}, \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively and when replicating between the two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. Also, when increasing the state size, transmitting the state to the other runtime takes a larger part of the total time, but only until the process run out of memory, as described above. In the experiment, this happened when the size reached 200 and above. When this happens, the process needs to use the system's swap memory when creating the new actor, why there is a huge increase in time to create the new actor when the state size is above 100 MB.
+
+%TODO
+A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
+
+%TODO
+As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be even larger part of the total replication time.
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time/server_parts_variable.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. Server to server, increased variable size} \label{fig:replication_time_parts_server_variable}
+\end{figure}
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time/server_parts_queue.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. Server to server, increased queue size.} \label{fig:replication_time_parts_server_queue}
+\end{figure}
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_variable.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. Laptop to laptop, increased variable size} \label{fig:replication_time_parts_laptop_variable}
+\end{figure}
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_queue.pdf} 
+\caption{Result for test~\ref{sec:eval_repl_time}. Laptop to laptop, increased queue size.} \label{fig:replication_time_parts_laptop_queue}
+\end{figure}
+
+\subsubsection*{Results - replication time variance}
+For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time, the standard deviation, and the standard deviation in percentage for these state sizes when increasing the variable's size, and the size of the queue respectively.
+ 
+ \begin{table}[h!]
+	\begin{center}
+	\begin{tabular}{| c | c | c | c | c |}
+	 \hline
+	 replicating from/to & state size (MB) & $\mu$ & $\sigma$ & RSD \\
+	 \hline		%TODO values
+	  server/server & 1 & 0.041 & 0.001 & 0.024 \\
+	  server/server & 50 &  5.523 &  0.056 & 0.010 \\
+	  server/server & 100 &  20.177 & 0.385 & 0.019 \\
+	  laptop/laptop & 1 & \\
+	  laptop/laptop & 50 & \\
+	  laptop/laptop & 100 & \\
+	   \hline
+	\end{tabular}
+	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time in seconds ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD) for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
+	 \label{table:replication_time_variation_variable}
+	 \end{center}
+ \end{table}
  
 \begin{table}[h!]
 	\begin{center}
 	\begin{tabular}{| c | c | c | c | c |}
 	 \hline
-	 X & state size (MB) & average (s) & STD & STD (\%) \\
+	 replicating from/to & state size (MB) & $\mu$ & $\sigma$ & RSD \\
 	 \hline		%TODO values
-	  server & 1 & 0.251 & 0,008 & 3.166 \\
-	  server & 50 & 16,547 & 0.256 & 1.550 \\
-	  server & 100 & 42.555 & 0.414 & 0.972 \\
-	  laptop & 1 & \\
-	  laptop & 50 &  \\
-	  laptop & 100 &  \\
+	  server/server & 1 & 0.251 & 0,008 & 0,032 \\
+	  server/server & 50 & 16,547 & 0.256 & 0,015 \\
+	  server/server & 100 & 42.555 & 0.414 & 0,010 \\
+	  laptop/laptop & 1 & \\
+	  laptop/laptop & 50 &  \\
+	  laptop/laptop & 100 &  \\
 	   \hline
 	\end{tabular}
-	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of the actor's port queue.}
-	 \label{table:rep_mean_deviation_queue}
+	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time in seconds ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD) for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
+	 \label{table:replication_time_variation_queue}
 	 \end{center}
  \end{table}
  
@@ -1168,7 +1191,7 @@ After the application was started, the reliability level of the nodes on which r
 
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98. %TODO this is actually weird since we do not guarantee the average level is above XXX
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
 
@@ -1213,7 +1236,7 @@ After the application was started, the reliability level of the nodes on which r
 
 The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999. %TODO also weird since we do not guarantee the average is above the required.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 %TODO include info about replication time
 %TODO
 The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30},~\cref{fig:exp_opt_replicas_MTBF_15}, and~\cref{fig:exp_opt_replicas_MTBF_75} show the number of replicas per node over time.
@@ -1270,7 +1293,7 @@ The required reliability in the experiment was set to 0.999. This results in tha
  \end{table}
 
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 %TODO include info about replication time
 The test ran for 5 minutes. As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. This means when the more unreliable nodes have failed twice, their MTBF will be 25 seconds, higher than the default value. But before the reliable nodes have failed twice, their MTBF will be 10 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their seconds failure however, it is known that they are actually more reliable than the other ones, why they are then given replicas.
 
@@ -1326,7 +1349,7 @@ The process of killing nodes therefore differed from~\cref{alg:simulating_node_f
 
 The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes vary over time. 
 
 \begin{figure}[!hbt]
@@ -1350,7 +1373,7 @@ Two runtimes were started on each server. The MTBF of the runtimes were the same
 %TODO this section needs work.
 When the MTBF for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the MTBF is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the MTBF is known.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used at any time. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time.
 
 \Cref{fig:eval_energy_efficient_mtbf_40}, \cref{fig:eval_energy_efficient_mtbf_15}, and \cref{fig:eval_energy_efficient_mtbf_75} show the number of actors running at the various nodes. Since the model does not place two replicas of the same task on the same node, the nodes had at most 5 actors, one replica per application, at any time.
@@ -1386,7 +1409,7 @@ In this experiment, five nodes were used. Three of these nodes, \emph{Tim}, \emp
 
 The test was considered successful if, despite being one of the more reliable nodes, the system avoided to place replicas on \emph{Kevin}, during the time its load was above the threshold of 15 percent.
 
-\subsubsection*{Result}
+\subsubsection*{Results}
 The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the CPU usage for the various nodes. \Cref{fig:eval_replaceable_model_loaded} and \cref{fig:eval_replaceable_model_unloaded} show the number of replicas for \emph{Kevin} and the other nodes during the test.
 
 \Cref{fig:eval_replaceable_model_loaded} clearly shows no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent. This means our model is general and key components such as calculating the reliability of a node as well as sorting the available nodes may be replaced. 
@@ -1904,7 +1927,7 @@ This Appendix consist of various figures.
 	\item \Cref{fig:extended_app_model} shows an extended application model with two replicated services.
 	\item \Cref{fig:before_node_failure} and \cref{fig:after_node_failure} shows the computational environment of four nodes and one service between a producer and a consumer before and after a node failure. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name.
 	\item \Cref{fig:replication_flow} shows the communication flow after a node failure.
-	\item \Cref{fig:replication_time_less_than_40} the measure replication times for state sizes less than 40 MB.
+	\item \Cref{fig:replication_time_less_than_100} the measure replication times for state sizes less than 100 MB.
 	\item \Cref{fig:eval_sleep_time} shows the function from which the sleep-times in test~\ref{sec:eval_adaptive_rel_model} where picked from.
 	\item \Cref{fig:heartbeats_worst_case} and \cref{fig:heartbeats_best_case} shows the worst and best case scenario for detecting a node failure.
 \end{itemize}
@@ -1938,8 +1961,8 @@ This Appendix consist of various figures.
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/replication_time_less_than_40.pdf} 
-\caption{The average replication time as a function of state size.}\label[app]{fig:replication_time_less_than_40}
+\includegraphics[scale=0.5]{images/results/replication_time/less_than_100.pdf} 
+\caption{The average replication time as a function of state size.}\label[app]{fig:replication_time_less_than_100}
 \end{figure}
 
 \begin{figure}[!hbt]
