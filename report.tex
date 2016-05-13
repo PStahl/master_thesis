@@ -1859,8 +1859,17 @@ Scheduling Optimization in Cloud Computing
 
 \begin{appendices}
 \chapter{Figures} \label[app]{appendix:figures}
-%TODO Should we here in the beginning describe the appendix contents at all? If so, update.
-\Cref{fig:before_node_failure} and \cref{fig:after_node_failure} shows the computational environment of four nodes and one actor between a producer and a consumer before and after a node failure. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name. \cref{fig:replication_flow} shows the communication flow after a node failure.
+This Appendix consist of various figures. 
+\begin{itemize}
+	\item \Cref{fig:extended_app_model} shows an extended application model with two replicated services.
+	\item \Cref{fig:before_node_failure} and \cref{fig:after_node_failure} shows the computational environment of four nodes and one service between a producer and a consumer before and after a node failure. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name.
+	\item \Cref{fig:replication_flow} shows the communication flow after a node failure.
+	\item \Cref{fig:replication_time_less_than_40} the measure replication times for state sizes less than 40 MB.
+	\item \Cref{fig:eval_sleep_time} shows the function from which the sleep-times in test~\ref{sec:eval_adaptive_rel_model} where picked from.
+	\item \Cref{fig:heartbeats_worst_case} and \cref{fig:heartbeats_best_case} shows the worst and best case scenario for detecting a node failure.
+\end{itemize}
+
+\newpage
 
 \begin{figure}[!hbt]
 \centering
@@ -1877,7 +1886,7 @@ Scheduling Optimization in Cloud Computing
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/after_node_failure.pdf}
-\caption{After Node C has failed. Now three replicacs (placed on Node A, B and D) is reuiqred to achieve reuiqred reliability.} \label[app]{fig:after_node_failure}
+\caption{After Node C has failed. Now three replicas (placed on Node A, B and D) is required to achieve required reliability.} \label[app]{fig:after_node_failure}
 \end{figure}
 
 %TODO change to exclude actors here as well? Or say that this is how it's done in Calvin.
@@ -1893,7 +1902,6 @@ Scheduling Optimization in Cloud Computing
 \caption{The average replication time as a function of state size.}\label[app]{fig:replication_time_less_than_40}
 \end{figure}
 
-
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/sinus_failure_times.pdf}
@@ -1903,16 +1911,18 @@ Scheduling Optimization in Cloud Computing
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/heartbeats_worst_case.pdf}
-\caption{Worst case scenario for detecting a failed node. In this example, node A fails directly after sending the heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 500 ms.} \label{fig:heartbeats_worst_case}
+\caption{Worst case scenario for detecting a failed node. In this example, node A fails directly after sending the heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 500 ms.} \label[app]{fig:heartbeats_worst_case}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/heartbeats_best_case.pdf}
-\caption{Best case scenario for detecting a failed node. In this example, node A fails just before sending the third heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 300 ms.} \label{fig:heartbeats_worst_case}
+\caption{Best case scenario for detecting a failed node. In this example, node A fails just before sending the third heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 300 ms.} \label[app]{fig:heartbeats_best_case}
 \end{figure}
 
+\iffalse
 \chapter{Code} \label{appendix:code}
+\fi
 
 \end{appendices}
 
