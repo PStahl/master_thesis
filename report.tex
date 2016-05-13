@@ -1084,10 +1084,32 @@ In the following two experiments, the actor had only one out-port and no in-port
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}.
 
-For the various state sizes, an actor was started on one of the two runtimes and replicated to the other runtime 10 times.
+For the various state sizes, an actor was started on one of the two runtimes and replicated to the other runtime 10 times. For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
 
 \subsubsection{Increasing variable size} \label{subsec:repl_time_variable}
 In this experiment, the state size of the actor to replicate was increased by increasing the size of one of the actor's variables.
+
+\subsubsection*{Result}
+%TODO
+  
+ \begin{table}[h!]
+	\begin{center}
+	\begin{tabular}{| c | c | c | c | c |}
+	 \hline
+	 X & state size (MB) & average (s) & STD & STD (\%) \\
+	 \hline		%TODO values
+	  server & 1 & 0.041 & 0.001 & 2.442 \\
+	  server & 50 &  5.523 &  0.056 & 1.012\\
+	  server & 100 &  20.177 & 0.385 & 1.908 \\
+	  laptop & 1 & \\
+	  laptop & 50 & \\
+	  laptop & 100 & \\
+	   \hline
+	\end{tabular}
+	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of one of the actor's variables.}
+	 \label{table:exp_nodes_means}
+	 \end{center}
+ \end{table}
 
 \subsubsection{Increasing queue size} \label{subsec:repl_time_queue}
 In this experiment, the state size of the actor to replicate was increased by increasing the size of the queue of the actor's out-port.
@@ -1103,23 +1125,44 @@ As seen in the figure, the replication time is exponential. For the laptop, ther
 As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be even larger part of the total replication time.
 
 
-\begin{figure}[!hbt]
+\begin{figure}[hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time.pdf} 
 \caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size.}\label{fig:replication_time}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time_percentages_server.pdf} 
 \caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from server to another server.}\label{fig:replication_time_percentages_server}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time_percentages_laptop.pdf} 
 \caption{Result for test~\ref{sec:eval_repl_time}. Part of total replication time spent on fetching the actor state, sending the state, setting up the new actor, and sending reply when replicating from laptop to laptop.}\label{fig:replication_time_percentages_laptop}
 \end{figure}
+
+ 
+\begin{table}[h!]
+	\begin{center}
+	\begin{tabular}{| c | c | c | c | c |}
+	 \hline
+	 X & state size (MB) & average (s) & STD & STD (\%) \\
+	 \hline		%TODO values
+	  server & 1 & 0.251 & 0,008 & 3.166 \\
+	  server & 50 & 16,547 & 0.256 & 1.550 \\
+	  server & 100 & 42.555 & 0.414 & 0.972 \\
+	  laptop & 1 & \\
+	  laptop & 50 &  \\
+	  laptop & 100 &  \\
+	   \hline
+	\end{tabular}
+	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of the actor's port queue.}
+	 \label{table:exp_nodes_means}
+	 \end{center}
+ \end{table}
+ 
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
 In this experiment, each runtime was given a MTBF of 20 seconds.
