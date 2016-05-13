@@ -943,7 +943,7 @@ The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is re
 
 The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues is the major part of the message size.
 
-The actor model corresponds well to the kind of applications and tasks described in~\cref{design:application}, as they perform deterministic calculations.
+The actor model corresponds well to the kind of applications and tasks described in~\cref{subsec:design_app_model}, as they perform deterministic calculations.
 
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between actors both within the same runtime and between different runtimes.
@@ -1104,7 +1104,7 @@ In this experiment, the state size of the actor to replicate was increased by in
 	   \hline
 	\end{tabular}
 	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of one of the actor's variables.}
-	 \label{table:rep_mean_deviation}
+	 \label{table:rep_mean_deviation_variable}
 	 \end{center}
  \end{table}
 
@@ -1156,7 +1156,7 @@ As shown in~\cref{fig:replication_time_percentages_server}, as long as one does 
 	   \hline
 	\end{tabular}
 	 \caption{Average replication time, mean value and standard deviation for state sizes 1, 50 and 100 MB, where the size was increased by increasing the size of the actor's port queue.}
-	 \label{table:exp_nodes_means}
+	 \label{table:rep_mean_deviation_queue}
 	 \end{center}
  \end{table}
  
