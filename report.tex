@@ -1098,7 +1098,7 @@ In this experiment, the state size of the actor to replicate was increased by in
 %TODO update after new test.
 As seen in the figure, the replication time is exponential. For the laptop, there is a big increase in time when increasing the state size from 160 MB to 240 MB. This is due to running out of memory, and the process starting using the system's SWAP memory, which significantly reduced the performance. This is also why the time to setup the new actor takes a significantly larger part of the total time for 160 MB than for 80 MB, shown in~\cref{fig:replication_time_percentages_laptop}. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
-As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be ever larger part of the total replication time.
+As shown in~\cref{fig:replication_time_percentages_server}, as long as one does not run out of memory, the time to send the state is clearly the bottleneck, despite the two servers in the experiment were connected with a 1000 Mb/s link with a latency of less than 0.2 ms. With a slower connection, sending the state would probably be even larger part of the total replication time.
 
 
 \begin{figure}[!hbt]
@@ -1176,7 +1176,7 @@ The test was considered successful if the number of replicas used decreased over
 %TODO
 The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30},~\cref{fig:exp_opt_replicas_MTBF_15}, and~\cref{fig:exp_opt_replicas_MTBF_75} show the number of replicas per node over time.
 
-As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only needing two. Furthermore,~\cref{fig:exp_opt_replicas_MTBF_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in~\cref{fig:exp_opt_replicas_MTBF_30} and~\cref{fig:exp_opt_replicas_MTBF_75}.
+As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only two. Furthermore,~\cref{fig:exp_opt_replicas_MTBF_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in~\cref{fig:exp_opt_replicas_MTBF_30} and~\cref{fig:exp_opt_replicas_MTBF_75}.
 
 \begin{figure}[!hbt]
 \centering
