@@ -1070,12 +1070,10 @@ Matlab was used to determine which distribution best fitted the data, and the Ba
 % Is this needed really?
 As described in~\cref{sec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within 500 ms, it is assumed dead. 
 
-In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node as assumed dead, which was 500 ms after the last received heartbeat as described in~\cref{subsec:heartbeats}. The failing node was killed and restarted 50 times.
+In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which was 500 ms after the last received heartbeat as described in~\cref{subsec:heartbeats}. The failing node was killed and restarted 50 times.
 
 \subsubsection*{Result}
-The average of the 50 measured times was 483.8 ms. This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms.
-
-% corresponds well to the theoretical average of 500 ms. %TODO this experiment is not needed if we set a timeout of 500 ms instead of increasing a count everytime we send a heartbeat and assume lost when we have sent 3 without receiving a reply. Atm, sending every 200 ms and assuming dead when count > 2, the average case is 500 ms. But using a timeout one can have a deterministic timeout.
+The average of the 50 measured times was 483.8 ms. This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms. An explanation of the extra 83.8 ms, the time above the average, could be the average time for sending a heartbeat. %TODO Calculate a confidence interval
 
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has.
