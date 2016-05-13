@@ -42,8 +42,7 @@
 	{\normalsize \href{mailto:ada10pst@student.lu.se}{\texttt{ada10pst@student.lu.se}}}
 	\and
 	Jonatan Broberg \\
-    {\normalsize \href{mailto:elt11jbr@student.lu.se
-}{\texttt{elt11jbr@student.lu.se}}}
+    {\normalsize \href{mailto:elt11jbr@student.lu.se}{\texttt{elt11jbr@student.lu.se}}}
 }
 
 \title{Dynamic Fault-Tolerance and Task Scheduling in Distributed Systems}
@@ -121,10 +120,7 @@ A dynamic and adaptive algorithm, which dynamically varies the number of replica
 
 A fault-tolerant scheduling technique incorporating a replication scheme is presented in~\cite{faultTolerantSchedPolicy}. While being dynamic in that failed replicas are restarted, it is static in that the user defines the number of replicas to use.
 
-The techniques used in~\cite{selfAdaptRel, dynAdaptRepl, relModelWebServices} are more dynamic and adaptive to the dynamic behavior of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}.
-%TODO (above sentence) However?
-An adaptive approach, which adapts to changes in the execution environment is presented in~\cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume a task's profile, including execution time, is available.
-
+The techniques used in~\cite{selfAdaptRel, dynAdaptRepl, relModelWebServices} are more dynamic and adaptive to the dynamic behaviour of distributed systems. However, reliability is defined as producing the correct result, and achieved by techniques like voting and \emph{k-modular redundancy}. An adaptive approach, which adapts to changes in the execution environment is presented in~\cite{imprRelAdaptRL}. In it, they present an adaptive scheduling model based on reinforcement learning, aiming at increasing the reliability. However, they assume that a task's profile, including execution time, is available.
 
 \section{Our contributions} \label{sec:introduction_contributions}
 To our knowledge, no previous attempt has been made which in a fully dynamic manner ensures a certain level of reliability for long running applications or services. Some previous work dynamically calculates the number of replicas, but are static in that failed replicas are not restarted, while others use a static number of replicas, and dynamically restart failed ones.
