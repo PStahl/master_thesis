@@ -586,7 +586,7 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
-As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times.
+As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times. It is also possible to have several services replicated, this scenario is shown in \cref{fig:extended_app_model}.
 
 In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. We do not count for whether or not the correct result is received at the consumer, but our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
 
@@ -1833,7 +1833,14 @@ Scheduling Optimization in Cloud Computing
 
 \begin{appendices}
 \chapter{Figures} \label[app]{appendix:figures}
+%TODO Should we here in the beginning describe the appendix contents at all? If so, update.
 \Cref{fig:before_node_failure} and \cref{fig:after_node_failure} shows the computational environment of four nodes and one actor between a producer and a consumer before and after a node failure. The required reliability is 0.995 and for a certain replication time and failure rate the nodes reliability is given under their name. \cref{fig:replication_flow} shows the communication flow after a node failure.
+
+\begin{figure}[!hbt]
+\centering
+\includegraphics[scale=0.5]{images/extended_app_model_replication.pdf}
+\caption{The data flow when two services, \emph{S1} and \emph{S2} with different required reliability are replicated.} \label[app]{fig:extended_app_model}
+\end{figure}
 
 \begin{figure}[!hbt]
 \centering
