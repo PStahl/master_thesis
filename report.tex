@@ -1018,11 +1018,10 @@ The process of killing and restarting is shown in~\cref{alg:simulating_node_fail
 
 \subsection{Node specification}
 \subsubsection{Server specification} \label{sec:server_spec}
-The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they were all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. 
+The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they were all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. The OS installed on the servers was Ubuntu 14.04 LTS.
 
 \subsubsection{Laptop specification} \label{sec:laptop_spec}
-The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a Samsung SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. 
-%TODO mention SSD speed? maybe of value when talking about swap memory... 
+The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. Furthermore the installed OS was the same as for the servers, Ubuntu 14.04 LTS.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
