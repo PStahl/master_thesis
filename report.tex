@@ -543,7 +543,7 @@ Since all nodes are interconnected we have redundant paths which results in that
 \subsection{Storage of data} \label{subsec:design_storage}
 All information collected, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, that information is lost in case that node fails. Also, if a remote database is used, a single-point-of-failure is introduced, resulting in a system where the reliability is no more than the reliability of the database. 
 
-Instead, to achieve a redundant storage in our model, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. More specifially, the DHT implementation used is Kademlia, and we refer to~\cite{kademlia} for further info about DHT and Kademlia. The reason for chosing this approach is a result of Calvin, the framework in the model was implemented and evaluated, already used Kademlia. Calvin is further described in~\cref{subsec:design_calvin}.
+Instead, to achieve a redundant storage in our model, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. More specifically, the DHT implementation used is Kademlia, and we refer to~\cite{kademlia} for further info about DHT and Kademlia. The reason for choosing this approach is a result of Calvin, the framework in the model was implemented and evaluated, already used Kademlia. Calvin is further described in~\cref{subsec:design_calvin}.
 
 When storing data using DHT, the data is first stored locally and later flushed, i.e. sent to other nodes. When a task is replicated to another node, the replication must only be considered successful if the storage is properly updated and the information shared to other nodes. Otherwise, the replication may only be partially reflected in the storage and use of this data will be useless. 
 %TODO this text needs work
@@ -676,7 +676,7 @@ Using replication of a task, and reliability defined as in \cref{def:task_replic
 R_{T}(t) = 1 - \prod\limits_{k=1}^n F_{k}(t)
 \end{equation}
 
-where $F_{k}(t)$ is the probability that replica $k$ fails during time $t$. \Cref{eq:task_reliability} corresponds to \cref{def:task_replica_reliability}, i.e. at least one replica is always operational.
+where $F_{k}(t)$ is the probability that replica $k$ fails during time $t$. 
 
 Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task replica is dependent on the reliability of the resources it uses. Furthermore, since limiting the model to node failures, either in terms of hardware failure or lost connectivity, \cref{eq:task_reliability} can with \cref{eq:resource_reliability} be re-written as
 
@@ -686,15 +686,15 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
 
 where $F_1$ \dots $F_m$ are the failure probability for the $m$ resources on which the $n$ replicas are running. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. \Cref{eq:task_reliability_2} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
 
-Given a time $t$, a desired reliability level $\lambda$, and assuming the replicas are running on separate nodes, we get
+Given a time $t$, a required reliability level $R_{req}$, and assuming the replicas are running on separate nodes, we get
 
 \begin{equation} \label{eq:desired_rel}
-\lambda \leq 1 - \prod\limits_{k=1}^m F_{k}(t)
+1 - \prod\limits_{k=1}^m F_{k}(t) \geq R_{req}
 \end{equation}
 
 which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
 
-The scheduling problem to fulfill a reliability $\lambda$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $\lambda$.
+The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $R_{req}$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
 The time $t$ used in \cref{eq:desired_rel} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
@@ -770,11 +770,11 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 \begin{algorithm}[H]
 	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $\lambda$ is the reliability to fulfill}
+	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $R_{req}$ is the reliability to fulfill}
 	\Statex
 	\Procedure{Greedy scheduling algorithm}{}
 	\State $nodes\gets $ \Call{get available nodes}{$current\_nodes$}
-	\While {$\lambda \geq$ \Call{reliability}{$current\_nodes$}}
+	\While {\Call{reliability}{$current\_nodes$} $\leq R_{req}$}
 		\State $node\gets nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
 		\State
@@ -827,7 +827,7 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
 	\begin{algorithmic}[1]
-	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $\lambda$ is the required reliability}
+	\Require{$current\_nodes$ is a list of nodes currently holding a replica, and $R_{req}$ is the required reliability}
 	\Statex
 	\Procedure{Move to most reliable nodes}{}
 	\State $current\_nodes.sort$\Comment{sort after reliability in ascending order}
@@ -851,7 +851,7 @@ When getting available nodes, sorted by reliability with the preferred nodes fir
 	
 	\Procedure{Delete unnecessary replicas}{}
 	\State $least\_reliable\gets current\_nodes.pop$
-	\While {\Call{reliability}{$current\_nodes$}\ >\ $\lambda$}
+	\While {\Call{reliability}{$current\_nodes$}\ >\ $R_{req}$}
 		\State $replica\gets $\Call{replica at}{$least\_reliable$}
 		\State
 		\Call{delete replica from node}{$replica$, $least\_reliable$}
