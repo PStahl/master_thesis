@@ -348,7 +348,7 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 %The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
 
 \subsection{Rollback recovery} \label{subsec:background_rollback}
-Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the state to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not needing to replay all actions, but only those from the latest checkpoint.
+Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and the actions replayed, which will reconstruct the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not needing to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
 Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique.
@@ -932,6 +932,7 @@ Calvin is an actor-based application environment for leight-weight IoT applicati
 
 \subsubsection{Storage} \label{sec:calvin_storage}
 Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially.
+%TODO Mention that there is an alternative way of storing, e.g. the proxy storage
 
 \subsubsection{Actor model}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
