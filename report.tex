@@ -712,7 +712,7 @@ The timeout time of 500 ms is an upper bound for how long it takes to detect a n
 
 If a node A dies precisely before sending a heartbeat to B, the last received heartbeat from A was for B received 200 ms ago. The timeout on that heartbeat will timeout after 500 ms, resulting in the node A has been dead for close to 300 ms before detecting it.
 
-In the latter case, node A dies directly after sending a heartbeat, since it will no longer send heartbeats, that one will timeout. The time to detect the failure will therefore be 500 ms, which is thus an upper bound of detecting node failures. See~\cref{appendix:figures} for a visual representation of the best and worst case scenario.
+In the latter case, node A dies directly after sending a heartbeat, since it will no longer send heartbeats, that one will timeout. The time to detect the failure will therefore be 500 ms, which is thus an upper bound of detecting node failures. See~\cref{appendix:figures} for a visual representation of the best and worst case scenario. Note that this only holds since we assume that the time to send the heartbeat is negligible.
 
 Assuming that the probability of a node dying just before and directly after sending a heartbeat is the same, we get a theoretical average detection time of 400 ms. However, $T_f$ is set to the upper bound, in our case 500 ms. This is safe since using a higher value than the actual time it takes, results in the calculated reliability is lower than the actual reliability.
 
