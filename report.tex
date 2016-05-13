@@ -868,7 +868,7 @@ The second part make sure no unnecessary replica is used, by deleting the replic
 \Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be seem unnecessary.
 
 \section{Handling node failure} \label{sec:design_handling_failure}
-In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{sec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
+In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{sec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. %Will also create a (possibly) hugh load on the network
 
 To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back whether or not the it managed to create a new replica if this was required to fulfill the required reliability. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
 
@@ -899,18 +899,11 @@ A small example is presented in~\cref{fig:handling_node_failure}. In the situati
 \end{figure}
 
 \section{Self-adapting} \label{sec:design_self_adapting}
-Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour~\cite{imprRelAdaptRL}.
+Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources must be continuously monitored in order to adapt to changing behaviour~\cite{imprRelAdaptRL}.
 
 To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased if the reliability of a running job decreases below the desired level, or, the number of replicas must if possible be decreased in order not to waste resources.
 
 When monitoring the system, all parameters used in the reliability model must be monitored. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica. Therefore, all nodes' failure times, and the time to create new replicas are registered. The time to detect failure is as mentioned in~\cref{sec:node_failure_detection_time} static.
-
-
-% TODO machine learning section?
-\iffalse
-TODO: If we have time: - we didn't :) Move this to discussion?
-Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day~\cite{implicationsOfFailures, studyOfFailures}.
-\fi
 
 \iffalse
 COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
@@ -1449,6 +1442,13 @@ When using a fail-stop fault model (see \cref{subsub:background_fail_stop}), we 
 Our limitations also excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use consensus techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 \\
 
+% TODO machine learning section?
+\iffalse
+TODO: If we have time: - we didn't :) 
+Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day~\cite{implicationsOfFailures, studyOfFailures}.
+\fi
+
+\\
 %\subsubsection{Replaceable reliability model}
 %TODO is this more suitable in discussion perhaps?
 \Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
