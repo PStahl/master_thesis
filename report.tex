@@ -533,9 +533,9 @@ In this section, we describe the system and application models employed in this 
 \subsection{Computational environment} \label{subsec:design_comp_env}
 In this paper we assume that all resources are within the same cluster, with low latency connections between them. The resources consist of heterogeneous hardware with high bandwidth low latency redundant links between them. Due to its heterogeneous properties, nodes can not be assumed to have the same failure rate.
 
-A small example of four interconnected nodes is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consists of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
+A small example of four interconnected nodes is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consisted of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
 
-Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{fig:before_node_failure} and \cref{fig:after_node_failure} a system of one replicated actor is shown before and after a node failure. Finally, we assume that the time to send a message between two nodes is the same for all nodes.
+Since all nodes are interconnected we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{fig:before_node_failure} and \cref{fig:after_node_failure}, a system of one replicated actor is shown before and after a node failure. Finally, we assume that the time to send a message between two nodes is the same for all nodes.
 
 \begin{figure}[!hbt]
 \centering
@@ -546,7 +546,7 @@ Since all nodes are interconnected we have redundant paths which results in that
 \subsection{Storage of data} \label{subsec:design_storage}
 All information collected, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, that information is lost in case that node fails. Also, if a remote database is used, a single-point-of-failure is introduced, resulting in a system where the reliability is no more than the reliability of the database. 
 
-Instead, to achieve a redundant storage in our model, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. More specifically, the DHT implementation used is Kademlia, and we refer to~\cite{kademlia} for further info about DHT and Kademlia. The reason for choosing this approach is a result of Calvin, the framework in the model was implemented and evaluated, already used Kademlia. Calvin is further described in~\cref{subsec:design_calvin}.
+Instead, to achieve a redundant storage in our model, Distributed Hash Table (DHT) is used, which efficiently avoids having a single-point-of-failure. More specifically, the DHT implementation used is Kademlia, and we refer to~\cite{kademlia} for further info about DHT and Kademlia. The reason for choosing this approach is a result of Calvin, the framework in the model was implemented and evaluated, already using Kademlia. Calvin is further described in~\cref{subsec:design_calvin}.
 
 When storing data using DHT, the data is first stored locally and later flushed, i.e. sent to other nodes. When a task is replicated to another node, the replication must only be considered successful if the storage is properly updated and the information shared to other nodes. Otherwise, the replication may only be partially reflected in the storage and use of this data will be useless. 
 %TODO this text needs work
@@ -555,6 +555,8 @@ When storing data using DHT, the data is first stored locally and later flushed,
 The fault-tolerant framework presented in this paper is general and may be used in various contexts. However, it is particularly of value for long running applications and services running in dynamic environments, and where a certain level of reliability must be met. Long running applications are particularly vulnerable to failure because they usually require many resources and usually must produce precise results~\cite{relGridSystems}.
 
 In this paper we use a simple example application in our experiments. The application can be modelled as shown in~\cref{fig:app_model}. The node $A$ shown in the figure could for example be a service for which we require a certain reliability. In contrast to ~\cite{algoOptTimeMaxRel, optTaskAllocationForMaxRel, taskAllocation, taskAllocationSwarm, algoMaxRelEndToEndConstraint, algoMinExTime, schedReplicas}, no assumptions are made about the execution time of the application. While our model is general, it's particularly beneficial for long running applications and services, as they in large-scale distributed environments are required to stay operational even in the case of unpredictable failures~\cite{imprRelAdaptRL}.
+
+A typical example of a long running application is stream data processing, where a continuous stream of data is sent to a service which performs some computations on the data, and sends a result to a receiving process. The execution time is unknown, and in case of a failure, data may be lost. By sending the data to several replicas, redundancy is achieved and reliability thereby increased, as the probability of at least one replica produces a result increases.
 
 \begin{figure}[!hbt]
 \centering
@@ -585,9 +587,9 @@ COPIED: "The end result is that long-running, distributed applications are inter
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
-As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same calculations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times. It is also possible to have several services replicated, this scenario is shown in \cref{fig:extended_app_model}.
+As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, and performs the same computations. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $S$ 4 times. It is also possible to have several services replicated, this scenario is shown in \cref{fig:extended_app_model}.
 
-In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. We do not count for whether or not the correct result is received at the consumer, but our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
+In contrast to the case with one \emph{primary} replica and several \emph{secondary} replicas, as described in \cref{subsec:background_replication}, we will adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer.
 
 \begin{figure}[!hbt]
 \centering
@@ -595,7 +597,7 @@ In contrast to the case with one \emph{primary} replica and several \emph{second
 \caption{An application model where a task or service $S$ has been replicated 4 times.}\label{fig:app_model_replication}
 \end{figure}
 
-After replicating, the various replicas are likely to be un-synced. But, since assuming only deterministic calculations is done by the tasks replicated, they will still produce the same result, even if not synced.
+After replicating, the various replicas are likely to be un-synced. But, since assuming only deterministic calculations is done by the tasks replicated, given the same input they will all produce the same result, even if not synced. However, our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
 
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
