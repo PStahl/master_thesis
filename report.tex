@@ -604,10 +604,10 @@ The process of replicating a task in Calvin, the framework in which our model wa
 \subsection{Fault model} \label{subsec:design_fault_model}
 In this paper, we adapt the \emph{fail-stop} fault model, which is described in~\cref{subsub:background_fail_stop} and commonly used when presenting fault-tolerance techniques~\cite{surveyFaultParallel}. Nodes in the system have one of two states: \emph{operational} or \emph{failed}. If a node fails, all running tasks on that node are dead. Furthermore, after a node has died, it will be restarted. However, the tasks that were being executed before it died will not be restarted when the node is restarted. The reason for why a node died is irrelevant. Our model do not care whether a link died, or it was a hardware failure, only that it stopped functioning.
 
-Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication, taskAllocationSwarm, relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible, but in the case of a link failure a node will stop sending heartbeats and replies, and will be assumed dead, and a new replica created. Therefore, the required reliability will still be met. 
+Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication, taskAllocationSwarm, relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible in our experiments, but in the case of a link failure a node will stop sending heartbeats, and will be assumed dead, further described in~\cref{subsec:heartbeats}.
 
 \subsubsection{Failure distribution}
-A commonly used assumption adapted in this paper is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution is defined as follows:
+A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution is defined as follows:
 
 \begin{equation} \label{eq:Poisson}
 P(k\ failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
@@ -619,15 +619,15 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 P(k\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^k \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{k!}
 \end{equation}
 
-In our case \emph{k} will always equal zero since we are interesting in knowing the probability that no failure occur during time \emph{t}, resulting in
+The probability of surviving corresponds to having zero failures, and can be expressed as
 
 \begin{equation} \label{eq:Poisson_no_failures}
 P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
 
-While most models using the Poisson process to model reliability assume constant failure rates, our failure distributions are dynamic and monitoring of the system resources and events allows for the framework to be self-adaptive and dynamic in terms of resource failure rates. This is accomplished by using the time of the latest three failures to determine the MTBF as of~\cref{def:MTBF}. 
+While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, allows for adapting the MTBF of a node. This is accomplished by using the time of the latest three failures to determine the MTBF as of~\cref{def:MTBF}. 
 
-However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time 0 which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the case when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{subsec:eval_default_values}.
+However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{subsec:eval_default_values}.
 
 As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. The time it takes to detect node failure and spawn a new replica is further discussed in~\cref{sec:design_time_t}.
 
