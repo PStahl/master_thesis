@@ -770,13 +770,12 @@ Other factors affect the time $T_R$. The node to which the replication request i
 
 The situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. Also the node being selected to run~\cref{alg:scheduling}, described below, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}.
 
-Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used, meaning for 95 percent of the cases, the time $T_R$ will actually be lower than this value. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
+Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $T_R$. From the fitted distribution, the 95th percentile value is used as the value for $T_R$ in~\cref{eq:rep_time}. This means in 95 percent of the cases, the time $T_R$ will actually be lower than the value used in~\cref{eq:rep_time}. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
 
 Finally, since assuming that all nodes are within the same cluster and that the latency between all nodes are low, we assume the time $T_R$ is independent on between which nodes the replication takes place. 
 
-
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
-A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid}, which fulfills \cref{eq:desired_rel} is shown below:
+To fulfill~\cref{eq:desired_rel} using the minimum number of replicas, one could simply place a new replica on the most reliable node available, until the required level is reached. A greedy scheduling algorithm doing this, similar to one presented in~\cite{effTaskReplMobGrid}, and which fulfills~\cref{eq:desired_rel} is shown below:
 
 %First we find which nodes that are available for placing a replica on. Secondly we filter the nodes with a load lower than a preferred level. If no preferred node is available we choose an unpreferred one.
 
@@ -829,10 +828,14 @@ A simple greedy scheduling, similar to one presented in~\cite{effTaskReplMobGrid
 	\end{algorithmic}
 \end{function}
 
-This algorithm is run by a master node, selected when failure is detected. The selection process is further described in~\cref{sec:design_handling_failure}. The algorithm is also run periodically as described in~\cref{subsec:monitoring_system_rel}.
+In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, and the calculation of the current reliability, why these two are two separate function calls. 
+
+In our model, the reliability function uses~\cref{eq:task_reliability_2} for determining the reliability, and simply sorts available nodes after reliability, but they could both easily be replaced, e.g. by a more sophisticated reliability models, and to also consider nodes' loads when sorting them.
+
+The algorithm is run at the time of deployment, but also every time a failure is detected, further described in~\cref{sec:design_handling_failure}.
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, unless there are no current replicas, it does not ensure the overall minimum number of replicas are used. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the overall minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}.
 
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
@@ -878,7 +881,7 @@ The first part of~\cref{alg:optimization} makes sure the most reliable nodes are
 
 The second part make sure no unnecessary replica is used, by deleting the replica on the least reliable node as long as the required reliability is still met.
 
-\Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be seem unnecessary.
+\Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be unnecessary. \Cref{alg:optimization} does not account for this.
 
 \section{Handling node failure} \label{sec:design_handling_failure}
 In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not any new replicas are needed by running the algorithm in~\cref{sec:design_sched_alg}. However, when a node fails and thereby stop sending heartbeats to the other nodes in the system, the other nodes will all be aware of the failure. If all other nodes start running the algorithm, one could end up in a situation where every remaining node creates a new replica. This will of course only increase the reliability, but we will no longer ensure the optimal number of replicas being used. 
