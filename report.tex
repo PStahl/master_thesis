@@ -606,7 +606,7 @@ In this paper, we adapt the \emph{fail-stop} fault model, which is described in~
 
 Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication, taskAllocationSwarm, relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible in our experiments, but in the case of a link failure a node will stop sending heartbeats, and will be assumed dead, further described in~\cref{subsec:heartbeats}.
 
-\subsubsection{Failure distribution}
+\subsubsection{Failure distribution} \label{design:failure_distribution}
 A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution is defined as follows:
 
 \begin{equation} \label{eq:Poisson}
@@ -625,7 +625,7 @@ The probability of surviving corresponds to having zero failures, and can be exp
 P(0\ failures\ during\ time\ t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
 
-While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, allows for adapting the MTBF of a node. This is accomplished by using the time of the latest three failures to determine the MTBF as of~\cref{def:MTBF}. 
+While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, allows for adapting the MTBF of a node. This is accomplished by using the time of the three latest failures to determine the MTBF as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
 
 However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
 
@@ -926,6 +926,13 @@ To ensure a certain level of reliability, the framework must ensure that the cur
 
 When monitoring the system, all parameters used in the reliability model must be monitored. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica. Therefore, all nodes' failure times, and the time to create new replicas are registered. The time to detect failure is as mentioned in~\cref{sec:node_failure_detection_time} static.
 
+\subsection{Adapting time $t$}
+Since using all registered times $T_R$ to fit the log-logistic distribution, and selecting the 95th percentile value as described in~\cref{sec:replication_time}, the value of $T_R$ used in~\cref{eq:rep_time} will depend on all previous registered values. Therefore, if the replication time starts increasing, e.g. during higher system load, the value used in the reliability model will also increase, thereby adapting to changing behavior. 
+
+\subsection{Adapting nodes' MTBF} \label{sec:design_self_adapting_mtbf}
+As described in~\cref{design:failure_distribution}, only the three latest failure times for a node are used to determine its MTBF. This allows for adapting a node's MTBF in case it starts failing more or less often. 
+
+However, if a node starts dying more often, it will take a few failures before the MTBF has been update to correctly reflect its new behavior. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm, to predict when a node is about to fail more or less often, and adapt its MTBF before it actually happens.
 
 % TODO machine learning section?
 \iffalse
