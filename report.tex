@@ -964,7 +964,7 @@ Calvin is an actor-based application environment for leight-weight IoT applicati
 Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially.
 %TODO Mention that there is an alternative way of storing, e.g. the proxy storage
 
-\subsubsection{Actor model}
+\subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
 
 Multiple actors may send data to another actors in-port, and an actor's out-port may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process.
@@ -1016,7 +1016,10 @@ For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the runt
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. First, that it dynamically ensures the desired level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Second, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Finally, that it adapts to changing properties of the system.
+In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. Firstly, that it dynamically ensures the desired level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
+
+We also measured the time $T_R$ to find the best fitting distribution for these values, and the replication time with varying state size was also measured.
+
 
 \section{Values used in the experiments} \label{sec:eval_values}
 As described previously, heartbeats were sent every 200 ms in all experiments, and nodes were considered dead if no heartbeat was received for 500 ms. The optimization algorithm was run every 5 seconds.
@@ -1030,12 +1033,12 @@ The state size of the actor replicated in the experiments was XXX MB.
 \section{Computational environment} \label{sec:eval_comp_env}
 In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. On five of the six servers used, one or two (depending on experiment) Calvin runtimes were started. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
-The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes were given the same MTBF and slept exactly that time, they would all have died at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes would have been given the same MTBF and slept exactly that time, they would all have died at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
@@ -1062,14 +1065,14 @@ The laptop used in the experiment where the replication time was measured, was a
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes.
+A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted.
 
-The computational environment and the application is shown in~\cref{fig:evaluation_application}.
+The computational environment, with an application consisting of a consumer, two service replicas, and a consumer, is shown in~\cref{fig:evaluation_application}.
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/evaluation_application.pdf} 
-\caption{The computational environment used in the experiments. In this example, there is a producer and consumer on Gru, and two replicas of the service located on Dave and Mark.} \label{fig:evaluation_application}
+\caption{The computational environment used in the experiments. In this example, there is a producer and consumer on Gru, and two replicas of the service actor located on Dave and Mark.} \label{fig:evaluation_application}
 \end{figure}
 
 \section{Experiments}
@@ -1077,9 +1080,9 @@ The computational environment and the application is shown in~\cref{fig:evaluati
 \subsection{Measurement of time $T_R$} \label{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
-The time for detecting that a node has died, $T_f$, in~\cref{eq:rep_time} is static and set to the upper bound of 500 ms as described in~\cref{sec:node_failure_detection_time}. While $T_f$ is static, the time for the replication request, $T_R$, varies. In order to find the best distribution for the times $T_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
+The time for detecting that a node has died, $T_f$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $T_{timeout}$, which in the experiments were 0.5 seconds. While $T_f$ is static, the time for the replication request, $T_R$, varies. In order to find the best distribution for the times $T_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
 
-Two Calvin runtimes were started on each of the non-stable servers, each with a MTBF of 10 seconds, and the required reliability was set to 0.99999.
+In this experiment, two Calvin runtimes were started on each of the non-stable servers, each with a MTBF of 10 seconds, and the required reliability was set to 0.99999.
 
 \subsubsection*{Results}
 The experiment ran for XXX minutes, and YYY times were registered.
@@ -1088,7 +1091,7 @@ The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{expone
 
 Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
 
-\Cref{fig:distribution_results} shows the four best fitted distributions, with log-logistic being the best.
+\Cref{fig:distribution_results} shows the four best fitted distributions, with log-logistic being the best. The log-logistic distribution is therefore the one used in our model, as described in~\cref{sec:node_failure_detection_time}.
 
 
 \begin{figure}[!hbt]
@@ -1099,21 +1102,23 @@ Matlab was used to determine which distribution best fitted the data, and the Ba
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
-As described in~\cref{sec:design_monitoring}, heartbeats are used to decide whether or not another node is healthy. If no heartbeat is received from a node within 500 ms, it is assumed dead. 
+As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is healthy. If no heartbeat is received from a node within $T_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
 
-In order to measure the time it takes to detect a failed node, an experiment was conducted in which two servers were used, each with a Calvin runtime. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which was 500 ms after the last received heartbeat as described in~\cref{subsec:heartbeats}. The failing node was killed and restarted 50 times.
+In order to measure the time it takes to detect a failed node, an experiment was conducted in which two runtimes were started on the same server. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which in the experiments was 500 ms after the last received heartbeat. The failing node was killed and restarted XXX times.
 
 \subsubsection*{Results}
-The average of the 50 measured times was 483.8 ms. This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms. 
+The average of the 50 measured times was 483.8 ms, the minimum was XXX ms and the maximum value was XXX ms.
+
+This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms. The standard deviation of the times registered was XXX.
 %TODO Calculate a confidence interval
 % klockorna måsta vara synkade..
 
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
-In the following experiments, two runtimes were used, either on the same laptop or on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is static, and its size during the experiment was 349 bytes.
+In the following experiments, two runtimes were used, either on the same laptop or on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
 
-The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply.
+The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply, corresponding to the times described in~\cref{eq:replication_time}.
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}. For each state size, the actor was replicated 10 times and the times measured.
 
