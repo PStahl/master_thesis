@@ -1107,15 +1107,15 @@ As described in~\cref{sec:design_monitoring}, heartbeats are used to determine w
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two runtimes were started on the same server. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which in the experiments was 500 ms after the last received heartbeat. The failing node was killed and restarted XXX times.
 
 \subsubsection*{Results}
-The average of the 50 measured times was 483.8 ms, the minimum was XXX ms and the maximum value was XXX ms.
+The average of the XXX measured times was 483.8 ms, the minimum was XXX ms and the maximum value was XXX ms.
 
-This above the theoretical average of 400 ms, but lower than the upper bound of 500 ms. The standard deviation of the times registered was XXX.
+This average value is close to the theoretical average of 400 ms, while the minimum is above the theoretical value of 300 ms, and the maximum registered time is less than the theoretical. The standard deviation of the times registered was XXX.
 %TODO Calculate a confidence interval
 % klockorna måsta vara synkade..
 % If higher than theoretical, give a explanation
 
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the new node. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
 In the following experiments, two runtimes were used, either on the same laptop or on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
 
@@ -1128,9 +1128,9 @@ For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 ti
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating from server to server and from laptop to laptop respectively. As shown, the replication time was higher when the increasing the queue size than  when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes of different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when the increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
 
-As seen in the figures, the replication time is exponential. When replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. The increase in time is very big when increasing the queue size but not when increasing the variable size. This is probably due to the memory needed when decoding the queue when creating the new actor.
+As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
 
 \begin{figure}[hbt!]
 \centering
@@ -1147,12 +1147,12 @@ As seen in the figures, the replication time is exponential. When replicating us
 \subsubsection*{Results - replication time parts}
 \Cref{fig:replication_time_parts_server_variable}, \cref{fig:replication_time_parts_server_queue} show how much of the total replication time is spent on the various parts of the replication process when increasing the variable size and queue size respectively, and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size rather than the variable size. This is due to the time spent on decoding the queue's values as described above.
 
-Furthermore, significantly more time is spent on transmitting the state to the other node for large state sizes. Hence for large state sizes, the replication time depends on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound.
+Furthermore, significantly more time is spent on transmitting the state to the other node as the state size is increased. Hence for large state sizes, the total replication time depends mostly on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound, especially for larger queue sizes.
 
 %TODO needs work.
 \Cref{fig:replication_time_parts_laptop_variable}, \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication is done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size.
 
- Furthermore, the time spent on transmitting the state increases when increasing the state size. However, when the state size is above 100 MB (when increasing the queue size), more time is spent on creating the actor, which is due to running out of memory as described before. In the experiment, this happened when the size was 200 MB or more. When this happens, the process needs to use the system's swap memory when creating the new actor. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
+Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when the state size is above 100 MB (when increasing the queue size), more time is spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the system's swap memory when creating the new actor. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 \begin{figure}[hbt!]
 \centering
