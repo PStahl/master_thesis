@@ -1179,13 +1179,13 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
-For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time, the standard deviation, and the standard deviation in percentage for these state sizes when increasing the variable's size, and the size of the queue respectively.
+For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$,  for these state sizes when increasing the variable's size, and the size of the queue respectively.
  
  \begin{table}[h!]
 	\begin{center}
 	\begin{tabular}{| c | c | c | c | c |}
 	 \hline
-	 replicating from/to & state size (MB) & $\mu$ & $\sigma$ & RSD \\
+	 replicating from/to & state size (MB) & $\mu$ (s) & $\sigma$ (s) & RSD \\
 	 \hline		%TODO values
 	  server/server & 1 & 0.041 & 0.001 & 0.024 \\
 	  server/server & 50 &  5.523 &  0.056 & 0.010 \\
@@ -1195,7 +1195,7 @@ For 1, 50 and 100 MB the replication time was measured 100 times. The variance o
 	  laptop/laptop & 100 & 34.019 & 1.412 & 0.041 \\
 	   \hline
 	\end{tabular}
-	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time in seconds ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD) for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
+	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
 	 \label{table:replication_time_variation_variable}
 	 \end{center}
  \end{table}
@@ -1204,7 +1204,7 @@ For 1, 50 and 100 MB the replication time was measured 100 times. The variance o
 	\begin{center}
 	\begin{tabular}{| c | c | c | c | c |}
 	 \hline
-	 replicating from/to & state size (MB) & $\mu$ & $\sigma$ & RSD \\
+	 replicating from/to & state size (MB) & $\mu$ (s) & $\sigma$ (s) & RSD \\
 	 \hline		%TODO values
 	  server/server & 1 & 0.251 & 0,008 & 0,032 \\
 	  server/server & 50 & 16,547 & 0.256 & 0,015 \\
@@ -1214,7 +1214,7 @@ For 1, 50 and 100 MB the replication time was measured 100 times. The variance o
 	  laptop/laptop & 100 & 50.893 & 1.066 & 0.021 \\
 	   \hline
 	\end{tabular}
-	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time in seconds ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD) for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
+	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
 	 \label{table:replication_time_variation_queue}
 	 \end{center}
  \end{table}
