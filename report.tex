@@ -126,7 +126,7 @@ To our knowledge, no previous attempt has been made which in a fully dynamic man
 
 We propose a framework which ensures a user determined level of reliability by the use of replication. Furthermore, the method ensures a minimized use of resources by not using more replicas than needed. This is achieved by scheduling replicas on the most reliable resources first and foremost. Finally, the system is periodically monitored in order to adapt to changing system properties.
 
-The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and scheduling algorithm are easily replaced to consider more parameters, or to include load-balancing.
+The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and scheduling algorithm are easily replaced to consider more parameters, or to include load-balancing. %TODO task placement instead of scheduling algorithm?
 
 %TODO
 %Finally, our solution is fully distributed and thereby avoids having a single point of failure, which may be the case in grid environments with a single Resource Management System. (THIS CONTRADICTS NOT BEING LIMITED TO A SPECIFIC DISTRIBUTED ENVIRONMENT)
@@ -167,7 +167,7 @@ The reliability of the grid computing is very critical but hard to analyze due t
 A cluster system is usually a number of identical units managed by a central manager. It is similar to a grid, but differ in that resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource~\cite{compStudyLoadAndCloud}.
 
 \subsubsection{Cloud}
-A cloud has been described as the next generation of grids and clusters. While it is similar to grids and clusters, the main difference is that cloud has multiple domains~\cite{compStudyLoadAndCloud}. Resources can be geographically distributed, and software and hardware components are often heterogeneous, and therefore analyzing and predicting workload and reliability is usually very challenging~\cite{surveyReliabilityDistr}. 
+Clouds has been described as the next generation of grids and clusters. While it is similar to grids and clusters, the main difference is that cloud has multiple domains~\cite{compStudyLoadAndCloud}. Resources can be geographically distributed, and software and hardware components are often heterogeneous, and therefore analyzing and predicting workload and reliability is usually very challenging~\cite{surveyReliabilityDistr}. 
 
 %COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
 
