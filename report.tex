@@ -491,7 +491,7 @@ In the case of stream processing, reliability is of particular interest in order
 
 Choosing streaming services with deterministic processing\footnote{A deterministic function always produces the same output given a certain input.} allows us to avoid timing issues and cases when the consumer receives different results. We therefore adapt the fail-stop fault model described in~\cref{subsub:background_fail_stop}. However, since using active replication the receiver of the results will receive a result from each replica, and our model could therefore easily be extended with consensus algorithms such as those presented in \cref{subsub:consensus} to determine whether or not the correct result was received, and thereby adapting the broader Byzantine fault model. %TODO We haven't mentioned active replication yet, move to discussion?
 
-Furthermore, using long running applications or services, such as streaming applications, allows us to focus on ensuring a required reliabity despite event of failures. Therefore, in contrast to the various scheduling algorithms in~\cite{algoOptTimeMaxRel, optTaskAllocationForMaxRel, taskAllocation, taskAllocationSwarm, algoMaxRelEndToEndConstraint, algoMinExTime, schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a desired level of reliability with the minimum number of replicas. The scheduling algorithm presented takes only the reliability of the available nodes into account, but as shown in~\ref{sec:eval_replaceable_model}, it can easily be replaced by another algorithm, which for example also takes the nodes' loads into account.
+Furthermore, using long running applications or services, such as streaming applications, allows us to focus on ensuring a required reliabity despite event of failures. Therefore, in contrast to the various scheduling algorithms in~\cite{algoOptTimeMaxRel, optTaskAllocationForMaxRel, taskAllocation, taskAllocationSwarm, algoMaxRelEndToEndConstraint, algoMinExTime, schedReplicas} aiming at meeting task deadlines or minimizing execution time, a greedy scheduling algorithm will be presented which solely aims at reaching a required level of reliability with the minimum number of replicas. The scheduling algorithm presented takes only the reliability of the available nodes into account, but as shown in~\ref{sec:eval_replaceable_model}, it can easily be replaced by another algorithm, which for example also takes the nodes' loads into account.
 
 Unlike~\cite{designFaultTolerantSched, evalReplicationSched, taskSchedulingReplication, effTaskReplMobGrid, relGridServicePredConstraint}, we propose a fully dynamic model which monitors the system with its running applications and services, and dynamically creates new replicas in order to ensure that the required reliability is met. Determining the number of replicas needed only when deploying an application or service may suffer if the system is in a reliable state at the time of deployment, but later becomes more unreliable. As mentioned in~\cref{subsec:background_failure_distribution}, the reliability of the resources vary over time, the system and its running applications must therefore by periodically monitored, the number of replicas increased or decreased over time. In our model, this is achieved by monitoring both how many replicas are operational, on which nodes they are executing, as well as node failures, in order to dynamically adapt the reliability model as the properties of the system changes.
 
@@ -700,11 +700,11 @@ Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this 
 
 Given a time $t$, a required reliability level $R_{req}$, and assuming the replicas are running on $m$ separate nodes, we get
 
-\begin{equation} \label{eq:desired_rel}
+\begin{equation} \label{eq:required_rel}
 R_T(t) = 1 - \prod\limits_{k=1}^m F_{k}(t) \geq R_{req}
 \end{equation}
 
-which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:desired_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
+which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:required_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
 
 The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $n$ nodes on which to place $n$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_3}, exceeds $R_{req}$.
 
@@ -775,7 +775,7 @@ Instead of including the probability of these situations in the reliability mode
 Finally, since assuming that all nodes are within the same cluster and that the latency between all nodes are low, we assume the time $T_R$ is independent on between which nodes the replication takes place. 
 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
-To fulfill~\cref{eq:desired_rel} using the minimum number of replicas, one could simply place a new replica on the most reliable node available, until the required level is reached. A greedy scheduling algorithm doing this, similar to one presented in~\cite{effTaskReplMobGrid}, and which fulfills~\cref{eq:desired_rel} is shown below:
+To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one could simply place a new replica on the most reliable node available, until the required level is reached. A greedy scheduling algorithm doing this, similar to one presented in~\cite{effTaskReplMobGrid}, and which fulfills~\cref{eq:required_rel} is shown below:
 
 %First we find which nodes that are available for placing a replica on. Secondly we filter the nodes with a load lower than a preferred level. If no preferred node is available we choose an unpreferred one.
 
@@ -922,7 +922,7 @@ If the selected node determines a new replica is needed, it will send a replicat
 \section{Self-adapting} \label{sec:design_self_adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour~\cite{imprRelAdaptRL}.
 
-To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased if the reliability of a running job decreases below the desired level, or, the number of replicas must if possible be decreased in order not to waste resources.
+To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased if the reliability of a running job decreases below the required level, or, the number of replicas must if possible be decreased in order not to waste resources.
 
 When monitoring the system, all parameters used in the reliability model must be monitored. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to spawn a new replica. Therefore, all nodes' failure times, and the time to create new replicas are registered. The time to detect failure is as mentioned in~\cref{sec:node_failure_detection_time} static.
 
@@ -1016,7 +1016,7 @@ For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the runt
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. Firstly, that it dynamically ensures the desired level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
+In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
 We also measured the time $T_R$ to find the best fitting distribution for these values, and the replication time with varying state size was also measured.
 
@@ -1223,13 +1223,13 @@ For 1, 50 and 100 MB the replication time was measured 100 times. The variance o
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
 In this experiment, each runtime was given a MTBF of 20 seconds.
 
-After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.98.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability for the producing actors were 0.98.
 
 The test was considered successful if the average reliability level during the duration of the test exceeded 0.98. %TODO this is actually weird since we do not guarantee the average level is above XXX
 
 \subsubsection*{Results}
 %TODO include info about replication time
-The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the desired level of 0.98.
+The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
 
 As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
 
@@ -1268,7 +1268,7 @@ In this experiment, the MTBF for the various runtimes varied. The mean values gi
  \end{table}
 
 
-After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The desired level of reliability for the producing actors were 0.999.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability for the producing actors were 0.999.
 
 The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999. %TODO also weird since we do not guarantee the average is above the required.
 
@@ -1531,7 +1531,7 @@ Finally, since using a \emph{default MTBF} of nodes for which we have not yet ex
 
 \chapter{Future Work} \label{ch:future_work}
 %TODO  move this paragraph
-Since periodically monitoring the reliability, some machine learning technique would be beneficial. Instead of acting first when the reliability is below the desired value, one could predict when the reliability is about to decrease and take preventative measures.
+Since periodically monitoring the reliability, some machine learning technique would be beneficial. Instead of acting first when the reliability is below the required value, one could predict when the reliability is about to decrease and take preventative measures.
 
 To the best of our knowledge our model is the first of it's kind, due to its fully dynamic behavior. Therefore we had to limit our scope a lot and considering these limitations there is a lot of possible future work. Our model could be extended by considering more types of failures, e.g. link failure and soft failures (e.g. an actor dies but not the node or the actor produce an incorrect result). A consensus algorithm should be implemented in order to hamper the risk of using incorrect results. Link failures could, for instance be detected if the node responsible for replicating actors after a node failure awaits request from several nodes. If it only receives one node fail request among ten nodes its safe to assume that the node is still alive and the link to the requesting node has failed.
 
