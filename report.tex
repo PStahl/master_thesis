@@ -1102,7 +1102,7 @@ Matlab was used to determine which distribution best fitted the data, and the Ba
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
-As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is healthy. If no heartbeat is received from a node within $T_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
+As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is healthy. If no heartbeat is received from a node within $t_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two runtimes were started on the same server. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which in the experiments was 500 ms after the last received heartbeat. The failing node was killed and restarted 1800 times.
 
