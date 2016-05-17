@@ -1111,9 +1111,8 @@ The average of the 1800 measured times was 333.5 ms, the minimum was 302.1 ms an
 
 All values lie between the theoretical minimum and maximum values of 300 and 500 ms, corresponding to the best and worse case scenarios described in~\cref{sec:node_failure_detection_time}. The average however is clearly below the theoretical average of 400 ms. 
 The standard deviation of the times registered was 28.8.
-%TODO Calculate a confidence interval
-% klockorna måsta vara synkade..
-% If higher than theoretical, give a explanation
+% If higher/lower than theoretical, give a explanation
+%TODO measure again, check time between killing and printing time.
 
 \subsection{Measurement of replication time} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
