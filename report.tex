@@ -823,7 +823,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\Statex
 	\Function{reliability}{$current\ nodes$}
 		\State $n\gets current\ nodes.length$
-		\State return $ \prod\limits_{k=1}^n R_{current\ nodes[k]}(t)$
+		\State return $ 1 - \prod\limits_{k=1}^n (1 - R_{current\ nodes[k]}(t))$
 	\EndFunction
 	\end{algorithmic}
 \end{function}
