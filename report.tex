@@ -693,7 +693,7 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
 where $F_k$ is the probability that node $k$ fails during time $t$. Using \cref{eq:resource_reliability} for describing the reliability of a resource, \cref{eq:task_reliability_2} can be re-written as
 
 \begin{equation} \label{eq:task_reliability_3}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m (1 - e^{\frac{-t}{MTBF_k}})
+R_{T}(t) = 1 - \prod\limits_{k=1}^m (1 - e^{-t/MTBF_k})
 \end{equation}
 
 Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. \Cref{eq:task_reliability_3} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
