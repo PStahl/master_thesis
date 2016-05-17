@@ -734,7 +734,7 @@ In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This is
 
 
 \subsubsection{Replication request time} \label{sec:replication_time}
-The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to a another node, and send a response.
+The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. $t_R$ consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node, and send a response.
 
 To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. Then, a replication request is sent, a new replica is created, and a response is received. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time}.
 
@@ -748,7 +748,7 @@ Where $t_{query\ storage}$ is the time it takes to find out which nodes currentl
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replication_request.pdf}
-\caption{The process of node A asking node B to replicate its replica a1 to node C, and receiving a response.}\label{fig:replication_request}
+\caption{The process of node A asking node B to replicate its replica $T_{1}$ to node C, and receiving a response.}\label{fig:replication_request}
 \end{figure}
 
 As mentioned, the time $t_r$ is the time it takes to replicate a task. Depending on the state of the task to replicate, it is likely to be a significant part of the total time $t_R$. The time to replicate a task consists of the time to get the state of the task, serialize it, transmit it to the other node, de-serialize it, and create a new identical replica using that state, and send the response. 
@@ -762,7 +762,7 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replicas_depending_on_t.pdf}
-\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time \emph{t}.}\label{fig:replicas_depending_on_t}
+\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time $t_{r}$.}\label{fig:replicas_depending_on_t}
 \end{figure}
 
 
