@@ -1036,6 +1036,11 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
+%TODO
+% I believe we have to mention the storage..
+In order to be able to easily test our model we used a proxy storage instead of Kademlia. This introduced a single-point-of-failure, but since our experiments ran for a very limited amount of time this wasn't a problem.
+%due to few number of runtimes? a very unrealistic low mtbf..?
+
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
