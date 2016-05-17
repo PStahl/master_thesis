@@ -1099,19 +1099,19 @@ The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{expone
 
 Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
 
-\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The log-logistic distribution was found to best fit both data-sets, and is therefore the one used in our model, as described in~\cref{sec:node_failure_detection_time}.
-
+\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for xxx reasons.
+The log-logistic distribution was found to best fit both data-sets, and is therefore the one used in our model, as described in~\cref{sec:node_failure_detection_time}.
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/distribution_results.pdf} 
+\includegraphics[scale=0.5]{images/results/distribution_results_30.pdf} 
 \caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the first experiment with MTBF of nodes set to 30 seconds.}
 \label{fig:distribution_results_30}
 \end{figure} 
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/results/distribution_results.pdf} 
+\includegraphics[scale=0.5]{images/results/distribution_results_10.pdf} 
 \caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with MTBF of nodes set to 10 seconds.} \label{fig:distribution_results_10}
 \end{figure} 
 
