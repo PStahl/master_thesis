@@ -791,7 +791,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\State
 	\Call{sort}{$available\ nodes$}
 	\While {\Call{reliability}{$current\ nodes$} $\leq R_{req}$}
-		\State $node\gets nodes.pop$\Comment{take the most reliable node}
+		\State $node\gets available\ nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
 		\State
 		\Call{place replica on node}{$replica$, $node$}
