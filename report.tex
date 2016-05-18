@@ -95,8 +95,7 @@ One way of increasing the reliability is by replicating application tasks, i.e. 
 
 A drawback of replication is the extra resources needed. If replicating a task \emph{n} times with every replica performing the same computation on the same input, $n$ times as many resources are needed, hence a lot of computational resources are wasted. Dynamic analysis of the system and an adaptive scheduling technique could help in determining on which resources replicas should be placed for optimal resource usage and load balancing.
 
-%TODO lång mening?
-In this master thesis, a model with dynamic fault-tolerance is presented, which ensures the required reliability is met by replicating tasks, and doing so in an optimal way by dynamically adapting to changing properties of the system and available resources.
+In this master thesis, a model with dynamic fault-tolerance is presented, which ensures the required reliability is met by replicating tasks. By dynamically adapting to changing properties of the system and available resources it ensured that the optimal number of replicas are used.
 
 \section{Related work} \label{sec:introduction_related_work}
 The interest in reliability for distributed systems has gained increased attention recently~\cite{replicationManagement}. Due to the heterogeneous resources composing distributed environments such as cloud and grid systems, ensuring reliability is a complex task~\cite{cloudServiceRel, surveyReliabilityDistr}.
