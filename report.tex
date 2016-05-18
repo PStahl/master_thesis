@@ -962,8 +962,12 @@ For implementing our model, we use an actor based application environment called
 Calvin is an actor-based application environment for leight-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
-Calvin uses the Kademlia implementation of a DHT. This enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially.
-%TODO Mention that there is an alternative way of storing, e.g. the proxy storage
+In Calvin there are two alternative ways of storing data, either by the Kademlia implementation of a DHT or by a proxy storage. 
+
+\begin{itemize}
+	\item The Kademlia storage enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+	\item When using the proxy storage there is one runtime acting as a storage node, i.e. all data is saved on that node only. All data is available for all nodes in the network. However, the proxy storage introduces a single point of failure. %TODO mention some pros, eaiser when testing?
+\end{itemize}
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
