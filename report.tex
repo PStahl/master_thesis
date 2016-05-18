@@ -103,8 +103,7 @@ The interest in reliability for distributed systems has gained increased attenti
 
 A lot of scheduling techniques have been designed, aiming at maximizing reliability of computational jobs in distributed environments under various constraints such as meeting task deadlines or minimizing execution time~\cite{algoOptTimeMaxRel, optTaskAllocationForMaxRel, taskAllocation, taskAllocationSwarm, algoMaxRelEndToEndConstraint, algoMinExTime, schedReplicas}. Maximizing reliability for these algorithms is a secondary concern, while meeting the constraints is the primary. In contrast to these \cite{optResourceAllMaxPerformance, matchSchedAlgoMinFailure, safetyRelTaskAllocation, improvedTaskAllMaxRel} have developed models which focuses on increasing the reliability. Common for these scheduling techniques is that while they try to maximize reliability, they do not ensure a certain level of reliability is met. Furthermore, the algorithms are usually static in the way that they do not account for the dynamic behaviour of distributed systems. In addition, they make assumptions such as known execution times of tasks, which makes them unsuitable for long running applications or services without a known execution time.
 
-A lot of work has been done in the area of designing fault-tolerant systems by using checkpoint/restart techniques [TODO]. %TODO add reference
-These techniques relies on the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. Checkpoint techniques are usually employed for applications or jobs where the computations done take a very long time [TODO].
+A lot of work has been done in the area of designing fault-tolerant systems by using checkpoint/restart techniques \cite{adaptiveCheckPointAndRep, IEEEfaultTolerantSys, faultTolerantDeadlock}. These techniques relies on the notion of a stable storage, such as a hard-drive, which is persistent even in the case of a system failure. Checkpoint techniques are usually employed for applications or jobs where the computations done take a very long time [TODO], since in these cases there is a lot of computational resource wasted if we need to recompute from the beginning %TODO Do we need a ref here?
 
 Some previous attempts at designing fault-tolerant systems by the use of replication have been made~\cite{designFaultTolerantSched, evalReplicationSched, taskSchedulingReplication, effTaskReplMobGrid, relGridServicePredConstraint}. In \cite{evalReplicationSched}, a static number of replicas is used for every application being deployed. Furthermore, they do not guarantee that all replicas are deployed, instead they use a best-effort approach, where replicas are deployed only if resources are available. In contrast to~\cite{evalReplicationSched}, \cite{ effTaskReplMobGrid, taskSchedulingReplication, designFaultTolerantSched} dynamically determine the number of replicas based on the state of the system. However, they are all static in that failed replicas are not restarted, and do therefore not ensure the reliability is met over time. Furthermore, while~\cite{designFaultTolerantSched} dynamically determines the number of replicas to use, the scheduling decision on which resources to put the replicas is done after the number of replicas has been determined. As the reliability vary between resources in a heterogeneous environment, the number of replicas needed depends on which resources are used. Therefore, determining the number of replicas needed and where to place then should be a joint process.
 
@@ -1984,8 +1983,18 @@ Scheduling Optimization in Cloud Computing
 \bibitem{kademlia} %TODO journal? year?
 	Maymounkov, P., Mazières, D.
 	\emph{Kademlia: A Peer-to-peer Information System Based on the XOR Metric}, 2012
-	
 
+\bibitem{IEEEfaultTolerantSys} 
+	U. Malladi,
+	\emph{Notice of Violation of IEEE Publication Principles Design, analysis and performance evaluation of a new algorithm for developing a fault tolerant distributed system},
+	12th International Conference on Parallel and Distributed Systems, (Volume:1),
+	2006
+
+\bibitem{faultTolerantDeadlock}
+	P. -Y. Li, B. McMillin,
+	\emph{Fault-tolerant distributed deadlock detection/resolution},
+	Computer Software and Applications Conference, 1993. COMPSAC 93. Proceedings., Seventeenth Annual International,
+	1993
 
 \end{thebibliography}
 
