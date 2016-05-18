@@ -1495,6 +1495,9 @@ The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the C
 Since we update the reliability of a node after failure's happen ... if a node start's dying more often, the mtbf used is "a little behind"... EDIT ME.
 
 %TODO
+What if we would have required that we had several replicated actors (A1, A2, A3 and B1, B2, B3) there all A send to all B. Then perhaps the heartbeat system isn't necessary? Since if all B doesn't receive any data from A1 we can safely assume it has died. I.e. all B becomes watch-dogs to all A and all A watches the Bs.
+
+%TODO
 \iffalse
 Större drag, vad kan vi få ut av alla experimenten?
 Hur mycket kan vi lite på resulaten?
