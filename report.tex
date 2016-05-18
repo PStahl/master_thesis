@@ -449,18 +449,12 @@ COPIED: "“The most basic form of monitoring is a simple heartbeat system. A mo
 \fi
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
+%TODO add refs?
 Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in hardware cost and space and in that the system becomes more dynamic. For instance, it is possible to run two virtual servers on each physical server. Another advantage with virtualization is that it separates the software from the hardware which enables the possibility of moving a virtual machine from one physical location to another. This also allows for starting several identical servers, by starting several virtual machines (VM) using the same VM image.
 
 A container is very similar to a virtual machine but more light-weight. Containers running on the same physical machine share the machines operating system and binaries while virtual machines running on a single physical machine have their own operating systems and dedicated resources, isolating them from each other \cite{vm_vs_container}.
 
-%TODO first mention of calvin?
-Calvin, an actor-based application environment developed by Ericsson, use a concept of runtimes. A runtime contains all necessary components to run Calvin applications, consisting of actors, by taking care of things such as scheduling and communication between runtimes. The runtimes work as containers and separate the hardware from the software, resulting in that it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
-
 \iffalse
-%COPIED
-Virtualization for cloud
-What makes virtualization so important for the cloud is that it decouples the software from the hardware. [dummies.com] 
-
 %COPIED
 Docker (Most popular container)
 Docker containers wrap up a piece of software in a complete file system that contains everything it needs to run: code, runtime, system tools, system libraries – anything you can install on a server. This guarantees that it will always run the same, regardless of the environment it is running in
@@ -955,6 +949,8 @@ For implementing our model, we use an actor based application environment called
 
 \subsection{Calvin} \label{subsec:design_calvin}
 Calvin is an actor-based application environment for light-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+
+The main features of Calvin is the use of runtimes (containers) in which actors (application tasks) run. Since the runtimes separate the hardware from the software, it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
 In Calvin there are two alternative ways of storing data, either by the Kademlia implementation of a DHT or by a proxy storage.
