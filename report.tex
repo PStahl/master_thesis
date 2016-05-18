@@ -524,9 +524,13 @@ Since all nodes are interconnected we have redundant paths which results in that
 \end{figure}
 
 \subsection{Storage of data} \label{subsec:design_storage}
-All information collected, such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system. If stored on a single node, all information is lost in case that the node fails. Also, if a remote database is used, a single-point-of-failure is introduced, resulting in a system where the reliability is smaller than the reliability of the database.
+Information such as how many replicas are currently executing, and on which nodes they are running, must be globally available and accessible from every node in the system.
 
-Instead, to achieve a redundant storage, Distributed Hash Table (DHT) can be used, which efficiently avoids having a single-point-of-failure. 
+If information is only stored locally on a node, that information is lost in case that the node fails. In case the information is written to a persistent storage, it may not be lost, but that information will be unavailable until node has been restarted. 
+
+Instead of storing information locally, a remote database can be used. In this case, a single-point-of-failure is introduced, resulting in a system where the reliability is no more than the reliability of the database. If a remote database is used, this must be taken into account in the reliability model.
+
+To achieve a fault-tolerant redundant storage of information, a Distributed Hash Table (DHT) can be used. Using DHT efficiently avoids having a single-point-of-failure. 
 
 In Calvin, the framework in which the model was implemented and evaluated, there are two storage alternatives. A DHT implementation called Kademlia, see~\cite{kademlia} for further information, and a proxy storage. Calvin and its storing alternatives is further described in~\cref{subsec:design_calvin}.
 
@@ -946,11 +950,11 @@ Calvin is an actor-based application environment for light-weight IoT applicatio
 The main features of Calvin is the use of runtimes (containers) in which actors (application tasks) run. Since the runtimes separate the hardware from the software, it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
-In Calvin there are two alternative ways of storing data, either by the Kademlia implementation of a DHT or by a proxy storage.
+In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
 \begin{itemize}
-	\item The Kademlia storage enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
-	\item When using the proxy storage there is one runtime acting as a storage node, i.e. all data is saved on that node only. All data is available for all nodes in the network. However, the proxy storage introduces a single point of failure. %TODO mention some pros, eaiser when testing?
+	\item Using Kademlia, data stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes failing. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure. %TODO mention some pros, eaiser when testing?
 \end{itemize}
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
@@ -1017,7 +1021,7 @@ Furthermore, the reliability model is based on a node's MTBF and the time $t_R$.
 
 In addition to the MTBF, a default value for $t_R$ must be used before any such times have been registered. The default value used in the tests was 2 seconds.
 
-The state size of the actor replicated in the experiments was XXX MB.
+The state size of the actor replicated in the experiments was (TODO size of actor with queue size 5) MB.
 
 \section{Computational environment} \label{sec:eval_comp_env}
 In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
@@ -1028,6 +1032,9 @@ As mentioned in \cref{ch:design}, the model was implemented in the IoT applicati
 % I believe we have to mention the storage..
 In order to be able to easily test our model we used a proxy storage instead of Kademlia. This introduced a single-point-of-failure, but since our experiments ran for a very limited amount of time this wasn't a problem.
 %due to few number of runtimes? a very unrealistic low mtbf..?
+
+\section{Storage used} \label{sec:eval_storage}
+As mentioned in~\cref{design:calvin_storage}, Calvin supports both using the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, were nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the a storage proxy is used in the experiments. This introduce a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
