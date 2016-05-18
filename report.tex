@@ -507,16 +507,13 @@ We also assume the case where all nodes are within the same cluster, connected w
 
 By the use of these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in~\cref{ch:discussion}.
 
-%\subsection{Reliability model}
-%\label{sec:limitations_reliability_model}
+
 \iffalse
 COPIED:
 
 Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
 
 the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
-
-We do not take into account parameters such as X and Y [TODO].
 
 Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
 
@@ -962,10 +959,10 @@ COPIED: “in the proposed system, we need to determine the degree of over-provi
 For implementing our model, we use an actor based application environment called \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
 
 \subsection{Calvin} \label{subsec:design_calvin}
-Calvin is an actor-based application environment for leight-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+Calvin is an actor-based application environment for light-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
-In Calvin there are two alternative ways of storing data, either by the Kademlia implementation of a DHT or by a proxy storage. 
+In Calvin there are two alternative ways of storing data, either by the Kademlia implementation of a DHT or by a proxy storage.
 
 \begin{itemize}
 	\item The Kademlia storage enables that any data stored by a node is distributed and available for all nodes in the network. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
