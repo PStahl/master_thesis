@@ -213,9 +213,9 @@ The possible errors in a Grid environment can be divided into the following thre
 When studying the reliability of distributed systems or the reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used, and the model developed is then validated with respect to this fault model~\cite{faultTolerantFundamentals}. In the fault models described in this section, a computational resource is referred to as a node.
 
 \subsubsection{Byzantine fault model} \label{subsub:background_byzantine}
-The Byzantine fault model allows nodes to continue interaction after failure. Correctly functioning nodes cannot automatically detect if a failure has occurred and even if it was known that a failure occurred, they cannot detect which nodes have failed. 
+The Byzantine fault model allows nodes to continue interaction after failure. Correctly functioning nodes cannot automatically detect if a failure has occurred. Even if it was known that a failure occurred, nodes cannot detect which node has failed. 
 
-Furthermore, the systems behaviour can be inconsistent and arbitrary~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all, or it can send an incorrect result. All Byzantine nodes might send the same incorrect result, thereby making it hard to identify malicious nodes~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
+Furthermore, the system's behaviour can be inconsistent and arbitrary~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all, or it can send an incorrect result. All Byzantine nodes might send the same incorrect result, thereby making it hard to identify malicious nodes~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, but it is therefore also very difficult to simulate and to analyze.
 
 % COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
@@ -357,7 +357,7 @@ The term replica or task replica is used to denote an identical copy of the orig
 \end{definition}
 
 \subsubsection{Active replication} \label{subsec:active_replication}
-In active replication, there are one or several replicas of a task running simultaneously. All replicas receive an exact copy of the task's input and they all perform the same computations. Often there is one primary task and several back-up replicas. The primary task is monitored by the back-up replicas for incorrect behaviour and in event that the primary task fails or behaves in an unexpected way, one of the back-up replicas will promote itself as the primary task~\cite{surveyFaultParallel}. Since the back-up replica already is in an identical state as the primary task the transition will take negligible amount of time. Depending on the set-up the primary task could be the only one producing output, or all replicas can produce output. In the latter case the replicas could compare there output in order to protect against Byzantine faults.
+In active replication, there are one or several replicas of a task running simultaneously. All replicas receive an exact copy of the task's input and they all perform the same computations. Often there is one primary task and several back-up replicas. The primary task is monitored by the back-up replicas for incorrect behaviour and in event that the primary task fails or behaves in an unexpected way, one of the back-up replicas will promote itself as the primary task~\cite{surveyFaultParallel}. Since the back-up replica already is in an identical state as the primary task the transition will take negligible amount of time. Depending on the set-up the primary task could be the only one producing output, or all replicas can produce output. In the latter case the replicas could compare their output in order to protect against Byzantine faults.
 
 In contrast to having a primary task and back-up replicas there's also the case when all replicas behaves as the primary. In this case all replicas have to produce output and some consensus is usually deployed, more on this in \cref{subsub:consensus}
 
@@ -412,7 +412,7 @@ Task scheduling is the process of mapping tasks to available resources. A schedu
 	\item Send the tasks to the selected resources
 \end{enumerate}
 
-Based on which requirements and parameters are considered in step 2 above, a task scheduling algorithm can achieve different goals. They can for example aim at maximizing the total reliability, minimizing the overall system load or meeting all the tasks deadlines \cite{schedulingSurvey}. 
+Based on which requirements and parameters are considered in step 2 above, a task scheduling algorithm can achieve different goals. They can for example aim at maximizing the total reliability, minimizing the overall system load or meeting all the tasks' deadlines \cite{schedulingSurvey}. 
 
 Task scheduling algorithms can be divided into static and dynamic algorithms depending on whether or not the scheduling mapping is based on pre-defined parameters or if the parameters might change during runtime~\cite{schedReplicas}.
 
@@ -449,7 +449,7 @@ COPIED: "“The most basic form of monitoring is a simple heartbeat system. A mo
 \fi
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
-Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in space and hardware cost and in that the system becomes more dynamic. For instance, it is possible to run several virtual servers on one physical server. With virtualization the software and the hardware gets separated which enables the possibility of moving a virtual machine, a VM, from one physical location to another \cite{virtualMachine}. This also allows for starting several identical servers, by starting several virtual machines using the same image.
+Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in space and hardware cost. Furthermore, the system becomes more dynamic. For instance, it is possible to run several virtual servers on one physical server. With virtualization the software and the hardware gets separated which enables the possibility of moving a virtual machine, a VM, from one physical location to another \cite{virtualMachine}. This also allows for starting several identical servers, by starting several virtual machines using the same image.
 
 A container is very similar to a virtual machine but more light-weight. Containers running on the same physical machine share the machines operating system and binaries while virtual machines running on a single physical machine have their own operating systems and dedicated resources, isolating them from each other \cite{vm_vs_container}. 
 
