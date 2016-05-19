@@ -779,7 +779,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\State $operational\ nodes\gets $ operational nodes
 	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
 	\State
-	\Call{sort}{$available\ nodes$}
+	\Call{sort}{$available\ nodes$, $descending$}
 	\While {\Call{reliability}{$current\ nodes$} $\leq R_{req}$}
 		\State $node\gets available\ nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
@@ -793,14 +793,13 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Sorts the given nodes in order of preference} \label{func:sort}
-	Returns the given nodes in sorted order, with the most preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters as well.
+	Returns the given nodes in sorted order, with the most or least (depending on $order$) preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters as well.
 	\begin{algorithmic}[1]
-	\Ensure{$nodes$ is the list to sort}
+	\Ensure{$nodes$ is the list to sort, and $order$ is the order to sort in (ascending or descending).}
 	\Statex
-	\Function{sort}{$nodes$}
-		\Statex\Comment{Add here to consider other parameters, such as nodes' loads, when sorting}
+	\Function{sort}{$nodes$, $order$}
 		\State
-	    \Call{sort after reliability}{$nodes$}
+	    \Call{sort after reliability}{$nodes$, $order$}
 	    \State \Return $nodes$
 	\EndFunction
 	\end{algorithmic}
@@ -826,7 +825,8 @@ In our model, the reliability function uses~\cref{eq:task_reliability_2} for det
 The algorithm is run when deploying an application, when a failure is detected as further described in~\cref{sec:design_handling_failure}, and also periodically in combination with an optimization algorithm, described next in \cref{subsec:design_optimization}.
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the overall minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. Running the greedy scheduling algorithm before the optimization makes sure that the required reliability is reached. Using the reliability model above nodes can not decrease in reliability caused by something else than a failure. Therefore one can argue that the greedy algorithm doesn't need to be run periodically but in order to be able to extend or change the used reliability model it is important to first make sure that the required reliability is achieved.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. By first running the greedy scheduling algorithm, and then the optimization algorithm, we ensure both that the required reliability is met, and that it is met while using the minimum number of replicas possible.
+ 
 
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
@@ -836,11 +836,13 @@ The algorithm is run when deploying an application, when a failure is detected a
 	\State $operational\ nodes\gets $ operational nodes
 	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
 	\State
-	\Call{sort}{$available\ nodes$}
 	\State
-	\Call{sort}{$current\ nodes$}
-	\State $least\_reliable\gets current\ nodes.pop$
+	\Call{sort}{$available\ nodes$, $descending$}
 	\State $most\_reliable\gets available\ nodes.pop$
+	\State
+	\Call{sort}{$current\ nodes$, $ascending$}
+	\State $least\_reliable\gets current\ nodes.pop$
+	\State
 	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
