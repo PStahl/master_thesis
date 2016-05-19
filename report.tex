@@ -1088,23 +1088,26 @@ The computational environment, with an application consisting of a consumer, two
 
 \section{Experiments}
 
-\subsection{Measurement of time $t_r$} \label{sec:eval_time_t}
+\subsection{Measurement of time $t_R$} \label{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
-The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to find the best distribution for the times $t_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
+The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to find the best distribution for the times $t_R$, an experiment was conducted where the times were registered and later used to find the best fitting distribution.
 
 The experiment was conducted in two settings. In both, two Calvin runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a MTBF of 30 seconds, and in the other a MTBF of 10 seconds. Furthermore, in the first experiment the required reliability was set to 0.999999, and in the second it was set to 0.99995. Each time $t_R$ was then registered for the duration of the experiment.
 
 The experiment was conducted in two settings with varying failure rates since with higher failure rate, there is a higher risk of the node handling the lost node dies before it finishes, or a node dies before the replication is finished, as described in~\cref{sec:replication_time}. With more stable nodes, i.e. higher MTBF, there is a lower risk of this happening. Therefore, the replication times are likely to have less variation in this case. The goal was to find the distribution, among those tested, which best fitted the two data-sets.
 
 \subsubsection*{Results}
-The first experiment ran for XXX minutes, and YYY times were registered, and the second experiment ran for 100 minutes, and 2400 times were registered.
+The first experiment ran for 230 minutes, and 2000 times were registered, and the second experiment ran for 80 minutes, and 2000 times were registered.
 
 The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}.
 
 Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
 
-\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for xxx reasons.
+\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for aesthetic reasons. The average values, and number of values above 100 and 500 ms in both experiments are shown in table~\cref{table:tr}. 
+
+When nodes fail more often, there is a higher probability of nodes failing before it finishes to handle a \emph{lost node} request, or to replicate one of its replicas. As described in~\cref{sec:replication_time}, this results in a higher time $t_R$. This is why the average is higher, and there are more times above 100 ms, in the test with \emph{MTBF} of 10 seconds, than the test with \emph{MTBF} of 30 seconds.
+
 The log-logistic distribution was found to best fit both data-sets, and is therefore the one used in our model, as described in~\cref{sec:node_failure_detection_time}.
 
 \begin{figure}[!hbt]
@@ -1118,7 +1121,22 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 \centering
 \includegraphics[scale=0.5]{images/results/distribution_results_10.pdf} 
 \caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with MTBF of nodes set to 10 seconds.} \label{fig:distribution_results_10}
-\end{figure} 
+\end{figure}
+
+ \begin{table}[hbt!]
+	\begin{center}
+	\begin{tabular}{| c | c | c | c | c |}
+	 \hline
+	 \emph{MTBF} & average & values above 100 ms & values above 500 ms \\
+	 \hline
+	  30 s & 86.6 & 311 & 15\\
+	  10 s & 107.3 & 597 & 34\\
+	   \hline
+	\end{tabular}
+	 \caption{RAverage, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in test~\ref{sec:eval_time_t}}
+	 \label{table:tr}
+	 \end{center}
+ \end{table} 
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
@@ -1134,7 +1152,7 @@ The standard deviation of the times registered was 28.8.
 % If higher/lower than theoretical, give a explanation
 %TODO measure again, check time between killing and printing time.
 
-\subsection{Measurement of replication time} \label{sec:eval_repl_time}
+\subsection{Measurement of replication time $t_r$} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
 In the following experiments, two runtimes were used, in one setting on the same laptop, and in the other on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
