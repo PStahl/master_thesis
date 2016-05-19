@@ -1012,7 +1012,7 @@ Each runtime also periodically monitors the applications deployed to it, to ensu
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
-We also measured the time $t_R$ to find the best fitting distribution for these values, and also the replication time $t_r$ for varying state sizes. Finally, we measured the actual time for detecting failure to demonstrate that the value lies between the best and worst case described in~\cref{subsec:heartbeats}.
+We also measured the time $t_R$ to find the best fitting distribution for these values, and also the replication time $t_r$ for varying state sizes. Finally, we measured the actual time for detecting failure to demonstrate that the values lie between the best and worst case described in~\cref{subsec:heartbeats}.
 
 
 \section{Values used in the experiments} \label{sec:eval_values}
@@ -1031,7 +1031,7 @@ As mentioned in \cref{ch:design}, the model was implemented in the IoT applicati
 
 On the sixth server, two runtimes were started in every experiment, and these two runtimes were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}, and the reason for having the other stable runtime is described in~\cref{sec:eval_application}.
 
-In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 unstable servers, and which were periodically killed.
+In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 unstable servers.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
