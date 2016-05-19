@@ -121,7 +121,7 @@ To our knowledge, no previous attempt has been made which in a fully dynamic man
 %TODO lyfta fram att vi inte bara minimerar totala resoursåtgpngen utan även antalat resurser
 We propose a framework which ensures a user determined level of reliability by the use of replication. Furthermore, the method ensures a minimized use of resources by not using more replicas than needed, nor more resources. This is achieved by placing replicas on the most reliable resources first and foremost. Finally, the system is periodically monitored in order to adapt to changing system properties.
 
-The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and the task placement decisions are easily replaced to consider more parameters, or to include load-balancing. 
+The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and the task placement decisions are easily replaced to consider more parameters, or to include load balancing. 
 
 Our model is implemented using the actor-based application environment \emph{Calvin} \cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for Internet of Things (IoT) applications, it suites our purpose well. The model is evaluated by running a set of experiments in a small cluster.
 
@@ -408,7 +408,7 @@ Load balancing algorithms can be divided into three categories based on the init
 \item Symmetric - A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
-Load balancing is often divided into two categories, namely static and dynamic load-balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
+Load balancing is often divided into two categories, namely static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
 \iffalse %Shorten?
 A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
