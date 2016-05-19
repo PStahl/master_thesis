@@ -713,7 +713,7 @@ In the latter case, node A dies directly after sending a heartbeat $H_k$, and $t
 
 Assuming that the probability of a node dying just before and directly after sending a heartbeat is the same, we get a theoretical average detection time of $t_{timeout} - \frac{t_h}{2}$ seconds. 
 
-An example of the best and worst case scenario is shown in~\cref{appendix:figures}, where $t_h$ and $t_{timeout}$ are set to 0.2 and 0.5 seconds respectively, which are the values used in the experiments.
+An example of the best and worst case scenario is shown in~\cref{fig:heartbeats_best_case} and~\cref{fig:heartbeats_worst_case}.
 
 In~\cref{eq:rep_time} we will use
 
@@ -2055,14 +2055,14 @@ This Appendix consist of various figures.
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/heartbeats_worst_case.pdf}
-\caption{Worst case scenario for detecting a failed node with $t_h$ set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. In this example, node A fails directly after sending the heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 500 ms.} \label[app]{fig:heartbeats_worst_case}
+\includegraphics[scale=0.5]{images/heartbeats_best_case.pdf}
+\caption{Best case scenario for detecting a node failure. Node A fails just before sending a heartbeat. The actual detection time, $t_d$ is therefore close to $t_{timeout} - t_h$.} \label[app]{fig:heartbeats_best_case}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
-\includegraphics[scale=0.5]{images/heartbeats_best_case.pdf}
-\caption{Best case scenario for detecting a failed node with $t_h$ set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. In this example, node A fails just before sending the third heartbeat. The actual time node A has been dead before it's detected by node B is therefore close to 300 ms.} \label[app]{fig:heartbeats_best_case}
+\includegraphics[scale=0.5]{images/heartbeats_worst_case.pdf}
+\caption{Worst case scenario for detecting a node failure. Node A fails directly after sending a heartbeat. The actual detection time, $t_d$ is therefore close to $t_{timeout}$.} \label[app]{fig:heartbeats_worst_case}
 \end{figure}
 
 \iffalse
