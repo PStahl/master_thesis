@@ -772,7 +772,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 \begin{algorithm}[H]
 	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\Require{$R_{req}$ is the reliability to fulfill}
+	\Require{$R_{req}$ is the reliability to fulfill.}
 	\Statex
 	\Procedure{Greedy scheduling algorithm}{}
 	\State $current\ nodes\gets$ current nodes
@@ -793,7 +793,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Sorts the given nodes in order of preference} \label{func:sort}
-	Returns the given nodes in sorted order, with the most preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters.
+	Returns the given nodes in sorted order, with the most preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters as well.
 	\begin{algorithmic}[1]
 	\Ensure{$nodes$ is the list to sort}
 	\Statex
@@ -808,8 +808,9 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
+	Calculate the reliability of the nodes currently holding a replica. This function could be change to use a different reliability model.
 	\begin{algorithmic}[1]
-	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica}
+	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica.}
 	\Statex
 	\Function{reliability}{$current\ nodes$}
 		\State $n\gets current\ nodes.length$
@@ -818,11 +819,11 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\end{algorithmic}
 \end{function}
 
-In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, and the calculation of the current reliability, why these two are two separate function calls. 
+In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, \cref{func:sort}, and the calculation of the current reliability, \cref{func:calc_reliability}, why these two are two separate function calls. 
 
 In our model, the reliability function uses~\cref{eq:task_reliability_2} for determining the reliability, and the sort function simply sorts available nodes after reliability, but they could both easily be replaced, e.g. by a more sophisticated reliability models, and to also consider nodes' loads when sorting them.
 
-The algorithm is run at the time of deployment, but also every time a failure is detected, further described in~\cref{sec:design_handling_failure} and  periodically, just before the optimization algorithm, described next in \cref{subsec:design_optimization}.
+The algorithm is run when deploying an application, when a failure is detected as further described in~\cref{sec:design_handling_failure}, and also periodically in combination with an optimization algorithm, described next in \cref{subsec:design_optimization}.
 
 \subsection{Optimization} \label{subsec:design_optimization}
 \Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the overall minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. Running the greedy scheduling algorithm before the optimization makes sure that the required reliability is reached. Using the reliability model above nodes can not decrease in reliability caused by something else than a failure. Therefore one can argue that the greedy algorithm doesn't need to be run periodically but in order to be able to extend or change the used reliability model it is important to first make sure that the required reliability is achieved.
