@@ -251,7 +251,13 @@ Statistically independent failures is also not very likely to reflect the real d
 
 Other factors also affect the likelihood of resource failures. Several studies have concluded a relationship between failure rate and the load of the system~\cite{studyOfFailures, implicationsOfFailures}. Furthermore, \cite{studyOfFailures, implicationsOfFailures} also show that failures are more likely to occur during daytime than at night, which may be a consequence of the system load being higher during daytime. In addition, components which have failed in the past are more likely to fail again~\cite{implicationsOfFailures}.
 
-While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} shows that failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonably useful in mathematical models~\cite{experimentalFailureAssessment}.
+While a Poisson process is commonly used to describe failures, \cite{studyOfFailures} shows that failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behaviour of a resource, a Poisson process has been experimentally shown to be reasonably useful in mathematical models~\cite{experimentalFailureAssessment}. The Poisson distribution expresses the probability of $k$ failures during a specific period of time, and is defined as follows:
+
+\begin{equation} \label{eq:Poisson}
+P(k \mbox{ failures}) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
+\end{equation}
+
+where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. 
 
 \section{Reliability} \label{sec:background_reliability}
 \subsection{Reliability definition} \label{subsec:background_reliability_definition}
@@ -289,15 +295,18 @@ The MTBF can be calculated as
 MTBF = \frac{total\ time}{number\ of\ failures}
 \end{equation}
 
-Assuming failures follow a Poisson process, and using \cref{eq:MTBF}, the reliability for a component can be expressed as 
-\begin{equation} \label{eq:resource_reliability}
-R(t) = e^{-t/MTBF}
+From \emph{t} and the \emph{MTBF}, the failure rate $\lambda$ used in~\cref{eq:Poisson} can be calculated as $\lambda = t/MTBF$. \Cref{eq:Poisson} can therefore be re-written as
+
+\begin{equation} \label{eq:Poisson_during_time_t}
+P(k \mbox{ failures during time } t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^k \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{k!}
 \end{equation}
 
-\Cref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time interval of length $t$ is
-\begin{equation} \label{eq:resource_failure_prob}
-F(t) = 1- e^{-t/MTBF}
+The probability of surviving corresponds to having zero failures, and can be expressed as
+
+\begin{equation} \label{eq:Poisson_no_failures}
+P(0 \mbox{ failures during time } t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
+
 
 \iffalse
 While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
@@ -598,29 +607,26 @@ In this paper, we adapt the \emph{fail-stop} fault model, which is described in~
 Like~\cite{selfAdaptRel}, only system related failures are considered, assuming failures depends on the nodes, not the jobs running on them and the computations they perform. Furthermore, unlike the reliability models presented in~\cite{taskSchedulingReplication, taskAllocationSwarm, relAnalysisFRA}, the network is assumed fully reliable, and thus link failures are not accounted for. However, since evaluating our model in a real cluster, further described in~\cref{ch:evaluation}, link failures are in fact possible in our experiments, but in the case of a link failure a node will stop sending heartbeats, and will be assumed dead, further described in~\cref{subsec:heartbeats}.
 
 \subsubsection{Failure distribution} \label{design:failure_distribution}
-A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. The Poisson distribution expresses the probability of $k$ failure during a specific period of time, and is defined as follows:
-
-\begin{equation} \label{eq:Poisson}
-P(k \mbox{ failures}) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
-\end{equation}
-
-where $\lambda$ is the failure rate, i.e. the average number of failures occurring in time \emph{t}. In our case \emph{t} represents the time it take to detect a node failure and create a new replica. From \emph{t} and \emph{MTBF} we can calculate the failure rate $\lambda$ as $\lambda = t/MTBF$. \Cref{eq:Poisson} can therefore be re-written as
-
-\begin{equation} \label{eq:Poisson_during_time_t}
-P(k \mbox{ failures during time } t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^k \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{k!}
-\end{equation}
-
-The probability of surviving corresponds to having zero failures, and can be expressed as
-
-\begin{equation} \label{eq:Poisson_no_failures}
-P(0 \mbox{ failures during time } t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
-\end{equation}
+A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. 
 
 While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, the MTBF of a node can by dynamically adapted. This is accomplished by using the time of the three latest failures to determine the MTBF as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
 
-However, in order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
+Since we assume the MTBF for a node is constant during a period of time, failures can be modeled using a Poisson process. Using a resource's \emph{MTBF}, the reliability for that resource can using~\cref{eq:Poisson} be expressed as
+ 
+\begin{equation} \label{eq:resource_reliability}
+R(t) = e^{-t/MTBF}
+\end{equation}
 
-As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. The time it takes to detect node failure and create a new replica is further discussed in~\cref{sec:design_time_t}.
+\Cref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time interval of length $t$ is
+\begin{equation} \label{eq:resource_failure_prob}
+F(t) = 1- e^{-t/MTBF}
+\end{equation}
+
+In our case \emph{t} represents the time it take to detect a node failure and create a new replica, and is further discussed in~\cref{sec:design_time_t}.
+
+In order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
+
+As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. 
 
 
 \section{Monitoring} \label{sec:design_monitoring}
