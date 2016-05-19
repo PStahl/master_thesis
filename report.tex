@@ -1265,13 +1265,13 @@ In this experiment, two runtimes were started on each of the unstable servers. E
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required reliability was set to 0.98.
 
-The test was considered successful if, when the current reliability dropped below the required it was restored to a level above the required. %TODO Maybe better?
+The test was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. %TODO Maybe better?
  
 \subsubsection*{Results}
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
 
-As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing.
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The test shows clearly that the current reliability level is restored to a level above the required level.
 
 %TODO this needs to be updated? Not the latest?
 \begin{figure}[!hbt]
