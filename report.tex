@@ -1032,9 +1032,9 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two, depending on experiment, Calvin runtimes were started on five of the six servers. These runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure.
 
-On the sixth server, two runtimes were started, which were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}. The reason for having the other stable runtime is described in~\cref{sec:eval_application}.
+On the sixth server, two runtimes were started in every experiment, and these two runtimes were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}. The reason for having the other stable runtime is described in~\cref{sec:eval_application}.
 
-In the experiments, the runtimes are referred to as nodes.
+In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 servers, and which were periodically killed.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
@@ -1219,7 +1219,9 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
-For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$,  for these state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low. However, the replication time will vary depending on the state of the system. When increasing the queue size, the replication time is more CPU bound than when increasing the size of a variable, and therefore the replication time is dependent on the current load of the two nodes. Furthermore, for larger state sizes when the transmission time is the largest part of the replication time, the total time will vary depending on the network load of the system.
+For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$,  for these three state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low. 
+
+However, in a real setting, the replication time will vary depending on the state of the system. When increasing the queue size, the replication time is more CPU bound than when increasing the size of a variable, and therefore the replication time is dependent on the current load of the two nodes. Furthermore, for larger state sizes when the transmission time is the largest part of the replication time, the total time will vary depending on the network load of the system.
  
  \begin{table}[h!]
 	\begin{center}
@@ -1261,7 +1263,7 @@ For 1, 50 and 100 MB the replication time was measured 100 times. The variance o
  
 
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
-In this experiment, each runtime was given a MTBF of 20 seconds.
+In this experiment, the two stable nodes and ten unstable nodes were used. The unstable nodes were each given a \emph{MTBF} of 20 seconds.
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability for the producing actors were 0.98.
 
@@ -1282,7 +1284,7 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 
 \subsection{Optimal number of replicas}
 \subsubsection{Chosing the most reliable} \label{sec:eval_opt_nbr_replicas}
-In this experiment, the MTBF for the various runtimes varied. The mean values given to the different runtimes are presented in \cref{table:exp_nodes_means}. 
+In this experiment, the two stable nodes and ten unstable nodes were used. The \emph{MTBF} for the various runtimes varied. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}. 
 
 \begin{table}[h]
 	\begin{center}
@@ -1345,7 +1347,7 @@ As shown in the figures, the number of replicas decreased over time, from three 
 
 \subsubsection{Optimal replicas}
 \label{sec:eval_opt_nbr_replicas_2}
-In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, an experiment was conducted in which five computing nodes were used. Two of these nodes were given a MTBF of 25 seconds, while the other three did not fail. Since those three nodes did not fail, the system used the default MTBF of 10 seconds. Despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas, not only when a node fails. The MTBF for the nodes used in this experiment are shown in \cref{table:exp_nodes_means}.
+In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five \emph{unstable} nodes were used. Two of these were given a MTBF of 25 seconds, while the other three did not fail. Since the three nodes were in fact not killed, they were not actually \emph{unstable}, but the system used the default MTBF of 10 seconds for those nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas, not only when a node fails. The MTBF for the nodes used in this experiment are shown in \cref{table:exp_nodes_means}.
 
 The required reliability in the experiment was set to 0.999. This results in that as long as the two reliable nodes are available, only two replicas are needed, but if one of them or both are dead, three replicas are needed to reach the required reliability. Finally, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
 
@@ -1394,7 +1396,9 @@ The test ran for 5 minutes. As mentioned, the default MTBF is 10 seconds when no
 
 \subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
 %TODO the mean-time-between-failure does not vary, really... must rephrase this sentence
-In this experiment, the MTBF for the various nodes varied over time, following a $sinus-curve$. The pseudo-random numbers for the nodes followed a normal distribution with mean 25 and standard deviation of 1. However, the time to sleep between failures were calculated by~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. The required reliability was set to 0.99999. This value was chosen so that the number of replicas needed would vary between 3 and 5, depending on the current state of the system.
+In this experiment, the two stable nodes and ten unstable nodes were used. The unstable nodes were each given a \emph{MTBF} of 25 seconds. But, instead of picking times to sleep from a normal distribution as described in~\cref{sec:simulating_node_failure}, the time to sleep between failures were calculated by~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. 
+
+The required reliability was in this experiment set to 0.99999. This value was chosen so that the number of replicas needed would vary between 3 and 5, depending on the current state of the system.
 
 %TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
@@ -1442,9 +1446,9 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 
 \subsection{Energy efficient for many applications} \label{sec:eval_energy_efficient}
 %TODO 5 applications and 3 replicas or tvartom?
-In this experiment, 5 applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
+In this experiment, the two stable nodes and ten unstable nodes were used. The MTBF of the unstable nodes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
 
-Two runtimes were started on each server. The MTBF of the runtimes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
+Furthermore, in this experiment five applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
 
 %TODO this section needs work.
 When the MTBF for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the MTBF is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the MTBF is known.
