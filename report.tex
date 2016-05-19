@@ -700,7 +700,7 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $R_{req}$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
-The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
+The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. The time $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
 	t = t_d + t_R
@@ -713,7 +713,7 @@ As described in~\cref{subsec:heartbeats}, heartbeats are periodically sent to al
 
 The timeout time, $t_{timeout}$ is only an upper bound for how long it takes to detect a node failure. A node may fail just before sending a heartbeat, or directly after, which will affect the actual time the node has been dead before it is detected. This corresponds to the best and worst case scenario. 
 
-If a node A dies precisely before sending heartbeat $H_k$ to B, the last received heartbeat from A was $H_{k - 1}$. $t_{timeout}$ seconds after $H_{k - 1}$ was received, node B will assume A has failed. Node A will then have been dead for $t_{timeout} - t_h$ seconds.
+If a node A dies precisely before sending heartbeat $H_k$ to node B, the last received heartbeat from A was $H_{k - 1}$. $t_{timeout}$ seconds after $H_{k - 1}$ was received, node B will assume A has failed. Node A will then have been dead for $t_{timeout} - t_h$ seconds.
 
 In the latter case, node A dies directly after sending a heartbeat $H_k$, and $t_{timeout}$ seconds later node B will assume node A has failed. Node A has in this case been dead for $t_{timeout}$ seconds when node B assumes it has failed.
 
@@ -721,11 +721,11 @@ Assuming that the probability of a node dying just before and directly after sen
 
 An example of the best and worst case scenario is shown in~\cref{appendix:figures}, where $t_h$ and $t_{timeout}$ are set to 0.2 and 0.5 seconds respectively, which are the values used in the experiments.
 
-In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This is safe since using a higher value than the actual time it takes, results in the calculated reliability is lower than the actual reliability.
+In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This result in the calculated reliability always being equal to or lower than the actual reliability, since the time to detect the failure will always be $t_{timeout}$ or lower.
 
 
 \subsubsection{Replication request time} \label{sec:replication_time}
-The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. $t_R$ consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node, and send a response.
+The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node and send a response.
 
 To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. Then, a replication request is sent, a new replica is created, and a response is received. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time}.
 
@@ -745,7 +745,7 @@ Where $t_{query\ storage}$ is the time it takes to find out which nodes currentl
 As mentioned, the time $t_r$ is the time it takes to replicate a task. Depending on the state of the task to replicate, it is likely to be a significant part of the total time $t_R$. The time to replicate a task consists of the time to get the state of the task, serialize it, transmit it to the other node, de-serialize it, and create a new identical replica using that state, and send the response. 
 
 \begin{equation} \label{eq:replication_time}
-t_{r} = t_{get\ state} + t_{serialize\ state} + t_{transmit\ state} + t_{de-serialize\ state} + t_{setup\ new} + t_{response}
+t_{r} = t_{get\ state} + t_{serialize\ state} + t_{transmit\ state} + t_{de-serialize\ state} + t_{create\ new} + t_{response}
 \end{equation} 
 
 In our model, the time $t_{R}$ is measured and stored every time a replication takes place. Since $t_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $t_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $t_R$. \Cref{fig:replicas_depending_on_t} shows how the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
@@ -757,9 +757,9 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 \end{figure}
 
 
-Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumed the receiving node has died if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node. 
+Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node. 
 
-The situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. Also the node being selected to run~\cref{alg:scheduling}, described below, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The situations also depend on how often nodes fail. If nodes fail very frequently, there is a higher risk of the selected node fails.
+This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
 
 Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $t_R$. From the fitted distribution, the 95th percentile value is used as the value for $t_R$ in~\cref{eq:rep_time}. This means in 95 percent of the cases, the time $t_R$ will actually be lower than the value used in~\cref{eq:rep_time}. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
 
