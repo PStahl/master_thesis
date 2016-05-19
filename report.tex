@@ -957,14 +957,14 @@ The main features of Calvin is the use of runtimes (containers) in which actors 
 \subsubsection{Storage} \label{sec:calvin_storage}
 In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
-Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. One of the configurable parameters used in Kademlia is $k$, representing the maximum size of a bucket-list. The value of $k$ hould be chosen such that the probability of $k$ nodes failing within an hour is very low \cite{kademlia}. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. One of the configurable parameters used in Kademlia is $k$, representing the maximum size of a bucket-list. The value of $k$ should be chosen such that the probability of $k$ nodes failing within an hour is very low \cite{kademlia}. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
 
-When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
+When using the proxy storage, one runtime acts as a storage node, and all data is sent to that runtime. All requests for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
 
-Multiple actors may send data to another actors in-port, and an actor's out-port may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process.
+Multiple actors may send data to another actor's in-port, and an actor's out-port may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process.
 
 The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
@@ -975,7 +975,10 @@ The actor model corresponds well to the kind of applications and tasks described
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between actors both within the same runtime and between different runtimes.
 
-Each runtime has a \emph{storage}. If DHT is used, all the information in the storage is first stored locally and later flushed, i.e. distributed in a multicast approach. If a proxy storage is used, the information is sent to only the proxy storage.
+Each runtime has a \emph{storage}. If DHT is used, all the information in the storage is first stored locally and later flushed, i.e. distributed in a multicast approach. If a proxy storage is used, the information is also stored locally at first, but later flushed to the proxy storage only.
+
+%TODO
+In our model a runtime corresponds to a node.
 
 \subsubsection{Replication} \label{subsec:calvin_replication}
 The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serializing it and sending it to the runtime in which the new replica is to be created. The receiving runtime then de-serializes the state and uses it to create the replica and setup its port connections.
@@ -991,26 +994,20 @@ We extended the Calvin framework to allow a fan-out/fan-in connectivity model wh
 \subsubsection{Actor replication}
 Previously, the framework allowed for dynamically migrating an actor from one runtime to another. We extended this functionality by allowing dynamic replication of actors. 
 
-%Maybe mention that due to no consensus actors only use the first received value
-
 \subsubsection{Node Resource Reporter}
-To share various kinds of resources between runtimes, e.g. CPU usage as used in~\cref{sec:eval_replaceable_model}, we created a resource reporter actor. When a runtime is created, it automatically creates a resource reporting actor. The actor periodically reports the node's CPU usage to all connected runtimes. Furthermore, each node has a resource manager which stores the other nodes' usages.
-
-%TODO we currently do not use the CPU usage, this is therefore not neccessary?
-
-\subsubsection{Resource Manager}
-Besides storing the connected nodes usages the resource manager stores information about node failures. If a node fails a time stamp and the failed node's usage is stored, among with the time it took to replicate a new replica for each of the actors which were running on the failed node.
-
+To share various kinds of resources between runtimes, e.g. CPU usage as used in~\cref{sec:eval_replaceable_model}, we created a resource reporter actor. When a runtime is created, it automatically creates a resource reporting actor. The actor periodically reports the node's CPU usage to all connected runtimes. 
+%TODO we almost don't use CPU usage, is this therefore neccessary?
 
 \subsubsection{Heartbeat Actor}
 The heartbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when its started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
 
 Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
-For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime to which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
+For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime to which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
 
 \subsubsection{Application monitor}
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
+%TODO Mention what happens if the runtime which deployed the application dies?
 
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
@@ -1514,6 +1511,9 @@ The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the C
 
 \chapter{Discussion} \label{ch:discussion}
 %TODO
+what if node that deployed an application dies? Then that app want be monitored, solve by choosing one node doing the monitoring.
+
+%TODO
 Since we update the reliability of a node after failure's happen ... if a node start's dying more often, the mtbf used is "a little behind"... EDIT ME.
 
 %TODO
@@ -1534,8 +1534,7 @@ When using a fail-stop fault model (see \cref{subsub:background_fail_stop}), we 
 Our limitations also excludes the possibility of tasks calculating incorrect results, which is the case when using a Byzantine fault model. Since already using active replication to ensure reliability, it would be trivial to extend it to use consensus techniques such as majority voting or \emph{k-modular redundancy} in order to extend the reliability definition to also include that the job calculates the correct result.
 \\
 
-%\subsubsection{Replaceable reliability model}
-%TODO is this more suitable in discussion perhaps?
+
 \Cref{alg:scheduling} is designed to use the reliability model in a plugin fashion, namely by calling~\cref{func:calc_reliability}. This allows for easily replacing the reliability model without changing the algorithm itself.
 
 Furthermore, determining which nodes to prefer when selecting where to place new replicas is also an external function call. In our case, the available nodes are sorted after reliability, see~\cref{func:get_available_nodes}. Also this function could be replaced without changing the algorithm. One could for example exclude nodes where the load is above a given threshold.
