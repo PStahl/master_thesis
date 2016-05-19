@@ -960,8 +960,8 @@ The main features of Calvin is the use of runtimes (containers) in which actors 
 In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
 \begin{itemize}
-	\item Using Kademlia, data stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes failing. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
-	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure. %TODO mention some pros, eaiser when testing?
+	\item Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
 \end{itemize}
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
@@ -978,10 +978,10 @@ The actor model corresponds well to the kind of applications and tasks described
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between actors both within the same runtime and between different runtimes.
 
-Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
+Each runtime has a \emph{storage}. If DHT is used, all the information in the storage is first stored locally and later flushed, i.e. distributed in a multicast approach. If a proxy storage is used, the information is sent to only the proxy storage.
 
 \subsubsection{Replication} \label{subsec:calvin_replication}
-The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serialize it, send it to the runtime in which the new replica is to be created. The receiving runtime must de-serialize the state and use it to create the replica and setup its port connections.
+The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serializing it and sending it to the runtime in which the new replica is to be created. The receiving runtime then de-serializes the state and uses it to create the replica and setup its port connections.
 
 Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
 
@@ -1010,7 +1010,7 @@ The heartbeat system described in~\cref{subsec:heartbeats}, was implemented usin
 
 Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
-For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the runtime to which the heartbeat was sent is assumed dead, and when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
+For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime to which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
 
 \subsubsection{Application monitor}
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
