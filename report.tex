@@ -1266,7 +1266,7 @@ In this experiment, two runtimes were started on each of the unstable servers. E
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required reliability was set to 0.98.
 
 The test was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. %TODO Maybe better?
- 
+
 \subsubsection*{Results}
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
@@ -1308,9 +1308,9 @@ In this experiment, the two runtimes were started on each of the unstable server
  \end{table}
 
 
-After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability for the producing actors were 0.999.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability was set to 0.999.
 
-The test was considered successful if the number of replicas used decreased over time, as the system learned the actual MTBF for the nodes, and consequently more reliable nodes could be chosen. Furthermore, for the test to be successful, the average reliability for the duration of the test should exceed 0.999. %TODO also weird since we do not guarantee the average is above the required.
+The test was considered successful if, as the system learned the actual \emph{MTBF} for the nodes, the system placed the replicas on the most reliable nodes. Furthermore, for the test to be successful, the momentary reliability should lie above the required, and it below it should be restored to a level above the required. %TODO Better?
 
 \subsubsection*{Results}
 %TODO include info about replication time
