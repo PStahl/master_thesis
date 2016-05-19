@@ -1263,10 +1263,10 @@ However, in a real setting, the replication time will vary depending on the stat
 \subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
 In this experiment, two runtimes were started on each of the unstable servers. Each runtime was given a \emph{MTBF} of 20 seconds.
 
-After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability for the producing actors were 0.98.
+After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required reliability was set to 0.98.
 
-The test was considered successful if the average reliability level during the duration of the test exceeded 0.98. %TODO this is actually weird since we do not guarantee the average level is above XXX
-
+The test was considered successful if, when the current reliability dropped below the required it was restored to a level above the required. %TODO Maybe better?
+ 
 \subsubsection*{Results}
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
