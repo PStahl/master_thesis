@@ -618,6 +618,7 @@ R(t) = e^{-t/MTBF}
 \end{equation}
 
 \Cref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time interval of length $t$ is
+
 \begin{equation} \label{eq:resource_failure_prob}
 F(t) = 1- e^{-t/MTBF}
 \end{equation}
@@ -665,7 +666,8 @@ For multi-task applications, where the tasks use more than one resource, reliabi
 The reliability of a multi-task process is the probability that the tasks being executed for a given time without experiencing any type of failure (internal or external) during the time of execution.
 \end{definition}
 
-Finally, for long running applications or services, where a replication scheme is used, the reliability can be defined as \cite{effTaskReplMobGrid}
+Finally, for long running applications or services, where a replication scheme is used and new replicas dynamically being created as old ones fail, the reliability can be defined as \cite{effTaskReplMobGrid}
+
 \begin{definition} \label{def:task_replica_reliability}
 The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always operational. This can be expressed as the probability that not all replicas fail during the time from that a task replica dies, until a new replica is operational.
 \end{definition}
@@ -679,19 +681,13 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^n f_{k}(t)
 
 where $f_{k}(t)$ is the probability that replica $k$ fails during time $t$. 
 
-Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task is dependent on the reliability of the resources it uses, not the number of replicas. Since only considering node failures, the reliability of a task $T$ with $n$ replicas, where the replicas are placed on $m$ different nodes, can therefore be expressed as
+Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task is dependent on the reliability of the resources it uses, not the number of replicas. Considering only node failures, the reliability of a task $T$ with $n$ replicas placed on $m$ different nodes, can using~\cref{eq:resource_failure_prob} be expressed as
 
 \begin{equation} \label{eq:task_reliability_2}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t) = 1 - \prod\limits_{k=1}^m (1- e^{-t/MTBF_k})
 \end{equation}
 
-where $F_k$ is the probability that node $k$ fails during time $t$. Using \cref{eq:resource_reliability} for describing the reliability of a resource, \cref{eq:task_reliability_2} can be re-written as
-
-\begin{equation} \label{eq:task_reliability_3}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m (1 - e^{-t/MTBF_k})
-\end{equation}
-
-Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. \Cref{eq:task_reliability_3} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
+Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. Furthermore, \cref{eq:task_reliability_2} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
 
 Given a time $t$, a required reliability level $R_{req}$, and assuming the replicas are running on $m$ separate nodes, we get
 
@@ -699,12 +695,12 @@ Given a time $t$, a required reliability level $R_{req}$, and assuming the repli
 R_T(t) = 1 - \prod\limits_{k=1}^m F_{k}(t) \geq R_{req}
 \end{equation}
 
-which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:required_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
+which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:required_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are running on.
 
-The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_3}, exceeds $R_{req}$.
+The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $R_{req}$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
-The time $t$ used in \cref{eq:task_reliability_3} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
+The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
 	t = t_d + t_R
@@ -1528,7 +1524,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
 
-The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_3} gives a reliability of
+The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_2} gives a reliability of
 
 \begin{equation*}
 \begin{split}
