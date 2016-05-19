@@ -617,6 +617,7 @@ R(t) = e^{-t/MTBF}
 \end{equation}
 
 \Cref{eq:resource_reliability} expresses the probability that a given resource will work for a time $t$. Correspondingly, the probability that a resource will fail during a time interval of length $t$ is
+
 \begin{equation} \label{eq:resource_failure_prob}
 F(t) = 1- e^{-t/MTBF}
 \end{equation}
@@ -629,27 +630,25 @@ As time goes and nodes fail, the time of failure for nodes are stored, the syste
 
 
 \section{Monitoring} \label{sec:design_monitoring}
-Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also not to use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
-
-The sharing of resource information is done using a push strategy, as described in~\cref{sec:background_monitoring}. Information are periodically sent to all other nodes in the system in a multicast fashion, and a heartbeat system is used to detect node failures.
+Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also not to use more resources than necessary. 
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
 The ability to detect node failures is crucial for knowing when a new replica is needed in order to keep the required reliability. Furthermore, since the reliability model presented in~\cref{sec:design_reliability_model} is based on a \emph{mean-time-between-failures} for the nodes in the system, it is based on the assumption that node failures are detectable. 
 
 To achieve this, a heartbeat system is used, where nodes periodically send UDP messages, called heartbeats, every $t_h$ seconds. The heartbeats contain a node identifier and are sent to all the other nodes in the system. Nodes are considered operational as long as heartbeats are received from them, and if no heartbeat is received from a node for $t_{timeout}$ seconds, the node is assumed dead.
 
-In the experiments conducted, see \cref{ch:evaluation}, $t_h$ was set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. These values should be modified in a real setting. For the experiments, a high-bandwidth low-latency cluster was used, why the frequency could be quite high and the timeout time relatively low. 
+In the experiments conducted, see \cref{ch:evaluation}, $t_h$ was set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. These values should be modified in a real setting. For the experiments, a high-bandwidth low-latency cluster was used, why we could use a high heartbeat frequency and a low timeout time.
 
-As further described in~\cref{sec:node_failure_detection_time}, these values also affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Byte.
+As further described in~\cref{sec:node_failure_detection_time}, these values affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Byte.
 
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
-In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
+In order to ensure the optimal number of replicas is used over time, as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications are monitored periodically. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
+In our model, the reliability of the running applications are monitored periodically, and if the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
 
 On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
 
-In the experiments, applications were monitored and the greedy algorithm along with the optimization algorithm ran every five seconds.
+In the experiments, all applications were monitored and the greedy scheduling algorithm followed by the optimization algorithm, both presented in~\cref{sec:design_sched_alg}, were run every five seconds.
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
@@ -666,7 +665,8 @@ For multi-task applications, where the tasks use more than one resource, reliabi
 The reliability of a multi-task process is the probability that the tasks being executed for a given time without experiencing any type of failure (internal or external) during the time of execution.
 \end{definition}
 
-Finally, for long running applications or services, where a replication scheme is used, the reliability can be defined as \cite{effTaskReplMobGrid}
+Finally, for long running applications or services, where a replication scheme is used and new replicas dynamically being created as old ones fail, the reliability can be defined as \cite{effTaskReplMobGrid}
+
 \begin{definition} \label{def:task_replica_reliability}
 The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always operational. This can be expressed as the probability that not all replicas fail during the time from that a task replica dies, until a new replica is operational.
 \end{definition}
@@ -680,19 +680,13 @@ R_{T}(t) = 1 - \prod\limits_{k=1}^n f_{k}(t)
 
 where $f_{k}(t)$ is the probability that replica $k$ fails during time $t$. 
 
-Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task is dependent on the reliability of the resources it uses, not the number of replicas. Since only considering node failures, the reliability of a task $T$ with $n$ replicas, where the replicas are placed on $m$ different nodes, can therefore be expressed as
+Since assuming tasks themselves do not fail unless the resources they use fail, the reliability of a task is dependent on the reliability of the resources it uses, not the number of replicas. Considering only node failures, the reliability of a task $T$ with $n$ replicas placed on $m$ different nodes, can using~\cref{eq:resource_failure_prob} be expressed as
 
 \begin{equation} \label{eq:task_reliability_2}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t)
+R_{T}(t) = 1 - \prod\limits_{k=1}^m F_{k}(t) = 1 - \prod\limits_{k=1}^m (1- e^{-t/MTBF_k})
 \end{equation}
 
-where $F_k$ is the probability that node $k$ fails during time $t$. Using \cref{eq:resource_reliability} for describing the reliability of a resource, \cref{eq:task_reliability_2} can be re-written as
-
-\begin{equation} \label{eq:task_reliability_3}
-R_{T}(t) = 1 - \prod\limits_{k=1}^m (1 - e^{-t/MTBF_k})
-\end{equation}
-
-Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. \Cref{eq:task_reliability_3} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
+Where $MTBF_k$ is the \emph{mean-time-between-failure} for node $k$. Using this model, reliability is only increased through replication if the replicas are scheduled on separate nodes. Furthermore, \cref{eq:task_reliability_2} is based on the assumption that failures of nodes are statistically independent, which is a commonly used assumption as described in~\cref{subsec:background_failure_distribution}.
 
 Given a time $t$, a required reliability level $R_{req}$, and assuming the replicas are running on $m$ separate nodes, we get
 
@@ -700,12 +694,12 @@ Given a time $t$, a required reliability level $R_{req}$, and assuming the repli
 R_T(t) = 1 - \prod\limits_{k=1}^m F_{k}(t) \geq R_{req}
 \end{equation}
 
-which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:required_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are executed on.
+which must be fulfilled by the system. Assuming that failure rates differ among resources, fulfilling \cref{eq:required_rel} is a scheduling problem, since the number of replicas needed is dependent on which resources the replicas are running on.
 
-The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_3}, exceeds $R_{req}$.
+The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $R_{req}$.
 
 \subsection{Expressing time t} \label{sec:design_time_t}
-The time $t$ used in \cref{eq:task_reliability_3} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. $t$ can therefore be expressed as 
+The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. The time $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
 	t = t_d + t_R
@@ -718,7 +712,7 @@ As described in~\cref{subsec:heartbeats}, heartbeats are periodically sent to al
 
 The timeout time, $t_{timeout}$ is only an upper bound for how long it takes to detect a node failure. A node may fail just before sending a heartbeat, or directly after, which will affect the actual time the node has been dead before it is detected. This corresponds to the best and worst case scenario. 
 
-If a node A dies precisely before sending heartbeat $H_k$ to B, the last received heartbeat from A was $H_{k - 1}$. $t_{timeout}$ seconds after $H_{k - 1}$ was received, node B will assume A has failed. Node A will then have been dead for $t_{timeout} - t_h$ seconds.
+If a node A dies precisely before sending heartbeat $H_k$ to node B, the last received heartbeat from A was $H_{k - 1}$. $t_{timeout}$ seconds after $H_{k - 1}$ was received, node B will assume A has failed. Node A will then have been dead for $t_{timeout} - t_h$ seconds.
 
 In the latter case, node A dies directly after sending a heartbeat $H_k$, and $t_{timeout}$ seconds later node B will assume node A has failed. Node A has in this case been dead for $t_{timeout}$ seconds when node B assumes it has failed.
 
@@ -726,11 +720,11 @@ Assuming that the probability of a node dying just before and directly after sen
 
 An example of the best and worst case scenario is shown in~\cref{appendix:figures}, where $t_h$ and $t_{timeout}$ are set to 0.2 and 0.5 seconds respectively, which are the values used in the experiments.
 
-In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This is safe since using a higher value than the actual time it takes, results in the calculated reliability is lower than the actual reliability.
+In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This result in the calculated reliability always being equal to or lower than the actual reliability, since the time to detect the failure will always be $t_{timeout}$ or lower.
 
 
 \subsubsection{Replication request time} \label{sec:replication_time}
-The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. $t_R$ consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node, and send a response.
+The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node and send a response.
 
 To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. Then, a replication request is sent, a new replica is created, and a response is received. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time}.
 
@@ -750,7 +744,7 @@ Where $t_{query\ storage}$ is the time it takes to find out which nodes currentl
 As mentioned, the time $t_r$ is the time it takes to replicate a task. Depending on the state of the task to replicate, it is likely to be a significant part of the total time $t_R$. The time to replicate a task consists of the time to get the state of the task, serialize it, transmit it to the other node, de-serialize it, and create a new identical replica using that state, and send the response. 
 
 \begin{equation} \label{eq:replication_time}
-t_{r} = t_{get\ state} + t_{serialize\ state} + t_{transmit\ state} + t_{de-serialize\ state} + t_{setup\ new} + t_{response}
+t_{r} = t_{get\ state} + t_{serialize\ state} + t_{transmit\ state} + t_{de-serialize\ state} + t_{create\ new} + t_{response}
 \end{equation} 
 
 In our model, the time $t_{R}$ is measured and stored every time a replication takes place. Since $t_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $t_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $t_R$. \Cref{fig:replicas_depending_on_t} shows how the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
@@ -762,9 +756,9 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 \end{figure}
 
 
-Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumed the receiving node has died if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node. 
+Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node. 
 
-The situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model. Also the node being selected to run~\cref{alg:scheduling}, described below, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The situations also depend on how often nodes fail. If nodes fail very frequently, there is a higher risk of the selected node fails.
+This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
 
 Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $t_R$. From the fitted distribution, the 95th percentile value is used as the value for $t_R$ in~\cref{eq:rep_time}. This means in 95 percent of the cases, the time $t_R$ will actually be lower than the value used in~\cref{eq:rep_time}. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
 
@@ -1038,9 +1032,6 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
-\section{Storage used} \label{sec:eval_storage}
-As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
-
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
@@ -1067,6 +1058,12 @@ The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of
 
 \subsubsection{Laptop specification} \label{sec:laptop_spec}
 The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. Furthermore the installed OS was the same as for the servers, Ubuntu 14.04 LTS.
+
+
+\section{Storage used} \label{sec:eval_storage}
+As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
+
+%TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
@@ -1526,7 +1523,7 @@ Our model is yet to be evaluated on highly unreliable system during extreme load
 
 Our model ensures that the reliability is higher than the required as long as we don't experience a node failure. After a node failure and before the system has recovered (replicated the lost actors) the reliability is lower than the required. Our model does not guarantee that the average reliability is higher than the required, it depends on the relationship between the MTBF and the time it takes to replicate an actor.
 
-The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_3} gives a reliability of
+The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, the experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte. Assuming a mean-time-between-failures of one year (31536000 s), and an replication time of 1 hour (3600 s), having only two replicas still according to \cref{eq:task_reliability_2} gives a reliability of
 
 \begin{equation*}
 \begin{split}
