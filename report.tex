@@ -1029,7 +1029,7 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two, depending on experiment, Calvin runtimes were started on five of the six servers. These runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. These five servers are referred to as the unstable servers.
 
-On the sixth server, two runtimes were started in every experiment, and these two runtimes were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}, and the reason for having the other stable runtime is described in~\cref{sec:eval_application}.
+On the sixth server, \emph{Gru}, two runtimes were started which were never killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}, and the reason for having the other stable runtime is described in~\cref{sec:eval_application}. The proxy storage was started in every experiment and the other stable runtime was started in every experiment expect the one where we measured the actual time for detecting failures.
 
 In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 unstable servers.
 
@@ -1060,20 +1060,22 @@ Since the experiments only ran for less than 30 minutes, the actual MTBF for a g
 The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of 2.20 GHz and 24 GB RAM. Furthermore, they were all connected with a 1000 Mb/s link with a latency of less than 0.2 ms. The OS installed on the servers was Ubuntu 14.04 LTS.
 
 \subsubsection{Laptop specification} \label{sec:laptop_spec}
-The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. Furthermore the installed OS was the same as for the servers, Ubuntu 14.04 LTS.
+The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. Furthermore, the installed OS was the same as for the servers, Ubuntu 14.04 LTS.
 
 
 \section{Storage used} \label{sec:eval_storage}
-As mentioned in~\cref{sec:calvin_storage}, Calvin supports use of both the Kademlia implementation of DHT, and a proxy storage. The Kademlia parameter $k$ as described in~\cref{sec:calvin_storage} should be chosen such that the probability of $k$ nodes failing within an hour is very low. Since we wanted to be able run an experiment within an hour, and simulate multiple node failures during that time, all nodes would experience failure within an hour. Furthermore, Kademlia periodically re-distributes responsibility of storing keys, as nodes leave and join the network~\cite{kademlia}. But due to killing and restarting runtimes as frequently as we do in the experiments, keys were found to not being re-distributed correctly.
+As mentioned in~\cref{sec:calvin_storage}, Calvin supports use of both the Kademlia implementation of DHT, and a proxy storage. The Kademlia parameter $k$ as described in~\cref{sec:calvin_storage} should be chosen such that the probability of $k$ nodes failing within an hour is very low. Since we wanted to be able run an experiment within an hour, and simulate multiple node failures during that time, all nodes would experience failure within an hour. Furthermore, Kademlia periodically re-distributes responsibility of storing keys, as nodes leave and join the network~\cite{kademlia}. But due to killing and restarting runtimes as frequently as we do in the experiments, keys were found to not being re-distributed correctly. 
+%TODO maybe not mention that we wanted to be able to run experiments whithin an hour? Just that we wanted many failures during an hour
 
-Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes as frequently as every five seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as they do in our experiments, and the use of DHT could in such a case be more suitable.
+Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as they do in our experiments, and the use of DHT could in such a case be more suitable.
 
 %TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted. When measuring the reliability in the experiments, we refer to the reliability of the service actor.
+A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on the stable runtime, mentioned in~\cref{sec:eval_comp_env}. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted. When measuring the reliability in the experiments, we refer to the reliability of the service actor.
+%TODO mention that the service actor wasn't allowed to be replicated to the stable node?
 
 The computational environment, with an application consisting of a consumer, two service replicas, and a consumer, is shown in~\cref{fig:evaluation_application}.
 
@@ -1086,9 +1088,9 @@ The computational environment, with an application consisting of a consumer, two
 \section{Experiments}
 
 \subsection{Measurement of time $t_R$} \label{sec:eval_time_t}
-As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
+As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational. It depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
-The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to find the best distribution for the times $t_R$, an experiment was conducted where the times were registered and later used to find the best fitting distribution.
+The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to model the variation correctly, an experiment was conducted where times were registered and later used to find the best fitting distribution.
 
 The experiment was conducted in two settings. In both settings, two runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a MTBF of 30 seconds, and in the other a MTBF of 10 seconds. Furthermore, the required reliability was in the first experiment set to 0.999999, and 0.99995 in the second. Each time $t_R$ was then registered for the duration of the experiment.
 
@@ -1101,7 +1103,7 @@ The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{expone
 
 \Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for aesthetic reasons. The average values, and number of values above 100 and 500 ms in both experiments are shown in table~\cref{table:tr}. 
 
-When nodes fail more often, there is a higher probability of nodes failing before it finishes to handle a \emph{lost node} request, or to replicate one of its replicas. As described in~\cref{sec:replication_time}, this results in a higher time $t_R$. This is why the average is higher, and there are more times above 100 ms, in the test with \emph{MTBF} of 10 seconds, than the test with \emph{MTBF} of 30 seconds.
+When nodes fail more often, there is a higher probability of nodes failing before it finishes to handle a \emph{lost node} request, or to replicate one of its replicas. As described in~\cref{sec:replication_time}, this results in a higher time $t_R$. This is why the average is higher, and there are more times above 100 ms and above 500 ms, in the test with \emph{MTBF} of 10 seconds, than the test with \emph{MTBF} of 30 seconds.
 
 The log-logistic distribution was found to best fit both data-sets, and is therefore the one used in our model, as described in~\cref{sec:node_failure_detection_time}.
 
@@ -1128,14 +1130,14 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 	  10 s & 107.3 & 597 & 34\\
 	   \hline
 	\end{tabular}
-	 \caption{RAverage, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in test~\ref{sec:eval_time_t}}
+	 \caption{Average, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in test~\ref{sec:eval_time_t}}
 	 \label{table:tr}
 	 \end{center}
  \end{table} 
 
 \subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
 % Is this needed really?
-As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is healthy. If no heartbeat is received from a node within $t_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
+As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is operational. If no heartbeat is received from a node within $t_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
 
 In order to measure the time it takes to detect a failed node, an experiment was conducted in which two runtimes were started on the same server. One of the runtimes was periodically killed and restarted. Before killing the runtime, the current time was logged, and on the other node, the time was logged when the node was assumed dead, which in the experiments was 500 ms after the last received heartbeat. The failing node was killed and restarted 1800 times.
 
@@ -1150,22 +1152,23 @@ The standard deviation of the times registered was 28.8.
 \subsection{Measurement of replication time $t_r$} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. In Calvin, the state of a task corresponds to the state of the actor representing the task, and consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
-In the following experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
-
-The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply, corresponding to the times described in~\cref{eq:replication_time}.
+In the following two experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtime and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment the state was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
+%TODO Is it neccasary or just confusing to mention that the service actor had no inport? 
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}. For each state size, the actor was replicated 10 times and the times measured.
 
-When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was due to the replication taking too long. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the test results.
+While measuring the total time, $t_r$, several other times was measured along the way, namely the times to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply, corresponding to the times described in~\cref{eq:replication_time}.
+
+When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was due to the replication taking too long time. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the test results.
 
 For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
 
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when the increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since then all values in the queue are decoded. %TODO express the last sentence better... #Maybe better?
 
-As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
+As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when, by increasing the queue, increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
 
 \begin{figure}[hbt!]
 \centering
@@ -1180,14 +1183,14 @@ As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop
 \end{figure}
 
 \subsubsection*{Results - replication time parts}
-\Cref{fig:replication_time_parts_server_variable}, \cref{fig:replication_time_parts_server_queue} show how much of the total replication time is spent on the various parts of the replication process when increasing the variable size and queue size respectively, and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size rather than the variable size. This is due to the time spent on decoding the queue's values as described above.
+\Cref{fig:replication_time_parts_server_variable} and \cref{fig:replication_time_parts_server_queue} show how much of the total replication time was spent on the various parts of the replication process when increasing the variable size and queue size respectively, and when replicating between the two servers. As shown, the time to create the new replica takes significantly larger part of the total time when increasing the queue size rather than the variable size. This is due to the time spent on decoding the queue's values as described above.
 
-Furthermore, significantly more time is spent on transmitting the state to the other node as the state size is increased. Hence for large state sizes, the total replication time depends mostly on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound, especially for larger queue sizes.
+Furthermore, significantly more time was spent on transmitting the state to the other node as the state size was increased. Hence for large state sizes, the total replication time depends mostly on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound, especially for larger queue sizes. %TODO contradiction? for smaller...., especially for larger?
 
 %TODO needs work.
-\Cref{fig:replication_time_parts_laptop_variable}, \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time is spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication is done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. %Might result in that actor blocking the others in the scheduling loop
+\Cref{fig:replication_time_parts_laptop_variable} and \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time was spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication was done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. %Might result in that actor blocking the others in the scheduling loop
 
-Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when the state size is above 100 MB (when increasing the queue size), more time is spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the system's swap memory when creating the new actor. A 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
+Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when replicating from laptop to laptop an actor with state size above 100 MB (when increasing the queue size), more time was spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the system's swap memory when creating the new actor. The laptops 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 \begin{figure}[hbt!]
 \centering
