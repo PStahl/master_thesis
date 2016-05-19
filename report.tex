@@ -818,12 +818,12 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, \cref{func:sort}, and the calculation of the current reliability, \cref{func:calc_reliability}, why these two are two separate function calls. 
 
-In our model, the reliability function uses~\cref{eq:task_reliability_2} for determining the reliability, and the sort function simply sorts available nodes after reliability, but they could both easily be replaced, e.g. by a more sophisticated reliability models, and to also consider nodes' loads when sorting them.
+In our model, the reliability function uses~\cref{eq:task_reliability_2} for determining the reliability, and the sort function simply sorts available nodes after reliability, but they could both easily be replaced by more sophisticated models, e.g. which also consider nodes' loads when sorting them.
 
 The algorithm is run when deploying an application, when a failure is detected as further described in~\cref{sec:design_handling_failure}, and also periodically in combination with an optimization algorithm, described next in \cref{subsec:design_optimization}.
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. By first running the greedy scheduling algorithm, and then the optimization algorithm, we ensure both that the required reliability is met, and that it is met while using the minimum number of replicas possible.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure that the minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. By first running the greedy scheduling algorithm, and then the optimization algorithm, we ensure both that the required reliability is met, and that it is met while using the minimum number of replicas possible.
  
 
 \begin{algorithm} 
