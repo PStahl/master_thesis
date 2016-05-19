@@ -660,12 +660,7 @@ In this paper, we use the following definitions of reliability:
 The reliability of a process is the probability that the resource on which the process is running is functioning during the time of execution.
 \end{definition}
 
-For multi-task applications, where the tasks use more than one resource, reliability is defined as
-\begin{definition} \label{def:multi_task_reliability}
-The reliability of a multi-task process is the probability that the tasks being executed for a given time without experiencing any type of failure (internal or external) during the time of execution.
-\end{definition}
-
-Finally, for long running applications or services, where a replication scheme is used and new replicas dynamically being created as old ones fail, the reliability can be defined as \cite{effTaskReplMobGrid}
+For long running applications or services, where a replication scheme is used and new replicas dynamically being created as old ones fail, the reliability can be defined as \cite{effTaskReplMobGrid}
 
 \begin{definition} \label{def:task_replica_reliability}
 The reliability of a process, with $n$ task replicas, is the probability that at least one replica is always operational. This can be expressed as the probability that not all replicas fail during the time from that a task replica dies, until a new replica is operational.
@@ -705,9 +700,9 @@ The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that
 	t = t_d + t_R
 \end{equation}
 
-where $t_d$ is the time to detect that a node has failed, and $t_R$ is the time it takes to create a new replica. A new replica is created by sending a replication request to a node currently holding a replica, including a third node on which the new replica is to be created. The replication request is further described in~\cref{sec:replication_time}.
+where $t_d$ is the time to detect that a node has failed, and $t_R$ is the time it takes to create a new replica. A new replica is created by sending a replication request to a node currently holding a replica, including a third node on which the new replica is to be created. This process is further described in~\cref{sec:replication_time}.
 
-\subsubsection{Node failure detection time} \label{sec:node_failure_detection_time}
+\subsubsection{Node failure detection time, $t_d$} \label{sec:node_failure_detection_time}
 As described in~\cref{subsec:heartbeats}, heartbeats are periodically sent to all nodes in the system every $t_h$ seconds, and if no heartbeat is received from a node for $t_{timeout}$ seconds, it is assumed dead. Note that $t_h$ must be lower than $t_{timeout}$.
 
 The timeout time, $t_{timeout}$ is only an upper bound for how long it takes to detect a node failure. A node may fail just before sending a heartbeat, or directly after, which will affect the actual time the node has been dead before it is detected. This corresponds to the best and worst case scenario. 
@@ -720,10 +715,15 @@ Assuming that the probability of a node dying just before and directly after sen
 
 An example of the best and worst case scenario is shown in~\cref{appendix:figures}, where $t_h$ and $t_{timeout}$ are set to 0.2 and 0.5 seconds respectively, which are the values used in the experiments.
 
-In~\cref{eq:rep_time}, $t_d$ is set to the upper bound of $t_{timeout}$. This result in the calculated reliability always being equal to or lower than the actual reliability, since the time to detect the failure will always be $t_{timeout}$ or lower.
+In~\cref{eq:rep_time} we will use
 
+\begin{equation} \label{eq:node_failure_detection_time}
+t_d = t_{timeout}
+\end{equation}
 
-\subsubsection{Replication request time} \label{sec:replication_time}
+which is the worst case scenario. This result in the calculated reliability always being equal to or lower than the actual reliability, since the time to detect the failure always is $t_{timeout}$ or lower.
+
+\subsubsection{Replication request time, $t_R$} \label{sec:replication_time}
 The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node and send a response.
 
 To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. Then, a replication request is sent, a new replica is created, and a response is received. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time}.
@@ -734,7 +734,6 @@ t_R = t_{query\ storage} + t_{replicate\ msg} + t_{r} + t_{response}
 
 Where $t_{query\ storage}$ is the time it takes to find out which nodes currently hold a replica, $t_{replicate\ msg}$ is the time to send a replicate message to another node, $t_{r}$ is the time to replicate the task to another node, and $t_{response}$ is the time to send a response to the requesting node. The process of sending a replication request is shown in~\cref{fig:replication_request}. The part of querying the storage is excluded from this image.
 
-%TODO change remove the dead none from the image and rename D to C?
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replication_request.pdf}
@@ -755,8 +754,7 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 \caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time $t_{r}$.}\label{fig:replicas_depending_on_t}
 \end{figure}
 
-
-Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a certain time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node. 
+Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a timeout time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node.
 
 This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
 
