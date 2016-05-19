@@ -1015,7 +1015,7 @@ Each runtime also periodically monitors the applications deployed to it, to ensu
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
-We also measured the time $t_R$ to find the best fitting distribution for these values, and the replication time $t_r$ for varying state sizes was also measured. Finally, we measured the actual time for detecting failure, to demonstrate that the value lies between the best and worst case described in~\cref{subsec:heartbeats}.
+We also measured the time $t_R$ to find the best fitting distribution for these values, and also the replication time $t_r$ for varying state sizes. Finally, we measured the actual time for detecting failure to demonstrate that the value lies between the best and worst case described in~\cref{subsec:heartbeats}.
 
 
 \section{Values used in the experiments} \label{sec:eval_values}
@@ -1030,18 +1030,18 @@ The state size of the actor replicated in the experiments was 1901 bytes.
 \section{Computational environment} \label{sec:eval_comp_env}
 In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time $t_r$. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two, depending on experiment, Calvin runtimes were started on five of the six servers. These runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two, depending on experiment, Calvin runtimes were started on five of the six servers. These runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. These five servers are referred to as the unstable servers.
 
-On the sixth server, two runtimes were started in every experiment, and these two runtimes were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}. The reason for having the other stable runtime is described in~\cref{sec:eval_application}.
+On the sixth server, two runtimes were started in every experiment, and these two runtimes were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}, and the reason for having the other stable runtime is described in~\cref{sec:eval_application}.
 
-In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 servers, and which were periodically killed.
+In the experiments, the runtimes are referred to as nodes, and when referring to creating nodes with a specific \emph{MTBF}, we refer to the runtimes created on the 5 unstable servers, and which were periodically killed.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
 The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. 
 
-Since the experiments only ran for less than 30 minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with a mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes would have been given the same MTBF and slept exactly that time, they would all have been killed at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+Since the experiments only ran for less than 30 minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with a mean equal to the given MTBF, instead of a fixed time, was to simulate a more realistic situation. If all runtimes would have been started at the same time, with the same fixed time to sleep before killing them, they would all have been killed at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never have died at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
@@ -1069,14 +1069,14 @@ The laptop used in the experiment where the replication time was measured, was a
 \section{Storage used} \label{sec:eval_storage}
 As mentioned in~\cref{sec:calvin_storage}, Calvin supports use of both the Kademlia implementation of DHT, and a proxy storage. The Kademlia parameter $k$ as described in~\cref{sec:calvin_storage} should be chosen such that the probability of $k$ nodes failing within an hour is very low. Since we wanted to be able run an experiment within an hour, and simulate multiple node failures during that time, all nodes would experience failure within an hour. Furthermore, Kademlia periodically re-distributes responsibility of storing keys, as nodes leave and join the network~\cite{kademlia}. But due to killing and restarting runtimes as frequently as we do in the experiments, keys were found to not being re-distributed correctly.
 
-Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes as frequently as every five seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
+Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes as frequently as every five seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as they do in our experiments, and the use of DHT could in such a case be more suitable.
 
 %TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted.
+A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted. When measuring the reliability in the experiments, we refer to the reliability of the service actor.
 
 The computational environment, with an application consisting of a consumer, two service replicas, and a consumer, is shown in~\cref{fig:evaluation_application}.
 
@@ -1093,16 +1093,14 @@ As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from
 
 The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to find the best distribution for the times $t_R$, an experiment was conducted where the times were registered and later used to find the best fitting distribution.
 
-The experiment was conducted in two settings. In both, two Calvin runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a MTBF of 30 seconds, and in the other a MTBF of 10 seconds. Furthermore, in the first experiment the required reliability was set to 0.999999, and in the second it was set to 0.99995. Each time $t_R$ was then registered for the duration of the experiment.
+The experiment was conducted in two settings. In both settings, two runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a MTBF of 30 seconds, and in the other a MTBF of 10 seconds. Furthermore, the required reliability was in the first experiment set to 0.999999, and 0.99995 in the second. Each time $t_R$ was then registered for the duration of the experiment.
 
 The experiment was conducted in two settings with varying failure rates since with higher failure rate, there is a higher risk of the node handling the lost node dies before it finishes, or a node dies before the replication is finished, as described in~\cref{sec:replication_time}. With more stable nodes, i.e. higher MTBF, there is a lower risk of this happening. Therefore, the replication times are likely to have less variation in this case. The goal was to find the distribution, among those tested, which best fitted the two data-sets.
 
 \subsubsection*{Results}
 The first experiment ran for 230 minutes, and 2000 times were registered, and the second experiment ran for 80 minutes, and 2000 times were registered.
 
-The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}.
-
-Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
+The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}. Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
 
 \Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for aesthetic reasons. The average values, and number of values above 100 and 500 ms in both experiments are shown in table~\cref{table:tr}. 
 
@@ -1153,7 +1151,7 @@ The standard deviation of the times registered was 28.8.
 %TODO measure again, check time between killing and printing time.
 
 \subsection{Measurement of replication time $t_r$} \label{sec:eval_repl_time}
-The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
+The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. In Calvin, the state of a task corresponds to the state of the actor representing the task, and consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
 In the following experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
 
@@ -1175,13 +1173,13 @@ As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of one of the actor's variables.} \label{fig:replication_time_server}
+\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of one of the actor's variables, and the replication was done between two runtimes on different servers.} \label{fig:replication_time_server}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of the actor's port queue.} \label{fig:replication_time_laptop}
+\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of the actor's port queue, and the replication was done between two runtimes on the same laptop.} \label{fig:replication_time_laptop}
 \end{figure}
 
 \subsubsection*{Results - replication time parts}
