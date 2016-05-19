@@ -1015,7 +1015,7 @@ Each runtime also periodically monitors the applications deployed to it, to ensu
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
-We also measured the time $t_R$ to find the best fitting distribution for these values, and the replication time $t_r$ for varying state sizes was also measured.
+We also measured the time $t_R$ to find the best fitting distribution for these values, and the replication time $t_r$ for varying state sizes was also measured. Finally, we measured the actual time for detecting failure, to demonstrate that the value lies between the best and worst case described in~\cref{subsec:heartbeats}.
 
 
 \section{Values used in the experiments} \label{sec:eval_values}
@@ -1155,20 +1155,20 @@ The standard deviation of the times registered was 28.8.
 \subsection{Measurement of replication time $t_r$} \label{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. Using Calvin, the state of a task corresponds to the state of the actor representing the task. In Calvin, the state consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
-In the following experiments, two runtimes were used, in one setting on the same laptop, and in the other on two different servers. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
+In the following experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtimes and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment it was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
 
 The times measured was the time to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply, corresponding to the times described in~\cref{eq:replication_time}.
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}. For each state size, the actor was replicated 10 times and the times measured.
 
-When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was simply due to the replication taking too long. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the test results.
+When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was due to the replication taking too long. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the test results.
 
 For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
 
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes of different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when the increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when the increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, when the values in queue are decoded. %TODO express the last sentence better...
 
 As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
 
@@ -1197,25 +1197,25 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_variable.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Server to server, increased variable size} \label{fig:replication_time_parts_server_variable}
+\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_server_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_queue.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Server to server, increased queue size.} \label{fig:replication_time_parts_server_queue}
+\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_server_queue}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_variable.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Laptop to laptop, increased variable size} \label{fig:replication_time_parts_laptop_variable}
+\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_laptop_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_queue.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Laptop to laptop, increased queue size.} \label{fig:replication_time_parts_laptop_queue}
+\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_laptop_queue}
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
