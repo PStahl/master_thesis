@@ -1070,6 +1070,8 @@ The laptop used in the experiment where the replication time was measured, was a
 \section{Storage used} \label{sec:eval_storage}
 As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
 
+%TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
+
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
