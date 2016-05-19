@@ -877,12 +877,12 @@ The second part make sure no unnecessary replica is used, by deleting the replic
 \section{Handling node failure} \label{sec:design_handling_failure}
 In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not new replicas are needed to still fulfill the required reliability level. This is accomplished by running~\cref{alg:scheduling}. However, when a node fails, all other nodes in the system will detect its failure, since no node will receive heartbeats from it. If all other nodes start running~\cref{alg:scheduling}, one could end up in a situation where every remaining node creates a new replica. While this will increase the reliability, it may result in an unnecessarily high number of new replicas being created, thus the optimal number of replicas will no longer be used.
 
-To cope with this, a selection process must take place in which a single node is selected, which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it manages to create any new replica. Therefore, all nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back to all nodes it received a \emph{lost node} message from. If the sending nodes do not receive a reply for some time, they assume the selected node died, and a new selection process will begin. %TODO "some time" unspecificed, be more specific?
+To cope with this, a selection process must take place in which a single node is selected, which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it manages to create any new replica. Therefore, all nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back to all nodes it received a \emph{lost node} message from. If the sending nodes do not receive a reply within a timeout, they assume the selected node died, and a new selection process will begin.
 
-The algorithm is shown below: % Om vi ska ha ":" får vi tvinga algoritmen att ligga här relativt till texten. Går att göra på något sätt, kommer inte ihåg just nu.
+The algorithm is shown below:
 
-\begin{algorithm}\label{alg:node_failure}
-	\caption{Handling a failed node}
+\begin{algorithm}[!h]	%!h forces the algorithm to be here (!-force h-here)
+	\caption{Handling a failed node} \label{alg:node_failure}
 	\begin{algorithmic}[1]
 	\State $operational\ nodes\gets $ operational nodes
 	\State $lost\ node\ id\gets $ lost node id
