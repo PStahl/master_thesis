@@ -1030,13 +1030,8 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
-%TODO
-% I believe we have to mention the storage..
-In order to be able to easily test our model we used a proxy storage instead of Kademlia. This introduced a single-point-of-failure, but since our experiments ran for a very limited amount of time this wasn't a problem.
-%due to few number of runtimes? a very unrealistic low mtbf..?
-
 \section{Storage used} \label{sec:eval_storage}
-As mentioned in~\cref{design:calvin_storage}, Calvin supports both using the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, were nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the a storage proxy is used in the experiments. This introduce a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
+As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
