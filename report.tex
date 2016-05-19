@@ -1039,9 +1039,6 @@ In the experiments, a cluster consisting of 6 inter-connected servers with homog
 
 As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
 
-\section{Storage used} \label{sec:eval_storage}
-As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
-
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
@@ -1068,6 +1065,10 @@ The servers used in the experiments all had a Intel(R) Xeon(R) CPU E5-2420 v2 of
 
 \subsubsection{Laptop specification} \label{sec:laptop_spec}
 The laptop used in the experiment where the replication time was measured, was a Dell Vostro v131 with a Intel i5, 2.3 GHz processor, 4 GB 1333 MHz RAM. It was equipped with a SSD with a read speed of 540 MB/s and a write speed of 520 MB/s. Furthermore the installed OS was the same as for the servers, Ubuntu 14.04 LTS.
+
+
+\section{Storage used} \label{sec:eval_storage}
+As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
