@@ -870,7 +870,7 @@ The algorithm is run when deploying an application, when a failure is detected a
 	\end{algorithmic}
 \end{algorithm}
 
-The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replica on the least reliable node to the most reliable node available as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving an actor consists of first creating a new replica, and later deleting the old one. By deleting first and then creating a new replica one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
+The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replicas on the least reliable nodes to the most reliable nodes available, as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving a replica involves first creating a new replica, and later deleting the old one. If deleting before creating the new replica, one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
 
 The second part make sure no unnecessary replica is used, by deleting the replica on the least reliable node as long as the required reliability is still met.
 
