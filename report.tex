@@ -630,27 +630,25 @@ As time goes and nodes fail, the time of failure for nodes are stored, the syste
 
 
 \section{Monitoring} \label{sec:design_monitoring}
-Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also not to use more resources than necessary. One must know both where replicas are executing and be able to detect node failures.
-
-The sharing of resource information is done using a push strategy, as described in~\cref{sec:background_monitoring}. Information are periodically sent to all other nodes in the system in a multicast fashion, and a heartbeat system is used to detect node failures.
+Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also not to use more resources than necessary. 
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
 The ability to detect node failures is crucial for knowing when a new replica is needed in order to keep the required reliability. Furthermore, since the reliability model presented in~\cref{sec:design_reliability_model} is based on a \emph{mean-time-between-failures} for the nodes in the system, it is based on the assumption that node failures are detectable. 
 
 To achieve this, a heartbeat system is used, where nodes periodically send UDP messages, called heartbeats, every $t_h$ seconds. The heartbeats contain a node identifier and are sent to all the other nodes in the system. Nodes are considered operational as long as heartbeats are received from them, and if no heartbeat is received from a node for $t_{timeout}$ seconds, the node is assumed dead.
 
-In the experiments conducted, see \cref{ch:evaluation}, $t_h$ was set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. These values should be modified in a real setting. For the experiments, a high-bandwidth low-latency cluster was used, why the frequency could be quite high and the timeout time relatively low. 
+In the experiments conducted, see \cref{ch:evaluation}, $t_h$ was set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. These values should be modified in a real setting. For the experiments, a high-bandwidth low-latency cluster was used, why we could use a high heartbeat frequency and a low timeout time.
 
-As further described in~\cref{sec:node_failure_detection_time}, these values also affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Byte.
+As further described in~\cref{sec:node_failure_detection_time}, these values affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Byte.
 
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
-In order to ensure the optimal number of replicas is used over time as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
+In order to ensure the optimal number of replicas is used over time, as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
 
-In our model, the reliability of the running applications are monitored periodically. If the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
+In our model, the reliability of the running applications are monitored periodically, and if the reliability is not met, appropriate actions are taken, which is further described in~\cref{sec:design_sched_alg}.
 
 On the other hand, if the required reliability is met, more replicas than necessary may be used to reach that reliability level. One must therefore minimize the number of replicas by moving the replicas to more reliable nodes, and deleting replicas on less reliable nodes as long as the required reliability is still met. The algorithm for optimizing is further described in~\cref{subsec:design_optimization}.
 
-In the experiments, applications were monitored and the greedy algorithm along with the optimization algorithm ran every five seconds.
+In the experiments, all applications were monitored and the greedy scheduling algorithm followed by the optimization algorithm, both presented in~\cref{sec:design_sched_alg}, were run every five seconds.
 
 \section{Reliability model} \label{sec:design_reliability_model}
 %TODO Maybe change section name
