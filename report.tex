@@ -1025,7 +1025,7 @@ As described in~\cref{sec:design_reliability_model}, the reliability model is ba
 
 In addition to the MTBF, a default value for $t_R$ must be used before any such times have been registered. The default value used in the experiments was 2 seconds.
 
-The state size of the actor replicated in the experiments was (TODO size of actor with queue size 5) MB.
+The state size of the actor replicated in the experiments was 1901 bytes.
 
 \section{Computational environment} \label{sec:eval_comp_env}
 In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time $t_r$. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
