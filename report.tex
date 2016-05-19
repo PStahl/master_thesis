@@ -159,6 +159,7 @@ The reliability of the grid computing is very critical but hard to analyze due t
 A cluster system is usually a number of identical units managed by a central manager. It is similar to a grid, but differ in that resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource~\cite{compStudyLoadAndCloud}.
 
 \subsubsection{Cloud}
+%TODO add info, clerify the difference with grid. The descriptions are very similar
 Clouds has been described as the next generation of grids and clusters. While it is similar to grids and clusters, the main difference is that cloud has multiple domains~\cite{compStudyLoadAndCloud}. Resources can be geographically distributed, and software and hardware components are often heterogeneous, and therefore analyzing and predicting workload and reliability is usually very challenging~\cite{surveyReliabilityDistr}. 
 
 %COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
@@ -193,6 +194,7 @@ In distributed environments, especially with heterogeneous commodity hardware, s
 	\item System related, or
 	\item Network related.
 \end{itemize}
+%TODO Utveckla tre ovan nämnda typer?
 
 In~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems was studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 percent depending on hardware type, while 10 to 20 percent of the failures were software failures.
 
@@ -207,7 +209,7 @@ The possible errors in a Grid environment can be divided into the following thre
 \fi
 
 \subsection{Fault models} \label{subsec:background_fault_models}
-When studying the reliability of distributed systems or the reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used. A reliability model is then designed, and validated with respect to this fault model~\cite{faultTolerantFundamentals}. In the fault models described in this section, a computational resource is referred to as a node.
+When studying the reliability of distributed systems or the reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used. A reliability model is then designed, and validated with respect to this fault model~\cite{faultTolerantFundamentals}. In the fault models described in this section, and in the rest of the report, a computational resource is referred to as a node.
 
 \subsubsection{Byzantine fault model} \label{subsub:background_byzantine}
 The Byzantine fault model allows nodes to continue interaction after failure. Correctly functioning nodes cannot automatically detect if a failure has occurred. Even if it was known that a failure occurred, nodes cannot detect which node has failed. 
@@ -342,7 +344,7 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and all actions replayed, thereby re-constructing the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the process to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not having to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
-Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique.
+Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique. %TODO reactive/proactive explain in which ways?
 
 Using replication, several identical processes are scheduled on different resources and simultaneously perform the same computations~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single point of failure~\cite{faultToleranceGrid}.
 
@@ -358,9 +360,10 @@ In active replication, there are one or several replicas of a task running simul
 
 Often, there is one primary task and several back-up replicas. The primary task is monitored by the back-up replicas for incorrect behaviour and if the primary task fails or behaves in an unexpected way, one of the back-up replicas will promote itself as the primary task~\cite{surveyFaultParallel}. Since the back-up replica already is in an identical state as the primary task the transition will take negligible amount of time. 
 
+%TODO needs work, there is no latter case atm
  In the latter case the receiver could compare the outputs .
-
-Depending on the set-up, the primary task could be the only one producing output, or all replicas can produce output. In the latter case,  the receiver will receive multiple results. A consensus algorithm could then be deployed to determine which result is correct, and thereby protect against Byzantine faults. More on this in \cref{subsub:consensus}
+%TODO Clearify that the replicas always produce a result but not always send it?
+Depending on the set-up, the primary task could be the only one producing output, or all replicas could produce output. In the latter case, the receiver will receive multiple results. A consensus algorithm could then be deployed to determine which result is correct, and thereby protect against Byzantine faults. More on this in \cref{subsub:consensus}.
 
 This type of replication is feasible only if, by assumption, the primary task and the replica receives exactly the same input. When replicating, the task replicas are likely to be un-synced. Therefore, if they perform computations or make external requests which are time-dependent, they are likely to produce different results. To avoid this, this kind of replication is usually done for tasks performing deterministic\footnote{A deterministic function always produces the same output given a certain input.} computations, which are not time-dependent.
 
@@ -376,9 +379,9 @@ Passive replication is the case when a second machine, typically in idle or powe
 In active and semi-active replication, several results are being produced. If non-deterministic computations are done, some form of consensus algorithm is usually deployed to determine which result is correct. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and the receiver of their results determine which result is considered correct. Such algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
 
 %TODO Are the following sections needed?
-Based on achieving consensus, two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas run simultaneously and afterwards a voting phase take place to determine which result is correct. The result with the highest number of votes is considered correct and consensus is reached.
+Based on achieving consensus, two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas run simultaneously and afterwards a voting takes place to determine which result is correct. The result with the highest number of votes is considered correct and consensus is reached.
 
-In progressive redundancy on the other hand the number of replicas needed is minimized. If with traditional redundancy, $k \in \{3,5,7...\}$ replicas is executed, progressive redundancy only needs $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result, an additional number of replicas is executed until enough replicas have returned the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
+In progressive redundancy the number of replicas needed is minimized. If with traditional redundancy, $k \in \{3,5,7...\}$ replicas is executed, progressive redundancy first executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result, an additional number of replicas is executed until enough replicas have returned the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
 
 Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focuses more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
@@ -393,11 +396,11 @@ The term load balancing is generally used for the process of transferring load f
 Load balancing algorithms can be divided into three categories based on the initiation of the process:
 \begin{itemize}
 \item Sender Initiated - An overloaded node sends requests until it finds a proper node which can except its load.
-\item Receiver Initiated - An under-loaded node sends a message for requests until it finds an overloaded node.
+\item Receiver Initiated - An under-loaded node sends a message for requests until it finds an overloaded node. %TODO "a message for requests", is it corrrect language?
 \item Symmetric - A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
-Load balancing is often divided into two categories, namely static and dynamic load-balancing. In contract to static load-balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
+Load balancing is often divided into two categories, namely static and dynamic load-balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
 \iffalse %Shorten?
 A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
