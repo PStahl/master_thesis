@@ -770,14 +770,14 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 \begin{algorithm}[H]
 	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
-	\Require{$R_{req}$ is the reliability to fulfill}
+	\Require{$R_{req}$ is the reliability to fulfill.}
 	\Statex
 	\Procedure{Greedy scheduling algorithm}{}
 	\State $current\ nodes\gets$ current nodes
 	\State $operational\ nodes\gets $ operational nodes
 	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
 	\State
-	\Call{sort}{$available\ nodes$}
+	\Call{sort}{$available\ nodes$, $descending$}
 	\While {\Call{reliability}{$current\ nodes$} $\leq R_{req}$}
 		\State $node\gets available\ nodes.pop$\Comment{take the most reliable node}
 		\State{$replica\gets new\ replica$}
@@ -791,14 +791,13 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Sorts the given nodes in order of preference} \label{func:sort}
-	Returns the given nodes in sorted order, with the most preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters.
+	Returns the given nodes in sorted order, with the most or least (depending on $order$) preferred nodes first. We only consider the nodes' reliability when sorting, but it can easily be changed to consider other parameters as well.
 	\begin{algorithmic}[1]
-	\Ensure{$nodes$ is the list to sort}
+	\Ensure{$nodes$ is the list to sort, and $order$ is the order to sort in (ascending or descending).}
 	\Statex
-	\Function{sort}{$nodes$}
-		\Statex\Comment{Add here to consider other parameters, such as nodes' loads, when sorting}
+	\Function{sort}{$nodes$, $order$}
 		\State
-	    \Call{sort after reliability}{$nodes$}
+	    \Call{sort after reliability}{$nodes$, $order$}
 	    \State \Return $nodes$
 	\EndFunction
 	\end{algorithmic}
@@ -806,8 +805,9 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
+	Calculate the reliability of the nodes currently holding a replica. This function could be change to use a different reliability model.
 	\begin{algorithmic}[1]
-	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica}
+	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica.}
 	\Statex
 	\Function{reliability}{$current\ nodes$}
 		\State $n\gets current\ nodes.length$
@@ -816,14 +816,15 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\end{algorithmic}
 \end{function}
 
-In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, and the calculation of the current reliability, why these two are two separate function calls. 
+In our model, a new replica is placed on the most reliable node until the required reliability level is reached. However, we do not account for whether or not the selected node has enough available resources for the new replica, hence we do not consider system load. The scheduling algorithm is however independent of both the selection of nodes, \cref{func:sort}, and the calculation of the current reliability, \cref{func:calc_reliability}, why these two are two separate function calls. 
 
 In our model, the reliability function uses~\cref{eq:task_reliability_2} for determining the reliability, and the sort function simply sorts available nodes after reliability, but they could both easily be replaced, e.g. by a more sophisticated reliability models, and to also consider nodes' loads when sorting them.
 
-The algorithm is run at the time of deployment, but also every time a failure is detected, further described in~\cref{sec:design_handling_failure} and  periodically, just before the optimization algorithm, described next in \cref{subsec:design_optimization}.
+The algorithm is run when deploying an application, when a failure is detected as further described in~\cref{sec:design_handling_failure}, and also periodically in combination with an optimization algorithm, described next in \cref{subsec:design_optimization}.
 
 \subsection{Optimization} \label{subsec:design_optimization}
-\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the overall minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. Running the greedy scheduling algorithm before the optimization makes sure that the required reliability is reached. Using the reliability model above nodes can not decrease in reliability caused by something else than a failure. Therefore one can argue that the greedy algorithm doesn't need to be run periodically but in order to be able to extend or change the used reliability model it is important to first make sure that the required reliability is achieved.
+\Cref{alg:scheduling} creates the minimal number of new replicas needed to reach the required reliability. However, it does not ensure the minimum number of replicas is used over time. As more reliable nodes become available, fewer replicas could be used while still meeting the required reliability. Therefore, \cref{alg:optimization} is periodically run, as part of the application monitoring as described in~\cref{subsec:monitoring_system_rel}. By first running the greedy scheduling algorithm, and then the optimization algorithm, we ensure both that the required reliability is met, and that it is met while using the minimum number of replicas possible.
+ 
 
 \begin{algorithm} 
 	\caption{Optimization algorithm} \label{alg:optimization}
@@ -833,11 +834,13 @@ The algorithm is run at the time of deployment, but also every time a failure is
 	\State $operational\ nodes\gets $ operational nodes
 	\State $available\ nodes\gets operational\ nodes \setminus \ current\ nodes$
 	\State
-	\Call{sort}{$available\ nodes$}
 	\State
-	\Call{sort}{$current\ nodes$}
-	\State $least\_reliable\gets current\ nodes.pop$
+	\Call{sort}{$available\ nodes$, $descending$}
 	\State $most\_reliable\gets available\ nodes.pop$
+	\State
+	\Call{sort}{$current\ nodes$, $ascending$}
+	\State $least\_reliable\gets current\ nodes.pop$
+	\State
 	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
@@ -865,16 +868,16 @@ The algorithm is run at the time of deployment, but also every time a failure is
 	\end{algorithmic}
 \end{algorithm}
 
-The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replica on the least reliable node to the most reliable node available as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving an actor consists of first creating a new replica, and later deleting the old one. By deleting first and then creating a new replica one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
+The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replicas on the least reliable nodes to the most reliable nodes available, as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving a replica involves first creating a new replica, and later deleting the old one. If deleting before creating the new replica, one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
 
 The second part make sure no unnecessary replica is used, by deleting the replica on the least reliable node as long as the required reliability is still met.
 
 \Cref{alg:optimization} makes sure no unnecessary replicas are used. However, moving replicas to more reliable nodes may be unnecessary overhead if it does not affect the overall number of replicas needed. For example, moving from a node with a reliability of 0.999 to a node with reliability 0.9991 will perhaps not significantly increase the overall reliability, and if it does not result in another replica can be deleted, it may be unnecessary. \Cref{alg:optimization} does not account for this.
 
 \section{Handling node failure} \label{sec:design_handling_failure}
-In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not new replicas are needed to still reach above the required reliability level. This is accomplished by running~\cref{alg:scheduling}. However, when a node fails, all other nodes in the system will detect its failure, since no node will receive heartbeats from it. If all other nodes start running~\cref{alg:scheduling}, one could end up in a situation where every remaining node creates a new replica. This will of course increase the reliability, but it will probably result in an unnecessary high load in the system and we will no longer ensure the optimal number of replicas being used. 
+In the case of a node failure, one must first determine whether or not any replicas were running on the failed node, and if so, determine whether or not new replicas are needed to still fulfill the required reliability level. This is accomplished by running~\cref{alg:scheduling}. However, when a node fails, all other nodes in the system will detect its failure, since no node will receive heartbeats from it. If all other nodes start running~\cref{alg:scheduling}, one could end up in a situation where every remaining node creates a new replica. While this will increase the reliability, it may result in an unnecessarily high number of new replicas being created, thus the optimal number of replicas will no longer be used.
 
-To cope with this, selection process must take place to select a single node which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it managed to create any new replica. Therefore, all other nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back to all nodes it received a \emph{lost node} message from. If the sending nodes does not receive a reply for some time, they assume the selected node died, and a new selection process will begin.
+To cope with this, a selection process must take place in which a single node is selected, which will be responsible for deciding what actions to take. Since assuming a dynamic system where nodes fail and new nodes are introduced, this selection must be done every time a node dies. Furthermore, the selected node may also die before it manages to create any new replica. Therefore, all nodes will send a \emph{lost node} request to the selected node. When finished, the selected node sends a reply back to all nodes it received a \emph{lost node} message from. If the sending nodes do not receive a reply for some time, they assume the selected node died, and a new selection process will begin. %TODO "some time" unspecificed, be more specific?
 
 The algorithm is shown below: % Om vi ska ha ":" får vi tvinga algoritmen att ligga här relativt till texten. Går att göra på något sätt, kommer inte ihåg just nu.
 
@@ -911,7 +914,7 @@ If the selected node determines a new replica is needed, it will send a replicat
 \section{Self-adapting} \label{sec:design_self_adapting}
 Adaption refers to changing the behaviour depending on the changing state of the system. For a distributed system, resources most be continously monitored in order to adapt to changing behaviour~\cite{imprRelAdaptRL}.
 
-To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored, and the number of replicas must be increased if the reliability of a running job decreases below the required level, or, the number of replicas must if possible be decreased in order not to waste resources.
+To ensure a certain level of reliability, the framework must ensure that the current state of the system is taken into account when determining the number of replicas needed. Furthermore, the system and the running jobs must be continuously monitored. If the reliability of a running job decreases below the required level, more replicas must be created. On the other hand, if the reliability increases, the number of replicas should be decreased in order not to waste resources, as long as doing so does not result in a reliability lower than the required one.
 
 When monitoring the system, all parameters used in the reliability model must be monitored. In our case, we consider only the nodes' mean-time-between-failures, the time to detect node failures and the time it takes to create a new replica. Therefore, all nodes' failure times, and the time to create new replicas are registered. The time to detect failure is as mentioned in~\cref{sec:node_failure_detection_time} static.
 
@@ -955,8 +958,8 @@ The main features of Calvin is the use of runtimes (containers) in which actors 
 In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
 \begin{itemize}
-	\item Using Kademlia, data stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes failing. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
-	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure. %TODO mention some pros, eaiser when testing?
+	\item Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
 \end{itemize}
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
@@ -973,10 +976,10 @@ The actor model corresponds well to the kind of applications and tasks described
 \subsubsection{Runtimes} \label{sec:calvin_runtime}
 The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runtimes makes up the distributed execution environment on which one can deploy application. A runtime is a self-managed container for application actors and provides data transport between actors both within the same runtime and between different runtimes.
 
-Each runtime has a \emph(storage), all the information stored in storage is first stored locally and later flushed, i.e. distributed in a multicast approach.
+Each runtime has a \emph{storage}. If DHT is used, all the information in the storage is first stored locally and later flushed, i.e. distributed in a multicast approach. If a proxy storage is used, the information is sent to only the proxy storage.
 
 \subsubsection{Replication} \label{subsec:calvin_replication}
-The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serialize it, send it to the runtime in which the new replica is to be created. The receiving runtime must de-serialize the state and use it to create the replica and setup its port connections.
+The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serializing it and sending it to the runtime in which the new replica is to be created. The receiving runtime then de-serializes the state and uses it to create the replica and setup its port connections.
 
 Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
 
@@ -1005,7 +1008,7 @@ The heartbeat system described in~\cref{subsec:heartbeats}, was implemented usin
 
 Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
-For every heartbeat sent, a timeout of 500 ms it set. When it timeouts, the runtime to which the heartbeat was sent is assumed dead, and when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
+For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime to which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} and new replicas are created if needed to reach the required reliability.
 
 \subsubsection{Application monitor}
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
