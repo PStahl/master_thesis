@@ -783,7 +783,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 		\State{$replica\gets new\ replica$}
 		\State
 		\Call{place replica on node}{$replica$, $node$}
-		\State $current\ nodes\gets node$
+		\State $current\ nodes.add(node)$	%TODO Look over
 	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
