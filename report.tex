@@ -957,10 +957,9 @@ The main features of Calvin is the use of runtimes (containers) in which actors 
 \subsubsection{Storage} \label{sec:calvin_storage}
 In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
-\begin{itemize}
-	\item Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
-	\item When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
-\end{itemize}
+Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. One of the configurable parameters used in Kademlia is $k$, representing the maximum size of a bucket-list. The value of $k$ hould be chosen such that the probability of $k$ nodes failing within an hour is very low \cite{kademlia}. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
+
+When using the proxy storage, one runtime acts as a storage node, and all data is distributed to that runtime. All request for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
@@ -1014,29 +1013,35 @@ For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and whe
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments were to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
+In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
-We also measured the time $t_R$ to find the best fitting distribution for these values, and the replication time with varying state size was also measured.
+We also measured the time $t_R$ to find the best fitting distribution for these values, and the replication time $t_r$ for varying state sizes was also measured.
 
 
 \section{Values used in the experiments} \label{sec:eval_values}
-As described previously, heartbeats were sent every 200 ms in all experiments, and nodes were considered dead if no heartbeat was received for 500 ms. The optimization algorithm was run every 5 seconds.
+As described previously, heartbeats were sent every 200 ms in the experiments, and nodes were considered dead if no heartbeat was received for 500 ms. Furthermore, the optimization algorithm was run every 5 seconds.
 
-Furthermore, the reliability model is based on a node's MTBF and the time $t_R$. In order to determine the MTBF for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. In all experiments, the default MTBF was 10 seconds.
+As described in~\cref{sec:design_reliability_model}, the reliability model is based on a node's MTBF and the time $t_R$. In order to determine the MTBF for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. The default MTBF used in the experiments was 10 seconds.
 
-In addition to the MTBF, a default value for $t_R$ must be used before any such times have been registered. The default value used in the tests was 2 seconds.
+In addition to the MTBF, a default value for $t_R$ must be used before any such times have been registered. The default value used in the experiments was 2 seconds.
 
-The state size of the actor replicated in the experiments was (TODO size of actor with queue size 5) MB.
+The state size of the actor replicated in the experiments was 1901 bytes.
 
 \section{Computational environment} \label{sec:eval_comp_env}
-In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
+In the experiments, a cluster consisting of 6 inter-connected servers with homogeneous hardware components were used. A laptop was also used when measuring the replication time $t_r$. The specification of the servers and the laptop are described in~\cref{sec:server_spec} and \cref{sec:laptop_spec}. The various servers will be referred to as \emph{Gru}, \emph{Dave}, \emph{Kevin}, \emph{Mark}, \emph{Jerry} and \emph{Tim}.
 
-As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two depending, on experiment, runtimes were started on five of the six servers. The runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure. On the sixth server a single runtime was started, which was not killed. The reason for having a stable runtime in the experiments is described in~\cref{sec:eval_application}. In the experiments, the runtimes are referred to as nodes.
+As mentioned in \cref{ch:design}, the model was implemented in the IoT application environment Calvin. In the experiments, one or two, depending on experiment, Calvin runtimes were started on five of the six servers. These runtimes were used to represent actual nodes, and were periodically killed and restarted to simulate node failure.
+
+On the sixth server, two runtimes were started, which were not killed. One of these stable runtimes was used as a proxy storage, further described in~\cref{sec:eval_storage}. The reason for having the other stable runtime is described in~\cref{sec:eval_application}.
+
+In the experiments, the runtimes are referred to as nodes.
 
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
-The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. Since the tests only ran for a couple of minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes would have been given the same MTBF and slept exactly that time, they would all have died at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. 
+
+Since the experiments only ran for less than 30 minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with a mean equal to the given MTBF, instead of simply the given MTBF, was to simulate a more realistic situation. If all runtimes would have been given the same MTBF and slept exactly that time, they would all have been killed at the same time, given that they were started at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never die at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
@@ -1062,14 +1067,16 @@ The laptop used in the experiment where the replication time was measured, was a
 
 
 \section{Storage used} \label{sec:eval_storage}
-As mentioned in~\cref{design:calvin_storage}, Calvin supports both the Kademlia implementation of DHT, and a proxy storage. We experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes with a MTBF of 10 seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
+As mentioned in~\cref{sec:calvin_storage}, Calvin supports use of both the Kademlia implementation of DHT, and a proxy storage. The Kademlia parameter $k$ as described in~\cref{sec:calvin_storage} should be chosen such that the probability of $k$ nodes failing within an hour is very low. Since we wanted to be able run an experiment within an hour, and simulate multiple node failures during that time, all nodes would experience failure within an hour. Furthermore, Kademlia periodically re-distributes responsibility of storing keys, as nodes leave and join the network~\cite{kademlia}. But due to killing and restarting runtimes as frequently as we do in the experiments, keys were found to not being re-distributed correctly.
+
+Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted, sometimes as frequently as every five seconds. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as every 10 seconds, and the use of DHT could in such a case be more suitable.
 
 %TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
-A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, they were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted.
+A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on a stable runtime, which was not killed. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted.
 
 The computational environment, with an application consisting of a consumer, two service replicas, and a consumer, is shown in~\cref{fig:evaluation_application}.
 
@@ -1081,7 +1088,7 @@ The computational environment, with an application consisting of a consumer, two
 
 \section{Experiments}
 
-\subsection{Measurement of time $t_R$} \label{sec:eval_time_t}
+\subsection{Measurement of time $t_r$} \label{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational, and depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
 The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to find the best distribution for the times $t_R$, an experiment was conducted where the times were registered and later used to find a best fitting distribution.
