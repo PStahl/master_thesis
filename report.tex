@@ -157,7 +157,7 @@ Some previous attempts at designing fault-tolerant systems by the use of replica
 
 A quite old but still relevant work is found in~\cite{dynAdaptRepl} in which a framework for dynamically replicating tasks in a multi-agent system is presented. The authors introduce a software architecture which can act as support for building reliable multi-agent systems. Since the available resources often are limited, they say that it is not feasible to replicate all components. Therefore, they introduce the concept of a criticality for each agent, which is allowed to evolve during runtime. An agent's criticality is calculated using the CPU usage and communication activity of the agent, and is used to determine the number of replicas, along with a predefined minimum number of replicas. The proposed solution also allows for dynamically adapting the number of replicas and the replication strategy itself (passive/active) in order to maximize the agents reliabilities based on available resources. 
 
-Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication are presented in~\cite{replicatingAgents, adaptiveMASReplication, adaptiveAgentReplication}. While being adaptive to system state, the solution presented in~\cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in~\cite{adaptiveMASReplication}, where a decentralized solution is proposed, and where the number of replicas and their placement depends on the system state. However, instead of ensuring a given level of reliability is met, they aim at maximizing the reliability and availability based on available resources. %TODO check this again
+Other approaches to improve reliability in Multi-Agent Systems (MAS) by the use of replication are presented in~\cite{replicatingAgents, adaptiveMASReplication, adaptiveAgentReplication}. While being adaptive to system state, the solution presented in~\cite{replicatingAgents} still faces the problem of having a single point of failure due to a communication proxy. This problem is avoided in~\cite{adaptiveMASReplication}, where a decentralized solution is proposed, and where the number of replicas and their placement depends on the system state. However, instead of ensuring a given level of reliability is met, they aim at maximizing the reliability and availability based on available resources.
 
 A dynamic and adaptive algorithm, which dynamically varies the number of replicas depending on system load is presented in~\cite{adaptiveCheckPointAndRep}. The proposed algorithm does not ensure a certain reliability. Instead, it reduces the number of replicas during peak hours, in order to reduce system load. Since the reliability of a system decreases during higher load~\cite{studyOfFailures, implicationsOfFailures}, the number of replicas should be increased instead of decreased in order to stay above the required level of reliability.
 
@@ -238,16 +238,6 @@ In distributed environments, especially with heterogeneous commodity hardware, s
 
 In~\cite{studyOfFailures}, almost ten years of real-world failure data of 22 high performance computing systems was studied and concluded hardware failures to be the single most common type of failure, ranging from 30 to more than 70 percent depending on hardware type, while 10 to 20 percent of the failures were software failures.
 
-\iffalse
-%TODO not important?
-The possible errors in a Grid environment can be divided into the following three categorize~\cite{effTaskReplMobGrid}:
-\begin{itemize}
-	\item Crash failure - When a correctly working server comes to a halt.
-	\item Omission failure - When a server fails to respond to incoming requests and to send messages
-	\item Timing failure - When a server responds correctly but beyond the specified time interval
-\end{itemize}
-\fi
-
 \subsection{Fault models} \label{subsec:background_fault_models}
 When studying the reliability of distributed systems or the reliability of applications running in distributed computing environments, one usually starts with specifying which fault model is used. A reliability model is then designed, and validated with respect to this fault model~\cite{faultTolerantFundamentals}. In the fault models described in this section, and in the rest of the report, a computational resource is referred to as a node.
 
@@ -258,7 +248,7 @@ Furthermore, the system's behaviour can be inconsistent and arbitrary~\cite{surv
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, but it is therefore also very difficult to simulate and to analyze.
 
 \subsubsection{Fail-stop fault model} \label{subsub:background_fail_stop}
-The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes~\cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs~\cite{surveyFaultParallel}. %The fail-stop model has been criticized for not representing enough real-world failures. LAST SENTENCE NEEDED?
+The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes~\cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs~\cite{surveyFaultParallel}.
 
 \subsubsection{Crash-failure fault model}
 The crash failure model is quite alike the fail-stop model with the difference that nodes do not automatically detect the failure of a node~\cite{faultTolerantFundamentals, adaptiveAgentReplication}.
@@ -297,19 +287,6 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 \subsection{Reliability definition} \label{subsec:background_reliability_definition}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully~\cite{taskAllocation, relModelDistSimSystem, studyServiceRel, hierarchicalRelModeling, generalAlgoRelEval, realTimeRelAnalysis, perfRelNonMarkovian}. A similar definition, for applications running in distributed environments, is that reliability is the probability of a software application to perform its intended functions for a specified period of time~\cite{surveyReliabilityDistr, surveyRelPrediction, relDistApplications}, and is commonly used for applications with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result~\cite{surveyRelPrediction, relAndPerfGridServices, relGridServicePredConstraint, relModelWebServices, selfAdaptRel}. The latter is usually used together with the Byzantine fault model. 
 
-\iffalse
-%Onödig definition??
-\cite{surveyReliabilityDistr} defines a software application reliable if the following is achieved:
-\begin{itemize}
-\item Perform well in specified time $t$ without undergoing halting state
-\item Perform exactly the way it is designed
-\item Resist various failures and recover in case of any failure that occurs during system execution without proceeding any incorrect result.
-\item Successfully run software operation or its intended functions for a specified period of time in a specified environment.
-\item Have probability that a functional unit will perform its required function for a specified interval under stated conditions.
-\item Have the ability to run correctly even after scaling is done with reference to some aspects.
-\end{itemize}
-\fi
-
 \subsection{Modelling reliability} \label{subsec:background_modelling_rel}
 Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors not feasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
 
@@ -341,25 +318,6 @@ The probability of surviving corresponds to having zero failures, and can be exp
 P(0 \mbox{ failures during time } t) = \dfrac{\left(\dfrac{t}{MTBF}\right)^0 \cdot e^{-\left(\dfrac{t}{MTBF}\right)}}{0!} = e^{-\left(\dfrac{t}{MTBF}\right)}
 \end{equation}
 
-
-\iffalse
-While redundancy and diversity have been employed as popular methods to attain better reliability [4][5][6][7][8][9][10], they impose extra hardware or software costs.
-optimal task allocation. This method does not require additional hardware or software and improves system reliability just by using proper allocation of the tasks among the nodes [8][11][12] [13] [14] \cite{optTaskAllocationForMaxRel}
-\\\\
-\cite{discContRelModel}
-\\\\
-System reliability: Due to independence of node and path failures, system reliability can be formulated as: Rs(X) = RS’(X) * Rs” (X) \cite{optTaskAllocationForMaxRel}
-\\\\
-the reliability model of the sub-distributed systems inherits the traditional models’ characters [19], [20], [21], [22] and has certain limitations. Those traditional models have a common assumption that the operational probabilities of the nodes and links are constant. However, this assumption is unrealistic for the grid, so this assumption was relaxed in [15] by assuming that the failures of nodes and links followed their respective Poisson processes so that their operational probabilities decrease with their working time instead of the constant values 
-There are also many other reliability models for software, hardware, or small-scale distributed systems, see, e.g., [14], [23], [24], [25], [26], which cannot be directly implemented for studying grid service reliability. \cite{hierarchicalRelModeling}
-\\\\
-Reliability evaluation of the hyper-cubes has been addressed recently [7]-[9]. Najjar and Gaudiot have modeled hyper-cube reliability assuming that the system works as long as there is no disconnected working node(s) [7]. This implies that even if a task requirement is satisfied, the system is considered failed whenever there is a disconnected node(s). This reliability is not based on task requirement, but on system managemen. [ A unified task-based dependability model for hyper-cube computers]
-\\\\
-(the processing element that runs the program under consideration) to some other nodes such that its vertices hold all the needed files for the program under consideration. \cite{relAnalysisFRA}
-\\\\
-We focus on the study of task allocation decision to achieve maximal distributed system reliability (DSR) under processor resource constraints and total system cost constraint. the task allocation problem has been studied to achieve various goals, such as reliability maximization, safety maximization, fault tolerance increasing, and cost minimization. Their processor reliability was computed from the processor failure rate and the elapsed execution time. As far as we know, the effects of module software reliabilities and module execution frequencies on the optimal task allocation decision have not been studied before. To pursue this topic, we divide the processor reliability into two parts in our system model: the processor hardware reliability and the module software reliability \cite{decisionModelTaskAllocation}
-\fi
-
 \section{Fault tolerance techniques} \label{sec:background_fault_tol_tech}
 Fault tolerance techniques are used to either predict failures and take appropriate actions before they occur~\cite{faultToleranceChallenges}, or to prepare the system for failures, and take appropriate actions first when they occur. Considering the whole life-span of a software application, fault-tolerant techniques can be divided into four different categories~\cite{surveyReliabilityDistr}:
 
@@ -374,7 +332,6 @@ Limited to already developed application, fault tolerance techniques can be divi
 
 Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback recovery} and \emph{replication} \cite{relGridSystems}.
 
-% Checkpointing, job migration, voting etc
 \subsection{Checkpoint/Restart} \label{subsec:background_checkpoint}
 Fault tolerance by the use of periodic checkpointing and rollback recovery is the most basic form of reactive fault tolerance techniques~\cite{surveyFaultParallel}.
 
@@ -425,7 +382,6 @@ In progressive redundancy the number of replicas needed is minimized. If with tr
 
 Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focuses more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
-%Delete? We don't use load balancing at all
 %TODO Load balancing is a proactive fault tolerence technique, short mention?
 \subsection{Load balancing} \label{sec:background_load_balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under-loaded nodes and thus improving the overall performance. Load balancing techniques for distributed environments consists of two parts, resource allocation and task scheduling. 
@@ -438,12 +394,6 @@ Load balancing algorithms can be divided into three categories based on the init
 \end{itemize}
 
 Load balancing is often divided into two categories, namely static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
-
-\iffalse %Shorten?
-A dynamic load balancing can work in two ways, either distributed or non-distributed. In the distributed case the load balancing algorithm is run on all the nodes and the task of load balancing is shared among them. This implies that each node has to communicate with all the others, effecting the overall performance of the network. % true also for static load balancing? i.e. distr/non-distr
-
-In the non-distributed case the load balancing algorithms is done by only a single node or a group-node. Non-distributed load balancing can be run in semi-distributed form, where the nodes are grouped into clusters and each such cluster has a central node performing the load balancing. Since there is only one load balancing node the number of messages between the nodes are decreased drastically but instead we get the disadvantage of the central node becoming a single-point of failure and a bottleneck in the system. Therefore this centralized form of load balancing is only useful for small networks~\cite{perfAnalysisLoadCloud}.
-\fi
 
 \section{Task scheduling} \label{sec:background_task_sched}
 Task scheduling is the process of mapping tasks to available resources. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
@@ -551,15 +501,6 @@ A typical example of a long running application is stream data processing, where
 \includegraphics[scale=0.5]{images/app_model.pdf} 
 \caption[Application model]{An application model where a producer transmits data to a task $T$, which transforms the data, and sends the result to a consumer. $T$ may be seen as a task or service running in a cluster and requiring a certain level of reliability.}\label{fig:app_model}
 \end{figure}
-
-\iffalse
-COMMENT: we should have some real examples of applications which would benefit from using our framework. ?
-\begin{itemize}
-\item telephone system?
-\item video trans-coding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
-\item Long running simulations? \cite{relModelDistSimSystem}
-\end{itemize}
-\fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, performs the same computations and produces the same output. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $T$ 4 times. It is also possible to have several tasks replicated, this scenario is shown in \cref{fig:extended_app_model}.
@@ -740,8 +681,6 @@ Finally, since assuming that all nodes are within the same cluster and that the 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
 To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one could simply place a new replica on the most reliable node available, until the required level is reached. A greedy scheduling algorithm doing this, similar to one presented in~\cite{effTaskReplMobGrid}, and which fulfills~\cref{eq:required_rel} is shown below:
 
-%First we find which nodes that are available for placing a replica on. Secondly we filter the nodes with a load lower than a preferred level. If no preferred node is available we choose an unpreferred one.
-
 \begin{algorithm}[H]
 	\caption{Greedy scheduling algorithm to fulfill a given reliability} \label{alg:scheduling}
 	\begin{algorithmic}[1]
@@ -856,7 +795,7 @@ To cope with this, a selection process must take place in which a single node is
 
 The algorithm is shown below:
 
-\begin{algorithm}[!h]	%!h forces the algorithm to be here (!-force h-here)
+\begin{algorithm}[!h]
 	\caption{Handling a failed node} \label{alg:node_failure}
 	\begin{algorithmic}[1]
 	\State $operational\ nodes\gets $ operational nodes
@@ -900,12 +839,6 @@ Since using all registered times $t_R$ to fit the log-logistic distribution, and
 As described in~\cref{design:failure_distribution}, only the three latest failure times for a node are used to determine its \emph{MTBF}. This allows for adapting a node's \emph{MTBF} in case it starts failing more or less often. 
 
 However, if a node starts dying more often, the model needs three new failure times before the \emph{MTBF} has been update to correctly reflect its new behaviour. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm, to predict when a node is about to fail more or less often, and adapt its \emph{MTBF} before it actually happens.
-
-% TODO machine learning section?
-\iffalse
-TODO: If we have time: - we didn't :) Move this to discussion?
-Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day~\cite{implicationsOfFailures, studyOfFailures}.
-\fi
 
 \section{Implementation} \label{sec:design_implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
