@@ -53,7 +53,6 @@
 \examiner{Christian Nyberg, \href{mailto:christian.nyberg@eit.lth.se}{\texttt{christian.nyberg@eit.lth.se}}}
 
 \date{\today}
-%\date{January 16, 2015}
 
 \acknowledgements{
 We would like to thank our supervisor Björn Landfeldt and our examiner Christian Nyberg for their valuable input. We would also like to express our gratitude and appreciation to the people at MAPCI and Ericsson for support during the work.
@@ -81,8 +80,6 @@ We would like to thank our supervisor Björn Landfeldt and our examiner Christia
 
 \newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ }}
 \newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
-
-
 
 
 \begin{document}
@@ -205,24 +202,16 @@ Each domain in a grid usually has a centralized scheduling service called Resour
 
 The reliability of the grid computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them~\cite{cloudServiceRel}.
 
-%COPIED:The grid computing system has emerged as an important new field, distinguished from conventional distributed computing systems by its focus on large-scale resource sharing, innovative applications, and, in some cases, high performance orientation. \cite{hierarchicalRelModeling}.
-
 \subsubsection{Cluster}
 A cluster system is usually a number of identical units managed by a central manager. It is similar to a grid, but differ in that resources are geographically located at the same place. The resources work in parallel under supervision of a single administrative domain. From the outside it looks like a single computing resource~\cite{compStudyLoadAndCloud}.
 
 \subsubsection{Cloud}
 Clouds has been described as the next generation of grids and clusters. While it is similar to clusters, the main difference is that cloud consists of multiple domains~\cite{compStudyLoadAndCloud}. The domains can be geographically distributed, and software and hardware components are often heterogeneous, and therefore analyzing and predicting workload and reliability is usually very challenging~\cite{surveyReliabilityDistr}.
 
-%COPIED: "Cloud computing is a style of computing where service is provided across the Internet using different models and layers of abstraction [4]. It refers to the applications delivered as services [5] to the mass, " \cite{faultToleranceChallenges}
-
-%COPIED: Cloud computing is different from but related with grid computing, utility computing and transparent computing. Grid computing [1] is a form of distributed computing whereby a "super and virtual computer" composed of a cluster of networked, loosely-coupled computers acts in concert to perform very large tasks.”
-
 \subsubsection{Heterogeneous distributed computing systems}
 A Heterogeneous Distributed Computing System (HDCS), is a system of numerous high-performance machines connected in a high-speed network. Therefore, high-speed processing of computational heavy applications is possible~\cite{algoMinExTime}. %TODO add info
 
 The majority of distributed service systems can be viewed as a Centralized Heterogeneous Distributed System (CHDS). A CHDS consists of heterogeneous sub-systems which are managed by a centralized control center. The sub-systems have various operating platforms and are connected in diverse topological networks~\cite{studyServiceRel}.
-
-%COPIED: Most of the distributed service systems can be modeled as a CHDS. This type of distributed systems consists of heterogeneous sub-systems with various operating platforms on different computers in diverse topological networks, which are managed by a control center. The heterogeneous sub-distributed systems are composed of different types of computers with various operating systems connected by diverse topologies of networks. These sub-systems exchange data with virtual machine through system service provider interface. They are connected with virtual nodes by routers \cite{studyServiceRel}.
 
 \subsection{Dynamic versus static environments} \label{subsec:background_dyn_stat_env}
 A distributed computing environment can be either static or dynamic.
@@ -268,12 +257,8 @@ The Byzantine fault model allows nodes to continue interaction after failure. Co
 Furthermore, the system's behaviour can be inconsistent and arbitrary~\cite{surveyFaultParallel}. Nodes can fail (become Byzantine) at any point of time and stop being Byzantine at any time. A Byzantine node can send no response at all, or it can send an incorrect result. All Byzantine nodes might send the same incorrect result, thereby making it hard to identify malicious nodes~\cite{selfAdaptRel}. %Kan man detektera malicious nodes? 
 The Byzantine fault model is very broad since it allows failed nodes to continue interacting, but it is therefore also very difficult to simulate and to analyze.
 
-% COPIED: in which processors may behave in arbitrary, even malevolent, ways). System correctness was always proved with respect to a specific fault model \cite{faultTolerantFundamentals}
-
 \subsubsection{Fail-stop fault model} \label{subsub:background_fail_stop}
 The fail-stop model, also called the crash-stop model, is in comparison to the Byzantine fault model much simpler. When a node fails it stops producing any output and stops interacting with the other nodes~\cite{faultTolerantFundamentals}. This allows for the rest of the system to automatically detect when a node has failed. Due to its simplicity, it does not handle subtle failures such as memory corruption but rather failures such as a system crash or if the system hangs~\cite{surveyFaultParallel}. %The fail-stop model has been criticized for not representing enough real-world failures. LAST SENTENCE NEEDED?
-
-%COPIED: This failure model has the practical implication that avoids the use of complicated software and/or hardware replication systems for recovering tasks from failed server. Consequently, the application cannot be successfully serviced by the system if at least one task remains unprocessed at a failed server. \cite{perfRelNonMarkovian}
 
 \subsubsection{Crash-failure fault model}
 The crash failure model is quite alike the fail-stop model with the difference that nodes do not automatically detect the failure of a node~\cite{faultTolerantFundamentals, adaptiveAgentReplication}.
@@ -395,9 +380,6 @@ Fault tolerance by the use of periodic checkpointing and rollback recovery is th
 
 Checkpointing is a fault tolerance technique which periodically saves the state of a computation to a persistent storage~\cite{relGridSystems, surveyFaultParallel}. In the case of failure, a new process can be restarted from the last saved state, thereby reducing the amount of computations needed to be redone.
 
-%COPIED
-%The basics, however, are checkpoint recovery and task replication. The former is a common method for ensuring the progress of a long-running application by taking a checkpoint, i.e. saving its state on permanent storage periodically. A checkpoint recovery is an insurance policy against failures. In the event of a failure, the application can be rolled back and restarted from its last checkpoint—thereby bounding the amount of lost work to be re-computed \cite{effTaskReplMobGrid}
-
 \subsection{Rollback recovery} \label{subsec:background_rollback}
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and all actions replayed, thereby re-constructing the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the process to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not having to replay all actions, but only those from the latest checkpoint.
 
@@ -480,33 +462,12 @@ Many studies have been done aiming at improving reliability by improved task all
 
 Furthermore, taking many factors in account when scheduling tasks results in a big overhead, thus reducing performance. 
 
-%COPIED:
-%The problem of finding an optimal task allocation with maximum system reliability has been shown to be NP-hard; thus, existing approaches to finding exact solutions are limited to the use in problems of small size. This paper presents a hybrid particle swarm optimization (HPSO) algorithm for finding the near-optimal task allocation within reasonable time. \cite{taskAllocationSwarm}.
-
 \section{Monitoring} \label{sec:background_monitoring}
 Monitoring is common in distributed system for being able to detect when resources fail. A commonly used technique is the use of heartbeats, where light-weight messages are sent, usually using UDP, between resources, informing each other that they are still operational. The heartbeats are periodically sent with a certain frequency. If a resource stops receiving heartbeats from another resource, it is assumed to have died. Another similar technique is to send a message and wait for a reply, and if no reply is received within a certain time, the resource is assumed to be dead~\cite{probabilistic_recovery}.
 
 Monitoring is also an important part of dynamic fault-tolerant techniques which adapts to changing system behaviour. Depending on which parameters are taken into account in the reliability model or scheduling algorithm used, the system resources must be monitored and various information must be shared. Resource information, such as current load of a resource, can be shared using either a pull or push strategy. If using a centralized storage, a pull strategy involves the storage requesting information from the resources, while a push strategy involves the resources sending the information to the storage without it being requested.
 
 Furthermore, the monitoring can take place in various forms. Using pull/push strategy, the information is sent from the resources to some monitoring system. But the monitoring system can also collect the information needed, e.g. by scanning logs~\cite{probabilistic_recovery}.
-
-\iffalse
-COPIED:
-Heartbeat-based monitors in which lack of a timely heartbeat message from the target indicates failure.
-Test-based monitors which send a test message to the target and wait for a reply. Messages may range from OSlevel pings and SNMP queries to application level testing, e.g., a test query to a database object.
-End-to-end monitors which emulate actual user requests. Such monitors can identify that a problem is somewhere along the request path but not its precise location.
-Error logs of different types that are often produced by software components. Some error messages can be modeled as monitors which alert when the error message is produced.
-Statistical monitors which track auxiliary system attributes such as load, throughput, and resource utilization at various measurement points, and alarm if the values fall outside historical norms.
-Diagnostic tools such as file system and memory checkers (e.g., fsck) that are expensive to run continuously, but can be invoked on demand. [Probabilistic Model-Driven Recovery in Distributed Systems]
-
-COPIED:
-Globus [9] provides a heartbeat service to monitor running processes to detect faults \cite{effTaskReplMobGrid}
-
-COPIED
-Nodes can alternate between working correctly and being crashed in our model. Hence, the status of a node is modeled by a state machine with two states, failed and working. Failed nodes do not send messages nor do they perform any computation. Working nodes execute faithfully the diagnosis procedure. In this section, we derive lower bounds on the diagnostic latency, start-up time, and state holding time achievable by any heartbeat-based diagnosis algorithm in completely connected networks. The maximum time between two consecutive heartbeats arriving from a continuously working node at any other node in the system sets a limit on how early failed nodes can be identified by the absence of a heartbeat. \cite{distDiagnosis}
-
-COPIED: "“The most basic form of monitoring is a simple heartbeat system. A monitor process listens for periodic messages from the monitored components. The message simply indicates that the component continues to function correctly enough to send messages. " \cite{surveyFaultParallel}.
-\fi
 
 \section{Virtualization and containers} \label{sec:background_virtualization}
 Virtualization is a broad term of creating a virtual version of something, e.g. a server, a hard drive or a private network (VPN). The advantages of virtualization are savings in space and hardware cost. Furthermore, the system becomes more dynamic. For instance, it is possible to run several virtual servers on one physical server. With virtualization the software and the hardware gets separated which enables the possibility of moving a virtual machine, a VM, from one physical location to another \cite{virtualMachine}. This also allows for starting several identical servers, by starting several virtual machines using the same image.
@@ -547,24 +508,6 @@ Furthermore, we assume the replicated tasks are deterministic and always produce
 We also assume the case where all nodes are within the same cluster, connected with high-bandwidth and low-latency links, and all nodes are reachable from every other node. We therefore assume that the time it takes to send a message between two nodes is the same for all nodes. Therefore, it is assumed that the replication time described in~\cref{sec:replication_time} does not depend on between which nodes the replication is done.
 
 By the use of these limitations we avoid unnecessary complexity in form of checkpointing and consensus. The impact of this will be discussed later in~\cref{ch:discussion}.
-
-
-\iffalse
-COPIED:
-
-Many engineers and researchers base their reliability models on the assumption that components of a system fail in a statistically independent manner. This assumption is often violated in practice because environmental and system specific factors contribute to correlated failures, which can lower the reliability of a fault tolerant system. A simple method to quantify the impact of correlation on system reliability is needed to encourage models explicitly incorporating correlated failures. Previous approaches to model correlation are limited to systems consisting of two or three components or assume that the majority of the subsets of component failures are statistically independent. \cite{discContRelModel}
-
-the interrelationship constraint between task modules has not been taken into account in calculation of distributed system reliability (DSR). In distributed simulation, the LPs simulation advances are bound by synchronization constraint, which will affect the executive time of system components. \cite{relModelDistSimSystem}
-
-Furthermore failure data which they have collected for their experiments through in-house testing cannot be compared with failures that can occur under actual operational environment \cite{surveyReliabilityDistr}
-
-A lot of researchers are of the view that service providers must provide some other detail to compute reliability of both type of services i.e. atomic service and composite service. Such as, external services it uses, how service are glued together in composite service, how frequently they call each other, and flow graph describing behavior of service [2]. Service Oriented Reliability Model (SORM) [18] computed reliability of atomic and composite services exploiting distinct technique \cite{surveyReliabilityDistr}
-
-Given the failure probability Pfik of each one of the mi replicas Ti k of task Ti , the new failure probability P fi0 for task Ti is:
-0 mi Y
-Pfi =Pfi· Pfik. (2) k=1
-The above corresponds to the probability of the event “all the replicas and the original task fail”. Respectively, the success probability is equal to the probability of the event “the original task or at least one of its replicas executes successfully”. The number of replicas issued depends on the failure probabilities of the original tasks and on the desired fault tolerance level in the Grid infrastructure. \cite{effTaskReplMobGrid}
-\fi
 
 \section{System model} \label{sec:design_system_model}
 In this section, we describe the system and application models employed in this work.
@@ -616,19 +559,6 @@ COMMENT: we should have some real examples of applications which would benefit f
 \item video trans-coding when streaming video to mobile phone? In this case one could imagine a case where a video file is located on a server with limited processing power. The video could therefore be streamed to another server in the cluster, with more processing power, which encodes it on the fly and stream the result to the user. To keep a continuous stream of data to the user, even in the case of failure of the encoding server, one could replicate the task and stream the video to several servers which encode and transmit the results to the user. While this would increase the amount of transmitted data to the user's mobile, it would also increase the user experience.
 \item Long running simulations? \cite{relModelDistSimSystem}
 \end{itemize}
-\fi
-
-\iffalse
-
-COPIED:
-“Services in large-scale distributed environments (e.g., The Internet of Things [15]) are required to stay and continue operating even in the presence of malicious and unpredictable circumstances; that is, their processing capacity must not be significantly affected by the user requirements [11,8] “ \cite{imprRelAdaptRL}.
-\\\\
-COPIED: “Most workloads are large-scale long-running 3D scientific simulations, e.g. for nuclear stockpile stewardship. These applications perform long periods (often months) of CPU computation, interrupted every few hours by a few minutes of I/O for checkpointing. “ \cite{studyOfFailures}
-\\\\
-COPIED: “given the long execution times of many of the parallel applications that we are targeting – those in the scientific domain at national laboratories and supercomputing centers. “ \cite{implicationsOfFailures}. 
-\\\\
-COPIED: "The end result is that long-running, distributed applications are interrupted by hardware failures with increasing frequency" \cite{surveyFaultParallel}.
-
 \fi
 
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
@@ -975,20 +905,6 @@ However, if a node starts dying more often, the model needs three new failure ti
 \iffalse
 TODO: If we have time: - we didn't :) Move this to discussion?
 Furthermore, we will take node CPU usage, and the time of day of the event into account in our fault model. This is based on that resource failure depends on both system load and time of day~\cite{implicationsOfFailures, studyOfFailures}.
-\fi
-
-\iffalse
-COPIED: “adaptation to changing conditions is achieved by both adaptive scheduling and adaptive execution” \cite{evalOfGridRel}.
-
-COPIED:
-"the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
-
-%TODO predict future \emph{MTBF}? machine learning? cpu, memory usage, network load, etc.
-
-COPIED:
-“The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
-
-COPIED: “in the proposed system, we need to determine the degree of over-provisioning or job replicas as small as possible in order to minimize the system overhead “ \cite{designFaultTolerantSched}.
 \fi
 
 \section{Implementation} \label{sec:design_implementation}
