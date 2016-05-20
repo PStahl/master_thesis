@@ -19,6 +19,8 @@
 \crefname{app}{Appendix}{Appendices}
 \crefname{procedure}{Algorithm}{Procedure}
 
+\crefname{exp}{experiment}{experiments}
+\Crefname{exp}{Experiment}{Experiments}
 
 \newtheorem{definition}{Definition}[chapter]
 \setcounter{secnumdepth}{3}
@@ -33,7 +35,6 @@
 
 \crefname{function}{function}{functions}
 \Crefname{function}{Function}{Functions}
-
 
 \algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
 
@@ -1087,7 +1088,7 @@ The computational environment, with an application consisting of a consumer, two
 
 \section{Experiments}
 
-\subsection{Measurement of time $t_R$} \label{sec:eval_time_t}
+\subsection{Measurement of time $t_R$} \label[exp]{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational. It depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
 
 The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to model the variation correctly, an experiment was conducted where times were registered and later used to find the best fitting distribution.
@@ -1110,14 +1111,14 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/distribution_results_30.pdf} 
-\caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the first experiment with MTBF of nodes set to 30 seconds.}
+\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the first experiment with MTBF of nodes set to 30 seconds.}
 \label{fig:distribution_results_30}
 \end{figure} 
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/distribution_results_10.pdf} 
-\caption{Result for test~\ref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with MTBF of nodes set to 10 seconds.} \label{fig:distribution_results_10}
+\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with MTBF of nodes set to 10 seconds.} \label{fig:distribution_results_10}
 \end{figure}
 
  \begin{table}[hbt!]
@@ -1130,12 +1131,12 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 	  10 s & 107.3 & 597 & 34\\
 	   \hline
 	\end{tabular}
-	 \caption{Average, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in test~\ref{sec:eval_time_t}}
+	 \caption{Average, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in~\cref{sec:eval_time_t}}
 	 \label{table:tr}
 	 \end{center}
  \end{table} 
 
-\subsection{Measurement of node failure detection time} \label{subsec:eval_node_fail_time}
+\subsection{Measurement of node failure detection time} \label[exp]{subsec:eval_node_fail_time}
 % Is this needed really?
 As described in~\cref{sec:design_monitoring}, heartbeats are used to determine whether or not another node is operational. If no heartbeat is received from a node within $t_{timeout}$ seconds (0.5 seconds in the experiments), it is assumed dead. 
 
@@ -1149,7 +1150,7 @@ The standard deviation of the times registered was 28.8.
 % If higher/lower than theoretical, give a explanation
 %TODO measure again, check time between killing and printing time.
 
-\subsection{Measurement of replication time $t_r$} \label{sec:eval_repl_time}
+\subsection{Measurement of replication time $t_r$} \label[exp]{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. In Calvin, the state of a task corresponds to the state of the actor representing the task, and consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
 In the following two experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtime and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment the state was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
@@ -1179,7 +1180,7 @@ As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of the actor's port queue, and the replication was done between two runtimes on the same laptop.} \label{fig:replication_time_laptop}
+\caption{Result for~\cref{sec:eval_repl_time}. The average replication time as a function of state size, where the state size was increased by increasing the size of the actor's port queue, and the replication was done between two runtimes on the same laptop.} \label{fig:replication_time_laptop}
 \end{figure}
 
 \subsubsection*{Results - replication time parts}
@@ -1195,25 +1196,25 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_variable.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_server_variable}
+\caption{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_server_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_queue.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_server_queue}
+\caption{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_server_queue}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_variable.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_laptop_variable}
+\caption{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_laptop_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_queue.pdf} 
-\caption{Result for test~\ref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_laptop_queue}
+\caption{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_laptop_queue}
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
@@ -1235,7 +1236,7 @@ However, in a real setting, the replication time will vary depending on the stat
 	  laptop/laptop & 100 & 34.019 & 1.412 & 0.041 \\
 	   \hline
 	\end{tabular}
-	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
+	 \caption{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
 	 \label{table:replication_time_variation_variable}
 	 \end{center}
  \end{table}
@@ -1254,13 +1255,13 @@ However, in a real setting, the replication time will vary depending on the stat
 	  laptop/laptop & 100 & 50.893 & 1.066 & 0.021 \\
 	   \hline
 	\end{tabular}
-	 \caption{Result for test~\ref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
+	 \caption{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
 	 \label{table:replication_time_variation_queue}
 	 \end{center}
  \end{table}
  
 
-\subsection{Ensuring a certain reliability level} \label{sec:eval_rel_level}
+\subsection{Ensuring a certain reliability level} \label[exp]{sec:eval_rel_level}
 In this experiment, two runtimes were started on each of the unstable servers. Each runtime was given a \emph{MTBF} of 20 seconds.
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required reliability was set to 0.98.
@@ -1277,12 +1278,12 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/reliability.pdf}
-\caption{Result for test~\ref{sec:eval_rel_level}. Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
+\caption{Result for~\cref{sec:eval_rel_level}. Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
 \end{figure}
 
 \subsection{Optimal number of replicas}
-\subsubsection{Chosing the most reliable} \label{sec:eval_opt_nbr_replicas}
-In this experiment, the two runtimes were started on each of the unstable servers. The \emph{MTBF} for the various runtimes varied. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}. 
+\subsubsection{Choosing the most reliable} \label[exp]{sec:eval_opt_nbr_replicas}
+In this experiment, the two runtimes were started on each of the unstable servers. The \emph{MTBF} for the various runtimes varied. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}.
 
 \begin{table}[h]
 	\begin{center}
@@ -1322,52 +1323,31 @@ As shown in the figures, the number of replicas decreased over time, from three 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/total.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Total number of replicas.} \label{fig:exp_opt_replicas_total}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Total number of replicas.} \label{fig:exp_opt_replicas_total}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_30.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_15.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_75.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
 \end{figure}
 
-\subsubsection{Optimal replicas}
-\label{sec:eval_opt_nbr_replicas_2}
-In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a MTBF of 25 seconds, while the other three were not killed. Since the three nodes were not killed, they were not actually \emph{unstable}, but the system used the default MTBF of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas when the optimization algorithm runs, not only when a node fails. The MTBF for the nodes used in this experiment are shown in \cref{table:exp_nodes_means}.
+\subsubsection{Optimal replicas} \label[exp]{sec:eval_opt_nbr_replicas_2}
+In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a MTBF of 25 seconds, while the other three were not killed. Since these three were not killed, they were not actually \emph{unstable}, but the system used the default MTBF of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas when the optimization algorithm runs, not only when a node fails. 
 
 The required reliability in the experiment was set to 0.999. This results in that as long as the two reliable nodes are available, only two replicas are needed, but if one of them or both are dead, three replicas are needed to reach the required reliability. Finally, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
-
-
-\begin{table}[h]
-	\begin{center}
-	\begin{tabular}{| c | c |}
-	 \hline
-	 node & MTBF (s) \\
-	 \hline		
-	  $dave$ & 10 \\
-	  $tim$ & 10 \\
-	  $mark$ & 10 \\
-	  $kevin$ & 25 \\
-	  $jerry$ & 25 \\
-	   \hline
-	\end{tabular}
-	 \caption{Mean-time-between-failures for the five runtimes in the experiment~\ref{sec:eval_opt_nbr_replicas_2}.}
-	 \label{table:exp_nodes_means_2}
-	 \end{center}
- \end{table}
-
 
 \subsubsection*{Results}
 %TODO include info about replication time
@@ -1376,23 +1356,23 @@ The test ran for 5 minutes. As mentioned, the default MTBF is 10 seconds when no
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/total.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Total number of replicas.} \label{fig:exp_opt_replicas_total_2}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Total number of replicas.} \label{fig:exp_opt_replicas_total_2}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_25.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_10.pdf}
-\caption{Result for test~\ref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
 \end{figure}
 
 
-\subsection{Self-adaptive reliability model} \label{sec:eval_adaptive_rel_model}
+\subsection{Self-adaptive reliability model} \label[exp]{sec:eval_adaptive_rel_model}
 In this experiment, the runtimes were started on each of the unstable servers. Each runtime was given a \emph{MTBF} of 25 seconds. But, instead of picking times to sleep from a normal distribution as described in~\cref{sec:simulating_node_failure}, the time to sleep between failures were calculated by~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. 
 
 The required reliability was in this experiment set to 0.99999. This value was chosen so that the number of replicas needed would vary between 3 and 5, depending on the current state of the system.
@@ -1432,16 +1412,16 @@ The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the num
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_replicas.pdf}
-\caption{Result for test~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_rel}
+\caption{Result for~\cref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_rel}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_node_rels.pdf}
-\caption{Result for test~\ref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
+\caption{Result for~\cref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
 
-\subsection{Energy efficient for many applications} \label{sec:eval_energy_efficient}
+\subsection{Energy efficient for many applications} \label[exp]{sec:eval_energy_efficient}
 In this experiment, two runtimes were started on each of the unstable servers. The \emph{MTBF} for the runtimes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
 
 Furthermore, in this experiment five applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
@@ -1457,28 +1437,28 @@ The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/total.pdf}
-\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of nodes used.} \label{fig:eval_energy_efficient_total}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of nodes used.} \label{fig:eval_energy_efficient_total}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_40.pdf}
-\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_15.pdf}
-\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_75.pdf}
-\caption{Result for test~\ref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
 \end{figure}
 
-\subsection{Considering nodes' load} \label{sec:eval_replaceable_model}
+\subsection{Considering nodes' load} \label[exp]{sec:eval_replaceable_model}
 Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, we conducted an experiment to show that system avoids placing replicas on nodes with a CPU usage above 15 percent. 
 
 In this experiment, one runtime was started on each of the unstable servers. Three of the runtimes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a MTBF of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a MTBF of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
@@ -1493,19 +1473,19 @@ The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the C
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/loads/usages.pdf}
-\caption{CPU usages in percent for the nodes used in test~\ref{sec:eval_replaceable_model}.} \label{fig:eval_replaceable_model_usages}
+\caption{CPU usages in percent for the nodes used in~\cref{sec:eval_replaceable_model}.} \label{fig:eval_replaceable_model_usages}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/loads/loaded.pdf}
-\caption{Result for test~\ref{sec:eval_replaceable_model}. The number of replicas over time for node \emph{Kevin}.} \label{fig:eval_replaceable_model_loaded}
+\caption{Result for~\cref{sec:eval_replaceable_model}. The number of replicas over time for node \emph{Kevin}.} \label{fig:eval_replaceable_model_loaded}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/loads/unloaded.pdf}
-\caption{Result for test~\ref{sec:eval_replaceable_model}. The number of replicas per node for \emph{Tim}, \emph{Mark}, \emph{Jerry}, and \emph{Dave}.} \label{fig:eval_replaceable_model_unloaded}
+\caption{Result for~\cref{sec:eval_replaceable_model}. The number of replicas per node for \emph{Tim}, \emph{Mark}, \emph{Jerry}, and \emph{Dave}.} \label{fig:eval_replaceable_model_unloaded}
 \end{figure}
 
 \chapter{Discussion} \label{ch:discussion}
