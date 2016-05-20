@@ -1552,45 +1552,16 @@ Furthermore, since the replication time as mentioned depends on the number of ot
 
 If a single node is used to handle all lost replicas, one must consider in which order they are handled. One way would be to replicate the actors with the biggest states first in order to achieve a uniform distribution of the replication times, or to handle the highest priority tasks first as described in~\cref{ch:discussion}. We leave the investigation of which algorithm is the optimal to future work. 
 
-Furthermore, our model does not guarantee that the average of the actual reliability is above the required, it only aims at keeping the current reliability higher than the required. This allows for the user specifying various reliability requirements. One such requirement could be that the time the system is in a vulnerable state should not exceed some threshold. One possible way of keeping the average reliability above a predefined level is further described in \cref{subsec:future_extended_model}.
-
-Our model is also to be tested using geographically distributed clusters. If such a case, one must take into account that the replication time will be higher when replicating to a node in another cluster than within the same cluster. Furthermore, whether or not the heartbeat system and handling of lost nodes should be done globally or only locally within a cluster is yet to be investigated.
-
-With the assumption of statistically independent failures, the reliability of a node depends only on the time $t$, and the node's \emph{MTBF}. However, since failures are likely to not be statistically independent, they should be taken into account in the reliability model. For example, if the switch of a rack fails, all nodes in that rack are unavailable. Therefore, the reliability of when having two replicas placed on two nodes in the same rack, is likely less than the reliability of two replicas placed on nodes in different racks.
-
-%TODO
-\iffalse
-NOTES:
-Replication impose extra burden on the system as additional resources are needed and computational power is wasted. By combining checkpointing techniques with active replication, the number of replicas needed could possible be decreased.(~\cite{adaptiveCheckPointAndRep} combines checkpointing and replication)
-\\\\
-Predict future failures - machine learning (many parameters could be taken into account), and when the probability of failure reaches above a certain threshold, the running tasks on that node could be migrated. A high reliability in failure prediction allows for fewer replicas to be needed.
-\\\\
-Implement consensus in Calvin system
-\\\\
-Accounting for link failures
-\\\\
-Test on highly unreliable systems during extreme load
-\fi
-
-%Should we have this section?
-\section{Extended model} \label{subsec:future_extended_model}
-Reliability of server’s availability and scalability (such as File Server, DB servers, Web servers, and email servers, etc.), communication infrastructure, and connecting devices~\cite{surveyReliabilityDistr}.
-
-For measuring reliability more accurate, more factors must be included (not only node failures). The overall reliability can then be expressed as:
-
-\begin{equation} \label{eq:overall_reliability}
-R(t) = R_{1}(t) \cdot R_{2}(t) \cdots R_{n}(t)
-\end{equation}
-where $R_{k}(t)$ is the probability that factor $k$ is free from failures during time $t$. Some factors to consider are software (the program itself), OS (or the device executing the program), various hardware components, network, electrical supply and load. The factors can be divided into static and dynamic factors. The static factors are those which does not change that frequently, such as electrical supply or hardware/software while the dynamic factors are those changing more frequently, for instance the current load (or load average for last 5 minutes etc). 
-
-By adding more parameters, the assumption that failures are independent will likely no longer hold. For example, if two nodes are in the same rack, and the rack's switch fails, both nodes will lose their connectivity to the rest of the cluster. The reliability of a given node will therefore also depend on which nodes currently hold a replica.
-
-Keeping the average reliability above a required level could be could be achieved be calculating the current average based on the quote between \emph{MTBF} and $t_r$, replication time.
-In the simplest case, when all nodes have the same \emph{MTBF} this could be achieved by using \cref{eq:avg_rel_same_MTBF}.
+Furthermore, our model does not guarantee that the average of the actual reliability is above the required, it only aims at keeping the current reliability higher than the required. This allows for the user specifying various reliability requirements. One such requirement could be that the time the system is in a vulnerable state should not exceed some threshold. Keeping the average reliability above a required level could be could be achieved be calculating the current average based on the quote between \emph{MTBF} and $t_r$, replication time. In the simplest case, when all nodes have the same \emph{MTBF} this could be achieved by using \cref{eq:avg_rel_same_MTBF}.
 
 \begin{equation} \label{eq:avg_rel_same_MTBF}
 	\frac{(MTBF/n - t_{R})}{(MTBF/n)} \cdot R^n + \frac{t_{R}}{(MTBF/n)} \cdot R^{n-1}
 \end{equation}
+
+Our model is also to be tested using geographically distributed clusters. If such a case, one must take into account that the replication time will be higher when replicating to a node in another cluster than within the same cluster. Furthermore, whether or not the heartbeat system and handling of lost nodes should be done globally or only locally within a cluster is yet to be investigated.
+
+Finally, assuming statistically independent failures, the reliability of a node depends only on the time $t$, and the node's \emph{MTBF}. However, since failures are likely to not be statistically independent, they should be taken into account in the reliability model. For example, if the switch of a rack fails, all nodes in that rack are unavailable. Therefore, the reliability of when having two replicas placed on two nodes in the same rack, is likely less than the reliability of two replicas placed on nodes in different racks.
+
 
 \chapter{Conclusions} \label{ch:conclusions}
 The implementation of our model provides a platform to use for future experiments.
