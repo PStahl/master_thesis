@@ -289,7 +289,7 @@ The Mean-Time-To-Failure for a component is the average time it takes for a comp
 The Mean-Time-Between-Failure for a component is the average time between successive failures for that component.
 \end{definition}
 
-The MTBF can be calculated as
+The \emph{MTBF} can be calculated as
 
 \begin{equation} \label{eq:MTBF}
 MTBF = \frac{total\ time}{number\ of\ failures}
@@ -497,7 +497,7 @@ The rest of this chapter is composed as follows, in \cref{sec:design_limitations
 \section{Limitations} \label{sec:design_limitations}
 As mentioned in~\cref{subsec:background_failure_distribution}, a commonly used assumption is having fully reliable links between nodes. We also make this assumption, and thereby limit our model to only consider node failures. However, the reliability model used in this thesis could easily be replaced by a more sophisticated one, since the scheduling algorithm presented in~\cref{sec:design_sched_alg} is independent of the reliability model used. Also, we do not distinguish between different kinds of failures, hence the reason for why a node failed is not important in our model. The reason of failures could however be taken into account in a more sophisticated reliability model.
 
-Furthermore, we assume the replicated tasks are deterministic and always produces the correct result for a given input. We can thereby define reliability as the probability of producing a result and not lose any data, instead of the probability of producing the correct result as done in~\cite{selfAdaptRel, dynAdaptRepl, relModelWebServices}.  However, as mentioned before, this can be solved by extending our model with consensus algorithms such as majority voting. Since we do not gain any extra useful information by doing so, we have chosen to leave this to future work.
+Furthermore, we assume the replicated tasks are deterministic and always produces the correct result for a given input. We can thereby define reliability as the probability of producing a result and not lose any data, instead of the probability of producing the correct result as done in~\cite{selfAdaptRel, dynAdaptRepl, relModelWebServices}. However, as mentioned before, this can be solved by extending our model with consensus algorithms such as majority voting. Since we do not gain any extra useful information by doing so, we have chosen to leave this to future work.
 
 We also assume the case where all nodes are within the same cluster, connected with high-bandwidth and low-latency links, and all nodes are reachable from every other node. We therefore assume that the time it takes to send a message between two nodes is the same for all nodes. Therefore, it is assumed that the replication time described in~\cref{sec:replication_time} does not depend on between which nodes the replication is done.
 
@@ -609,9 +609,9 @@ Like~\cite{selfAdaptRel}, only system related failures are considered, assuming 
 \subsubsection{Failure distribution} \label{design:failure_distribution}
 A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. 
 
-While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, the MTBF of a node can by dynamically adapted. This is accomplished by using the time of the three latest failures to determine the MTBF as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
+While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, the \emph{MTBF} of a node can by dynamically adapted. This is accomplished by using the time of the three latest failures to determine the \emph{MTBF} as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
 
-Since we assume the MTBF for a node is constant during a period of time, failures can be modeled using a Poisson process. Using a resource's \emph{MTBF}, the reliability for that resource can using~\cref{eq:Poisson} be expressed as
+Since we assume the \emph{MTBF} for a node is constant during a period of time, failures can be modeled using a Poisson process. Using a resource's \emph{MTBF}, the reliability for that resource can using~\cref{eq:Poisson} be expressed as
  
 \begin{equation} \label{eq:resource_reliability}
 R(t) = e^{-t/MTBF}
@@ -625,9 +625,9 @@ F(t) = 1- e^{-t/MTBF}
 
 In our case \emph{t} represents the time it take to detect a node failure and create a new replica, and is further discussed in~\cref{sec:design_time_t}.
 
-In order to use~\cref{eq:Poisson_no_failures}, the MTBF of a node must be available, and to calculate a node's MTBF at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the MTBF will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
+In order to use~\cref{eq:Poisson_no_failures}, the \emph{MTBF} of a node must be available, and to calculate a node's \emph{MTBF} at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the \emph{MTBF} will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
 
-As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the MTBF for the nodes in the system. By using the latest three failure times, one can adapt the MTBF as nodes start failing more or less often. 
+As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the \emph{MTBF} for the nodes in the system. By using the latest three failure times, one can adapt the \emph{MTBF} as nodes start failing more or less often. 
 
 
 \section{Monitoring} \label{sec:design_monitoring}
@@ -747,12 +747,12 @@ As mentioned, the time $t_r$ is the time it takes to replicate a task. Depending
 t_{r} = t_{get\ state} + t_{serialize\ state} + t_{transmit\ state} + t_{de-serialize\ state} + t_{create\ new} + t_{response}
 \end{equation} 
 
-In our model, the time $t_{R}$ is measured and stored every time a replication takes place. Since $t_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $t_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $t_R$. \Cref{fig:replicas_depending_on_t} shows how the number of replicas needed to reach a reliability above 0.99, using nodes with a MTBF of 10 seconds, vary depending on the time \emph{t}.
+In our model, the time $t_{R}$ is measured and stored every time a replication takes place. Since $t_{r}$ depends on the size of the state, the time to replicate different tasks are likely to vary. Therefore, the time $t_{R}$ is stored per task type. Consequently, different types of tasks may require different number of replicas to reach the same reliability, as the reliability is dependent on the time $t_R$. \Cref{fig:replicas_depending_on_t} shows how the number of replicas needed to reach a reliability above 0.99, using nodes with a \emph{MTBF} of 10 seconds, vary depending on the time \emph{t}.
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replicas_depending_on_t.pdf}
-\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a MTBF of 10 seconds, depending on the time $t_{r}$.}\label{fig:replicas_depending_on_t}
+\caption{The number of replicas needed to reach a reliabilty above 0.99, using nodes with a \emph{MTBF} of 10 seconds, depending on the time $t_{r}$.}\label{fig:replicas_depending_on_t}
 \end{figure}
 
 Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a timeout time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node.
@@ -922,10 +922,10 @@ When monitoring the system, all parameters used in the reliability model must be
 \subsection{Adapting time $t$}
 Since using all registered times $t_R$ to fit the log-logistic distribution, and selecting the 95th percentile value as described in~\cref{sec:replication_time}, the value of $t_R$ used in~\cref{eq:rep_time} will depend on all previous registered values. Therefore, if the replication time starts increasing, e.g. during higher system load, the value used in the reliability model will also increase, thereby adapting to changing behavior. 
 
-\subsection{Adapting nodes' MTBF} \label{sec:design_self_adapting_mtbf}
-As described in~\cref{design:failure_distribution}, only the three latest failure times for a node are used to determine its MTBF. This allows for adapting a node's MTBF in case it starts failing more or less often. 
+\subsection{Adapting nodes' \emph{MTBF}} \label{sec:design_self_adapting_mtbf}
+As described in~\cref{design:failure_distribution}, only the three latest failure times for a node are used to determine its \emph{MTBF}. This allows for adapting a node's \emph{MTBF} in case it starts failing more or less often. 
 
-However, if a node starts dying more often, the model needs three new failure times before the MTBF has been update to correctly reflect its new behaviour. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm, to predict when a node is about to fail more or less often, and adapt its MTBF before it actually happens.
+However, if a node starts dying more often, the model needs three new failure times before the \emph{MTBF} has been update to correctly reflect its new behaviour. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm, to predict when a node is about to fail more or less often, and adapt its \emph{MTBF} before it actually happens.
 
 % TODO machine learning section?
 \iffalse
@@ -939,7 +939,7 @@ COPIED: “adaptation to changing conditions is achieved by both adaptive schedu
 COPIED:
 "the distributed systems require consistent and iterative monitoring for valuation resources’ behaviors and processing requirements. Therefore, an autonomous, scalable and highly dynamic learning approach is deserved \cite{imprRelAdaptRL}
 
-%TODO predict future MTBF? machine learning? cpu, memory usage, network load, etc.
+%TODO predict future \emph{MTBF}? machine learning? cpu, memory usage, network load, etc.
 
 COPIED:
 “The individual component can be monitored in real time and updates the parameters dynamically for the exponential distribution. The monitored information is simple: just the number of failures over the total running time of this component which has actually been recorded by log files in today’s grids. Such a dynamic updating scheme can further validate the exponential assumption, though we may relax the above assumption somewhat to allow reasonable or gradual change in the failure rate (such as wear out) because, during a short enough period of service time, the parameter cannot change too much and using the latest value should be a good approximation “ \cite{hierarchicalRelModeling}.
@@ -1019,9 +1019,9 @@ We also measured the time $t_R$ to find the best fitting distribution for these 
 \section{Values used in the experiments} \label{sec:eval_values}
 As described previously, heartbeats were sent every 200 ms in the experiments, and nodes were considered dead if no heartbeat was received for 500 ms. Furthermore, the optimization algorithm was run every 5 seconds.
 
-As described in~\cref{sec:design_reliability_model}, the reliability model is based on a node's MTBF and the time $t_R$. In order to determine the MTBF for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. The default MTBF used in the experiments was 10 seconds.
+As described in~\cref{sec:design_reliability_model}, the reliability model is based on a node's \emph{MTBF} and the time $t_R$. In order to determine the \emph{MTBF} for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. The default \emph{MTBF} used in the experiments was 10 seconds.
 
-In addition to the MTBF, a default value for $t_R$ must be used before any such times have been registered. The default value used in the experiments was 2 seconds.
+In addition to the \emph{MTBF}, a default value for $t_R$ must be used before any such times have been registered. The default value used in the experiments was 2 seconds.
 
 The state size of the actor replicated in the experiments was 1901 bytes.
 
@@ -1037,9 +1037,9 @@ In the experiments, the runtimes are referred to as nodes, and when referring to
 \subsection{Simulating node failure} \label{sec:simulating_node_failure}
 As mentioned, the servers used in the experiments had homogeneous hardware components, but varying failure rates were simulated by killing and restarting the runtimes with varying rates.
 
-The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a MTBF of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. 
+The process of killing and restarting is shown in~\cref{alg:simulating_node_failures}. If a node was to have a \emph{MTBF} of 15 seconds, the time between failures followed a normal distribution with mean 15 and standard deviation of 1. 
 
-Since the experiments only ran for less than 30 minutes, the actual MTBF for a given node may during the duration of a test be either lower or higher than the given MTBF. The reason for using values from a normal distribution with a mean equal to the given MTBF, instead of a fixed time, was to simulate a more realistic situation. If all runtimes would have been started at the same time, with the same fixed time to sleep before killing them, they would all have been killed at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never have died at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
+Since the experiments only ran for less than 30 minutes, the actual \emph{MTBF} for a given node may during the duration of a test be either lower or higher than the given \emph{MTBF}. The reason for using values from a normal distribution with a mean equal to the given \emph{MTBF}, instead of a fixed time, was to simulate a more realistic situation. If all runtimes would have been started at the same time, with the same fixed time to sleep before killing them, they would all have been killed at the same time. Furthermore, if we would have waited some time before starting each runtime, two runtimes would perhaps never have died at the same time. By picking values from a normal distribution, two or more runtimes may fail at the same time during the time of the experiments.
 
 \begin{algorithm} 
 	\caption{Simulating node failures} \label{alg:simulating_node_failures}
@@ -1093,16 +1093,16 @@ As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from
 
 The time for detecting that a node has died, $t_d$, was as described in~\cref{sec:node_failure_detection_time} static and set to the upper bound $t_{timeout}$, which in the experiments were 0.5 seconds. While $t_d$ is static, the time for the replication request, $t_R$, varies. In order to model the variation correctly, an experiment was conducted where times were registered and later used to find the best fitting distribution.
 
-The experiment was conducted in two settings. In both settings, two runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a MTBF of 30 seconds, and in the other a MTBF of 10 seconds. Furthermore, the required reliability was in the first experiment set to 0.999999, and 0.99995 in the second. Each time $t_R$ was then registered for the duration of the experiment.
+The experiment was conducted in two settings. In both settings, two runtimes were started on each of the non-stable servers. In the first experiment, each runtime was given a \emph{MTBF} of 30 seconds, and in the other a \emph{MTBF} of 10 seconds. Furthermore, the required reliability was in the first experiment set to 0.999999, and 0.99995 in the second. Each time $t_R$ was then registered for the duration of the experiment.
 
-The experiment was conducted in two settings with varying failure rates since with higher failure rate, there is a higher risk of the node handling the lost node dies before it finishes, or a node dies before the replication is finished, as described in~\cref{sec:replication_time}. With more stable nodes, i.e. higher MTBF, there is a lower risk of this happening. Therefore, the replication times are likely to have less variation in this case. The goal was to find the distribution, among those tested, which best fitted the two data-sets.
+The experiment was conducted in two settings with varying failure rates since with higher failure rate, there is a higher risk of the node handling the lost node dies before it finishes, or a node dies before the replication is finished, as described in~\cref{sec:replication_time}. With more stable nodes, i.e. higher \emph{MTBF}, there is a lower risk of this happening. Therefore, the replication times are likely to have less variation in this case. The goal was to find the distribution, among those tested, which best fitted the two data-sets.
 
 \subsubsection*{Results}
 The first experiment ran for 230 minutes, and 2000 times were registered, and the second experiment ran for 80 minutes, and 2000 times were registered.
 
 The distributions tested were \emph{beta}, \emph{birnbaumsaunders}, \emph{exponential}, \emph{extreme value}, \emph{gamma generalized pareto}, \emph{inversegaussian}, \emph{logistic}, \emph{logalogistic}, \emph{lognormal}, \emph{nakagami}, \emph{normal}, \emph{rayleigh}, \emph{rician}, \emph{tlocationscale}, \emph{weibull}. Matlab was used to determine which distribution best fitted the data, and the Bayesian information criterion was used to determine how good of a fit a distribution was.
 
-\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' MTBF set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for aesthetic reasons. The average values, and number of values above 100 and 500 ms in both experiments are shown in table~\cref{table:tr}. 
+\Cref{fig:distribution_results_30} shows the four best fitted distributions for the first experiment, with nodes' \emph{MTBF} set to 30 seconds, and \cref{fig:distribution_results_10} shows the four best fitted distributions for the second experiment. The figures only show registered values less than 500 ms, for aesthetic reasons. The average values, and number of values above 100 and 500 ms in both experiments are shown in table~\cref{table:tr}. 
 
 When nodes fail more often, there is a higher probability of nodes failing before it finishes to handle a \emph{lost node} request, or to replicate one of its replicas. As described in~\cref{sec:replication_time}, this results in a higher time $t_R$. This is why the average is higher, and there are more times above 100 ms and above 500 ms, in the test with \emph{MTBF} of 10 seconds, than the test with \emph{MTBF} of 30 seconds.
 
@@ -1111,14 +1111,14 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/distribution_results_30.pdf} 
-\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the first experiment with MTBF of nodes set to 30 seconds.}
+\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the first experiment with \emph{MTBF} of nodes set to 30 seconds.}
 \label{fig:distribution_results_30}
 \end{figure} 
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/distribution_results_10.pdf} 
-\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with MTBF of nodes set to 10 seconds.} \label{fig:distribution_results_10}
+\caption{Result for~\cref{sec:eval_time_t}. The four best fitted distributions for the failure time data in the second experiment with \emph{MTBF} of nodes set to 10 seconds.} \label{fig:distribution_results_10}
 \end{figure}
 
  \begin{table}[hbt!]
@@ -1131,7 +1131,7 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 	  10 s & 107.3 & 597 & 34\\
 	   \hline
 	\end{tabular}
-	 \caption{Average, times above 100 ms, and times above 500 ms for MTBF 30 and 10 in~\cref{sec:eval_time_t}}
+	 \caption{Average, times above 100 ms, and times above 500 ms for \emph{MTBF} 30 and 10 in~\cref{sec:eval_time_t}}
 	 \label{table:tr}
 	 \end{center}
  \end{table} 
@@ -1218,7 +1218,7 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
-For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$,  for these three state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low. 
+For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$, for these three state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low. 
 
 However, in a real setting, the replication time will vary depending on the state of the system. When increasing the queue size, the replication time is more CPU bound than when increasing the size of a variable, and therefore the replication time is dependent on the current load of the two nodes. Furthermore, for larger state sizes when the transmission time is the largest part of the replication time, the total time will vary depending on the network load of the system.
  
@@ -1272,7 +1272,7 @@ The test was considered successful if the momentary reliability, when dropped be
 %TODO include info about replication time
 The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
 
-As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the MTBF of 10 seconds. As the nodes starts failing, the system learns their actual MTBF, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The test shows clearly that the current reliability level is restored to a level above the required level.
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The test shows clearly that the current reliability level is restored to a level above the required level.
 
 %TODO this needs to be updated? Not the latest?
 \begin{figure}[!hbt]
@@ -1289,7 +1289,7 @@ In this experiment, the two runtimes were started on each of the unstable server
 	\begin{center}
 	\begin{tabular}{| c | c |}
 	 \hline
-	 node & MTBF (s) \\
+	 node & \emph{MTBF} (s) \\
 	 \hline		
 	  $dave_1$ & 7.5 \\
 	  $dave_2$ & 7.5 \\
@@ -1329,29 +1329,29 @@ As shown in the figures, the number of replicas decreased over time, from three 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_30.pdf}
-\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a \emph{MTBF} of 30 seconds.} \label{fig:exp_opt_replicas_MTBF_30}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_15.pdf}
-\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the three nodes with a \emph{MTBF} of 15 seconds.} \label{fig:exp_opt_replicas_MTBF_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/MTBF_75.pdf}
-\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the four nodes with a MTBF of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas}. Number of replicas per node, for the four nodes with a \emph{MTBF} of 7.5 seconds.} \label{fig:exp_opt_replicas_MTBF_75}
 \end{figure}
 
 \subsubsection{Optimal replicas} \label[exp]{sec:eval_opt_nbr_replicas_2}
-In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a MTBF of 25 seconds, while the other three were not killed. Since these three were not killed, they were not actually \emph{unstable}, but the system used the default MTBF of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with MTBF of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas when the optimization algorithm runs, not only when a node fails. 
+In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a \emph{MTBF} of 25 seconds, while the other three were not killed. Since these three were not killed, they were not actually \emph{unstable}, but the system used the default \emph{MTBF} of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with \emph{MTBF} of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas when the optimization algorithm runs, not only when a node fails. 
 
 The required reliability in the experiment was set to 0.999. This results in that as long as the two reliable nodes are available, only two replicas are needed, but if one of them or both are dead, three replicas are needed to reach the required reliability. Finally, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
 
 \subsubsection*{Results}
 %TODO include info about replication time
-The test ran for 5 minutes. As mentioned, the default MTBF is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, have failed twice, the system will use the default \emph{MTBF} of 10 seconds. After having failed twice, the system can learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
+The test ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, have failed twice, the system will use the default \emph{MTBF} of 10 seconds. After having failed twice, the system can learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
 
 \begin{figure}[!hbt]
 \centering
@@ -1362,13 +1362,13 @@ The test ran for 5 minutes. As mentioned, the default MTBF is 10 seconds when no
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_25.pdf}
-\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the two nodes with a MTBF of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the two nodes with a \emph{MTBF} of 25 seconds.} \label{fig:exp_opt_replicas_MTBF_25_2}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/optimal_replicas/2/MTBF_10.pdf}
-\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a MTBF of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
+\caption{Result for~\cref{sec:eval_opt_nbr_replicas_2}. Number of replicas per node, for the three nodes which were not killed, and therefore were assumed to have a \emph{MTBF} of 10 seconds.} \label{fig:exp_opt_replicas_MTBF_10_2}
 \end{figure}
 
 
@@ -1427,7 +1427,7 @@ In this experiment, two runtimes were started on each of the unstable servers. T
 Furthermore, in this experiment five applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
 
 %TODO this section needs work.
-When the MTBF for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the MTBF is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the MTBF is known.
+When the \emph{MTBF} for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the \emph{MTBF} is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the \emph{MTBF} is known.
 
 \subsubsection*{Results}
 The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used at any time. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time.
@@ -1443,25 +1443,25 @@ The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_40.pdf}
-\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_15.pdf}
-\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_75.pdf}
-\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a MTBF of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
+\caption{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
 \end{figure}
 
 \subsection{Considering nodes' load} \label[exp]{sec:eval_replaceable_model}
 Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, we conducted an experiment to show that system avoids placing replicas on nodes with a CPU usage above 15 percent. 
 
-In this experiment, one runtime was started on each of the unstable servers. Three of the runtimes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a MTBF of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a MTBF of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
+In this experiment, one runtime was started on each of the unstable servers. Three of the runtimes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a \emph{MTBF} of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a \emph{MTBF} of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
 
 The test was considered successful if, despite being one of the more reliable nodes, the system avoided to place replicas on \emph{Kevin}, during the time its load was above the threshold of 15 percent.
 
@@ -1521,7 +1521,7 @@ With the primary objective being to ensure a certain level of reliability, and d
 
 Our model ensures that the reliability is higher than the required as long as we do not experience a node failure. After a node failure and before the system has recovered, by creating new replicas, the reliability is lower than the required. Our model does therefore not guarantee that the average reliability is higher than the required, it depends on the relationship between the \emph{MTBF} and the time it takes to replicate an actor.
 
-The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, our experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte between two servers in the same cluster. Assuming a mean-time-between-failures of one year (31536000 s), and a time $t$ of 1 hour (3600 s), having only two replicas gives using  \cref{eq:task_reliability_2} a reliability of
+The reliability is dependent on the replication time, which depends on the state of the task to replicate. The Calvin framework is only designed for light-weight IoT applications, thus not for applications where the actor state is several megabytes, and not optimized for this kind of work. Despite this, our experiments show that it takes less than one hour to replicate an actor with a state of 1 gigabyte between two servers in the same cluster. Assuming a mean-time-between-failures of one year (31536000 s), and a time $t$ of 1 hour (3600 s), having only two replicas gives using \cref{eq:task_reliability_2} a reliability of
 
 \begin{equation*}
 \begin{split}
@@ -1586,8 +1586,8 @@ where $R_{k}(t)$ is the probability that factor $k$ is free from failures during
 
 By adding more parameters, the assumption that failures are independent will likely no longer hold. For example, if two nodes are in the same rack, and the rack's switch fails, both nodes will lose their connectivity to the rest of the cluster. The reliability of a given node will therefore also depend on which nodes currently hold a replica.
 
-Keeping the average reliability above a required level could be could be achieved be calculating the current average based on the quote between MTBF and $t_r$, replication time.
-In the simplest case, when all nodes have the same MTBF this could be achieved by using \cref{eq:avg_rel_same_MTBF}.
+Keeping the average reliability above a required level could be could be achieved be calculating the current average based on the quote between \emph{MTBF} and $t_r$, replication time.
+In the simplest case, when all nodes have the same \emph{MTBF} this could be achieved by using \cref{eq:avg_rel_same_MTBF}.
 
 \begin{equation} \label{eq:avg_rel_same_MTBF}
 	\frac{(MTBF/n - t_{R})}{(MTBF/n)} \cdot R^n + \frac{t_{R}}{(MTBF/n)} \cdot R^{n-1}
