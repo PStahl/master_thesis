@@ -1,4 +1,4 @@
-	\documentclass{cslthse-msc}
+\documentclass{cslthse-msc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amsmath}
@@ -19,8 +19,8 @@
 \crefname{app}{Appendix}{Appendices}
 \crefname{procedure}{Algorithm}{Procedure}
 
-\crefname{exp}{experiment}{experiments}
-\Crefname{exp}{Experiment}{Experiments}
+\crefname{exp}{experiment}{experiment}
+\Crefname{exp}{Experiment}{Experiment}
 
 \newtheorem{definition}{Definition}[chapter]
 \setcounter{secnumdepth}{3}
@@ -1087,6 +1087,7 @@ The computational environment, with an application consisting of a consumer, two
 \end{figure}
 
 \section{Experiments}
+In~\cref{sec:eval_time_t,sec:eval_rel_level,sec:eval_opt,sec:eval_adaptive_rel_model,sec:eval_energy_efficient,sec:eval_replaceable_model} the replication time used by the model, $t_R$ was logged. Recall that the model calculates and uses the 95th percentile value, see~\cref{sec:replication_time}.
 
 \subsection{Measurement of time $t_R$} \label[exp]{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, the time $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational. It depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
@@ -1266,13 +1267,12 @@ In this experiment, two runtimes were started on each of the unstable servers. E
 
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required reliability was set to 0.98.
 
-The test was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. %TODO Maybe better?
+The test was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. 
 
 \subsubsection*{Results}
-%TODO include info about replication time
-The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98.
+The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole test was 0.996, clearly above the required level of 0.98. The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 583,9 ms.
 
-As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The test shows clearly that the current reliability level is restored to a level above the required level.
+As shown in the figure, the reliability was lower in the beginning of the test. This is due the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the test was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The test shows clearly that the momentary reliability level is restored to a level above the required level and the experiment if therefore considered successful.
 
 %TODO this needs to be updated? Not the latest?
 \begin{figure}[!hbt]
@@ -1281,7 +1281,7 @@ As shown in the figure, the reliability was lower in the beginning of the test. 
 \caption{Result for~\cref{sec:eval_rel_level}. Reliability over time in a system with failing nodes.} \label{fig:exp_reliability_level}
 \end{figure}
 
-\subsection{Optimal number of replicas}
+\subsection{Optimal number of replicas} \label[exp]{sec:eval_opt}
 \subsubsection{Choosing the most reliable} \label[exp]{sec:eval_opt_nbr_replicas}
 In this experiment, the two runtimes were started on each of the unstable servers. The \emph{MTBF} for the various runtimes varied. The mean values given to the different nodes are presented in \cref{table:exp_nodes_means}.
 
@@ -1308,17 +1308,16 @@ In this experiment, the two runtimes were started on each of the unstable server
 	 \end{center}
  \end{table}
 
-
 After the application was started, the reliability level of the nodes on which replicas were running was periodically measured. The required level of reliability was set to 0.999.
 
-The test was considered successful if, as the system learned the actual \emph{MTBF} for the nodes, the system placed the replicas on the most reliable nodes. Furthermore, for the test to be successful, the momentary reliability should lie above the required, and it below it should be restored to a level above the required. %TODO Better?
+The experiment was considered successful if, as the system learned the actual \emph{MTBF} for the nodes, the system placed the replicas on the most reliable nodes. Furthermore, for the test to be successful, the momentary reliability should lie above the required, and if below it should be restored to a level above the required.
 
 \subsubsection*{Results}
-%TODO include info about replication time
-%TODO
-The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30},~\cref{fig:exp_opt_replicas_MTBF_15}, and~\cref{fig:exp_opt_replicas_MTBF_75} show the number of replicas for each of the unstable nodes over time.
+The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75} show the number of replicas for each of the unstable nodes over time.
 
-As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only two. Furthermore,~\cref{fig:exp_opt_replicas_MTBF_30} shows that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones, shown in~\cref{fig:exp_opt_replicas_MTBF_30} and~\cref{fig:exp_opt_replicas_MTBF_75}.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 599,1 ms.
+
+As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the test, to later only two. This is due to the system learning the nodes \emph{MTBF} and thereafter placing the replicas on the more reliable ones. This is shown in \cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75}, where the number of replicas per node is shown. It is clear that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones. The experiment was therefore considered successful.
 
 \begin{figure}[!hbt]
 \centering
@@ -1345,13 +1344,14 @@ As shown in the figures, the number of replicas decreased over time, from three 
 \end{figure}
 
 \subsubsection{Optimal replicas} \label[exp]{sec:eval_opt_nbr_replicas_2}
-In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a \emph{MTBF} of 25 seconds, while the other three were not killed. Since these three were not killed, they were not actually \emph{unstable}, but the system used the default \emph{MTBF} of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with \emph{MTBF} of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically reduces the number of replicas when the optimization algorithm runs, not only when a node fails. 
-
-The required reliability in the experiment was set to 0.999. This results in that as long as the two reliable nodes are available, only two replicas are needed, but if one of them or both are dead, three replicas are needed to reach the required reliability. Finally, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
+In order to show that the system automatically reduces the number of replicas in case more reliable nodes are available, we conducted an experiment in which five runtimes were started on the unstable servers. Two of these were given a \emph{MTBF} of 25 seconds, while the other three were not killed. Since these three were not killed, they were not actually \emph{unstable}, but the system used the default \emph{MTBF} of 10 seconds for these nodes. Consequently, despite not failing, the system considered them less reliable than the two failing nodes with a \emph{MTBF} of 25 seconds. The reason for not killing those three nodes were simply in order to show that the system automatically minimizes the number of replicas when the optimization algorithm runs, not only when a node fails. The required reliability in the experiment was set to 0.999. Finally, for aesthetic reasons, a delay of 5 seconds were used between killing and restarting nodes \emph{kevin} and \emph{jerry}.
 
 \subsubsection*{Results}
-%TODO include info about replication time
-The test ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, have failed twice, the system will use the default \emph{MTBF} of 10 seconds. After having failed twice, the system can learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
+The test ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, had failed twice, the system used the default \emph{MTBF} of 10 seconds. After having failed twice, the system could learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
+
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 567,7 ms. This resulted in that as long as the two reliable nodes were available, only two replicas were needed, but if one, or both of them died, three replicas were needed to reach the required reliability. This is shown in~\cref{fig:exp_opt_replicas_total_2}, where the total number of replicas are shown. 
+
+\Cref{fig:exp_opt_replicas_MTBF_25_2,fig:exp_opt_replicas_MTBF_10_2} shows the number of replicas per node and it seen that the system moves replicas from the less reliable nodes to the more reliable nodes as soon there is a more reliable node available. The experiment was therefore considered successful.
 
 \begin{figure}[!hbt]
 \centering
@@ -1373,16 +1373,16 @@ The test ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds 
 
 
 \subsection{Self-adaptive reliability model} \label[exp]{sec:eval_adaptive_rel_model}
-In this experiment, the runtimes were started on each of the unstable servers. Each runtime was given a \emph{MTBF} of 25 seconds. But, instead of picking times to sleep from a normal distribution as described in~\cref{sec:simulating_node_failure}, the time to sleep between failures were calculated by~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. 
+In this experiment, one runtime was started on each of the unstable servers. Each runtime was given a \emph{MTBF} of 25 seconds. But, instead of picking times to sleep from a normal distribution as described in~\cref{sec:simulating_node_failure}, the time to sleep between failures were calculated by~\ref{eq:eval_sleep_time}. This means the time between failures varied between 5 and 45 seconds. 
 
-The required reliability was in this experiment set to 0.99999. This value was chosen so that the number of replicas needed would vary between 3 and 5, depending on the current state of the system.
+The required reliability was in this experiment set to 0.99999. 
 
 %TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
 t_{sleep} = t_i + 20 * \sin{(2\*\pi\*t_{elapsed} / 300)}
 \end{equation}
 
-Where $t_i$ are the numbers following a normal distribution with mean 25 and standard deviation of 1, and $t_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, \cref{fig:eval_sleep_time} in~\cref{appendix:figures} shows how the actual time to sleep varies over time.
+Where $t_i$ is the numbers following a normal distribution with mean 25 and standard deviation of 1, and $t_{elapsed}$ is the total elapsed time for the test. Given $t_i=25$, \cref{fig:eval_sleep_time} shows how the actual time to sleep varies over time.
 
 The process of killing nodes therefore differed from~\cref{alg:simulating_node_failures}. How nodes were killed and restarted in this experiment is shown in~\cref{alg:simulating_node_failures_sinus}.
 
@@ -1404,35 +1404,36 @@ The process of killing nodes therefore differed from~\cref{alg:simulating_node_f
 	\end{algorithmic}
 \end{algorithm}
 
-The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, after which it increased as the time between failures increased.
+The test was considered successful if the number of replicas used increased as the time between failures decreased for the various nodes, and if the number of replicas decreased as the time between failures increased.
 
 \subsubsection*{Results}
-The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes vary over time. 
+The test ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes varied over time. Since the number of replicas deceased as the \emph{MTBF} for the various nodes increased, and the number of replicas increased as the \emph{MTBF} for the nodes decreased the experiment was considered successful. 
+
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 709,2 ms. The reason for the higher value of $t_R$, compared to \cref{sec:eval_rel_level,sec:eval_opt_nbr_replicas,sec:eval_opt_nbr_replicas_2} is due to that when the \emph{MTBF} for the nodes were at it lowest, approximately 5 seconds, there was a high probability of replication request failing, recall~\cref{sec:replication_time}.
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_replicas.pdf}
-\caption{Result for~\cref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_rel}
+\caption{Result for~\cref{sec:eval_adaptive_rel_model}. Number of replicas over time.} \label{fig:eval_self_adaptive_rel}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/self_adaptive_node_rels.pdf}
-\caption{Result for~\cref{sec:eval_adaptive_rel_model}. Reliability over time with failing nodes and varying time between failures.} \label{fig:eval_self_adaptive_node_rels}
+\caption{Result for~\cref{sec:eval_adaptive_rel_model}. The various nodes reliabilities over time.} \label{fig:eval_self_adaptive_node_rels}
 \end{figure}
 
 \subsection{Energy efficient for many applications} \label[exp]{sec:eval_energy_efficient}
 In this experiment, two runtimes were started on each of the unstable servers. The \emph{MTBF} for the runtimes were the same as for experiment~\cref{sec:eval_opt_nbr_replicas}, and shown in~\cref{table:exp_nodes_means}.
 
-Furthermore, in this experiment five applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999. 
+Furthermore, in this experiment five applications were started instead of only one. The applications were identical, described in~\cref{sec:eval_application}, with a required reliability of 0.99999.
 
-%TODO this section needs work.
-When the \emph{MTBF} for the runtimes is known, only two replicas per application is needed to reach above the required reliability, while three replicas are needed when it's unknown. Since the replicas are placed on the most reliable nodes, each application would have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically only two nodes would be needed when the \emph{MTBF} is known, since each applications' two replicas would be placed on the two most reliable nodes. The test is therefore considered successful if the nodes used at any time were kept to a minimum, which theoretically would be two when the \emph{MTBF} is known.
+Since the replicas are placed on the most reliable nodes, each application will have its replicas on the same nodes, i.e. the most reliable ones. Therefore, theoretically, the total number of nodes having a replica will be no greater than the number of replicas for the application with the most number of replicas. The experiment is therefore considered successful if the number of nodes used at any time were kept to a minimum.
 
 \subsubsection*{Results}
-The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used at any time. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time.
+The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used over time. \Cref{fig:eval_energy_efficient_mtbf_40}, \cref{fig:eval_energy_efficient_mtbf_15}, and \cref{fig:eval_energy_efficient_mtbf_75} show the number of replicas running at the various nodes. Since the model does not place two replicas of the same task on the same node, the nodes had at most 5 actors, one replica per application, at any time.
 
-\Cref{fig:eval_energy_efficient_mtbf_40}, \cref{fig:eval_energy_efficient_mtbf_15}, and \cref{fig:eval_energy_efficient_mtbf_75} show the number of actors running at the various nodes. Since the model does not place two replicas of the same task on the same node, the nodes had at most 5 actors, one replica per application, at any time.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 763,4 ms. This resulted in that when the system had learned the nodes \emph{MTBF}, only two replicas per application was needed to reach the required reliability, while three replicas were needed when the \emph{MTBF} was unknown and the default value of 10 seconds was used. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time. The experiment was therefore considered successfully.
 
 \begin{figure}[!hbt]
 \centering
@@ -1459,7 +1460,7 @@ The test ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the
 \end{figure}
 
 \subsection{Considering nodes' load} \label[exp]{sec:eval_replaceable_model}
-Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, we conducted an experiment to show that system avoids placing replicas on nodes with a CPU usage above 15 percent. 
+Lastly, to show that the reliability model and selection of nodes to place replicas on are replaceable with more sophisticated algorithms, we conducted an experiment where the system avoids placing replicas on nodes with a CPU usage above 15 percent. 
 
 In this experiment, one runtime was started on each of the unstable servers. Three of the runtimes, \emph{Tim}, \emph{Mark}, and \emph{Jerry}, had a \emph{MTBF} of 10 seconds, and two, \emph{Dave} and \emph{Kevin}, had a \emph{MTBF} of 40 seconds. Furthermore, the load on \emph{Kevin} was increased after a while by starting dummy jobs simply to consume CPU resources, and was later decreased again. The required reliability in this test was set to 0.999.
 
@@ -1468,7 +1469,11 @@ The test was considered successful if, despite being one of the more reliable no
 \subsubsection*{Results}
 The test ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the CPU usage for the various nodes. \Cref{fig:eval_replaceable_model_loaded} and \cref{fig:eval_replaceable_model_unloaded} show the number of replicas for \emph{Kevin} and the other nodes during the test.
 
-\Cref{fig:eval_replaceable_model_loaded} clearly shows no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent. This means our model is general and key components such as calculating the reliability of a node as well as sorting the available nodes may be replaced. 
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 547,9 ms.
+
+\Cref{fig:eval_replaceable_model_loaded} clearly shows that no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent and therefore, this experiment is considered successful. 
+
+This experiment also shows that our model is general and key components such as calculating the reliability of a node as well as sorting the available nodes may be replaced.
 
 \begin{figure}[!hbt]
 \centering
