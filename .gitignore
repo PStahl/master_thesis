@@ -128,3 +128,4 @@ sympy-plots-for-*.tex/
 *.pyc
 
 presentation/~$presentation.pptx
+tests/*
