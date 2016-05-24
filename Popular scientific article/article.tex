@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{multicol}
+\usepackage[textwidth=450pt]{geometry}
+
+
+\author{
+	Philip Ståhl \& Jonatan Broberg
+}
+
+\title{Ökad tillförlitlighet för molntjänster}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{multicols}{2}
+%Preamble
+\noindent
+\textbf{Med automatiskt feldetektering och periodisk övervakning av molnapplikationer kan en önskad nivå av pålitlighet uppnås genom att automatiskt kloning av applikationen. Nackdelen är att fler resurser krävs och därför måste antalet kopior hållas till ett minimum genom att inte ha fler kopior än nödvändigt.}
+
+\section*{Metod}
+Genom att skapa identiska kopior av funktioner eller beräkningar som en tjänst utför, så ökar sannolikheten att minst en av dessa lyckas slutföra beräkningen utan att ett fel inträffar. Genom att skapa tillräckligt många kopior kan en specifik tillförlitlighetsnivå uppfyllas, d.v.s. sannolikhet att minst en kopia lyckas slutföra sin beräkning och producera ett resultat. Vidare kan den önskade tillförlitlighetsnivån uppnås över en längre tid genom att automatiskt skapa nya kopior allt eftersom tidigare kopior slutar fungera till följd av serverfel.
+
+Med flera identiska kopior som utför exakt samma uppgift, så ökar tillförlitligheten, till följd av att fler resurser krävs i form av beräkningskraft och energiförbrukning. Därför är det viktigt att hålla antalet kopior till ett minimum, så att inte onödigt mycket resurser används. Dessutom är det svårt att tillgodose en viss tillförlitlighet för molntjänster eftersom risken för fel varierar över tid. Exempelvis är risken för serverfel högre om servern är under hög belastning. Eftersom tillförlitligheten varierar över tid, så måste applikationer och tillgängliga servrar periodiskt övervakas för att se till att den önskade nivån uppfylls. Genom att flytta kopior till mer tillförlitliga servrar kan den önskade nivån uppnås med färra antal kopior. Överflödiga kopior kan då tas bort och därmed resursåtgången hållas till ett minimum.
+
+\section*{Bakgrund}
+Intresset för applikationer och tjänster som kör i molnet har vuxit explosionsartat det senaste decenniet. Molnet är en bred term och används för att beskriva distribuerade kluster av servrar på vilka applikation och tjänster körs. Dessa servrar är oftast byggda med relativt billiga komponenter med hög felfrekvens. Fel som leder till att en server blir oanvändbar inträffar ofta, och sådana fel är ofta svåra att förutse. Om ett fel inträffar, så kan inte längre de beräkningar som utfördes på servern slutföras, och värdefulla resultat kan gå förlorade. Vidare så kräver användare av sådana tjänster oftast en viss tillförlitlighet, d.v.s. sannolikhet att en applikation eller tjänst lyckas utföra det jobb den är ämnad för utan att fel inträffar. 
+
+\section*{Resultat}
+Slutligen har det inom forskningsvärlden tidigare saknat en plattform där man kunnat utföra realistiska experiment på ett enkelt sätt. Genom att implementera ovannämnda funktionalitet för att automatiskt skapa nya kopior, och detektera fel, finns nu en plattform där nya metoder kan prövas och experiment utföras. Implementationen är gjord i Calvin, en applikationsmiljö för Internet of Things utvecklad av Ericsson.
+
+\end{multicols}
+ 
+\end{document}
