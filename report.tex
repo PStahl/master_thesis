@@ -425,7 +425,7 @@ Having a fault tolerant framework or model includes being able to express the re
 
 We implemented the model using Ericsson's actor-based application environment Calvin \cite{calvin}, and conducted a set of experiments to show its usefulness. The implementation provides a platform which can be used for further research and experiments. The model is not dependent on the reliability model used, and it could easily be replaced.
 
-Since implementing our model using Calvin, some understanding of the results may be lost. Calvin is designed for light-weight IoT applications, and not for data stream processing applications where tasks are replicated. However, the implementation provides a mean of testing other algorithms and reliability models than the ones used in this thesis, and we believe that the results can still give a good first interpretation of the possibilities, which is further discussed in~\cref{ch:discussion}.
+Since implementing our model using Calvin, some understanding of the results may be lost. Calvin is designed for light-weight IoT applications, and not for data stream processing applications where tasks are replicated. However, the implementation provides a mean of testing other algorithms and reliability models than the ones used in this thesis, and we believe that the results can still give a good first interpretation of the possibilities, which are further discussed in~\cref{ch:discussion}.
 
 \section{Introduction} \label{sec:design_intro}
 In the case of data stream processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, focus is on the case when a process of some kind produces data which needs to be transformed or processed by a task $T$, which sends the result to a consumer. The task $T$ is running within a cluster, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.	
@@ -453,7 +453,7 @@ In this section, we describe the system and application models employed in this 
 \subsection{Computational environment} \label{subsec:design_comp_env}
 In this report we assume that all resources are within the same cluster, with low-latency connections between them. The resources consist of heterogeneous hardware with high-bandwidth, low-latency redundant links between them. Due to its heterogeneous properties, nodes can not be assumed to have the same failure rate.
 
-A small example of four interconnected nodes is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consisted of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
+An example of four interconnected nodes is shown in \cref{fig:computational_environment}. We refer to a computational resource as a \emph{node}. Due to the lack of access to a cluster consisting of heterogeneous hardware components, the cluster used for experiments consisted of homogeneous hardware components, and varying behavior in terms of failure is simulated in the experiments. This if further described in~\cref{ch:evaluation}.
 
 Since all nodes are interconnected, we have redundant paths which results in that all nodes are directly reachable even if a node fails. In~\cref{fig:before_node_failure} and \cref{fig:after_node_failure}, a system of one replicated actor is shown before and after a node failure.
 
@@ -501,7 +501,7 @@ In contrast to the case with one \emph{primary} task and several \emph{back-up} 
 \caption[Application model with replicas]{An application model where a task $T$ has been replicated 4 times.}\label{fig:app_model_replication}
 \end{figure}
 
-After replicating, the various replicas may not be synchronized. But, since assuming only deterministic calculations is done by the tasks replicated, given the same input they will all produce the same result, even if not synchronized. However, since the receiver receive a result from each replica, our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
+After replicating, the various replicas may not be synchronized. But, since assuming only deterministic calculations are done by the tasks replicated, given the same input they will all produce the same result, even if not synchronized. However, since the receiver receive a result from each replica, our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
 
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
@@ -544,7 +544,7 @@ To achieve this, a heartbeat system is used, where nodes periodically send UDP m
 
 In the experiments conducted, see \cref{ch:evaluation}, $t_h$ was set to 0.2 seconds, and $t_{timeout}$ to 0.5 seconds. These values should be modified in a real setting. For the experiments, a high-bandwidth low-latency cluster was used, why we could use a high heartbeat frequency and a low timeout time.
 
-As further described in~\cref{sec:node_failure_detection_time}, these values affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Byte.
+As further described in~\cref{sec:node_failure_detection_time}, these values affect the reliability model, and thereby the number of replicas needed. A higher frequency and lower timeout means a shorter time in which the system is in a vulnerable state, and therefore a lower number of replicas may be needed to reach the required reliability. On the other hand, higher frequency means increased network traffic in the system as more heartbeats are being sent, although the size of a heartbeat message is low, only 126 Bytes.
 
 \subsection{Monitoring system reliability} \label{subsec:monitoring_system_rel}
 In order to ensure the optimal number of replicas is used over time, as the properties of the system varies, the system and its running applications or services must be periodically monitored. 
@@ -659,11 +659,11 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 
 Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a timeout time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node.
 
-This situation can theoretically continue until there is no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
+This situation can theoretically continue until there are no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
 
 Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $t_R$. From the fitted distribution, the 95th percentile value is used as the value for $t_R$ in~\cref{eq:rep_time}. This means in 95 percent of the cases, the time $t_R$ will actually be lower than the value used in~\cref{eq:rep_time}. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
 
-Finally, since assuming that all nodes are within the same cluster and that the latency between all nodes are low, we assume the time $t_R$ is independent on between which nodes the replication takes place. 
+Finally, since assuming that all nodes are within the same cluster and that the latency between all nodes are low, we assume the time $t_R$ is not dependent on between which nodes the replication takes place. 
 
 \section{Scheduling algorithm} \label{sec:design_sched_alg}
 To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one could simply place a new replica on the most reliable node available, until the required level is reached. A greedy scheduling algorithm doing this, similar to one presented in~\cite{effTaskReplMobGrid}, and which fulfills~\cref{eq:required_rel} is shown below:
@@ -799,7 +799,7 @@ The algorithm is shown below:
 	\end{algorithmic}
 \end{algorithm}
 
-A small example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, A, B, C and D, and the node C has just failed. When the other nodes (A, B and D) detect the failure they will select the node with the highest ID, in this case node A, and inform it that node C has failed. Node A will then determine which actions to take.
+An example is presented in~\cref{fig:handling_node_failure}. In the situation shown in the figure, there are 4 connected nodes, A, B, C and D, and the node C has just failed. When the other nodes (A, B and D) detect the failure they will select the node with the highest ID, in this case node A, and inform it that node C has failed. Node A will then determine which actions to take.
 
 \begin{figure}[!hbt]
 \centering
@@ -831,16 +831,16 @@ However, if a node starts dying more often, the model needs three new failure ti
 For implementing our model, we use an actor based application environment called \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
 
 \subsection{Calvin} \label{subsec:design_calvin}
-Calvin is an actor-based application environment for light-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, is suites well for implementation of our model.
+Calvin is an actor-based application environment for light-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, it suites well for implementation of our model.
 
-The main features of Calvin is the use of runtimes (containers) in which actors (application tasks) run. Since the runtimes separate the hardware from the software, it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
+The main features of Calvin are the use of runtimes (containers) in which actors (application tasks) run. Since the runtimes separate the hardware from the software, it is possible to use Calvin on different platforms. In developing phase of new applications the developer does not need to consider on which operating systems the application should run.
 
 \subsubsection{Storage} \label{sec:calvin_storage}
 In Calvin there are two ways of storing data, either by the Kademlia implementation of a DHT or by the use of a proxy storage.
 
 Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. One of the configurable parameters used in Kademlia is $k$, representing the maximum size of a bucket-list. The value of $k$ should be chosen such that the probability of $k$ nodes failing within an hour is very low \cite{kademlia}. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
 
-When using the proxy storage, one runtime acts as a storage node, and all data is sent to that runtime. All requests for data is also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
+When using the proxy storage, one runtime acts as a storage node, and all data is sent to that runtime. All requests for data are also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single point of failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
@@ -849,7 +849,7 @@ Multiple actors may send data to another actor's in-port, and an actor's out-por
 
 The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
-The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues is the major part of the message size.
+The state of an actor is needed when replicating an actor. In Calvin, the state of an actor consists mainly of actor type, in-port and out-port connections, and for each port a queue with data to process or to send, and read and write positions for the incoming and outgoing queues. The queues are the major part of the message size.
 
 The actor model corresponds well to the kind of applications and tasks described in~\cref{subsec:design_app_model}, as they perform deterministic calculations.
 
@@ -864,7 +864,7 @@ In our model a runtime corresponds to a node.
 \subsubsection{Replication} \label{subsec:calvin_replication}
 The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serializing it and sending it to the runtime in which the new replica is to be created. The receiving runtime then de-serializes the state and uses it to create the replica and setup its port connections.
 
-Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. This processing is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
+Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. The decoding is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
 
 \subsection{Our contributions to Calvin} \label{subsec:design_contributions} % ish?
 Here follows a description of the most important parts of our changes and new features in Calvin.
@@ -883,10 +883,10 @@ The heartbeat system described in~\cref{subsec:heartbeats}, was implemented usin
 
 Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
-For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime to which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime is canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
+For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime from which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime are canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
 
 \subsubsection{Application monitor}
-Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is achieved by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
+Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is fulfilled by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
 %TODO Mention what happens if the runtime which deployed the application dies?
 
 \chapter{Evaluation} \label{ch:evaluation}
