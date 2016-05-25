@@ -898,7 +898,7 @@ We also measured the time $t_R$ to find the best fitting distribution for these 
 \section{Values used in the experiments} \label{sec:eval_values}
 As described previously, heartbeats were sent every 200 ms in the experiments, and nodes were considered dead if no heartbeat was received for 500 ms. Furthermore, the optimization algorithm was run every 5 seconds.
 
-As described in~\cref{sec:design_reliability_model}, the reliability model is based on a node's \emph{MTBF} and the time $t_R$. In order to determine the \emph{MTBF} for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. The default \emph{MTBF} used in the experiments was 10 seconds.
+As described in~\cref{sec:design_reliability_model}, the reliability model is based on nodes' \emph{MTBF} and the time $t_R$. In order to determine the \emph{MTBF} for a node, at least two failure times must have been registered. Before a node has failed twice, a default value is used. The default \emph{MTBF} used in the experiments was 10 seconds.
 
 In addition to the \emph{MTBF}, a default value for $t_R$ must be used before any such times have been registered. The default value used in the experiments was 2 seconds.
 
@@ -945,17 +945,13 @@ The laptop used in the experiment where the replication time was measured, was a
 
 \section{Storage used} \label{sec:eval_storage}
 As mentioned in~\cref{sec:calvin_storage}, Calvin supports use of both the Kademlia implementation of DHT, and a proxy storage. The Kademlia parameter $k$ as described in~\cref{sec:calvin_storage} should be chosen such that the probability of $n$ nodes failing within an hour is very low. Since we wanted to be able run an experiment within an hour, and simulate multiple node failures during that time, all nodes would experience failure within an hour. Furthermore, Kademlia periodically re-distributes responsibility of storing keys, as nodes leave and join the network~\cite{kademlia}. But due to killing and restarting runtimes as frequently as we do in the experiments, keys were found to not being re-distributed correctly. 
-%TODO maybe not mention that we wanted to be able to run experiments whithin an hour? Just that we wanted many failures during an hour
 
 Therefore, we experienced the DHT to be very unstable, and not suitable for our experiments, where nodes were frequently killed and restarted. Therefore, the proxy storage was used in the experiments. This introduced a single-point-of-failure, but the runtime acting as a proxy storage was never killed during the experiments. In a more realistic setting, nodes are unlikely to fail as often as they do in our experiments, and the use of DHT could in such a case be more suitable.
-
-%TODO mention that k in Kademlia is chosen so that the probability of k nodes failing within an hour is extremely low. --> we would need a lot of nodes in the experiments.
 
 \section{Application used in experiments} \label{sec:eval_application}
 The Calvin application used in the experiments was of simplest form, consisting only of a producing actor, a service actor and a consuming actor. The producing actor produced integer numbers and sent those to the service actor which simply forwarded them to the consuming actor, which printed the values to standard out. 
 
 A predefined level of reliability was required only for the service actor, and it was therefore the only one being replicated. As neither the producing nor the consuming actor were replicated, the whole application would have died in case the runtime on which they were deployed died. Therefore, the consumer and producer were both placed on the stable runtime, mentioned in~\cref{sec:eval_comp_env}. The service actor however, was only deployed to the unstable runtimes, which were periodically killed and restarted. When measuring the reliability in the experiments, we refer to the reliability of the service actor.
-%TODO mention that the service actor wasn't allowed to be replicated to the stable node?
 
 The computational environment, with an application consisting of a consumer, two service replicas, and a consumer, is shown in~\cref{fig:evaluation_application}.
 
@@ -1025,7 +1021,7 @@ In order to measure the time it takes to detect a failed node, an experiment was
 \subsubsection*{Results}
 The average of the 1800 measured times was 333.5 ms, the minimum was 302.1 ms and the maximum value was 499.8 ms.
 
-All values lie between the theoretical minimum and maximum values of 300 and 500 ms, corresponding to the best and worse case scenarios described in~\cref{sec:node_failure_detection_time}. The average however is clearly below the theoretical average of 400 ms. 
+All values lie between the theoretical minimum and maximum values of 300 and 500 ms, corresponding to the best and worse case scenarios described in~\cref{sec:node_failure_detection_time}. The average however it is clearly below the theoretical average of 400 ms. 
 The standard deviation of the times registered was 28.8.
 %TODO If higher/lower than theoretical, give a explanation
 
@@ -1046,7 +1042,7 @@ For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 ti
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since then all values in the queue has to be decoded. %TODO decoded?
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since then all values in the queue have to be decoded. %TODO decoded?
 
 As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when, by increasing the queue, increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
 
