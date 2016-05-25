@@ -642,13 +642,12 @@ which is the worst case scenario. This result in the calculated reliability alwa
 \subsubsection{Replication request time, $t_R$} \label{sec:replication_time}
 The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node and send a response.
 
-To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. Then, a replication request is sent, a new replica is created, and a response is received. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time}.
+To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time} where $t_{query\ storage}$ is the time it takes to find which nodes currently holding a replica and which nodes doesn't, $t_{replicate\ msg}$ is the time to send a replication message to another node, $t_{r}$ is the time to replicate the task to another node, and $t_{response}$ is the time to send a response to the requesting node. The process of sending a replication request is shown in~\cref{fig:replication_request}. The part of querying the storage is excluded from this figure.
 
 \begin{equation} \label{eq:replication_request_time}
 t_R = t_{query\ storage} + t_{replicate\ msg} + t_{r} + t_{response}
 \end{equation} 
 
-Where $t_{query\ storage}$ is the time it takes to find out which nodes currently hold a replica, $t_{replicate\ msg}$ is the time to send a replicate message to another node, $t_{r}$ is the time to replicate the task to another node, and $t_{response}$ is the time to send a response to the requesting node. The process of sending a replication request is shown in~\cref{fig:replication_request}. The part of querying the storage is excluded from this image.
 
 \begin{figure}[!hbt]
 \centering
