@@ -220,7 +220,7 @@ In contrast to static environments, a dynamic environment usually consists of he
 
 
 \section{Faults in distributed environments} \label{sec:background_faults_distr_env}
-In distributed environments, a larger number of faults can occur due to its complexity. Therefore, when modelling faults and reliability in such environments, a fault model is usually employed, describing what kind of faults are being considered.
+In distributed environments, a larger number of faults can occur due to its complexity. Therefore, when modeling faults and reliability in such environments, a fault model is usually employed, describing what kind of faults are being considered.
 
 \subsection{Types of Faults} \label{subsec:background_types_of_faults}
 A fault is usually used to describe a defect at the lowest level of abstraction~\cite{faultTolerantFundamentals}. A fault may cause an error which in turn may lead to a failure, which is when a system has not behaved according to its specification.
@@ -263,9 +263,9 @@ Models describing the nature of failures in distributed computing environments, 
 	\item Fully reliable network
 \end{itemize}
 
-When modelling reliability for grid systems, it is common to also assume a fully reliable Resource Management System (RMS)~\cite{relAndPerfGridServices, relGridServicePredConstraint}, which is a non-negligible assumption since the RMS is a single point of failure.
+When modeling reliability for grid systems, it is common to also assume a fully reliable Resource Management System (RMS)~\cite{relAndPerfGridServices, relGridServicePredConstraint}, which is a non-negligible assumption since the RMS is a single point of failure.
 
-%When modelling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate~\cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate~\cite{algoMaxRelEndToEndConstraint}. %we use Poisson and have a non-constant failure rate?
+%When modeling system reliability, failures are usually assumed to follow a Poisson process with a constant failure rate~\cite{algoMaxRelEndToEndConstraint} \cite{algoMinExTime} \cite{relModelDistSimSystem} \cite{optTaskAllocationForMaxRel} \cite{perfImplPerCheckPoint} \cite{optCheckpointInterval} \cite{realTimeSchedAlgo}. For such a model to be valid, it is assumed that failures between resources are statistically independent with a constant failure rate~\cite{algoMaxRelEndToEndConstraint}. %we use Poisson and have a non-constant failure rate?
 
 Constant failure rates are not likely to model the actual failure scenario of a dynamic heterogeneous distributed system~\cite{algoMinExTime}. The failure rate for a hardware component often follows a bathtub shaped curve~\cite{surveyReliabilityDistr}. The failure rate is usually higher in the beginning due to that the probability that a manufacture failure would affect the system is higher in the beginning of the system's lifetime. After stabilizing, the failure rate drops and later increases again due to that the component gets worn out. %TODO refer to this in design.
 
@@ -285,7 +285,7 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 \subsection{Reliability definition} \label{subsec:background_reliability_definition}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully~\cite{taskAllocation, relModelDistSimSystem, studyServiceRel, hierarchicalRelModeling, generalAlgoRelEval, realTimeRelAnalysis, perfRelNonMarkovian}. A similar definition, for applications running in distributed environments, is that reliability is the probability of a software application to perform its intended functions for a specified period of time~\cite{surveyReliabilityDistr, surveyRelPrediction, relDistApplications}, and is commonly used for applications with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result~\cite{surveyRelPrediction, relAndPerfGridServices, relGridServicePredConstraint, relModelWebServices, selfAdaptRel}. The latter is usually used together with the Byzantine fault model. 
 
-\subsection{Modelling reliability} \label{subsec:background_modelling_rel}
+\subsection{Modeling reliability} \label{subsec:background_modeling_rel}
 Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors not feasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
 
 For distributed applications, the probability of failure increases since it is dependent on more resources~\cite{relModelDistSimSystem}. Most reliability models are based on the mean-time-to-failure, or the mean-time-between-failures, of resources~\cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects~\cite{effTaskReplMobGrid}.
