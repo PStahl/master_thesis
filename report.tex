@@ -830,7 +830,7 @@ Since using all registered times $t_R$ to fit the log-logistic distribution, and
 \subsection{Adapting nodes' \emph{MTBF}} \label{sec:design_self_adapting_mtbf}
 As described in~\cref{design:failure_distribution}, only the three latest failure times for a node are used to determine its \emph{MTBF}. This allows for adapting a node's \emph{MTBF} in case it starts failing more or less often. 
 
-However, if a node starts dying more often, the model needs three new failure times before the \emph{MTBF} has been update to correctly reflect its new behavior. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm, to predict when a node is about to fail more or less often, and adapt its \emph{MTBF} before it actually happens.
+However, if a node starts dying more often, the model needs three new failure times before the \emph{MTBF} has been update to correctly reflect its new behavior. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm or statistical regression, to predict when a node is about to fail more or less often, and adapt its \emph{MTBF} before it actually happens.
 
 \section{Implementation} \label{sec:design_implementation}
 For implementing our model, we use an actor based application environment called \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
