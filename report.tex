@@ -426,17 +426,11 @@ A container is very similar to a virtual machine but more light-weight. Containe
 In this chapter, the key components of our fault tolerant framework are described. Of the various fault tolerant techniques described in~\cref{sec:background_fault_tol_tech}, our model focuses on fault tolerance, using reactive techniques.
 
 \section{Methodology} \label{sec:design_methodology}
-%TODO needs work
-Having a fault tolerant framework or model includes being able to express the reliability of resources, and applications using those resources, as well as being able to detect failures. 
+Having a fault tolerant framework or model includes being able to express the reliability of resources, and applications using those resources, as well as being able to detect failures. The methodology for devising our model is mainly literature study as well as meetings and discussions with our supervisor and colleagues at MAPCI.
 
-The methodology for devising our model is mainly literature study as well as meetings and discussions with our supervisor and colleagues at MAPCI.
+We implemented the model using Ericsson's actor-based application environment Calvin \cite{calvin}, and conducted a set of experiments to show its usefulness. The implementation provides a platform which can be used for further research and experiments. The model is not dependent on the reliability model used, and it could easily be replaced.
 
-%TODO remove "... time spent on impl. ..."
-To validate our model and show its usefulness, we implemented it using Ericsson's actor-based application environment Calvin \cite{calvin} and conducted a set of experiments. A somewhat simplistic reliability model was made, while more time was spent on the design and implementation of the other parts of the model. Spending more time on implementation rather than designing a more sophisticated reliability model allowed us to conduct various kinds of experiments. In addition, our model is not dependent on the reliability model used, and it could easily be replaced.
-
-An alternative approach would have been to make a more sophisticated reliability model which maps better to real-world characteristics of distributed environments. However, as described in~\cref{subsec:background_modelling_rel}, it is impossible to include all parameters affecting the reliability of applications or services running in such environments. Furthermore, the lack of an actual implementation would have resulted in only simulations being possible, instead of actual experiments. While simulations can take many parameters into account, they have to be based on failure data, which is usually collected from in-house testing, and thus cannot be compared with failures that can occur in an actual operational environments~\cite{surveyReliabilityDistr}. %TODO Oklart enligt Christian? While simulations...
-
-Since limiting ourselves to testing using Calvin, some understanding of the results may be lost, but we believe that the results can still give a good first interpretation of the possibilities, see~\cref{ch:discussion}. 
+Since implementing our model using Calvin, some understanding of the results may be lost. Calvin is designed for light-weight IoT applications, and not for data stream processing applications where tasks are replicated. However, the implementation provides a mean of testing other algorithms and reliability models than the ones used in this thesis, and we believe that the results can still give a good first interpretation of the possibilities, which is further discussed in~\cref{ch:discussion}.
 
 \section{Introduction} \label{sec:design_intro}
 In the case of data stream processing, reliability is of particular interest in order not to lose any valuable data. In this thesis, focus is on the case when a process of some kind produces data which needs to be transformed or processed by a task $T$, which sends the result to a consumer. The task $T$ is running within a cluster, and the user of this service demands a certain level of reliability, and active replication is used to ensure this.	
