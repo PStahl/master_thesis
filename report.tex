@@ -172,19 +172,17 @@ We propose a framework which ensures a user determined level of reliability by t
 
 The framework is not limited to a specific type of distributed environment, nor the reliability model used. The reliability model and the task placement decisions are easily replaced to consider more parameters, or to include load balancing. 
 
-Our model is implemented using the actor-based application environment \emph{Calvin} \cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for Internet of Things (IoT) applications, it suites our purpose well. The model is evaluated by running a set of experiments in a small cluster.
+Our model is implemented using the actor-based application environment \emph{Calvin} \cite{calvin}, developed by Ericsson. While \emph{Calvin} is mainly an environment for Internet of Things (IoT) applications, it suites our purpose well. The model is evaluated by running a set of experiments in a small cluster. Furthermore, the implementation provides a platform for further research and experiments.
 
 \section{Goal} \label{sec:introduction_goals}
-The goal of this thesis is to devise a method for dynamically ensuring a predefined level of reliability for distributed applications or services. Reliability will be achieved by replicating tasks.
+The goal of this thesis was to devise a method for dynamically ensuring a predefined level of reliability for distributed applications or services by dynamically replicating tasks. The goal was further to implement the method and provide a flexible and extensible platform, which can be used for further research and experiments.
 
-First, a reliability model will be designed, describing the reliability of the available resources, and for applications using these resources.
+First, a reliability model was designed, describing the reliability of the available resources, and for applications using these resources.
 
-Secondly, a framework will be designed which will automatically detect node failures and based on the reliability of the available resources creates enough replicas to reach the required reliability level.
+Secondly, a framework was designed which will automatically detects node failures and based on the reliability of the available resources creates enough replicas to reach the required reliability level. Furthermore, the system and its running applications is periodically monitored in order to adapt the resources' reliability and the number of replicas needed as the properties of the system varies over time.
 
-Lastly, the system and its running applications will be periodically monitored in order to adapt the resources' reliability and the number of replicas needed as the properties of the system varies over time.
+Lastly, the model was implemented and tested using the IoT application framework \emph{Calvin}.
 
-The model will be implemented and tested using the IoT application framework \emph{Calvin}.
-\\\\
 The report is structured as follows: in \cref{ch:background} all necessary background theory is provided, in \cref{ch:design} we present our model and contribution in more detail, \cref{ch:evaluation} presents an evaluation of our solution and in \cref{ch:discussion} the solution is discussed. \Cref{ch:future_work} presents future work and \cref{ch:conclusions} concludes the report.
 
 \chapter{Background} \label{ch:background}
@@ -433,6 +431,7 @@ Having a fault tolerant framework or model includes being able to express the re
 
 The methodology for devising our model is mainly literature study as well as meetings and discussions with our supervisor and colleagues at MAPCI.
 
+%TODO remove "... time spent on impl. ..."
 To validate our model and show its usefulness, we implemented it using Ericsson's actor-based application environment Calvin \cite{calvin} and conducted a set of experiments. A somewhat simplistic reliability model was made, while more time was spent on the design and implementation of the other parts of the model. Spending more time on implementation rather than designing a more sophisticated reliability model allowed us to conduct various kinds of experiments. In addition, our model is not dependent on the reliability model used, and it could easily be replaced.
 
 An alternative approach would have been to make a more sophisticated reliability model which maps better to real-world characteristics of distributed environments. However, as described in~\cref{subsec:background_modelling_rel}, it is impossible to include all parameters affecting the reliability of applications or services running in such environments. Furthermore, the lack of an actual implementation would have resulted in only simulations being possible, instead of actual experiments. While simulations can take many parameters into account, they have to be based on failure data, which is usually collected from in-house testing, and thus cannot be compared with failures that can occur in an actual operational environments~\cite{surveyReliabilityDistr}. %TODO Oklart enligt Christian? While simulations...
