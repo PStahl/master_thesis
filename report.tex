@@ -515,7 +515,7 @@ Like~\cite{selfAdaptRel}, only system related failures are considered, assuming 
 \subsubsection{Failure distribution} \label{design:failure_distribution}
 A commonly used assumption, also adapted in this paper, is that failures are statistically independent. Furthermore, failures are assumed to follow a Poisson process, as this seems to be widely accepted in the research community~\cite{experimentalFailureAssessment}. 
 
-While most models using the Poisson process to model reliability assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, the \emph{MTBF} of a node can by dynamically adapted. This is accomplished by using the time of the three latest failures to determine the \emph{MTBF} as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
+While most models using the Poisson process to model the probability of failure assume constant failure rates, we assume they are constant only for a given period of time. By monitoring the system resources and registering failure times, the \emph{MTBF} of a node can by dynamically adapted. This is accomplished by using the time of the three latest failures to determine the \emph{MTBF} as of~\cref{def:MTBF}. This is further described in~\cref{sec:design_self_adapting_mtbf}. 
 
 Since we assume the \emph{MTBF} for a node is constant during a period of time, failures can be modeled using a Poisson process. Using a resource's \emph{MTBF}, the reliability for that resource can using~\cref{eq:Poisson} be expressed as
  
@@ -533,7 +533,7 @@ In our case \emph{t} represents the time it take to detect a node failure and cr
 
 In order to use~\cref{eq:Poisson_no_failures}, the \emph{MTBF} of a node must be available, and to calculate a node's \emph{MTBF} at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the \emph{MTBF} will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
 
-As time goes and nodes fail, the time of failure for nodes are stored, the system will get more precise values for the \emph{MTBF} for the nodes in the system. By using the latest three failure times, one can adapt the \emph{MTBF} as nodes start failing more or less often. 
+As time goes and nodes fail, and the time of each failure is stored, the system will get more precise values for the \emph{MTBF} for the nodes in the system. By using the latest three failure times, one can adapt the \emph{MTBF} as nodes start failing more or less often. 
 
 
 \section{Monitoring} \label{sec:design_monitoring}
