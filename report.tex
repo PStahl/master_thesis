@@ -601,7 +601,7 @@ which must be fulfilled by the system. Assuming that failure rates differ among 
 
 The scheduling problem to fulfill a reliability $R_{req}$ refers to selecting $m$ nodes on which to place $m$ replicas such as the reliability level of the task, expressed in \cref{eq:task_reliability_2}, exceeds $R_{req}$.
 
-\subsection{Expressing time t} \label{sec:design_time_t}
+\subsection{Expressing time \emph{t}} \label{sec:design_time_t}
 The time $t$ used in \cref{eq:task_reliability_2} is the time it takes from that a failure happened, until a new replica is operational, and consists of the time it takes to detect the failure, and the time it takes to create a new replica. The time $t$ can therefore be expressed as 
 
 \begin{equation} \label{eq:rep_time}
@@ -712,6 +712,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
 	Calculate the reliability of the nodes currently holding a replica. This function could be change to use a different reliability model.
 	\begin{algorithmic}[1]
+	\Require{The time \emph{t} used in this function depends on the task type and is described in~\cref{sec:design_time_t}.}
 	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica.}
 	\Statex
 	\Function{reliability}{$current\ nodes$}
@@ -746,7 +747,7 @@ The algorithm is run when deploying an application, when a failure is detected a
 	\Call{sort}{$current\ nodes$, $ascending$}
 	\State $least\_reliable\gets current\ nodes.pop$
 	\State
-	\While{$R_{most\_reliable}(t) > R_{least\_reliable}(t)$}
+	\While{\Call{Reliability}{$most\_reliable$} > \Call{Reliability}{$least\_reliable$}}
 			\State $replica\gets $\Call{replica at}{$least\_reliable$}
 			\State
 			\Call{replicate to}{$replica$, $most\_reliable$}
