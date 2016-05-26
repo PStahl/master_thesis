@@ -538,10 +538,10 @@ As time goes and nodes fail, and the time of each failure is stored, the system 
 
 
 \section{Monitoring} \label{sec:design_monitoring}
-Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also not to use more resources than necessary. 
+Monitoring the system is crucial for achieving an entirely dynamic system, both in which the required reliability is met over time, but also where no more resources than necessary are being used. 
 
 \subsection{Heartbeats} \label{subsec:heartbeats}
-The ability to detect node failures is crucial for knowing when a new replica is needed in order to keep the required reliability. Furthermore, since the reliability model presented in~\cref{sec:design_reliability_model} is based on a \emph{mean-time-between-failures} for the nodes in the system, it is based on the assumption that node failures are detectable. 
+The ability to detect node failures is crucial for knowing when a new replica is needed in order to keep the required reliability. Furthermore, since the reliability model presented in~\cref{sec:design_reliability_model} is based on a \emph{MTBF} of the nodes in the system, it is based on the assumption that node failures are detectable. 
 
 To achieve this, a heartbeat system is used, where nodes periodically send UDP messages, called heartbeats, every $t_h$ seconds. The heartbeats contain a node identifier and are sent to all the other nodes in the system. Nodes are considered operational as long as heartbeats are received from them, and if no heartbeat is received from a node for $t_{timeout}$ seconds, the node is assumed dead.
 
@@ -612,7 +612,7 @@ where $t_d$ is the time to detect that a node has failed, and $t_R$ is the time 
 \subsubsection{Node failure detection time, $t_d$} \label{sec:node_failure_detection_time}
 As described in~\cref{subsec:heartbeats}, heartbeats are periodically sent to all nodes in the system every $t_h$ seconds, and if no heartbeat is received from a node for $t_{timeout}$ seconds, it is assumed dead. Note that $t_h$ must be lower than $t_{timeout}$.
 
-The timeout time, $t_{timeout}$ is only an upper bound for how long it takes to detect a node failure. A node may fail just before sending a heartbeat, or directly after, which will affect the actual time the node has been dead before it is detected. This corresponds to the best and worst case scenario. 
+The timeout time, $t_{timeout}$ is only an upper bound for how long it takes to detect a node failure. A node can fail just before sending a heartbeat, or directly after, which will affect the actual time the node has been dead before it is detected. This corresponds to the best and worst case scenario. 
 
 If a node A dies precisely before sending heartbeat $H_k$ to node B, the last received heartbeat from A was $H_{k - 1}$. $t_{timeout}$ seconds after $H_{k - 1}$ was received, node B will assume A has failed. Node A will then have been dead for $t_{timeout} - t_h$ seconds.
 
@@ -633,7 +633,7 @@ which is the worst case scenario. This result in the calculated reliability alwa
 \subsubsection{Replication request time, $t_R$} \label{sec:replication_time}
 The time $t_R$ in~\cref{eq:rep_time} is the time from that a replication request is sent, until a new replica is operational and a response is received. It consists of the time it takes to send a replication request to a node, for that node to replicate its replica to another node and send a response.
 
-To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which has no replica already and include this in the request. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time} where $t_{query\ storage}$ is the time it takes to find which nodes currently holding a replica and which nodes does not, $t_{replicate\ msg}$ is the time to send a replication message to another node, $t_{r}$ is the time to replicate the task to another node, and $t_{response}$ is the time to send a response to the requesting node. The process of sending a replication request is shown in~\cref{fig:replication_request}. The part of querying the storage is excluded from this figure.
+To know which node to send the replication request to, one must first find out on which nodes current replicas are running. Thereafter, since the reliability is dependent on which nodes the replicas are running on, not solely on the number of replicas, one must also find a node which does not already have a replica and include this node in the request. The time $t_R$ can be expressed as in~\cref{eq:replication_request_time} where $t_{query\ storage}$ is the time it takes to find which nodes currently holding a replica and which nodes do not, $t_{replicate\ msg}$ is the time to send a replication message to another node, $t_{r}$ is the time to replicate the task to another node, and $t_{response}$ is the time to send a response to the requesting node. The process of sending a replication request is shown in~\cref{fig:replication_request}. The part of querying the storage is excluded from this figure.
 
 \begin{equation} \label{eq:replication_request_time}
 t_R = t_{query\ storage} + t_{replicate\ msg} + t_{r} + t_{response}
@@ -662,7 +662,7 @@ In our model, the time $t_{R}$ is measured and stored every time a replication t
 
 Other factors affect the time $t_R$. The node to which the replication request is sent may die before the replication is finished. The sender of the request assumes the receiving node has failed if no response is received within a timeout time. In this case, a new node is selected and asked to replicate its replica. When this happens, the time $t_R$, will be relatively high, as time was wasted sending the request to the first node.
 
-This situation can theoretically continue until there are no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishes the replication.
+This situation can theoretically continue until there are no more nodes holding a replica. One could argue that this should be taken into account in the reliability model, as the time $t_R$ affects the reliability. Also the node being selected to run~\cref{alg:scheduling}, described in~\cref{sec:design_handling_failure}, may die, in case a new node is selected. These situations are further described in~\cref{sec:design_handling_failure}. The probability of these situations happening depend on how often nodes fail, and how long time the replication takes. If nodes fail very frequently, there is a higher risk of a node failing before finishing the replication.
 
 Instead of including the probability of these situations in the reliability model, a log-logistic distribution is first fitted to the previously registered times $t_R$. From the fitted distribution, the 95th percentile value is used as the value for $t_R$ in~\cref{eq:rep_time}. This means in 95 percent of the cases, the time $t_R$ will actually be lower than the value used in~\cref{eq:rep_time}. The reason for choosing log-logistic distribution is mentioned in~\cref{sec:eval_time_t}.
 
@@ -709,7 +709,7 @@ To fulfill~\cref{eq:required_rel} using the minimum number of replicas, one coul
 
 \begin{function} 
 	\caption{Calculates the reliability of the given nodes} \label{func:calc_reliability}
-	Calculate the reliability of the nodes currently holding a replica. This function could be change to use a different reliability model.
+	Calculates the reliability of the nodes currently holding a replica. This function could be changed to use a different reliability model.
 	\begin{algorithmic}[1]
 	\Require{The time \emph{t} used in this function depends on the task type and is described in~\cref{sec:design_time_t}.}
 	\Ensure{$current\ nodes$ is a list of nodes currently holding a replica.}
@@ -773,7 +773,7 @@ The algorithm is run when deploying an application, when a failure is detected a
 	\end{algorithmic}
 \end{algorithm}
 
-The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replicas on the least reliable nodes to the most reliable nodes available, as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving a replica involves first creating a new replica, and later deleting the old one. If deleting before creating the new replica, one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
+The first part of~\cref{alg:optimization} makes sure the most reliable nodes are used, by moving the replicas from the least reliable nodes used, to the most reliable nodes available, as long as more reliable nodes are available. To avoid putting the system in a vulnerable state, moving a replica involves first creating a new replica, and later deleting the old one. If deleting before creating the new replica, one risk not having enough replicas until the new replica is operational. Replicating first avoids this problem.
 
 The second part make sure no unnecessary replica is used, by deleting the replica on the least reliable node as long as the required reliability is still met.
 
@@ -894,7 +894,7 @@ Each runtime also periodically monitors the applications deployed to it, to ensu
 %TODO Mention what happens if the runtime which deployed the application dies?
 
 \chapter{Evaluation} \label{ch:evaluation}
-In order to validate our model, we conducted a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
+In order to validate our model, we carried out a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
 We also measured the time $t_R$ to find the best fitting distribution for these values, and also the replication time $t_r$ for varying state sizes. Finally, we measured the actual time for detecting failure to demonstrate that the values lie between the best and worst case described in~\cref{subsec:heartbeats}.
 
