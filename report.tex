@@ -196,7 +196,7 @@ Distributed computing systems (DCS) are composed of a number of components or su
 \subsubsection{Grid computing}
 A grid is a collection of autonomous resources, that are distributed geographically and across several administrative domains, and work together to achieve a common goal, i.e. to solve a single task~\cite{compStudyLoadAndCloud, relAndPerfGridServices, evalOfGridRel}.
 
-Each domain in a grid usually has a centralized scheduling service called Resource Management System (RMS) which accepts job execution requests and sends the job's tasks to the different resources for execution~\cite{evalOfGridRel}.
+Each domain in a grid usually has a centralized scheduling service called Resource Management System (RMS) which accepts job execution requests and sends the jobs' tasks to the different resources for execution~\cite{evalOfGridRel}.
 
 The reliability of the grid computing is very critical but hard to analyze due to its characteristics of massive-scale service sharing, wide-area network, heterogeneous software/hardware components and complicated interactions among them~\cite{cloudServiceRel}.
 
@@ -214,9 +214,9 @@ The majority of distributed service systems can be viewed as a Centralized Heter
 \subsection{Dynamic versus static environments} \label{subsec:background_dyn_stat_env}
 A distributed computing environment can be either static or dynamic.
 
-In a static environment, only homogenous resources are usually installed~\cite{compStudyLoadAndCloud}. Prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during runtime are not taken into account which makes the environment easy to simulate but not well suited for heterogeneous resources. Once the system has been put into place, resources are neither added nor removed from the system.
+In a static environment, only homogenous resources are usually installed~\cite{compStudyLoadAndCloud}. For load-balancing and scheduling algorithms, prior knowledge of node capacity, processing power, memory, performance and statistics of user requirements are required. Changes in load during runtime are not taken into account which makes the environment easy to simulate but not well suited for heterogeneous resources. Once the system has been put into place, resources are neither added nor removed from the system.
 
-In contrast to static environments, a dynamic environment usually consists of heterogeneous resources~\cite{compStudyLoadAndCloud}. Once the system has been put into place, resources can be dynamically added or removed. In such environments, prior knowledge is therefore not enough, since the requirements of the user and the available resources can change during runtime. Runtime statistics are therefore usually collected and taken into account. Dynamic environments are difficult to simulate, but algorithms exist which easily adopt to runtime changes. 
+In contrast to static environments, a dynamic environment usually consists of heterogeneous resources~\cite{compStudyLoadAndCloud}. Once the system has been put into place, resources can be dynamically added or removed. In such environments, prior knowledge is therefore not enough for load-balancing and scheduling algorithms, since the requirements of the user and the available resources can change during runtime. Runtime statistics are therefore usually collected and taken into account. Dynamic environments are difficult to simulate, but algorithms exist which easily adopt to runtime changes. 
 
 
 \section{Faults in distributed environments} \label{sec:background_faults_distr_env}
