@@ -1148,7 +1148,7 @@ After the application was started, the reliability level of the nodes on which r
 The experiment was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. 
 
 \subsubsection*{Results}
-The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole experiment was 0.996, clearly above the required level of 0.98. The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 83,9 ms.
+The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole experiment was 0.996, clearly above the required level of 0.98. The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 83.9 ms.
 
 As shown in the figure, the reliability was lower in the beginning of the experiment. This is due the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the experiment was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The experiment shows clearly that the momentary reliability level is restored to a level above the required level and the experiment if therefore considered successful.
 
@@ -1193,7 +1193,7 @@ The experiment was considered successful if, as the system learned the actual \e
 \subsubsection*{Results}
 The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75} show the number of replicas for each of the unstable nodes over time.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 99,1 ms.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 99.1 ms.
 
 As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the experiment, to later only two. This is due to the system learning the nodes' \emph{MTBF} and thereafter placing the replicas on the more reliable ones. This is shown in \cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75}, where the number of replicas per node is shown. It is clear that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones. The experiment was therefore considered successful.
 
@@ -1227,7 +1227,7 @@ In order to show that the system automatically reduces the number of replicas in
 \subsubsection*{Results}
 The experiment ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, had failed twice, the system used the default \emph{MTBF} of 10 seconds. After having failed twice, the system could learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 67,7 ms. This resulted in that as long as the two reliable nodes were available, only two replicas were needed, but if one, or both of them died, three replicas were needed to reach the required reliability. This is shown in~\cref{fig:exp_opt_replicas_total_2}, where the total number of replicas are shown. 
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 67.7 ms. This resulted in that as long as the two reliable nodes were available, only two replicas were needed, but if one, or both of them died, three replicas were needed to reach the required reliability. This is shown in~\cref{fig:exp_opt_replicas_total_2}, where the total number of replicas are shown. 
 
 \Cref{fig:exp_opt_replicas_MTBF_25_2,fig:exp_opt_replicas_MTBF_10_2} shows the number of replicas per node and it seen that the system moves replicas from the less reliable nodes to the more reliable nodes as soon there is a more reliable node available. The experiment was therefore considered successful.
 
@@ -1311,7 +1311,7 @@ Since the replicas are placed on the most reliable nodes, each application will 
 \subsubsection*{Results}
 The experiment ran for 5 minutes, and \cref{fig:eval_energy_efficient_total} shows the total number of nodes used over time. \Cref{fig:eval_energy_efficient_mtbf_40}, \cref{fig:eval_energy_efficient_mtbf_15}, and \cref{fig:eval_energy_efficient_mtbf_75} show the number of replicas running at the various nodes. Since the model does not place two replicas of the same task on the same node, the nodes had at most 5 actors, one replica per application, at any time.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 763,4 ms. This resulted in that when the system had learned the nodes' \emph{MTBF}, only two replicas per application was needed to reach the required reliability, while three replicas were needed when the \emph{MTBF} was unknown and the default value of 10 seconds was used. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time. The experiment was therefore considered successfully.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 263.4 ms. This resulted in that when the system had learned the nodes' \emph{MTBF}, only two replicas per application was needed to reach the required reliability, while three replicas were needed when the \emph{MTBF} was unknown and the default value of 10 seconds was used. As shown in the figure, the number of nodes used varies between two to three for the most time, until after about two minutes, after which only two nodes are needed most of the time. Despite having 10 nodes, at most 4 were actually used to at any time. The experiment was therefore considered successfully.
 
 \begin{figure}[!hbt]
 \centering
@@ -1347,7 +1347,7 @@ The experiment was considered successful if, despite being one of the more relia
 \subsubsection*{Results}
 The experiment ran for 5 minutes. \Cref{fig:eval_replaceable_model_usages} shows the CPU usage for the various nodes. \Cref{fig:eval_replaceable_model_loaded} and \cref{fig:eval_replaceable_model_unloaded} show the number of replicas for \emph{Kevin} and the other nodes during the experiment.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 547,9 ms.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 47.9 ms.
 
 \Cref{fig:eval_replaceable_model_loaded} clearly shows that no replica was placed on \emph{Kevin} during the time its load exceeded the threshold of 15 percent and therefore, this experiment is considered successful. 
 
