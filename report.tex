@@ -1039,16 +1039,16 @@ Both experiments was conducted in two settings. In one, two servers were used wi
 
 While measuring the total time, $t_r$, several other times was measured along the way, namely the times to serialize the state, send the state to the other runtime, de-serialize it, create and start the new actor, and send the reply, corresponding to the times described in~\cref{eq:replication_time}.
 
-When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was due to the replication taking too long time. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the results.
+When the replication was done between runtimes on the same laptop, and the queue size increased, the times were only measured for state sizes less than or equal to 400 MB. This was due to the replication taking too long. For a state size of 400 MB, each replication took nearly two hours, as shown below, and during the time of the experiment the laptop could not be used, not to affect the results.
 
 For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 times and calculated the standard deviation of these values.
 
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since then all values in the queue have to be decoded. %TODO decoded?
+\Cref{fig:replication_time_server} and \cref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since all values in the queue have to be decoded. %TODO decoded?
 
-As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when, by increasing the queue, increasing the state size from 200 MB to 400 MB. This is due to running out of memory, and the process started using the system's SWAP memory, which significantly reduced the performance. 
+As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB, by increasing the queue. This is due to running out of memory, and the process started using the laptop's SWAP memory, which significantly reduced the performance. 
 
 \begin{figure}[hbt!]
 \centering
@@ -1070,7 +1070,7 @@ Furthermore, significantly more time was spent on transmitting the state to the 
 %TODO needs work.
 \Cref{fig:replication_time_parts_laptop_variable} and \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time was spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication was done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. %Might result in that actor blocking the others in the scheduling loop
 
-Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when replicating from laptop to laptop an actor with state size above 100 MB (when increasing the queue size), more time was spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the system's swap memory when creating the new actor. The laptop's 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
+Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when replicating from laptop to laptop an actor with state size above 100 MB (when increasing the queue size), more time was spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the laptop's swap memory when creating the new actor. The laptop's 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
 
 \begin{figure}[hbt!]
 \centering
@@ -1097,7 +1097,7 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
-For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$, for these three state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low. 
+For 1, 50 and 100 MB the replication time was measured 100 times. The variance of the replication times was very small. \Cref{table:replication_time_variation_variable} and \cref{table:replication_time_variation_queue} show the average replication time ($\mu$), the standard deviation ($\sigma$), and the relative standard deviation (RSD), calculated as $\frac{\sigma}{\mu}$, for these three state sizes when increasing the variable's size, and the size of the queue respectively. The variance was as shown very low, except for the smaller state size when replication was done between runtimes on the same laptop. 
 
 However, in a real setting, the replication time will vary depending on the state of the system. When increasing the queue size, the replication time is more CPU bound than when increasing the size of a variable, and therefore the replication time is dependent on the current load of the two nodes. Furthermore, for larger state sizes when the transmission time is the largest part of the replication time, the total time will vary depending on the network load of the system.
  
@@ -1148,7 +1148,7 @@ After the application was started, the reliability level of the nodes on which r
 The experiment was considered successful if the momentary reliability, when dropped below the required, was restored to a level above the required. 
 
 \subsubsection*{Results}
-The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole experiment was 0.996, clearly above the required level of 0.98. The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 583,9 ms.
+The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how the reliability vary during this period. The average reliability for the duration of the whole experiment was 0.996, clearly above the required level of 0.98. The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 83,9 ms.
 
 As shown in the figure, the reliability was lower in the beginning of the experiment. This is due the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the experiment was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The experiment shows clearly that the momentary reliability level is restored to a level above the required level and the experiment if therefore considered successful.
 
@@ -1193,7 +1193,7 @@ The experiment was considered successful if, as the system learned the actual \e
 \subsubsection*{Results}
 The experiment ran for 5 minutes, and~\cref{fig:exp_opt_replicas_total} shows the number of replicas over time, while~\cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75} show the number of replicas for each of the unstable nodes over time.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 599,1 ms.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 99,1 ms.
 
 As shown in the figures, the number of replicas decreased over time, from three replicas at the start of the experiment, to later only two. This is due to the system learning the nodes' \emph{MTBF} and thereafter placing the replicas on the more reliable ones. This is shown in \cref{fig:exp_opt_replicas_MTBF_30,fig:exp_opt_replicas_MTBF_15,fig:exp_opt_replicas_MTBF_75}, where the number of replicas per node is shown. It is clear that the more reliable nodes, $mark_2$, $jerry_1$, and $jerry_2$, were chosen more often than the less reliable ones. The experiment was therefore considered successful.
 
@@ -1227,7 +1227,7 @@ In order to show that the system automatically reduces the number of replicas in
 \subsubsection*{Results}
 The experiment ran for 5 minutes. As mentioned, the default \emph{MTBF} is 10 seconds when no failure data is known for a node. Therefore, before the reliable nodes, $kevin$ and $jerry$, had failed twice, the system used the default \emph{MTBF} of 10 seconds. After having failed twice, the system could learn their actual \emph{MTBF} of 25 seconds. This is why there is a period during which none of the reliable nodes are given any replicas. After their second failure however, it is known that they are actually more reliable than the other ones, why replicas are then moved to those nodes.
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 567,7 ms. This resulted in that as long as the two reliable nodes were available, only two replicas were needed, but if one, or both of them died, three replicas were needed to reach the required reliability. This is shown in~\cref{fig:exp_opt_replicas_total_2}, where the total number of replicas are shown. 
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 67,7 ms. This resulted in that as long as the two reliable nodes were available, only two replicas were needed, but if one, or both of them died, three replicas were needed to reach the required reliability. This is shown in~\cref{fig:exp_opt_replicas_total_2}, where the total number of replicas are shown. 
 
 \Cref{fig:exp_opt_replicas_MTBF_25_2,fig:exp_opt_replicas_MTBF_10_2} shows the number of replicas per node and it seen that the system moves replicas from the less reliable nodes to the more reliable nodes as soon there is a more reliable node available. The experiment was therefore considered successful.
 
@@ -1287,7 +1287,7 @@ The experiment was considered successful if the number of replicas used increase
 \subsubsection*{Results}
 The experiment ran for 30 minutes. \Cref{fig:eval_self_adaptive_rel} shows how the number of replicas varied over time, and~\cref{fig:eval_self_adaptive_node_rels} shows how the calculated reliability for the various nodes varied over time. Since the number of replicas deceased as the \emph{MTBF} for the various nodes increased, and the number of replicas increased as the \emph{MTBF} for the nodes decreased the experiment was considered successful. 
 
-The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 709,2 ms. The reason for the higher value of $t_R$, compared to \cref{sec:eval_rel_level,sec:eval_opt_nbr_replicas,sec:eval_opt_nbr_replicas_2} is due to that when the \emph{MTBF} for the nodes were at it lowest, approximately 5 seconds, there was a high probability of replication request failing, recall~\cref{sec:replication_time}.
+The average of the 95th percentile values for the replication time, $t_R$ was during the experiment 209.2 ms. The reason for the higher value of $t_R$, compared to \cref{sec:eval_rel_level,sec:eval_opt_nbr_replicas,sec:eval_opt_nbr_replicas_2} is due to that when the \emph{MTBF} for the nodes were at it lowest, approximately 5 seconds, there was a high probability of replication request failing, recall~\cref{sec:replication_time}.
 
 \begin{figure}[!hbt]
 \centering
