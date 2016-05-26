@@ -832,7 +832,7 @@ As described in~\cref{design:failure_distribution}, only the three latest failur
 However, if a node starts dying more often, the model needs three new failure times before the \emph{MTBF} has been update to correctly reflect its new behavior. This is a clear limitation to our model. Instead, the past failure times could be used together with some machine-learning algorithm or regression analysis, to predict when a node is about to fail more or less often, and adapt its \emph{MTBF} before it actually happens.
 
 \section{Implementation} \label{sec:design_implementation}
-For implementing our model, we use an actor based application environment called \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
+For implementing our model, we used the actor based application environment \emph{Calvin}. Below follows a brief description of the main parts of the Calvin framework, for further info we refer to~\cite{calvin}.
 
 \subsection{Calvin} \label{subsec:design_calvin}
 Calvin is an actor-based application environment for light-weight IoT applications, and is written in Python. It was developed by \emph{Ericsson} and made open source in the summer of 2015. While Calvin is an application environment for IoT applications, it suites well for implementation of our model.
@@ -849,7 +849,7 @@ When using the proxy storage, one runtime acts as a storage node, and all data i
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
 
-Multiple actors may send data to another actor's in-port, and an actor's out-port may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process.
+Multiple actors may send data to another actor's in-port, and each of an actor's out-ports may have several receivers. For each receiver of outgoing messages, or sender of incoming messages, there is a separate queue of tokens to process or to send.
 
 The runtime, see~\cref{sec:calvin_runtime}, in which an actor is executing is responsible for the communication between runtimes and between actors.
 
@@ -868,13 +868,13 @@ In our model a runtime corresponds to a node.
 \subsubsection{Replication} \label{subsec:calvin_replication}
 The process of replicating an actor in Calvin starts with getting the state of the actor to replicate, serializing it and sending it to the runtime in which the new replica is to be created. The receiving runtime then de-serializes the state and uses it to create the replica and setup its port connections.
 
-Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. The decoding is CPU bound and affects the total replication time, as shown in the experiment in~\cref{sec:eval_repl_time}.
+Part of creating the new replica is decoding the in- and out-ports' queues, which are part of the state. The decoding is CPU bound and affects the total replication time, as shown in~\cref{sec:eval_repl_time}.
 
 \subsection{Our contributions to Calvin} \label{subsec:design_contributions} % ish?
 Here follows a description of the most important parts of our changes and new features in Calvin.
 
 \subsubsection{Fan-in connectivity}
-We extended the Calvin framework to allow a fan-out/fan-in connectivity model where actors can have multiple producers (fan-in) and multiple consumers (fan-out). Previously, only multiple receivers were allowed, but with our changes an actor's in-port could have multiple senders.
+We extended the Calvin framework to allow a fan-out/fan-in connectivity model where actors can have multiple producers (fan-in) and multiple consumers (fan-out). Previously, only multiple receivers were allowed, but with our changes an actor's in-port can have multiple senders.
 
 \subsubsection{Actor replication}
 Previously, the framework allowed for dynamically migrating an actor from one runtime to another. We extended this functionality by allowing dynamic replication of actors. 
@@ -883,9 +883,9 @@ Previously, the framework allowed for dynamically migrating an actor from one ru
 To share various kinds of resources between runtimes, e.g. CPU usage as used in~\cref{sec:eval_replaceable_model}, we created a resource reporter actor. When a runtime is created, it automatically creates a resource reporting actor. The actor periodically reports the node's CPU usage to all connected runtimes. 
 
 \subsubsection{Heartbeat Actor}
-The heartbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when its started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
+The heartbeat system described in~\cref{subsec:heartbeats}, was implemented using actors. Each runtime creates a heartbeat actor when it is started. The heartbeat actor listens for heartbeats as well as periodically sends heartbeats to other runtimes.
 
-Unlike the resource manager, messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
+Unlike the resource manager, heartbeat messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
 For every heartbeat received, a timeout of $t_{timeout}$ seconds is set, and when it times out, the runtime from which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime are canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
 
