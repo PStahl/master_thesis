@@ -385,12 +385,12 @@ The term load balancing is generally used for the process of transferring load f
 
 Load balancing algorithms can be divided into three categories based on the initiation of the process:
 \begin{itemize}
-\item Sender Initiated - An overloaded node sends requests until it finds a proper node which can except its load.
-\item Receiver Initiated - An under-loaded node sends a message for requests until it finds an overloaded node. %TODO "a message for requests", is it corrrect language?
-\item Symmetric - A combination of sender initiated and receiver initiated. 
+\item Sender initiated - an overloaded node sends requests until it finds a proper node which can except its load.
+\item Receiver initiated - an under-loaded node sends requests for more work until it finds an overloaded node. %TODO "a message for requests", is it corrrect language?
+\item Symmetric - a combination of sender initiated and receiver initiated. 
 \end{itemize}
 
-Load balancing is also often divided into two categories, namely static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
+Load balancing can also be divided into static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
 \section{Task scheduling} \label{sec:background_task_sched}
 Task scheduling is the process of mapping tasks to available resources. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
