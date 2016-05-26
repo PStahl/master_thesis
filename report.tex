@@ -1436,11 +1436,11 @@ Finally, assuming statistically independent failures, the reliability of a node 
 
 
 \chapter{Conclusions} \label{ch:conclusions}
-The goal of this thesis was first to devise a method for dynamically ensuring a predefined level of reliability for distributed applications or services. This was accomplished by first designing a somewhat simplistic reliability model, and secondly a framework which automatically detects node failures and ensures the predefined reliability is met. 
+The goal of this thesis was first to devise a method for dynamically ensuring a predefined required level of reliability for distributed applications or services. This was accomplished by first designing reliability model based on nodes' \emph{mean-time-between-failures}, and secondly a framework which automatically detects node failures and ensures the predefined reliability is met. 
 
-The predefined reliability is ensured by replication of tasks, and based on the available resources the framework creates enough number of replicas. In order to optimize the number of replicas over time the system is periodically monitored in order to dynamically adapt to resources' changing behavior.
+Reliability is increased by replication of tasks, and the required reliability is ensured by creating enough replicas. In order to optimize the number of replicas over time, the system is periodically monitored in order to dynamically adapt to resources' changing behavior.
 
-Furthermore, the goal was also to provide a platform to be used to further experiments. This was accomplished by implementing our model using Calvin. Both the reliability model used and the task placement function are replaceable, which gives rise to various experimental opportunities. One could for instance include resources' load and capacity in the task place function or apply machine learning in the reliability function, but this is left as future work.
+Finally, the goal was also to provide a platform to be used to further experiments. This was accomplished by implementing our model using Calvin. Both the reliability model used and the task placement function are replaceable, which gives rise to various experimental opportunities.
 
 \begin{thebibliography}{50}
 
