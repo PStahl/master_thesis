@@ -283,10 +283,12 @@ where $\lambda$ is the failure rate, i.e. the average number of failures occurri
 \subsection{Reliability definition} \label{subsec:background_reliability_definition}
 Reliability in the context of software applications can have several meanings, especially for applications running in distributed systems. Often, reliability is defined as the probability that the system can run an entire task successfully~\cite{taskAllocation, relModelDistSimSystem, studyServiceRel, hierarchicalRelModeling, generalAlgoRelEval, realTimeRelAnalysis, perfRelNonMarkovian}. A similar definition, for applications running in distributed environments, is that reliability is the probability of a software application to perform its intended functions for a specified period of time~\cite{surveyReliabilityDistr, surveyRelPrediction, relDistApplications}, and is commonly used for applications with time constraints. Finally, reliability can also be defined as the probability that a task produces the correct result~\cite{surveyRelPrediction, relAndPerfGridServices, relGridServicePredConstraint, relModelWebServices, selfAdaptRel}. The latter is usually used together with the Byzantine fault model. 
 
-\subsection{Modeling reliability} \label{subsec:background_modeling_rel}
-Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one need to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors not feasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
+%TODO FINAL mention that rel. model must be updated to use consensus algorithm
 
-For distributed applications, the probability of failure increases since it is dependent on more resources~\cite{relModelDistSimSystem}. Most reliability models are based on the mean-time-to-failure, or the mean-time-between-failures, of resources~\cite{relModelAnalysis}. Conventionally, Mean-Time-To-Failure (MTTF) refers to non-repairable resources, while Mean-Time-Between-Failures (MTBF) refers to repairable objects~\cite{effTaskReplMobGrid}.
+\subsection{Modeling reliability} \label{subsec:background_modeling_rel}
+Reliability of a system highly depends on how the system is used~\cite{surveyRelPrediction}. In order to determine the reliability of a system, one needs to take all factors affecting the reliability into account~\cite{surveyReliabilityDistr}. However, including all factors not feasible. In \cite{factorsAffectingRel}, 32 factors affecting the reliability of software are listed, excluding environmental factors such as hardware and link failure. Other environmental conditions affecting reliability include the amount of data being transmitted, available bandwidth and operation time~\cite{cloudServiceRel, hierarchicalRelModeling}.
+
+For distributed applications, the probability of failure increases since it is dependent on more resources~\cite{relModelDistSimSystem}. Most reliability models are based on the Mean-Time-To-Failure (MTTF), or the Mean-Time-Between-Failures (MTBF), of resources~\cite{relModelAnalysis}. Conventionally, MTTF refers to non-repairable resources, while MTBF refers to repairable objects~\cite{effTaskReplMobGrid}.
 
 \begin{definition} \label{def:mttf}
 The Mean-Time-To-Failure for a component is the average time it takes for a component to fail, given that it was operational at time zero.
@@ -355,9 +357,9 @@ Often, there is one primary task and several back-up replicas. The primary task 
 
 Depending on the set-up, the primary task could be the only one producing output, or all replicas could produce output. In the latter case, the receiver will receive multiple results. A consensus algorithm could then be deployed to determine which result is correct, and thereby protect against Byzantine faults. More on this in \cref{subsub:consensus}.
 
-This type of replication is feasible only if, by assumption, the primary task and the replica receives exactly the same input. When replicating, the task replicas are likely not to be synchronized. Therefore, if they perform computations or make external requests which are time-dependent, they are likely to produce different results. To avoid this, this kind of replication is usually done for tasks performing deterministic\footnote{A deterministic function always produces the same output given a certain input.} computations, which are not time-dependent.
+Active replication is feasible only if all replicas receive exactly the same input. When replicating, the task replicas are likely not to be synchronized. Therefore, if they perform computations or make external requests which are time-dependent, they are likely to produce different results. To avoid this, this kind of replication is usually done for tasks performing deterministic\footnote{A deterministic function always produces the same output given a certain input.} computations, which are not time-dependent.
 
-A drawback with active replication is that having $n$ identical copies of a task, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, it may help improving performance by reducing task completion time~\cite{improvingPerformanceReplication}.
+A drawback with active replication is that having $n$ identical copies of a task, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, it may help to improve performance by reducing task completion time~\cite{improvingPerformanceReplication}.
 
 \subsubsection{Semi-active replication} \label{subsec:semi_active_replication}
 Semi-active replication is very similar to active replication, but differs in that decisions common for all replicas are taken by one site. This solves the issue with time-dependent computations, since all such computations could be performed by one site. However, this introduces a single-point-of-failure. %TODO Otydligt?
@@ -373,11 +375,13 @@ Based on achieving consensus, two different redundancy strategies can be identif
 
 In progressive redundancy the number of replicas needed is minimized. If with traditional redundancy, $k \in \{3,5,7...\}$ replicas are executed, progressive redundancy first executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result, an additional number of replicas are executed until enough replicas have returned the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
 
+%TODO FINAL note about extending with consensus algorithm should mention that it should be traditional redundancy
+
 Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focuses more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
 %TODO Load balancing is a proactive fault tolerence technique, short mention?
 \subsection{Load balancing} \label{sec:background_load_balancing}
-The term load balancing is generally used for the process of transferring load from overloaded nodes to under-loaded nodes and thus improving the overall performance. Load balancing techniques for distributed environments consists of two parts, resource allocation and task scheduling. 
+The term load balancing is generally used for the process of transferring load from overloaded nodes to under-loaded nodes in order to improve the overall performance. Load balancing techniques for distributed environments consists of two parts, resource allocation and task scheduling. 
 
 Load balancing algorithms can be divided into three categories based on the initiation of the process:
 \begin{itemize}
@@ -386,7 +390,7 @@ Load balancing algorithms can be divided into three categories based on the init
 \item Symmetric - A combination of sender initiated and receiver initiated. 
 \end{itemize}
 
-Load balancing is often divided into two categories, namely static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
+Load balancing is also often divided into two categories, namely static and dynamic load balancing. In contrast to static load balancing algorithms, dynamic algorithms takes the nodes' previous states and performance into account. The static load balancing only consider properties such as processing power and available memory which might lead to the disadvantage that the selected node gets overloaded~\cite{perfAnalysisLoadCloud}
 
 \section{Task scheduling} \label{sec:background_task_sched}
 Task scheduling is the process of mapping tasks to available resources. A scheduling algorithm can be divided into three simple steps~\cite{optSchedCloud}:
