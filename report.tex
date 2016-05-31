@@ -1,10 +1,24 @@
-\documentclass{cslthse-msc}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{amsthm}
+\documentclass[11pt,twoside]{eitExjobb}
+%%\documentclass[11pt,twoside,final]{eitExjobb}
+% Use final for the final version that will be printed
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\usepackage[Text,Num]{LUfonts}%% LU fonts (local file)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer fonts
+%\usepackage{pxfonts}
+%\usepackage{mathpazo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\usepackage[T1]{fontenc}
+%% Packages used in the thesis
+\usepackage{color}
+\usepackage{graphpap}
+\unitlength=1mm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
 %\usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{microtype}
@@ -14,8 +28,8 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{cite}
-
-
+\fi
+\iffalse
 \crefname{app}{Appendix}{Appendices}
 \crefname{procedure}{Algorithm}{Procedure}
 
@@ -37,100 +51,45 @@
 \Crefname{function}{Function}{Functions}
 
 \algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+\fi
 
-\author{
+\begin{document}
+%%% Title page
+
+\Title{Dynamic Fault Tolerance and Task Scheduling in Distributed Systems}
+\Author{Philip och Jonatan
+\iffalse
 	Philip Ståhl \\
 	{\normalsize \href{mailto:ada10pst@student.lu.se}{\texttt{ada10pst@student.lu.se}}}
 	\and
 	Jonatan Broberg \\
     {\normalsize \href{mailto:elt11jbr@student.lu.se}{\texttt{elt11jbr@student.lu.se}}}
+\fi
 }
 
-\title{Dynamic Fault Tolerance and Task Scheduling in Distributed Systems}
-\subtitle{}
-\company{Mobile and Pervasive Computing Institute (MAPCI), Lund University}
-\supervisor{Björn Landfeldt, \href{mailto:bjorn.landfeldt@eit.lth.se}{\texttt{bjorn.landfeldt@eit.lth.se}}}{}
-\examiner{Christian Nyberg, \href{mailto:christian.nyberg@eit.lth.se}{\texttt{christian.nyberg@eit.lth.se}}}
+\Date{\today}
+\Advisor{Björn Landfeldt}%, \href{mailto:bjorn.landfeldt@eit.lth.se}{\texttt{bjorn.landfeldt@eit.lth.se}}}
 
-\date{\today}
+%\examiner{Christian Nyberg, \href{mailto:christian.nyberg@eit.lth.se}{\texttt{christian.nyberg@eit.lth.se}}}
+\Company{Mobile and Pervasive Computing Institute (MAPCI), Lund University}
 
-\acknowledgements{
-We would like to thank our supervisor Björn Landfeldt and our examiner Christian Nyberg for their valuable input. We would also like to express our gratitude and appreciation to the people at MAPCI and Ericsson for support during the work.
+\MakeTitlePage
+%%%%% Page numbering for front pages
+\frontmatter
+%%%%% Abstract
+\chapter*{Abstract}
+Ensuring a predefined level of reliability for applications running in distributed environments is a complex task. Having multiple identical copies of a task increases redundancy and thereby the reliability. Due to varying properties of the often heterogeneous and vast number of components used in distributed environments, using static analysis of the environment to determine how many copies are needed to reach a certain level of reliability is insufficient. Instead, the system should dynamically adapt the number of copies as the properties of the system changes. In this thesis, we present a dynamic fault tolerant model and task scheduling, which ensures a predefined reliability by replicating tasks. Reliability is ensured over time by detecting failures, and dynamically creating new copies. Furthermore, the resources used are kept to a minimum by using the optimal number of task copies. Finally, the model was implemented using Ericsson's IoT-environment Calvin, thus providing a platform which can be used for further research and experiments.
 
-%If you want to thank people, do it here, on a separate right-hand page. Both the U.S. \textit{acknowledgments} and the British \textit{acknowledgements} spellings are acceptable.
-}
-
-\theabstract{Ensuring a predefined level of reliability for applications running in distributed environments is a complex task. Having multiple identical copies of a task increases redundancy and thereby the reliability. Due to varying properties of the often heterogeneous and vast number of components used in distributed environments, using static analysis of the environment to determine how many copies are needed to reach a certain level of reliability is insufficient. Instead, the system should dynamically adapt the number of copies as the properties of the system changes. In this thesis, we present a dynamic fault tolerant model and task scheduling, which ensures a predefined reliability by replicating tasks. Reliability is ensured over time by detecting failures, and dynamically creating new copies. Furthermore, the resources used are kept to a minimum by using the optimal number of task copies. Finally, the model was implemented using Ericsson's IoT-environment Calvin, thus providing a platform which can be used for further research and experiments.
-
-%Your abstract should capture, in English, the whole thesis with focus on the problem and solution in 150 words. It should be placed on a separate right-hand page, with an additional \textit{1cm} margin on both left and right. Avoid acronyms, footnotes, and references in the abstract if possible.
-
-%Leave a \textit{2cm} vertical space after the abstract and provide a few keywords relevant for your report. Use five to six words, of which at most two should be from the title.
-}
-
-\keywords{reliability, distributed computing, dynamic fault tolerance, task scheduling, replication} %Poisson?
-
-%% Only used to display font sizes
-\makeatletter
-\newcommand\thefontsize[1]{{#1 \f@size pt\par}}
-\makeatother
-%%%%%%%%%%
-
-\newcommand{\loslabel}[1]{\makebox[3cm][l]{\textbf{#1}\ }}
-\newenvironment{listofsymbols}{\begin{list}{}{\renewcommand{\makelabel}{\loslabel}}}{\end{list}}
-
-\newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ }}
-\newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
-
-
-\begin{document}
-\makefrontmatter
-
+%% ToC
+\tableofcontents
+%\cleardoublepage
 \listoffigures
 \listoftables
-
-\chapter*{List of Symbols}
-\begin{listofsymbols}
-\item[$\lambda$] Failure rate
-\item[$\sigma$] Standard deviation
-\item[$\mu$] Mean value
-\item[$f(t)$] Probability of a replica failing within time $t$
-\item[$F(t)$] Probability of a node failing within time $t$
-\item[$P(k)$] Probability of k failures
-\item[$R(t)$] Probability of not experience a failure within a time $t$
-\item[$R_{\textrm{req}}$] Required reliability
-\item[$t$] Time from a failure happening to the system is restored
-\item[$t_{\textrm{create}}$] Time for creating a new replica
-\item[$t_{\textrm{d}}$] Time to detect a failure
-\item[$t_{\textrm{de-serialize state}}$] Time for de-serializing a task's state
-\item[$t_{\textrm{get state}}$] Time to get a task's state 
-\item[$t_{\textrm{h}}$] Time between sending heartbeats
-\item[$t_{\textrm{R}}$] Total time for having a new replica operational
-\item[$t_{\textrm{r}}$] Time for replicating a task to another node
-\item[$t_{\textrm{replication msg}}$] Time for sending all information needed for starting a new replica
-\item[$t_{\textrm{response}}$] Time for sending a response
-\item[$t_{\textrm{send reply}}$] Time for sending a reply
-\item[$t_{\textrm{serialize state}}$] Time for serializing a task's state
-\item[$t_{\textrm{timeout}}$] Timeout time for listening for heartbeats
-\item[$t_{\textrm{transmit state}}$] Time for transmitting a task's state
-\item[$t_{\textrm{query storage}}$] Time for querying the storage and receiving a response
-\end{listofsymbols}
-
-\chapter*{Abbreviations}
-\begin{abbreviations}
-\item[CHDS] Centralized Heterogeneous Distributed Systems
-\item[DHT] Distributed Hash Table
-\item[HDCS] Heterogeneous Distributed Computing Systems
-\item[IoT] Internet of Things
-\item[MAS] Multi-Agent System
-\item[MTBF] Mean Time Between Failures
-\item[MTTF] Mean Time To Failure
-\item[RMS] Resource Management System
-\item[RSD] Relative Standard Deviation
-\item[TCP] Transmission Control Protocol
-\item[UDP] User Datagram Protocol
-\item[VM] Virtual Machine
-\end{abbreviations}
-
+\cleardoublepage
+%%%%% Page numbering for the main thesis
+\mainmatter
+%%%%%
+\iffalse
 \chapter{Introduction} \label{ch:introduction} 
 \section{Background and Motivation} \label{sec:introduction_backgroud_motivation}
 Ensuring a predefined level of reliability is of major concern for many cloud service providers. Cloud computing, and distributed computing in general, is growing rapidly, and users demand more services and higher availability and reliability. Therefore, providing fault tolerant systems and improving reliability by more sophisticated task scheduling algorithms, have become very important and gained plenty of research interest.
@@ -1434,14 +1393,9 @@ The goal of this thesis was first to devise a method for dynamically ensuring a 
 Reliability is increased by replication of tasks, and the required reliability is ensured by creating enough replicas. In order to optimize the number of replicas over time, the system is periodically monitored in order to dynamically adapt to resources' changing behavior.
 
 Finally, the goal was also to provide a platform to be used to further experiments, and was accomplished by implementing our model using Calvin. Both the reliability model used and the task placement function are replaceable, which gives rise to various experimental opportunities.
-
-\begin{thebibliography}{50}
-
-%TODO
-% Innan final
-% http://libguides.lub.lu.se/referencemanagement_lth
-% IEEE reference style
-
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{99}
 \bibitem{taskAllocation}
 	S. M. Shatz, J. Wang and M. Goto,
 	"Task Allocation for Maximizing Reliability of Distributed Computer Systems",
@@ -1450,17 +1404,17 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{surveyReliabilityDistr}
 	W. Ahmed and Y. W. Wu,
 	"A survey on reliability in distributed systems",
-	\emph{Journal of Computer and System Sciences}, vol. 78, no. 8,	pp. 1243–1255, Dec. 2013.
+	\emph{Journal of Computer and System Sciences}, vol. 78, no. 8,	pp. 1243?1255, Dec. 2013.
 	
 \bibitem{surveyRelPrediction}
-	A. Immonen and E. Niemelä,
+	A. Immonen and E. Niemel�,
 	"Survey of reliability and availability prediction methods from the viewpoint of software architecture",
 	\emph{Software \& Systems Modeling}, vol. 7, no. 1, pp. 49-65, Feb. 2008.
 
 \bibitem{relDistApplications}
-	C. A. Tănasie, S. Vîntutis and A. Grigorivici,
+	C. A. T?nasie, S. V�ntutis and A. Grigorivici,
 	"Reliability in Distributed Software Applications",
-	\emph{Informatica Economică}, vol. 15, no. 4, pp. 167-177, 2011,
+	\emph{Informatica Economic?}, vol. 15, no. 4, pp. 167-177, 2011,
 
 \bibitem{relGridSystems}
 	C. Dabrowski,
@@ -1483,7 +1437,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 	\emph{Cornell University Library}, Jan. 2005.
 
 \bibitem{faultTolerantFundamentals}
-	F. C. Gärtner,
+	F. C. G�rtner,
 	"Fundamentals of Fault-Tolerant Distributed Computing in Asynchronous Environments",
 	\emph{ACM Computing Surveys}, vol. 31, no. 1, pp. 1-26, Mar. 1999.
 
@@ -1508,7 +1462,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 	\emph{The Journal of Supercomputing}, vol. 66, no. 3, pp. 1462-1488, Dec. 2013.
 
 \bibitem{algoMinExTime}
-	A. Dogan and F. Özüner,
+	A. Dogan and F. �z�ner,
 	"Matching and Scheduling Algorithms for Minimising Execution Time and Failure Probability of Applications in Heterogeneous Computing",
 	\emph{IEEE Transactions on Parallel and Distributed Systems}, vol. 13, no.3, pp. 308-323, Mar. 2002.
 
@@ -1595,7 +1549,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{calvin}
 	P. Persson and O. Angelsmark,
 	"Calvin - Merging Cloud and IoT",
-	\emph{Procedia Computer Science}, vol. 52, pp. 210–217, 2015
+	\emph{Procedia Computer Science}, vol. 52, pp. 210?217, 2015
 
 \bibitem{taskAllocationSwarm}
 	P. Yin, S. Yu, P. Wang and Y. Wang,
@@ -1608,7 +1562,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 	\emph{IEEE Transactions on Reliability}, vol. 56, no. 3, pp. 444-453, Sep. 2007.
 
 \bibitem{matchSchedAlgoMinFailure}
-	A. Dogan and F. Özgüner,
+	A. Dogan and F. �zg�ner,
 	"Matching and Scheduling Algorithms for Minimizing Execution Time and Failure Probability of Applications in Heterogeneous Computing",
 	\emph{IEEE Transactions on Parallel and Distributed Systems}, vol. 13, no. 3, pp. 308-323, Mar. 2002.
 
@@ -1679,7 +1633,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 
 \bibitem{evalOfGridRel}
 	E. Huedo, R. S. Montero and I. M. Llorente,
-	"Evaluating the reliability of computational grids from the end user’s point of view",
+	"Evaluating the reliability of computational grids from the end user?s point of view",
 	\emph{Journal of Systems Architecture}, vol. 52, no. 12, pp. 727-736, Dec. 2006.
 
 \bibitem{generalAlgoRelEval}
@@ -1744,7 +1698,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 
 \bibitem{vm_vs_container}
 	D. Strauss,
-	"Containers—Not Virtual Machines—Are the Future Cloud", 
+	"Containers?Not Virtual Machines?Are the Future Cloud", 
 	June 2013. [Online]. \\
 	Available:
 	 http://www.linuxjournal.com/content/containers\%E2\%80\%94not-virtual-machines\%E2\%80\%94are-future-cloud.
@@ -1756,7 +1710,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 	\emph{IEEE Transactions on Dependable and Secure Computing}, vol. 8, no. 6, pp. 913-928, Nov./Dec. 2011.
 	
 \bibitem{kademlia}
-	P. Maymounkov and D. Mazières,
+	P. Maymounkov and D. Mazi�res,
 	"Kademlia: A Peer-to-peer Information System Based on the XOR Metric",
 	\emph{Lecture Notes in Computer Science}, vol. 2429, pp. 53-65, Oct. 2002.
 
@@ -1777,7 +1731,10 @@ Finally, the goal was also to provide a platform to be used to further experimen
 
 \end{thebibliography}
 
-\begin{appendices}
+
+%%%%%%%%%%%%%%%%%%
+\appendix
+%%%%%%%%%%%%%%%%%%
 \chapter{Figures} \label[app]{appendix:figures}
 This Appendix consist of various figures. 
 \begin{itemize}
@@ -1839,9 +1796,6 @@ This Appendix consist of various figures.
 \includegraphics[scale=0.5]{images/heartbeats_worst_case.pdf}
 \caption[Node failure detecting time, worst case]{Worst case scenario for detecting a node failure. Node A fails directly after sending a heartbeat. The actual detection time, $t_{\textrm{d}}$ is therefore close to $t_{\textrm{timeout}}$.} \label[app]{fig:heartbeats_worst_case}
 \end{figure}
-
-
-\end{appendices}
 
 
 \end{document}
