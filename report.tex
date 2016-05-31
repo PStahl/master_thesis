@@ -208,7 +208,7 @@ A cluster system is usually a number of identical units managed by a central man
 Cloud has been described as the next generation of grids and clusters. While it is similar to clusters, the main difference is that cloud consists of multiple domains~\cite{compStudyLoadAndCloud}. The domains can be geographically distributed, and software and hardware components are often heterogeneous. Therefore, analyzing and predicting workload and reliability are usually very challenging~\cite{surveyReliabilityDistr}.
 
 \subsubsection{Heterogeneous distributed computing systems}
-A Heterogeneous Distributed Computing System (HDCS), is a system of numerous high-performance machines connected in a high-speed network. Therefore, high-speed processing by computational heavy applications is possible~\cite{algoMinExTime}. %TODO add info
+A Heterogeneous Distributed Computing System (HDCS), is a system of numerous high-performance machines connected in a high-speed network. Therefore, high-speed processing by computational heavy applications is possible~\cite{algoMinExTime}.
 
 The majority of distributed service systems can be viewed as a Centralized Heterogeneous Distributed System (CHDS). A CHDS consists of heterogeneous sub-systems which are managed by a centralized control center. The sub-systems have various operating platforms and are connected in diverse topological networks~\cite{studyServiceRel}.
 
@@ -334,7 +334,7 @@ Checkpointing is a fault tolerance technique which periodically saves the state 
 Rollback recovery is a technique in which all actions taken during execution are written to a log. At the event of failure, the process is restarted, and the log is read and all actions replayed, thereby re-constructing the previous state~\cite{surveyFaultParallel}. In contrast to checkpointing, rollback recovery returns the process to the most recent state, not only the last saved one. Rollback recovery can be used in combination with checkpointing in order to reduce recovery time by not having to replay all actions, but only those from the latest checkpoint.
 
 \subsection{Replication} \label{subsec:background_replication}
-Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique. %TODO reactive/proactive explain in which ways?
+Task replication is a commonly used fault tolerant technique, and is based on the assumption that the probability of a single resource failing is greater than the probability of multiple resources failing simultaneously~\cite{faultToleranceGrid}. Replication can be used both as a reactive and proactive fault tolerance technique.
 
 Using replication, several identical processes are scheduled on different resources and simultaneously perform the same computations~\cite{relGridSystems}. With the increased redundancy, the probability of at least one replica finishing increases at the cost of more resources being used. Furthermore, the use of replication effectively protects against having a single-point-of-failure~\cite{faultToleranceGrid}.
 
@@ -357,7 +357,7 @@ Active replication is feasible only if all replicas receive exactly the same inp
 A drawback with active replication is that having $n$ identical copies of a task, all computations are performed $n$ times, and thereby wasting computational capacity. But while replication increases the system load, it may help to improve performance by reducing task completion time~\cite{improvingPerformanceReplication}.
 
 \subsubsection{Semi-active replication} \label{subsec:semi_active_replication}
-Semi-active replication is very similar to active replication, but differs in that decisions common for all replicas are taken by one site. This solves the issue with time-dependent computations, since all such computations could be performed by one site. However, this introduces a single-point-of-failure. %TODO Otydligt?
+Semi-active replication is very similar to active replication, but differs in that decisions common for all replicas are taken by one site. This solves the issue with time-dependent computations, since all such computations could be performed by one site. However, this introduces a single-point-of-failure. 
 
 \subsubsection{Passive replication} \label{subsec:passive_replication}
 Passive replication is the case when a second machine, typically in idle or power off state has a copy of all necessary system software as the primary machine. If the primary machine fails the "spare" machine takes over, which might incur some interrupt of service. This type of replication is only suitable for components that have a minimal internal state, unless additional checkpointing is employed.
@@ -365,21 +365,20 @@ Passive replication is the case when a second machine, typically in idle or powe
 \subsubsection{Consensus} \label{subsub:consensus}
 In active and semi-active replication, several results are being produced. If non-deterministic computations are done, some form of consensus algorithm is usually deployed to determine which result is correct. The consensus problem can be viewed as a form of agreement. A consensus algorithm lets several replicas execute in parallel, independent of each other and the receiver of their results determine which result is considered correct. Such algorithms are usually used with the Byzantine fault model \cref{subsub:background_byzantine}, where a resource can produce an incorrect result.
 
-%TODO Are the following sections needed?
 Based on achieving consensus, two different redundancy strategies can be identified, traditional and progressive redundancy~\cite{selfAdaptRel}. In traditional redundancy an odd number of replicas run simultaneously and afterwards a voting takes place to determine which result is correct. The result with the highest number of votes is considered correct and consensus is reached.
 
 In progressive redundancy the number of replicas needed is minimized. If with traditional redundancy, $k \in \{3,5,7...\}$ replicas are executed, progressive redundancy first executes $(k+1)/2$ replicas and reaches consensus if all replicas return the same result. If some replica return a deviant result, an additional number of replicas are executed until enough replicas have returned the same result, i.e. consensus is reached. In worst case $k$ replicas are executed, the same as for traditional redundancy. A disadvantage with progressive consensus is that it might take longer time if consensus is not reached after the first iteration.
 
 Finally, \cite{selfAdaptRel} present a third strategy, an iterative redundancy alternative which focuses more on reaching a required level of reliability in comparison to reaching a certain level of consensus.
 
-%TODO Load balancing is a proactive fault tolerence technique, short mention?
+
 \subsection{Load balancing} \label{sec:background_load_balancing}
 The term load balancing is generally used for the process of transferring load from overloaded nodes to under-loaded nodes in order to improve the overall performance. Load balancing techniques for distributed environments consists of two parts, resource allocation and task scheduling. 
 
 Load balancing algorithms can be divided into three categories based on the initiation of the process:
 \begin{itemize}
 \item Sender initiated - an overloaded node sends requests until it finds a proper node which can accept its load.
-\item Receiver initiated - an under-loaded node sends requests for more work until it finds an overloaded node. %TODO "a message for requests", is it corrrect language?
+\item Receiver initiated - an under-loaded node sends requests for more work until it finds an overloaded node.
 \item Symmetric - a combination of sender initiated and receiver initiated. 
 \end{itemize}
 
@@ -473,7 +472,6 @@ To achieve a fault tolerant redundant storage of information, a Distributed Hash
 
 In Calvin, the framework in which the model was implemented and evaluated, there are two storage alternatives. A DHT implementation called Kademlia, see~\cite{kademlia} for further information, and a proxy storage. Calvin and its storing alternatives are further described in~\cref{subsec:design_calvin}.
 
-%TODO this text needs work
 When storing data using DHT, the data is first stored locally and later flushed, i.e. sent to other nodes. When a task is replicated to another node, the replication must only be considered successful if the storage is properly updated and the information shared to other nodes. Otherwise, the replication may only be partially reflected in the storage and use of this data will be useless. 
 
 \subsection{Application model} \label{subsec:design_app_model}
@@ -492,7 +490,7 @@ A typical example of a long running application is data stream processing, where
 \subsection{Replication scheme} \label{subsec:design_repl_scheme}
 As previously mentioned, reliability will be ensured by the use of replication. More specifically, active replication is used, where each replica receives the same input, performs the same computations, and produces the same output. \Cref{fig:app_model_replication} shows how the application in \cref{fig:app_model} looks after replicating task $T$ four times. It is also possible to have several tasks replicated, this scenario is shown in \cref{fig:extended_app_model}.
 
-In contrast to the case with one \emph{primary} task and several \emph{back-up} replicas, as described in \cref{subsec:background_replication}, we adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer. %TODO explain fan-in/fan-out in background_replication?
+In contrast to the case with one \emph{primary} task and several \emph{back-up} replicas, as described in \cref{subsec:background_replication}, we adapt a fan-in fan-out model, where all replicas both receive the same input, but also all transmit its result to the consumer.
 
 \begin{figure}[!hbt]
 \centering
@@ -500,7 +498,7 @@ In contrast to the case with one \emph{primary} task and several \emph{back-up} 
 \caption[Application model with replicas]{An application model where a task $T$ has been replicated four times.}\label{fig:app_model_replication}
 \end{figure}
 
-After replicating, the various replicas may not be synchronized. But, since assuming only deterministic calculations are done by the tasks replicated, given the same input they will all produce the same result, even if not synchronized. However, since the receiver receive a result from each replica, our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received. %TODO do we have to have this? I don't think it really affects our model right?
+After replicating, the various replicas may not be synchronized. But, since assuming only deterministic calculations are done by the tasks replicated, given the same input they will all produce the same result, even if not synchronized. However, since the receiver receive a result from each replica, our model allows for easy extension to also include a majority decision at the consumer to determine whether or not the correct result was received.
 
 The process of replicating a task in Calvin, the framework in which our model was implemented, is further described in~\cref{subsec:calvin_replication}.
 
@@ -836,7 +834,7 @@ In Calvin there are two ways of storing data, either by the Kademlia implementat
 
 Using Kademlia, data is stored both locally and remotely, by distributing the data to other nodes in the system. The data is therefore available despite one of the storing nodes fails. One of the configurable parameters used in Kademlia is $k$, representing the maximum size of a bucket-list. The value of $k$ should be chosen such that the probability of $k$ nodes failing within an hour is very low \cite{kademlia}. DHT will not be further explained in this thesis, instead we refer to~\cite{kademlia} for further information about DHT and Kademlia especially. 
 
-When using the proxy storage, one runtime acts as a storage node, and all data is sent to that runtime. All requests for data are also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single-point-of-failure, since all data is lost if that runtime fails. %TODO mention some pros, eaiser when testing?
+When using the proxy storage, one runtime acts as a storage node, and all data is sent to that runtime. All requests for data are also sent to the runtime acting as proxy storage. However, the proxy storage introduces a single-point-of-failure, since all data is lost if that runtime fails. 
 
 \subsubsection{Actor model} \label{sec:calvin_actor}
 An application in Calvin consist of a set of connected \emph{actors}. An actor usually represents part of a device, service or computation. Actors communicate by sending data, called tokens, on their out-ports to other actors in-ports. 
@@ -854,7 +852,6 @@ The Calvin framework use a concept of \emph{runtimes}. A mesh of connected runti
 
 Each runtime has a \emph{storage}. If DHT is used, all the information in the storage is first stored locally and later flushed, i.e. distributed in a multicast approach. If a proxy storage is used, the information is also stored locally at first, but later flushed to the proxy storage only.
 
-%TODO
 In our model a runtime corresponds to a node.
 
 \subsubsection{Replication} \label{subsec:calvin_replication}
@@ -883,7 +880,6 @@ For every heartbeat received, a timeout of $t_{\textrm{timeout}}$ seconds is set
 
 \subsubsection{Application monitor}
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is fulfilled by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
-%TODO Mention what happens if the runtime which deployed the application dies?
 
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model and to show some of the possibilities, we carried out a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
@@ -1020,13 +1016,11 @@ The average of the 1800 measured times was 333.5 ms, the minimum was 302.1 ms an
 
 All values lie between the theoretical minimum and maximum values of 300 and 500 ms, corresponding to the best and worse case scenarios described in~\cref{sec:node_failure_detection_time}. The average however it is clearly below the theoretical average of 400 ms. 
 The standard deviation of the times registered was 28.8.
-%TODO If higher/lower than theoretical, give a explanation
 
 \subsection{Measurement of replication time $t_{\textrm{r}}$} \label[exp]{sec:eval_repl_time}
 The time it takes to replicate a task, depends on the size of the task state, which have to be sent to the node where the new replica should be created. In Calvin, the state of a task corresponds to the state of the actor representing the task, and consists mainly of the queues of incoming and outgoing data for the actor's in- and out-ports, and any local variables the actor has, as described in~\cref{sec:calvin_actor}.
 
 In the following two experiments, two runtimes were used. The application was first deployed to one of these runtimes, and the service actor was replicated to the other runtime and the time measured. This was repeated for various sizes of the actor's state. The actor had only one out-port and no in-port, and in the first experiment the state of the actor was incrementally increased by increasing the size of a local variable, while in the second experiment the state was increased by increasing the size of its output queue. The state of the actor is only one part of the total replication message. The other part is however static, and its size during the experiment was 349 bytes.
-%TODO Is it neccasary or just confusing to mention that the service actor had no inport? 
 
 Both experiments was conducted in two settings. In one, two servers were used with a runtime on each of them, while in the other, a laptop was used on which both the two runtimes were started. The specification of the servers and the laptop are found in~\cref{sec:server_spec} and~\cref{sec:laptop_spec}. For each state size, the actor was replicated 10 times and the times measured.
 
@@ -1039,7 +1033,7 @@ For three state sizes, 1, 50 and 100 MB, we measured the replication time 100 ti
 The goal of the experiment was to see how the replication time vary depending on the state size, in which part of the replication process most time is spent, and finally how the replication times varied.
 
 \subsubsection*{Results - total replication time}
-\Cref{fig:replication_time_server} and \ref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since all values in the queue have to be decoded. %TODO decoded?
+\Cref{fig:replication_time_server} and \ref{fig:replication_time_laptop} show how the total replication time vary depending on the state size when replicating between runtimes on different servers, and between runtimes on the same laptop respectively. As shown, the replication time is exponential, and the replication time was higher when increasing the queue size than when increasing the variable size. This is due to the extra time needed when creating the new actor, since all values in the queue have to be decoded. 
 
 As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop, there is a big increase in time when increasing the state size from 200 MB to 400 MB, by increasing the queue. This is due to running out of memory, and the process started using the laptop's SWAP memory, which significantly reduced the performance. 
 
@@ -1060,7 +1054,6 @@ As seen in~\cref{fig:replication_time_laptop}, when replicating using the laptop
 
 Furthermore, significantly more time was spent on transmitting the state to the other node as the state size was increased. Hence for large state sizes, the total replication time depends mostly on the bandwidth of the links connecting the various nodes. For smaller state sizes, the replication time is more CPU bound, especially when increasing the queue size.
 
-%TODO needs work.
 \Cref{fig:replication_time_parts_laptop_variable} and \cref{fig:replication_time_parts_laptop_queue} show how much of the total replication time was spent on the various parts of the replication process, when increasing the variable size and queue size respectively, and when the replication was done between two runtimes on the same laptop. Again, more time is spent on creating the new actor when increasing the queue size than when increasing the variable size. %Might result in that actor blocking the others in the scheduling loop
 
 Furthermore, the time spent on transmitting the state increases when increasing the state size. However, as shown in~\cref{fig:replication_time_parts_laptop_queue}, when replicating from laptop to laptop an actor with state size above 100 MB (when increasing the queue size), more time was spent on creating the actor. This, as described before, is due to running out of memory. In the experiment, this happened when the size was 200 MB or more, and when this happens, the process needs to use the laptop's swap memory when creating the new actor. The laptop's 1333 MHz ram memory has a speed of approximately 21 GB/s, which compared to the SSD speed of 540 MB/s explains the significantly drop in performance.
@@ -1099,7 +1092,7 @@ However, in a real setting, the replication time will vary depending on the stat
 	\begin{tabular}{| c | c | c | c | c |}
 	 \hline
 	 replicating from/to & state size (MB) & $\mu$ (s) & $\sigma$ (s) & RSD \\
-	 \hline		%TODO values
+	 \hline
 	  server/server & 1 & 0.041 & 0.001 & 0.024 \\
 	  server/server & 50 &  5.523 &  0.056 & 0.010 \\
 	  server/server & 100 &  20.177 & 0.385 & 0.019 \\
@@ -1118,7 +1111,7 @@ However, in a real setting, the replication time will vary depending on the stat
 	\begin{tabular}{| c | c | c | c | c |}
 	 \hline
 	 replicating from/to & state size (MB) & $\mu$ (s) & $\sigma$ (s) & RSD \\
-	 \hline		%TODO values
+	 \hline
 	  server/server & 1 & 0.251 & 0,008 & 0,032 \\
 	  server/server & 50 & 16,547 & 0.256 & 0,015 \\
 	  server/server & 100 & 42.555 & 0.414 & 0,010 \\
@@ -1145,7 +1138,6 @@ The experiment ran for 5 minutes, and \cref{fig:exp_reliability_level} shows how
 
 As shown in~\cref{fig:exp_reliability_level}, the reliability was lower in the beginning of the experiment. This is due to the lack of failure data for nodes, therefore assuming the default value for the \emph{MTBF} of 10 seconds. As the nodes starts failing, the system learns their actual \emph{MTBF}, which in the experiment was 20 seconds. Every drop in reliability corresponds to a failure of one of the nodes on which a replica is executing. The experiment shows clearly that the momentary reliability level is restored to a level above the required level and the experiment was therefore considered successful.
 
-%TODO this needs to be updated? Not the latest?
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/reliability.pdf}
@@ -1248,7 +1240,6 @@ In this experiment, one runtime was started on each of the unstable servers. Eac
 
 The required reliability was in this experiment set to 0.99999. 
 
-%TODO how long should before we're back? 60 sec?
 \begin{equation} \label{eq:eval_sleep_time}
 t_{\textrm{sleep}} = t_{\textrm{i}} + 20 * \sin{(2\*\pi\*t_{\textrm{elapsed}} / 300)}
 \end{equation}
@@ -1437,11 +1428,6 @@ Finally, the goal was also to provide a platform to be used to further experimen
 
 \begin{thebibliography}{50}
 
-%TODO
-% Innan final
-% http://libguides.lub.lu.se/referencemanagement_lth
-% IEEE reference style
-
 \bibitem{taskAllocation}
 	S. M. Shatz, J. Wang and M. Goto,
 	"Task Allocation for Maximizing Reliability of Distributed Computer Systems",
@@ -1525,7 +1511,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{cloudServiceRel}
 	Y. Dai, B. Yang, J. Dongarra and G. Zhang,
 	"Cloud Service Reliability: Modeling and Analysis",
-	\emph{15th IEEE Pacific Rim International Symposium on Dependable Computing}, Nov. 2009. %TODO pages?
+	\emph{15th IEEE Pacific Rim International Symposium on Dependable Computing}, Nov. 2009. 
 
 \bibitem{optTaskAllocationForMaxRel}
 	H. Faragardi, R. Shojaee, M. Keshtkar and H. Tabani,
@@ -1535,7 +1521,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{perfImplPerCheckPoint}
 	A. J. Oliner, R. K. Sahoo, J. E. Moreira and M. Gupta,
 	"Performance Implications of Periodic Checkpointing on Large-scale Cluster Systems",
-	\emph{19th IEEE International Parallel and Distributed Processing Symposium}, Apr. 2005. %TODO pages?
+	\emph{19th IEEE International Parallel and Distributed Processing Symposium}, Apr. 2005. 
 
 \bibitem{studyOfFailures}
 	B. Schroeder and G. Gibson,
@@ -1545,12 +1531,12 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{implicationsOfFailures}
 	Y. Zhang, M. S. Squillante, A. Sivasubramaniam and R. K. Sahoo,
 	"Performance Implications of Failures in Large-Scale Cluster Scheduling",
-	\emph{Lecture Notes in Computer Science }, vol. 3277, pp. 233-252, 2005. %TODO no.?
+	\emph{Lecture Notes in Computer Science }, vol. 3277, pp. 233-252, 2005.
 
 \bibitem{discContRelModel}
 	L. Fiondella, and L. Xing,
 	"Discrete and continuous reliability models for systems with identically distributed correlated components",
-	\emph{Reliability Engineering \& System Safety}, vol. 133, pp. 1-10, Jan. 2015. %TODO no.?
+	\emph{Reliability Engineering \& System Safety}, vol. 133, pp. 1-10, Jan. 2015.
 
 \bibitem{effTaskReplMobGrid}
 	A. Litke, D. Skoutas, K. Tserpes and T. Varvarigou,
@@ -1665,7 +1651,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{relModelWebServices}
 	W. T. Tsai, D. Zhang, Y. Chen, H. Huang, R. Paul and N. Liao,
 	"A Software Reliability Model for Web Services",
-	\emph{Proceedings of the IASTED Conference on Software Engineering and Applications}, Nov. 2004. %TODO pp?
+	\emph{Proceedings of the IASTED Conference on Software Engineering and Applications}, Nov. 2004. 
 
 \bibitem{studyServiceRel}
 	Y.S. Dai, M. Xie, K.L. Poh and G.Q. Liu,
@@ -1763,7 +1749,7 @@ Finally, the goal was also to provide a platform to be used to further experimen
 \bibitem{IEEEfaultTolerantSys} 
 	U. Malladi,
 	"Notice of Violation of IEEE Publication Principles Design, analysis and performance evaluation of a new algorithm for developing a fault tolerant distributed system",
-	\emph{12th International Conference on Parallel and Distributed Systems}, vol. 1, July 2006. %TODO pp?
+	\emph{12th International Conference on Parallel and Distributed Systems}, vol. 1, July 2006.
 
 \bibitem{faultTolerantDeadlock}
 	P. Li and B. McMillin,
@@ -1809,7 +1795,6 @@ This Appendix consist of various figures.
 \caption[System after a node failure]{After Node C has failed. Now three replicas (placed on Node A, B and D) are required to achieve required reliability.} \label[app]{fig:after_node_failure}
 \end{figure}
 
-%TODO change to exclude actors here as well? Or say that this is how it's done in Calvin.
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/replication_flow.pdf}
