@@ -528,7 +528,7 @@ F(t) = 1- e^{-t/MTBF}
 
 In our case \emph{t} represents the time it takes to detect a node failure and create a new replica, and is further discussed in~\cref{sec:design_time_t}.
 
-In order to use~\cref{eq:Poisson_no_failures}, the \emph{MTBF} of a node must be available, and to calculate a node's \emph{MTBF} at least two failures must have occurred since not all nodes are alive at time zero which is assumed by~\cref{def:mttf}. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the \emph{MTBF} will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
+In order to use~\cref{eq:Poisson_no_failures}, the \emph{MTBF} of a node must be available, and to calculate a node's \emph{MTBF} at least two failures must have occurred. However, the system still need to be able to calculate the reliability for a node, even if the node has not yet failed. Therefore, a default value for the \emph{MTBF} will be used in the experiments when no failure data is available for a node, or if it has not yet failed twice. In a real situation, the default value could be based on past failure data for resources of similar type. The default value used in the experiments is further described in~\cref{sec:eval_values}.
 
 As time goes and nodes fail, and the time of each failure is stored, the system will get more precise values for the \emph{MTBF} for the nodes in the system. By using the latest three failure times, one can adapt the \emph{MTBF} as nodes start failing more or less often. 
 
@@ -735,33 +735,33 @@ The algorithm is run when deploying an application, when a failure is detected a
 	\State
 	\State
 	\Call{sort}{$available\ nodes$, $descending$}
-	\State $most\_reliable\gets available\ nodes.pop$
+	\State $most\ reliable\gets available\ nodes.pop$
 	\State
 	\Call{sort}{$current\ nodes$, $ascending$}
-	\State $least\_reliable\gets current\ nodes.pop$
+	\State $least\ reliable\gets current\ nodes.pop$
 	\State
-	\While{\Call{Reliability}{$most\_reliable$} > \Call{Reliability}{$least\_reliable$}}
-			\State $replica\gets $\Call{replica at}{$least\_reliable$}
+	\While{\Call{Reliability}{$most\_reliable$} > \Call{Reliability}{$least\ reliable$}}
+			\State $replica\gets $\Call{replica at}{$least\ reliable$}
 			\State
-			\Call{replicate to}{$replica$, $most\_reliable$}
+			\Call{replicate to}{$replica$, $most\ reliable$}
 			\State
-			\Call{delete replica from node}{$replica$, $least\_reliable$}
+			\Call{delete replica from node}{$replica$, $least\ reliable$}
 			\State
-			\State $current\ nodes.add(most\_reliable)$
-			\State $available\ nodes.add(least\_reliable)$
-			\State $least\_reliable\gets current\ nodes.pop$
-			\State $most\_reliable\gets available\ nodes.pop$
+			\State $current\ nodes.add(most\ reliable)$
+			\State $available\ nodes.add(least\ reliable)$
+			\State $least\ reliable\gets current\ nodes.pop$
+			\State $most\ reliable\gets available\ nodes.pop$
 	\EndWhile
 	\EndProcedure
 	\State
 	
 	\Procedure{Delete unnecessary replicas}{}
-	\State $least\_reliable\gets current\ nodes.pop$
+	\State $least\ reliable\gets current\ nodes.pop$
 	\While {\Call{reliability}{$current\ nodes$}\ $\geq R_{\textrm{req}}$}
-		\State $replica\gets $\Call{replica at}{$least\_reliable$}
+		\State $replica\gets $\Call{replica at}{$least\ reliable$}
 		\State
-		\Call{delete replica from node}{$replica$, $least\_reliable$}
-		\State $least\_reliable\gets current\ nodes.pop$
+		\Call{delete replica from node}{$replica$, $least\ reliable$}
+		\State $least\ reliable\gets current\ nodes.pop$
 	\EndWhile
 	\EndProcedure
 	\end{algorithmic}
@@ -888,7 +888,7 @@ Each runtime also periodically monitors the applications deployed to it, to ensu
 \chapter{Evaluation} \label{ch:evaluation}
 In order to validate our model and to show some of the possibilities, we carried out a set of experiments. The goal of the experiments was to show the three main properties of our model. Firstly, that it dynamically ensures the required level of reliability is met, despite the event of node failures, by dynamically creating new replicas when old ones are lost. Secondly, that it uses the optimal number of replicas by choosing the most reliable nodes, and also removing unnecessary ones. Thirdly, that it adapts to changing properties of the system. 
 
-We also measured the time $t_{\textrm{R}}$ to find the best fitting distribution for these values, and also the replication time $t_{\textrm{r}}$ for varying state sizes. Finally, we measured the actual time for detecting failures to demonstrate that the values lie between the best and worst case described in~\cref{subsec:heartbeats}.
+We also measured the replication request time $t_{\textrm{R}}$ to find the best fitting distribution for these values, and also the replication time $t_{\textrm{r}}$ for varying state sizes. Finally, we measured the actual time for detecting failures to demonstrate that the values lie between the best and worst case described in~\cref{subsec:heartbeats}.
 
 
 \section{Values used in the experiments} \label{sec:eval_values}
@@ -958,7 +958,7 @@ The computational environment, with an application consisting of a consumer, two
 \end{figure}
 
 \section{Experiments}
-In~\cref{sec:eval_time_t,sec:eval_rel_level,sec:eval_opt,sec:eval_adaptive_rel_model,sec:eval_energy_efficient,sec:eval_replaceable_model} the replication time used by the model, $t_{\textrm{R}}$ was logged. Recall that the model calculates and uses the 95th percentile value, see~\cref{sec:replication_time}.
+In~\cref{sec:eval_time_t,sec:eval_rel_level,sec:eval_opt,sec:eval_adaptive_rel_model,sec:eval_energy_efficient,sec:eval_replaceable_model} the replication request time used by the model, $t_{\textrm{R}}$ was logged. Recall that the model calculates and uses the 95th percentile value, see~\cref{sec:replication_time}.
 
 \subsection{Measurement of time $t_{\textrm{R}}$} \label[exp]{sec:eval_time_t}
 As mentioned in~\cref{sec:design_time_t}, $t$ is the time it takes from that a node on which a replica is running dies, until a new replica is operational. It depends on the time it takes to detect that the node died, and the time it takes to create a new replica. 
