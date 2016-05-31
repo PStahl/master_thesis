@@ -296,7 +296,7 @@ The Mean-Time-Between-Failure for a component is the average time between succes
 The \emph{MTBF} can be calculated as
 
 \begin{equation} \label{eq:MTBF}
-MTBF = \frac{total\ time}{number\ of\ failures}
+MTBF = \frac{\mbox{total time}}{\mbox{number of failures}}
 \end{equation}
 
 From \emph{t} and the \emph{MTBF}, the failure rate $\lambda$ used in~\cref{eq:Poisson} can be calculated as $\lambda = t/MTBF$. \Cref{eq:Poisson} can therefore be re-written as
@@ -321,7 +321,7 @@ Fault tolerance techniques are used to either predict failures and take appropri
 \item Fault forecasting - predicting or estimating faults at architectural level during design phase or before actual deployment
 \end{enumerate}
 
-Limited to already developed applications, fault tolerance techniques can be divided into reactive and proactive techniques~\cite{faultToleranceChallenges}. A reactive fault tolerant technique prepares the system for failure, and reacts when a failure occur and tries to reduce the effect of the failure. They therefore consists of preparing for, detecting, and recovering from failure in order to allow computations to continue~\cite{relGridSystems}. The proactive technique on the other hand, tries to predict failures and proactively replace the erroneous components.
+Limited to already developed applications, fault tolerance techniques can be divided into reactive and proactive techniques~\cite{faultToleranceChallenges}. A reactive fault tolerant technique prepares the system for failure, and reacts when a failure occurs and tries to reduce the effect of the failure. They therefore consists of preparing for, detecting, and recovering from failure in order to allow computations to continue~\cite{relGridSystems}. The proactive technique on the other hand, tries to predict failures and proactively replace the erroneous components.
 
 Common fault tolerance techniques include \emph{checkpointing}, \emph{rollback recovery} and \emph{replication} \cite{relGridSystems}.
 
@@ -879,7 +879,7 @@ The heartbeat system described in~\cref{subsec:heartbeats}, was implemented usin
 
 Unlike the resource manager, heartbeat messages are sent using UDP instead of TCP. With TCP, an initial handshake it used to setup the communication channel. For a heartbeat system, this is unnecessary overhead. 
 
-For every heartbeat received, a timeout of $t_{\textrm{timeout}}$ seconds is set, and when it times out, the runtime from which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime are canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
+For every heartbeat received, a timeout of $t_{\textrm{timeout}}$ seconds is set. At timeout, the runtime from which the heartbeat was sent is assumed dead. On the other hand, when a heartbeat is received, all timeouts related to that runtime are canceled. When a timeout happens, \cref{alg:node_failure} is deployed and new replicas are created if needed to reach the required reliability, see~\cref{sec:design_handling_failure}.
 
 \subsubsection{Application monitor}
 Each runtime also periodically monitors the applications deployed to it, to ensure the required reliability is fulfilled by running \cref{alg:scheduling} and creating new replicas if needed. Also the optimization algorithm, is run as part of this monitoring.
