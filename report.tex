@@ -1011,7 +1011,7 @@ The log-logistic distribution was found to best fit both data-sets, and is there
 	  10 s & 107.3 & 597 & 34 & 194.5 \\ %times the actual exceeded 115
 	   \hline
 	\end{tabular}
-	 \caption[Average $t_{\textrm{R}}$, number of times above 100 ms and 500 ms and the 95th percentile in~\cref{sec:eval_time_t}]{Average time $t_{\textrm{R}}$, number of times above 100 ms and 500 ms, and the 95th percentile value for \emph{MTBF} 30 and 10 in~\cref{sec:eval_time_t}}
+	 \caption[Average $t_{\textrm{R}}$ and the 95th percentile in~\cref{sec:eval_time_t}]{Average time $t_{\textrm{R}}$, number of times above 100 ms and 500 ms, and the 95th percentile value for \emph{MTBF} 30 and 10 in~\cref{sec:eval_time_t}}
 	 \label{table:tr}
 	 \end{center}
  \end{table} 
@@ -1075,25 +1075,25 @@ Furthermore, the time spent on transmitting the state increases when increasing 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_variable.pdf} 
-\caption[Replication time parts in~\cref{sec:eval_repl_time}, server-server, increasing variable size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_server_variable}
+\caption[Time parts in~\cref{sec:eval_repl_time}, server-server, increasing variable size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_server_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/server_parts_queue.pdf} 
-\caption[Replication time parts in~\cref{sec:eval_repl_time}, server-server, increasing queue size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_server_queue}
+\caption[Time parts in~\cref{sec:eval_repl_time}, server-server, increasing queue size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from server to server, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_server_queue}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_variable.pdf} 
-\caption[Replication time parts in~\cref{sec:eval_repl_time}, laptop-laptop, increasing variable size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_laptop_variable}
+\caption[Time parts in~\cref{sec:eval_repl_time}, laptop-laptop, increasing variable size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of one of the actor's variables.} \label{fig:replication_time_parts_laptop_variable}
 \end{figure}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[scale=0.5]{images/results/replication_time/laptop_parts_queue.pdf} 
-\caption[Replication time parts in~\cref{sec:eval_repl_time}, laptop-laptop, increasing queue size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_laptop_queue}
+\caption[Time parts in~\cref{sec:eval_repl_time}, laptop-laptop, increasing queue size]{Result for~\cref{sec:eval_repl_time}. Time, of the total replication time, spent on the different parts of the replication, when replicating from laptop to laptop, and increasing the size of the actor's port queue.} \label{fig:replication_time_parts_laptop_queue}
 \end{figure}
 
 \subsubsection*{Results - replication time variance}
@@ -1115,7 +1115,7 @@ However, in a real setting, the replication time will vary depending on the stat
 	  laptop/laptop & 100 & 34.019 & 1.412 & 0.041 \\
 	   \hline
 	\end{tabular}
-	 \caption[Average replication time, standard deviation and RSD in~\cref{sec:eval_repl_time}, increased variable size]{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
+	 \caption[Time, deviation and RSD in~\cref{sec:eval_repl_time}, increased variable size]{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of one of the actor's variables.}
 	 \label{table:replication_time_variation_variable}
 	 \end{center}
  \end{table}
@@ -1134,7 +1134,7 @@ However, in a real setting, the replication time will vary depending on the stat
 	  laptop/laptop & 100 & 50.893 & 1.066 & 0.021 \\
 	   \hline
 	\end{tabular}
-	 \caption[Average replication time, standard deviation and RSD in~\cref{sec:eval_repl_time}, increased queue size]{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
+	 \caption[Time, deviation and RSD in~\cref{sec:eval_repl_time}, increased queue size]{Result for~\cref{sec:eval_repl_time}. Average replication time ($\mu$), standard deviation ($\sigma$), and the relative standard deviation (RSD), for state sizes 1, 50 and 100 MB, where the state size was increased by increasing the size of the actor's port queue.}
 	 \label{table:replication_time_variation_queue}
 	 \end{center}
  \end{table}
@@ -1322,19 +1322,19 @@ The average of the 95th percentile values for the replication time, $t_{\textrm{
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_40.pdf}
-\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 40 s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
+\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 40s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 40 seconds.} \label{fig:eval_energy_efficient_mtbf_40}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_15.pdf}
-\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 15 s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
+\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 15s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 15 seconds.} \label{fig:eval_energy_efficient_mtbf_15}
 \end{figure}
 
 \begin{figure}[!hbt]
 \centering
 \includegraphics[scale=0.5]{images/results/energy_efficient/MTBF_75.pdf}
-\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 7.5 s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
+\caption[Number of replicas per node in~\cref{sec:eval_energy_efficient} for nodes with \emph{MTBF} = 7.5s]{Result for~\cref{sec:eval_energy_efficient}. Number of actors per node, for the three nodes with a \emph{MTBF} of 7.5 seconds.} \label{fig:eval_energy_efficient_mtbf_75}
 \end{figure}
 
 \subsection{Considering nodes' load} \label[exp]{sec:eval_replaceable_model}
