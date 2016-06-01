@@ -5,8 +5,8 @@
 %%\usepackage[Text,Num]{LUfonts}%% LU fonts (local file)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nicer fonts
-\usepackage{pxfonts}
-\usepackage{mathpazo}
+%\usepackage{pxfonts}
+%\usepackage{mathpazo}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ÅÄÖ
 \usepackage[T1]{fontenc}
@@ -21,6 +21,8 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{cite}
+
+\usepackage{amsmath}
 
 \crefname{app}{Appendix}{Appendices}
 \crefname{procedure}{Algorithm}{Procedure}
@@ -265,10 +267,10 @@ Other factors also affect the likelihood of resource failures. Several studies h
 
 While a Poisson process is commonly used to describe the probabilities of failures, \cite{studyOfFailures} shows that failures are better modelled by a Weibull distribution with a shape parameter of 0.7 - 0.8. However, despite not always reflecting the true dynamic failure behavior of a resource, a Poisson process has been experimentally shown to be reasonably useful in mathematical models~\cite{experimentalFailureAssessment}. The Poisson distribution expresses the probability of $k$ failures during a specific period of time, and is defined as follows:
 
-%\begin{equation} \label{eq:Poisson}
-%P(k failures) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
-%\end{equation}
-% P(k \mbox{ failures}) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
+\begin{equation} \label{eq:Poisson}
+P(k \mbox{ failures}) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}
+\end{equation}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
